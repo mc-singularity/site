@@ -9,6 +9,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: none !important;
         }
 
         body {
@@ -17,6 +18,7 @@
             background: #000000;
             min-height: 100vh;
             overflow-x: hidden;
+            cursor: none;
         }
 
         @keyframes spin {
@@ -33,7 +35,7 @@
             width: 32px;
             height: 32px;
             pointer-events: none !important;
-            z-index: 1;
+            z-index: 9999;
             animation: spin 0.5s linear infinite;
         }
 
@@ -437,6 +439,43 @@
 
         .social-button {
             text-decoration: none;
+            position: relative;
+        }
+
+        .social-button .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.95);
+            color: #ffffff;
+            padding: 8px 12px;
+            border: 2px solid #ffffff;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            margin-bottom: 10px;
+        }
+
+        .social-button:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .social-button .tooltip {
+                opacity: 1;
+                visibility: visible;
+                position: relative;
+                bottom: auto;
+                left: auto;
+                transform: none;
+                margin-bottom: 5px;
+                text-align: center;
+            }
         }
 
         .toggle-btn {
@@ -533,6 +572,57 @@
             flex-direction: column;
             align-items: center;
             gap: 5px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .player-head:hover {
+            transform: scale(1.1);
+        }
+
+        .player-head::after {
+            content: 'Нажми чтобы узнать больше';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.95);
+            color: #ffffff;
+            padding: 5px 10px;
+            border: 2px solid #ffffff;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            margin-bottom: 5px;
+        }
+
+        .player-head:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .player-head::after {
+                opacity: 1;
+                visibility: visible;
+                position: relative;
+                bottom: auto;
+                left: auto;
+                transform: none;
+                margin-bottom: 5px;
+                margin-top: 5px;
+            }
+        }
+
+        .players-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            padding: 10px;
         }
 
         .player-head img {
@@ -768,9 +858,7 @@
             .stat-value {
                 font-size: 2rem;
             }
-        }
 
-        @media (max-width: 768px) {
             .side-panel {
                 width: 85%;
             }
@@ -798,11 +886,6 @@
                 font-size: 2rem;
             }
 
-            .search-input {
-                width: 200px;
-                font-size: 1rem;
-            }
-
             .team-member.expanded .team-member-info {
                 position: relative;
                 top: auto;
@@ -813,10 +896,21 @@
                 border-top: none;
                 padding: 15px;
                 margin-top: 10px;
+                flex-direction: column;
+            }
+
+            .team-member-card {
+                width: 100%;
+                margin-bottom: 10px;
             }
 
             .team-member-hint {
                 display: block;
+            }
+
+            .search-input {
+                width: 200px;
+                font-size: 1rem;
             }
         }
 
@@ -864,6 +958,12 @@
                 border-top: none;
                 padding: 15px;
                 margin-top: 10px;
+                flex-direction: column;
+            }
+
+            .team-member-card {
+                width: 100%;
+                margin-bottom: 10px;
             }
 
             .team-member {
@@ -909,6 +1009,7 @@
 </head>
 <body>
     <div class="background"></div>
+    <div class="cursor-logo"><img src="image.png" alt="cursor" style="width: 100%; height: 100%;"></div>
 
     <!-- Left News Panel -->
     <div class="side-panel left" id="newsPanel">
@@ -1018,9 +1119,18 @@
             <div class="section social-links">
                 <h2 class="section-title">ССЫЛКИ</h2>
                 <div class="social-buttons">
-                    <a href="https://discord.gg/fnzjSWf88p" target="_blank" class="button social-button">DISCORD</a>
-                    <a href="https://t.me/singularity_sl" target="_blank" class="button social-button">TELEGRAM</a>
-                    <a href="https://www.youtube.com/@Singularity_Mine" target="_blank" class="button social-button">YOUTUBE</a>
+                    <a href="https://discord.gg/fnzjSWf88p" target="_blank" class="button social-button">
+                        DISCORD
+                        <span class="tooltip">Можно подать заявку на участие</span>
+                    </a>
+                    <a href="https://t.me/singularity_sl" target="_blank" class="button social-button">
+                        TELEGRAM
+                        <span class="tooltip">Можно следить за новостями</span>
+                    </a>
+                    <a href="https://www.youtube.com/@Singularity_Mine" target="_blank" class="button social-button">
+                        YOUTUBE
+                        <span class="tooltip">Можно следить за видео</span>
+                    </a>
                 </div>
             </div>
 
@@ -1255,6 +1365,10 @@
             const x = (e.clientX / window.innerWidth - 0.5) * 30;
             const y = (e.clientY / window.innerHeight - 0.5) * 30;
             background.style.transform = `translate(${x}px, ${y}px)`;
+
+            const cursor = document.querySelector('.cursor-logo');
+            cursor.style.left = e.clientX - 16 + 'px';
+            cursor.style.top = e.clientY - 16 + 'px';
         });
 
         // Check server status
@@ -1279,7 +1393,7 @@
                     // Display online players with heads
                     if (data.players.sample && data.players.sample.length > 0) {
                         playersContent.innerHTML = data.players.sample.map(player => `
-                            <div class="player-head">
+                            <div class="player-head" onclick="openTeamMember('${player.name}')" style="cursor: pointer;">
                                 <img src="https://minotar.net/helm/${player.name}/50" alt="${player.name}">
                                 <div class="player-name">${player.name}</div>
                             </div>
@@ -1342,6 +1456,46 @@
                 info.appendChild(details);
             }
         });
+
+        // Function to open team member profile from online players list
+        function openTeamMember(playerName) {
+            const teamMembers = document.querySelectorAll('.team-member');
+            const teamMembersContainer = document.getElementById('teamMembers');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            const sortButtons = document.querySelector('.sort-buttons');
+            const searchContainer = document.querySelector('.search-container');
+            let found = false;
+
+            // Open team section if it's hidden
+            if (teamMembersContainer.classList.contains('hidden')) {
+                teamMembersContainer.classList.remove('hidden');
+                sortButtons.classList.remove('hidden');
+                searchContainer.classList.remove('hidden');
+                toggleBtn.textContent = 'Скрыть состав';
+                sortTeam('az');
+            }
+
+            // Collapse all members first
+            teamMembers.forEach(m => {
+                m.classList.remove('expanded');
+            });
+
+            teamMembers.forEach(member => {
+                const memberName = member.dataset.name;
+                if (memberName === playerName) {
+                    // Expand the team member
+                    member.classList.add('expanded');
+                    
+                    // Scroll to the team member
+                    member.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    found = true;
+                }
+            });
+
+            if (!found) {
+                console.log(`Team member ${playerName} not found in composition`);
+            }
+        }
 
         function toggleTeam() {
             const teamMembers = document.getElementById('teamMembers');
