@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Singularity - Приватный сервер КМ(Контент Мэйкеров)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'uvKits';
+            color: #ffffff;
+            background: #000000;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @font-face {
+            font-family: 'uvKits';
+            src: url('uvKits.ttf') format('truetype');
+        }
+
+        .background {
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1;
+            transition: transform 0.1s ease-out;
+        }
+
+        .background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-image {
+            max-width: 300px;
+            max-height: 150px;
+            object-fit: contain;
+            mix-blend-mode: normal;
+        }
+
+        .logo {
+            font-size: 5rem;
+            font-weight: normal;
+            color: #ffffff;
+            text-shadow: 4px 4px 0 #000000;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            font-family: 'uvKits';
+        }
+
+        .tagline {
+            font-size: 1.8rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #000000;
+            font-family: 'uvKits';
+        }
+
+        .content {
+            padding: 40px 0;
+        }
+
+        .server-info {
+            background: rgba(0, 0, 0, 0.8);
+            border: 4px solid #ffffff;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .server-ip {
+            font-size: 2.5rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #000000;
+            margin: 20px 0;
+            cursor: pointer;
+            padding: 15px;
+            border: 3px dashed #ffffff;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .server-ip:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .ip-label {
+            font-size: 1.5rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #000000;
+            margin-bottom: 10px;
+        }
+
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ffffff;
+            color: #000000;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            border: 4px solid #000000;
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .copy-notification.show {
+            transform: translateX(0);
+        }
+
+        .section {
+            background: rgba(0, 0, 0, 0.8);
+            border: 4px solid #ffffff;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #ffffff;
+            text-shadow: 3px 3px 0 #000000;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #ffffff;
+            padding-bottom: 15px;
+            font-family: 'uvKits';
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .feature-title {
+            font-size: 2rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #000000;
+            margin-bottom: 10px;
+        }
+
+        .feature-text {
+            font-size: 1.4rem;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        .rules {
+            font-size: 1.5rem;
+            color: #ffffff;
+            line-height: 1.8;
+        }
+
+        .rules li {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            color: #ffffff;
+            text-shadow: 3px 3px 0 #000000;
+        }
+
+        .stat-label {
+            font-size: 1.5rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #000000;
+        }
+
+        .team-section {
+            margin-top: 30px;
+        }
+
+        .sort-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sort-buttons.hidden {
+            display: none;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .search-container.hidden {
+            display: none;
+        }
+
+        .search-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid #ffffff;
+            color: #ffffff;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            font-family: 'uvKits';
+            width: 300px;
+        }
+
+        .search-input::placeholder {
+            color: #aaaaaa;
+        }
+
+        .side-panel {
+            position: fixed;
+            top: 0;
+            width: 450px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            border: 3px solid #ffffff;
+            padding: 20px;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .side-panel.left {
+            left: 0;
+            transform: translateX(-100%);
+        }
+
+        .side-panel.right {
+            right: 0;
+            transform: translateX(100%);
+        }
+
+        .side-panel.open {
+            transform: translateX(0);
+        }
+
+        .panel-toggle {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid #ffffff;
+            color: #ffffff;
+            padding: 15px 10px;
+            cursor: pointer;
+            z-index: 1001;
+            font-family: 'uvKits';
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            letter-spacing: 5px;
+        }
+
+        .panel-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .panel-toggle.left {
+            left: 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .panel-toggle.right {
+            right: 0;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .panel-toggle.lore {
+            top: 40%;
+        }
+
+        .panel-toggle.events {
+            top: 60%;
+        }
+
+        .panel-content h3 {
+            font-size: 1.8rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #000000;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ffffff;
+            padding-bottom: 10px;
+            font-family: 'uvKits';
+        }
+
+        .panel-content p {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-family: 'uvKits';
+        }
+
+        .panel-content .news-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ffffff;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .panel-content .news-date {
+            font-size: 0.9rem;
+            color: #aaaaaa;
+            margin-bottom: 5px;
+            font-family: 'uvKits';
+        }
+
+        .lore-season {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ffffff;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .lore-season-header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lore-season-header h4 {
+            font-size: 1.2rem;
+            color: #ffffff;
+            text-shadow: 1px 1px 0 #000000;
+            margin: 0;
+            font-family: 'uvKits';
+        }
+
+        .lore-season-content {
+            padding: 15px;
+            display: none;
+            border-top: 2px solid #ffffff;
+        }
+
+        .lore-season-content.open {
+            display: block;
+        }
+
+        .lore-season-arrow {
+            font-size: 1.5rem;
+            color: #ffffff;
+            transition: transform 0.3s ease;
+            font-weight: bold;
+        }
+
+        .lore-season.open .lore-season-arrow {
+            transform: rotate(180deg);
+        }
+
+        .sort-btn {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-button {
+            text-decoration: none;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-family: 'uvKits';
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-btn:hover {
+            color: #aaaaaa;
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .status-info {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .status-corner {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            text-align: right;
+            z-index: 10;
+        }
+
+        .status-indicator {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #000000;
+            font-family: 'uvKits';
+        }
+
+        .status-indicator.online {
+            color: #4ecdc4;
+        }
+
+        .status-indicator.offline {
+            color: #ff6b6b;
+        }
+
+        .player-count {
+            font-size: 1rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #000000;
+            font-family: 'uvKits';
+        }
+
+        .players-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            padding: 20px;
+            min-height: 100px;
+            align-items: center;
+        }
+
+        .player-head {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .player-head img {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #ffffff;
+            image-rendering: pixelated;
+        }
+
+        .player-name {
+            font-size: 0.9rem;
+            color: #ffffff;
+            text-shadow: 1px 1px 0 #000000;
+            font-family: 'uvKits';
+        }
+
+        .team-member {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid #ffffff;
+            padding: 20px;
+            gap: 20px;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .team-member::after {
+            content: 'Нажмите для подробностей';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: #aaaaaa;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-family: 'uvKits';
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .team-member:hover::after {
+            opacity: 1;
+        }
+
+        .team-member-hint {
+            display: none;
+            font-size: 0.6rem;
+            color: #ffffff;
+            margin-top: 5px;
+            font-family: 'uvKits';
+        }
+
+        .team-member.expanded {
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .team-member.expanded .team-member-info {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px;
+            border: 3px solid #ffffff;
+            border-top: none;
+            z-index: 101;
+            box-sizing: border-box;
+        }
+
+        .team-member-socials {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .team-member-avatar {
+            width: 80px;
+            height: 80px;
+            background: #333;
+            border: 3px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .team-member-avatar img {
+            width: 80px;
+            height: 80px;
+            image-rendering: pixelated;
+        }
+
+        .team-member-info {
+            flex: 1;
+            display: none;
+        }
+
+        .team-member.expanded .team-member-info {
+            display: block;
+        }
+
+        .team-members {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .team-members.hidden {
+            display: none;
+        }
+
+        .team-member-name {
+            font-size: 2rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #000000;
+            margin-bottom: 5px;
+            font-family: 'uvKits';
+        }
+
+        .team-member-role {
+            font-size: 1.4rem;
+            color: #aaaaaa;
+            margin-bottom: 5px;
+            font-family: 'uvKits';
+        }
+
+        .team-member-realname {
+            font-size: 1.3rem;
+            color: #888888;
+            margin-bottom: 10px;
+            font-family: 'uvKits';
+        }
+
+        .team-member-socials {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            font-size: 1.2rem;
+            color: #ffffff;
+            text-decoration: none;
+            border: 2px solid #ffffff;
+            padding: 5px 15px;
+            transition: all 0.2s;
+            font-family: 'uvKits';
+        }
+
+        .social-link:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .button {
+            background: #ffffff;
+            color: #000000;
+            border: 4px solid #000000;
+            padding: 15px 40px;
+            font-size: 1.8rem;
+            font-family: 'uvKits';
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.2s;
+            text-shadow: none;
+        }
+
+        .button:hover {
+            background: #000000;
+            color: #ffffff;
+            border-color: #ffffff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            font-size: 1.4rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #000000;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3rem;
+            }
+
+            .tagline {
+                font-size: 1.4rem;
+            }
+
+            .server-ip {
+                font-size: 1.8rem;
+            }
+
+            .stats {
+                gap: 30px;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .side-panel {
+                width: 85%;
+            }
+
+            .panel-toggle {
+                padding: 10px 8px;
+                font-size: 1rem;
+            }
+
+            .team-members {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .team-member-avatar img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .button {
+                padding: 10px 20px;
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .search-input {
+                width: 200px;
+                font-size: 1rem;
+            }
+
+            .team-member.expanded .team-member-info {
+                position: relative;
+                top: auto;
+                left: auto;
+                width: auto;
+                background: rgba(0, 0, 0, 0.95);
+                border: 3px solid #ffffff;
+                border-top: none;
+                padding: 15px;
+                margin-top: 10px;
+            }
+
+            .team-member-hint {
+                display: block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .side-panel {
+                width: 95%;
+            }
+
+            .team-members {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 15px;
+            }
+
+            .team-member-avatar img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .button {
+                padding: 8px 15px;
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .search-input {
+                width: 150px;
+                font-size: 0.9rem;
+            }
+
+            .panel-toggle {
+                padding: 8px 6px;
+                font-size: 0.9rem;
+            }
+
+            .team-member.expanded .team-member-info {
+                position: relative;
+                top: auto;
+                left: auto;
+                width: auto;
+                background: rgba(0, 0, 0, 0.95);
+                border: 3px solid #ffffff;
+                border-top: none;
+                padding: 15px;
+                margin-top: 10px;
+            }
+
+            .team-member {
+                padding-bottom: 25px;
+            }
+
+            .team-member::after {
+                opacity: 1;
+                font-size: 0.6rem;
+                bottom: 8px;
+                color: #ffffff;
+            }
+        }
+
+        @media (min-width: 2560px) {
+            .container {
+                max-width: 2000px;
+                margin: 0 auto;
+            }
+
+            .team-members {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (min-width: 3840px) {
+            .container {
+                max-width: 3000px;
+                margin: 0 auto;
+            }
+
+            .team-members {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (aspect-ratio: 1/1) {
+            .team-members {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+
+    <!-- Left News Panel -->
+    <div class="side-panel left" id="newsPanel">
+        <div class="panel-content">
+            <h3>НОВОСТИ</h3>
+            <div class="news-item">
+                <div class="news-date">7 дней назад</div>
+                <p>Набор</p>
+            </div>
+            <div class="news-item">
+                <div class="news-date">9 месяцев назад</div>
+                <p>Набор</p>
+            </div>
+            <div class="news-item">
+                <div class="news-date">9 месяцев назад</div>
+                <p>Старт первого сезона</p>
+            </div>
+            <div class="news-item">
+                <div class="news-date">10 месяцев назад</div>
+                <p>Сервер принимает участие в королевской битве составом "Лайн, Эндер, Озди, Тии"</p>
+            </div>
+            <div class="news-item">
+                <div class="news-date">30 июня 2025</div>
+                <p>Конец стартового сезона</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Lore Panel -->
+    <div class="side-panel right" id="lorePanel">
+        <div class="panel-content">
+            <h3>ЛОР</h3>
+            <div class="lore-season" onclick="toggleLoreSeason(this)">
+                <div class="lore-season-header">
+                    <h4>СИНГУЛЯРИТИ - ЗАПУСК (0 сезон)</h4>
+                    <span class="lore-season-arrow">&gt;</span>
+                </div>
+                <div class="lore-season-content">
+                    <p>На сервере обнаружена гравитационная аномалия. Игроки, не посещавшие Энд, прыгают на 1 блок. После посещения Энда прыжок увеличивается до 9,5 блоков без утяжелённого шлема, и сокращается до 1,5 блоков с ним. Такие игроки также влияют на мобов, увеличивая их прыжок.</p>
+                    <p>Для исследований построили стеклянный купол. Во время экспериментов появились частицы из Энда. Обнаружены два типа аномальных зон: притяжение и отталкивание от поверхности.</p>
+                    <p>Изучено свойство облучения — игрок теряет нормальную гравитацию и не может передавать энергию другим. Ситуация прогрессирует.</p>
+                    <p>Лайн и Азурп разрушили портал в Энд, подозревая через него аномалии. Основана исследовательская компания ГИК и построена лаборатория с тремя этажами для разных уровней знаний.</p>
+                    <p>Лайн собирает экспедицию в Энд. Там после странной аномалии с эндерманами ростом в 30 блоков они обнаруживают, что шалкеры стали сильнее.</p>
+                    <p>Шалкеры теперь накладывают эффект отравления, наносящий урон. Урон от нескольких шалкеров складывается, даже игрок в полной заритовой броне получает много урона.</p>
+                    <p>Воздействие Энда вызывает фиолетовые частицы, более мощную левитацию и эффект тьмы.</p>
+                    <p>Азурп нашёл чёрную парящую дыру на базе Эша, которая затянула его. После того как дыра исчезла, из неё вылетела корона Эша и упала в лаву, но не сгорела, а осталась плавать на поверхности.</p>
+                    <p>Азурп после взаимодействия с чёрной дырой избавился от всех видов излучения и заражения, и у него восстановилась нормальная гравитация, как у обычного игрока.</p>
+                    <p>Найдена таинственная записка. Группа игроков (автор, Озди, Эндер, Козинак, Ти и Кловер) отправляется к месту, указанному в записке с координатами, и находит огромную лестницу, ведущую в бездну. Спустившись, они оказываются в бункере.</p>
+                    <p>В бункере найдены пять новых предметов: резервуар для антифрм, ловушка для шалкеров, колба для инъекторов, инъектор с лфрм, инъектор с антифрм.</p>
+                    <p>Ловушка для шалкеров нужна, чтобы отлавливать шалкеров и создавать антифоре. С помощью колбы можно наполнить инъектор антифреймом и излечиться от заражения лфрм.</p>
+                    <p>Порядок использования: поймать шалкеров с помощью ловушки, переработать их в специальном оборудовании, передать вещество в колбу, с помощью одной колбы создать восемь инъекторов для излечения. Также колбы можно использовать для питания реактора антифреймом.</p>
+                    <p>В досье описывается левит-фермент (лфрм) — аномальный фермент, присутствующий в атмосфере края. Шалкеры накапливают этот фермент и могут выпускать его в концентрированном виде. При контакте с ферментом организм мгновенно заряжается и становится переносчиком. Есть первичные и вторичные симптомы заражения.</p>
+                    <p>Сезон заканчивается тем, что всех засасывает в некую чёрную дыру.</p>
+                </div>
+            </div>
+            <div class="lore-season" onclick="toggleLoreSeason(this)">
+                <div class="lore-season-header">
+                    <h4>СИНГУЛЯРИТИ - 1 (Текущий)</h4>
+                    <span class="lore-season-arrow">&gt;</span>
+                </div>
+                <div class="lore-season-content">
+                    <p>В мире начинают происходить первые аномалии: появляются странные столбы из красной магмы, а на спавн падает метеорит с непонятным сообщением. Вскоре игроки обнаруживают загадочный маленький росток, который абсолютно неуязвим к разрушению и иссушает всё вокруг себя, а рядом с ним также находят магмовые столбы.</p>
+                    <p>При дальнейшем исследовании в разрастающихся корнях этого растения обнаруживают первые записки, описывающие историю дерева и его способность высасывать жизнь из рек, лесов и морей.</p>
+                    <p>Параллельно с этим Эндер находит другие зашифрованные книги — на особом языке, шифром Цезаря и числовым кодом, которые рассказывают о природных аномалиях, кошмарах, потере памяти и жутких существах с фиолетовыми глазами.</p>
+                    <p>В это же время Озди спускается в шахты и находит пещеру с летающим аметистовым кристаллом, который бьет энергией во всё живое, а также логово неизвестного существа, предупреждающего о надвигающейся тьме.</p>
+                    <p>Дальше события начинают развиваться стремительно: дерево, которое раньше было небольшим, теперь стало совсем огромным и превысило предел высоты самой игры. Вдобавок заражение теперь распространяется прямо на глазах и уже успело охватить все базы игроков, даже самые дальние.</p>
+                    <p>Из древа прямо на поверхности выбрались корни; один из таких корней разрушил одну из адских башен, на месте которой теперь образовалась часть адского измерения. Сущности выбираются из этого измерения и сразу зомбифицируются.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Events Panel -->
+    <div class="side-panel right" id="eventsPanel">
+        <div class="panel-content">
+            <h3>СОБЫТИЯ</h3>
+            <p>Скоро...</p>
+        </div>
+    </div>
+
+    <!-- Panel Toggle Buttons -->
+    <button class="panel-toggle left" onclick="togglePanel('news')">НОВОСТИ</button>
+    <button class="panel-toggle right lore" onclick="togglePanel('lore')">ЛОР</button>
+    <button class="panel-toggle right events" onclick="togglePanel('events')">СОБЫТИЯ</button>
+
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="image.png" alt="Singularity Logo" class="logo-image">
+                <h1 class="logo">SINGULARITY</h1>
+            </div>
+            <p class="tagline">Приватный сервер КМ(Контент Мэйкеров)</p>
+        </header>
+
+        <div class="content">
+            <div class="section server-status">
+                <div class="status-corner">
+                    <div class="status-indicator" id="statusIndicator">Загрузка...</div>
+                    <div class="player-count" id="playerCount"></div>
+                </div>
+                <div class="players-list" id="playersList"></div>
+            </div>
+
+            <div class="section social-links">
+                <h2 class="section-title">ССЫЛКИ</h2>
+                <div class="social-buttons">
+                    <a href="https://discord.gg/fnzjSWf88p" target="_blank" class="button social-button">DISCORD</a>
+                    <a href="https://t.me/singularity_sl" target="_blank" class="button social-button">TELEGRAM</a>
+                    <a href="https://www.youtube.com/@Singularity_Mine" target="_blank" class="button social-button">YOUTUBE</a>
+                </div>
+            </div>
+
+            <div class="section team-section">
+                <h2 class="section-title">НАШ СОСТАВ</h2>
+                <div class="toggle-container">
+                    <button class="button toggle-btn" onclick="toggleTeam()">Показать состав</button>
+                </div>
+                <div class="sort-buttons hidden">
+                    <button class="button sort-btn" onclick="sortTeam('az')">А-Я</button>
+                    <button class="button sort-btn" onclick="sortTeam('za')">Я-А</button>
+                </div>
+                <div class="search-container hidden">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Поиск по имени..." oninput="searchTeam()">
+                </div>
+                <div class="team-members hidden" id="teamMembers">
+                    <div class="team-member" data-priority="3" data-name="CloverS_Kid">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/CloverS_Kid/80" alt="CloverS_Kid"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">CloverS_Kid</div>
+                            <div class="team-member-role">Основатель, Тех. админ</div>
+                            <div class="team-member-realname">Кловер</div>
+                            <div class="team-member-socials">
+                                <a href="https://www.youtube.com/@realcloverskid" target="_blank" class="social-link">YOUTUBE</a>
+                                <a href="https://t.me/realcloverskid" target="_blank" class="social-link">TELEGRAM</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="1" data-name="MR_0zdi">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/MR_0zdi/80" alt="MR_0zdi"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">MR_0zdi</div>
+                            <div class="team-member-role">Билдер</div>
+                            <div class="team-member-realname">Озди</div>
+                            <div class="team-member-socials">
+                                <a href="https://t.me/ozdi_channel" target="_blank" class="social-link">TELEGRAM</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="Agata_friss">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/Agata_friss/80" alt="Agata_friss"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">Agata_friss</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Агата</div>
+                            <div class="team-member-socials">
+                                <a href="https://www.twitch.tv/agata_friss" target="_blank" class="social-link">TWITCH</a>
+                                <a href="https://t.me/agata_friss" target="_blank" class="social-link">TELEGRAM</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="CHOMeQ418">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/CHOMeQ418/80" alt="CHOMeQ418"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">CHOMeQ418</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Хомяк</div>
+                            <div class="team-member-socials">
+                                <a href="#" class="social-link">YOUTUBE</a>
+                                <a href="#" class="social-link">TELEGRAM</a>
+                                <a href="#" class="social-link">TWITCH</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="EnderHack1">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/EnderHack1/80" alt="EnderHack1"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">EnderHack1</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Эндер</div>
+                            <div class="team-member-socials">
+                                <a href="#" class="social-link">YOUTUBE</a>
+                                <a href="#" class="social-link">TELEGRAM</a>
+                                <a href="#" class="social-link">TWITCH</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="Folksy13_dll">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/Folksy13_dll/80" alt="Folksy13_dll"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">Folksy13_dll</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Фолкси</div>
+                            <div class="team-member-socials">
+                                <a href="https://www.youtube.com/@folksy13" target="_blank" class="social-link">YOUTUBE</a>
+                                <a href="https://t.me/Folksy13Family" target="_blank" class="social-link">TELEGRAM</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="g6thblood">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/g6thblood/80" alt="g6thblood"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">g6thblood</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Егор</div>
+                            <div class="team-member-socials">
+                                <a href="#" class="social-link">YOUTUBE</a>
+                                <a href="#" class="social-link">TELEGRAM</a>
+                                <a href="#" class="social-link">TWITCH</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="horHyplace">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/horHyplace/80" alt="horHyplace"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">horHyplace</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Марк</div>
+                            <div class="team-member-socials">
+                                <a href="#" class="social-link">YOUTUBE</a>
+                                <a href="#" class="social-link">TELEGRAM</a>
+                                <a href="#" class="social-link">TWITCH</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="LainBerg">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/LainBerg/80" alt="LainBerg"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">LainBerg</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Лайн</div>
+                            <div class="team-member-socials">
+                                <a href="https://www.youtube.com/@Negor_ll" target="_blank" class="social-link">YOUTUBE</a>
+                                <a href="https://t.me/LainBerg777" target="_blank" class="social-link">TELEGRAM</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="Maksimm205">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/Maksimm205/80" alt="Maksimm205"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">Maksimm205</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Максим (Макс) - Обрёл лицензию</div>
+                            <div class="team-member-socials">
+                                <a href="#" class="social-link">YOUTUBE</a>
+                                <a href="#" class="social-link">TELEGRAM</a>
+                                <a href="#" class="social-link">TWITCH</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="MrKhazinack">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/MrKhazinack/80" alt="MrKhazinack"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">MrKhazinack</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Кази</div>
+                            <div class="team-member-socials">
+                                <a href="#" class="social-link">YOUTUBE</a>
+                                <a href="#" class="social-link">TELEGRAM</a>
+                                <a href="#" class="social-link">TWITCH</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="lousamik">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/lousamik/80" alt="lousamik"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">lousamik</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Лосьён</div>
+                            <div class="team-member-socials">
+                                <a href="#" class="social-link">YOUTUBE</a>
+                                <a href="#" class="social-link">TELEGRAM</a>
+                                <a href="#" class="social-link">TWITCH</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="erinaceus_">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/erinaceus_/80" alt="erinaceus_"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">erinaceus_</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Эрин</div>
+                            <div class="team-member-socials">
+                                <a href="#" class="social-link">YOUTUBE</a>
+                                <a href="#" class="social-link">TELEGRAM</a>
+                                <a href="#" class="social-link">TWITCH</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="impartialkus">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/impartialkus/80" alt="impartialkus"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">impartialkus</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Кира</div>
+                            <div class="team-member-socials">
+                                <a href="#" class="social-link">YOUTUBE</a>
+                                <a href="#" class="social-link">TELEGRAM</a>
+                                <a href="#" class="social-link">TWITCH</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="ArtAzurp">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/ArtAzurp/80" alt="ArtAzurp"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">ArtAzurp</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Азурп</div>
+                            <div class="team-member-socials">
+                                <a href="#" class="social-link">YOUTUBE</a>
+                                <a href="#" class="social-link">TELEGRAM</a>
+                                <a href="#" class="social-link">TWITCH</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-member" data-priority="0" data-name="ba1toss">
+                        <div class="team-member-avatar"><img src="https://minotar.net/helm/ba1toss/80" alt="ba1toss"></div>
+                        <div class="team-member-info">
+                            <div class="team-member-name">ba1toss</div>
+                            <div class="team-member-role">Игрок проекта</div>
+                            <div class="team-member-realname">Балтосс</div>
+                            <div class="team-member-socials">
+                                <a href="https://www.youtube.com/@bal2oss" target="_blank" class="social-link">YOUTUBE</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Singularity | Season 1 | 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('mousemove', (e) => {
+            const background = document.querySelector('.background');
+            const x = (e.clientX / window.innerWidth - 0.5) * 30;
+            const y = (e.clientY / window.innerHeight - 0.5) * 30;
+            background.style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        // Check server status
+        async function checkServerStatus() {
+            const statusIndicator = document.getElementById('statusIndicator');
+            const playerCount = document.getElementById('playerCount');
+            const playersList = document.getElementById('playersList');
+            const serverIP = '5.83.140.250:25757';
+
+            try {
+                const response = await fetch(`https://api.mcsrvstat.us/2/${serverIP}`);
+                const data = await response.json();
+
+                if (data.online) {
+                    statusIndicator.textContent = '🟢 Сервер онлайн';
+                    statusIndicator.className = 'status-indicator online';
+                    playerCount.textContent = `${data.players.online} / ${data.players.max}`;
+
+                    // Display online players with heads
+                    if (data.players.list && data.players.list.length > 0) {
+                        playersList.innerHTML = data.players.list.map(player => `
+                            <div class="player-head">
+                                <img src="https://minotar.net/helm/${player}/50" alt="${player}">
+                                <div class="player-name">${player}</div>
+                            </div>
+                        `).join('');
+                    } else {
+                        playersList.innerHTML = '<div style="color: #888; font-size: 1rem;">Нет игроков онлайн</div>';
+                    }
+                } else {
+                    statusIndicator.textContent = '🔴 Сервер оффлайн';
+                    statusIndicator.className = 'status-indicator offline';
+                    playerCount.textContent = '';
+                    playersList.innerHTML = '';
+                }
+            } catch (error) {
+                statusIndicator.textContent = '🔴 Ошибка проверки';
+                statusIndicator.className = 'status-indicator offline';
+                playerCount.textContent = '';
+                playersList.innerHTML = '';
+            }
+        }
+
+        // Check status on page load
+        checkServerStatus();
+
+        // Refresh status every 30 seconds
+        setInterval(checkServerStatus, 30000);
+
+        function toggleTeam() {
+            const teamMembers = document.getElementById('teamMembers');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            const sortButtons = document.querySelector('.sort-buttons');
+            const searchContainer = document.querySelector('.search-container');
+            
+            if (teamMembers.classList.contains('hidden')) {
+                teamMembers.classList.remove('hidden');
+                sortButtons.classList.remove('hidden');
+                searchContainer.classList.remove('hidden');
+                toggleBtn.textContent = 'Скрыть состав';
+                sortTeam('az'); // Auto-sort when showing
+            } else {
+                teamMembers.classList.add('hidden');
+                sortButtons.classList.add('hidden');
+                searchContainer.classList.add('hidden');
+                toggleBtn.textContent = 'Показать состав';
+            }
+        }
+
+        // Add click functionality to team members using event delegation
+        document.getElementById('teamMembers').addEventListener('click', function(e) {
+            const member = e.target.closest('.team-member');
+            if (member) {
+                // Collapse all other members
+                document.querySelectorAll('.team-member').forEach(m => {
+                    if (m !== member) {
+                        m.classList.remove('expanded');
+                    }
+                });
+                // Toggle this member
+                member.classList.toggle('expanded');
+            }
+        });
+
+        // Collapse when mouse leaves using event delegation
+        document.getElementById('teamMembers').addEventListener('mouseleave', function(e) {
+            const member = e.target.closest('.team-member');
+            if (member) {
+                member.classList.remove('expanded');
+            }
+        });
+
+        function sortTeam(sortType) {
+            const container = document.getElementById('teamMembers');
+            const members = Array.from(container.children);
+
+            members.sort((a, b) => {
+                const priorityA = parseInt(a.dataset.priority);
+                const priorityB = parseInt(b.dataset.priority);
+                const nameA = a.dataset.name;
+                const nameB = b.dataset.name;
+
+                // Always keep priority members at the top
+                if (priorityA > 0 && priorityB > 0) {
+                    return priorityB - priorityA;
+                }
+                if (priorityA > 0) return -1;
+                if (priorityB > 0) return 1;
+
+                // Sort non-priority members
+                if (sortType === 'az') {
+                    return nameA.localeCompare(nameB);
+                } else if (sortType === 'za') {
+                    return nameB.localeCompare(nameA);
+                }
+            });
+
+            members.forEach(member => container.appendChild(member));
+        }
+
+        function searchTeam() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const members = document.querySelectorAll('.team-member');
+
+            members.forEach(member => {
+                const name = member.dataset.name.toLowerCase();
+                const realName = member.querySelector('.team-member-realname').textContent.toLowerCase();
+                
+                if (name.includes(searchTerm) || realName.includes(searchTerm)) {
+                    member.style.display = 'flex';
+                } else {
+                    member.style.display = 'none';
+                }
+            });
+        }
+
+        function togglePanel(panel) {
+            const panelElement = document.getElementById(panel + 'Panel');
+            panelElement.classList.toggle('open');
+        }
+
+        function toggleLoreSeason(season) {
+            season.classList.toggle('open');
+            const content = season.querySelector('.lore-season-content');
+            content.classList.toggle('open');
+        }
+    </script>
+
+</body>
+</html>
