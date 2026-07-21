@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -651,13 +652,14 @@
             white-space: nowrap;
         }
 
-        /* Состав команды */
+        /* Состав команды: Плиточная сетка Masonry */
         .team-members {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
             gap: 1.25rem;
+            grid-auto-rows: 10px;
+            grid-auto-flow: dense;
             padding: 1rem 0;
-            align-items: flex-start;
         }
 
         .team-members.hidden {
@@ -675,9 +677,10 @@
             justify-content: flex-start;
             position: relative;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
             z-index: 1;
-            width: calc(25% - 0.9375rem); /* 4 игрока в ряд на десктопе */
+            align-self: start;
+            height: max-content;
         }
 
         .team-member:hover {
@@ -718,11 +721,17 @@
             display: none;
         }
 
-        /* Открытый игрок становится в 2 раза шире (занимает место 2 стандартных ячеек) */
+        /* Показ инфо при клике: задействуется 2 колонки, карточка плавно разворачивается */
         .team-member.expanded {
             z-index: 100;
             background: rgba(0, 0, 0, 0.95);
-            width: calc(50% - 0.625rem);
+            grid-column: span 2;
+        }
+
+        @media (max-width: 32rem) {
+            .team-member.expanded {
+                grid-column: span 1;
+            }
         }
 
         .team-member.expanded .team-member-name-preview {
@@ -849,16 +858,7 @@
             text-shadow: 0.125rem 0.125rem 0 #000000;
         }
 
-        /* АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ И ПЛАНШЕТОВ */
-        @media (max-width: 56rem) {
-            .team-member {
-                width: calc(33.333% - 0.833rem); /* 3 в ряд */
-            }
-            .team-member.expanded {
-                width: calc(66.666% - 0.416rem);
-            }
-        }
-
+        /* АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ */
         @media (max-width: 48rem) {
             .container {
                 padding: 0 0.9375rem;
@@ -914,16 +914,13 @@
             }
 
             .team-members {
+                grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
                 gap: 0.75rem;
+                grid-auto-rows: 8px;
             }
 
             .team-member {
                 padding: 0.75rem;
-                width: calc(50% - 0.375rem); /* 2 в ряд */
-            }
-
-            .team-member.expanded {
-                width: 100%;
             }
 
             .team-member-avatar {
@@ -959,8 +956,8 @@
                 right: 4.8rem;
             }
 
-            .team-member {
-                width: 100%;
+            .team-members {
+                grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
             }
 
             .team-member.expanded .team-member-info {
@@ -1143,6 +1140,25 @@
     </div>
 
     <script>
+        // Расчет Masonry-эффекта для карточек состава
+        function resizeGridItem(item) {
+            if (!item || item.style.display === 'none') return;
+            const grid = document.getElementById('teamMembers');
+            if (!grid) return;
+            const rowHeight = parseFloat(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows')) || 10;
+            const rowGap = parseFloat(window.getComputedStyle(grid).getPropertyValue('gap') || window.getComputedStyle(grid).getPropertyValue('grid-row-gap') || 0);
+            const contentHeight = item.scrollHeight;
+            const rowSpan = Math.ceil((contentHeight + rowGap) / (rowHeight + rowGap));
+            item.style.gridRowEnd = `span ${rowSpan}`;
+        }
+
+        function resizeAllGridItems() {
+            const allItems = document.querySelectorAll('.team-member');
+            allItems.forEach(resizeGridItem);
+        }
+
+        window.addEventListener('resize', resizeAllGridItems);
+
         // Анимация фона за курсором
         document.addEventListener('mousemove', (e) => {
             if (window.innerWidth > 768) {
@@ -1258,6 +1274,9 @@
                     
                     teamMembersContainer.appendChild(memberDiv);
                 });
+
+                resizeAllGridItems();
+                setTimeout(resizeAllGridItems, 300);
             } catch (error) {
                 console.error('Error loading team members:', error);
                 document.getElementById('teamMembers').innerHTML = '<p style="color: #ff6b6b; text-align: center; grid-column: 1/-1;">Ошибка загрузки состава</p>';
@@ -1289,6 +1308,8 @@
                     member.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             });
+            resizeAllGridItems();
+            setTimeout(resizeAllGridItems, 300);
         }
 
         function toggleTeam() {
@@ -1303,6 +1324,8 @@
                 searchContainer.classList.remove('hidden');
                 toggleBtn.textContent = 'Скрыть состав';
                 sortTeam('az');
+                resizeAllGridItems();
+                setTimeout(resizeAllGridItems, 100);
             } else {
                 teamMembers.classList.add('hidden');
                 sortButtons.classList.add('hidden');
@@ -1315,10 +1338,16 @@
         document.getElementById('teamMembers').addEventListener('click', function(e) {
             const member = e.target.closest('.team-member');
             if (member && !e.target.closest('.social-link')) {
+                const isExpanded = member.classList.contains('expanded');
                 document.querySelectorAll('.team-member').forEach(m => {
-                    if (m !== member) m.classList.remove('expanded');
+                    m.classList.remove('expanded');
                 });
-                member.classList.toggle('expanded');
+                if (!isExpanded) {
+                    member.classList.add('expanded');
+                }
+                resizeAllGridItems();
+                setTimeout(resizeAllGridItems, 50);
+                setTimeout(resizeAllGridItems, 300);
             }
         });
 
@@ -1342,6 +1371,7 @@
             });
 
             members.forEach(member => container.appendChild(member));
+            resizeAllGridItems();
         }
 
         function searchTeam() {
@@ -1359,6 +1389,7 @@
                     member.style.display = 'none';
                 }
             });
+            resizeAllGridItems();
         }
 
         function togglePanel(panel) {
