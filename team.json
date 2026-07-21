@@ -280,7 +280,9 @@
         {
           "platform": "YOUTUBE",
           "url": "https://www.youtube.com/@bal2oss"
-        },
+        }
+      ]
+    },
     {
       "name": "Yrk1z",
       "role": "Игрок проекта",
@@ -303,6 +305,4 @@
       ]
     }
   ]
-}
-]
 }
