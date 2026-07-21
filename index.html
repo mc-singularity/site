@@ -1550,7 +1550,7 @@
         // Load team members from JSON file
         async function loadTeamMembers() {
             try {
-                const response = await fetch('team.json', { 
+                const response = await fetch('team.json?v=' + Date.now() + Math.random(), { 
                     cache: 'no-store',
                     headers: { 'Cache-Control': 'no-cache' }
                 });
