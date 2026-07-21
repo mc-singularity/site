@@ -1555,6 +1555,8 @@
                     headers: { 'Cache-Control': 'no-cache' }
                 });
                 const data = await response.json();
+                console.log('Loaded team data:', data);
+                console.log('Total members:', data.teamMembers.length);
                 const teamMembersContainer = document.getElementById('teamMembers');
                 
                 data.teamMembers.forEach(member => {
