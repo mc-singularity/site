@@ -41,9 +41,14 @@
             width: 2rem;
             height: 2rem;
             pointer-events: none !important;
-            z-index: 9999;
+            z-index: 999999 !important; /* Курсор всегда поверх всех окон и модалок */
             animation: spin 0.5s linear infinite;
             display: none;
+        }
+
+        .cursor-logo * {
+            pointer-events: none !important;
+            user-select: none;
         }
 
         @media (hover: hover) and (pointer: fine) {
@@ -1305,6 +1310,10 @@
             document.getElementById('newsTextInput').value = '';
             document.getElementById('newsDateInput').value = 'Только что';
             document.getElementById('newsFormError').textContent = '';
+            setTimeout(() => {
+                const input = document.getElementById('newsAccessCode');
+                if (input) input.focus();
+            }, 100);
         }
 
         function closeNewsModal() {
@@ -1318,6 +1327,10 @@
                 errorElem.textContent = '';
                 document.getElementById('modalStep1').style.display = 'none';
                 document.getElementById('modalStep2').style.display = 'block';
+                setTimeout(() => {
+                    const input = document.getElementById('newsTextInput');
+                    if (input) input.focus();
+                }, 100);
             } else {
                 errorElem.textContent = 'Неверный код доступа!';
             }
