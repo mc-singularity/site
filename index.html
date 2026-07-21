@@ -445,6 +445,105 @@
             font-family: 'uvKits', sans-serif;
         }
 
+        .add-news-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 0.125rem solid #ffffff;
+            color: #ffffff;
+            padding: 0.6rem 1rem;
+            width: 100%;
+            font-family: 'uvKits', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .add-news-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Модальное окно добавления новостей */
+        .custom-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10005;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .custom-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .custom-modal-content {
+            background: #000000;
+            border: 0.1875rem solid #ffffff;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 25rem;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 0 1.5rem rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-family: 'uvKits', sans-serif;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .modal-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 0.125rem solid #ffffff;
+            color: #ffffff;
+            padding: 0.6rem;
+            font-family: 'uvKits', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            outline: none;
+        }
+
+        .modal-textarea {
+            min-height: 5rem;
+            resize: vertical;
+        }
+
+        .modal-btn {
+            font-size: 1rem;
+            padding: 0.5rem 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .modal-error {
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            min-height: 1.2rem;
+            font-family: 'uvKits', sans-serif;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.8rem;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
         .lore-season {
             background: rgba(255, 255, 255, 0.1);
             border: 0.125rem solid #ffffff;
@@ -1022,25 +1121,48 @@
             <button class="panel-close" onclick="closeAllPanels()">&times;</button>
         </div>
         <div class="panel-content">
-            <div class="news-item">
-                <div class="news-date">7 дней назад</div>
-                <p>Набор</p>
+            <button class="add-news-btn" onclick="openAddNewsModal()">+ ДОБАВИТЬ НОВОСТЬ</button>
+            <div id="newsItemsList">
+                <div class="news-item">
+                    <div class="news-date">7 дней назад</div>
+                    <p>Набор</p>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">9 месяцев назад</div>
+                    <p>Набор</p>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">9 месяцев назад</div>
+                    <p>Старт первого сезона</p>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">10 месяцев назад</div>
+                    <p>Сервер принимает участие в королевской битве составом "Лайн, Эндер, Озди, Тии"</p>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">30 июня 2025</div>
+                    <p>Конец стартового сезона</p>
+                </div>
             </div>
-            <div class="news-item">
-                <div class="news-date">9 месяцев назад</div>
-                <p>Набор</p>
+        </div>
+    </div>
+
+    <!-- Модальное окно для добавления новостей -->
+    <div class="custom-modal" id="newsModal">
+        <div class="custom-modal-content">
+            <button class="modal-close" onclick="closeNewsModal()">&times;</button>
+            <div id="modalStep1">
+                <h4 class="modal-title">ВВЕДИТЕ КОД ДОСТУПА</h4>
+                <input type="password" id="newsAccessCode" class="modal-input" placeholder="Код доступа..." onkeydown="if(event.key === 'Enter') verifyNewsCode()">
+                <div id="newsCodeError" class="modal-error"></div>
+                <button class="button modal-btn" onclick="verifyNewsCode()">ПОДТВЕРДИТЬ</button>
             </div>
-            <div class="news-item">
-                <div class="news-date">9 месяцев назад</div>
-                <p>Старт первого сезона</p>
-            </div>
-            <div class="news-item">
-                <div class="news-date">10 месяцев назад</div>
-                <p>Сервер принимает участие в королевской битве составом "Лайн, Эндер, Озди, Тии"</p>
-            </div>
-            <div class="news-item">
-                <div class="news-date">30 июня 2025</div>
-                <p>Конец стартового сезона</p>
+            <div id="modalStep2" style="display: none;">
+                <h4 class="modal-title">НОВАЯ НОВОСТЬ</h4>
+                <input type="text" id="newsDateInput" class="modal-input" placeholder="Дата (например: Только что)">
+                <textarea id="newsTextInput" class="modal-input modal-textarea" placeholder="Текст новости..."></textarea>
+                <div id="newsFormError" class="modal-error"></div>
+                <button class="button modal-btn" onclick="publishNews()">ОПУБЛИКОВАТЬ</button>
             </div>
         </div>
     </div>
@@ -1109,7 +1231,7 @@
     <button class="panel-toggle right events" onclick="togglePanel('events')">СОБЫТИЯ</button>
 
     <div class="container">
-        header>
+        <header>
             <div class="logo-container">
                 <img src="logo.png" alt="Singularity Logo" class="logo-image" onerror="this.style.display='none'">
                 <h1 class="logo">SINGULARITY</h1>
@@ -1171,6 +1293,70 @@
     </div>
 
     <script>
+        // Код доступа для публикации новостей
+        const NEWS_ACCESS_CODE = "SLFLKS-1331";
+
+        function openAddNewsModal() {
+            document.getElementById('newsModal').classList.add('show');
+            document.getElementById('modalStep1').style.display = 'block';
+            document.getElementById('modalStep2').style.display = 'none';
+            document.getElementById('newsAccessCode').value = '';
+            document.getElementById('newsCodeError').textContent = '';
+            document.getElementById('newsTextInput').value = '';
+            document.getElementById('newsDateInput').value = 'Только что';
+            document.getElementById('newsFormError').textContent = '';
+        }
+
+        function closeNewsModal() {
+            document.getElementById('newsModal').classList.remove('show');
+        }
+
+        function verifyNewsCode() {
+            const codeInput = document.getElementById('newsAccessCode').value.trim();
+            const errorElem = document.getElementById('newsCodeError');
+            if (codeInput === NEWS_ACCESS_CODE) {
+                errorElem.textContent = '';
+                document.getElementById('modalStep1').style.display = 'none';
+                document.getElementById('modalStep2').style.display = 'block';
+            } else {
+                errorElem.textContent = 'Неверный код доступа!';
+            }
+        }
+
+        function publishNews() {
+            const dateVal = document.getElementById('newsDateInput').value.trim() || 'Только что';
+            const textVal = document.getElementById('newsTextInput').value.trim();
+            const errorElem = document.getElementById('newsFormError');
+
+            if (!textVal) {
+                errorElem.textContent = 'Введите текст новости!';
+                return;
+            }
+
+            const newsList = document.getElementById('newsItemsList');
+            const newsItem = document.createElement('div');
+            newsItem.className = 'news-item';
+            newsItem.innerHTML = `
+                <div class="news-date">${escapeHTML(dateVal)}</div>
+                <p>${escapeHTML(textVal)}</p>
+            `;
+
+            newsList.insertBefore(newsItem, newsList.firstChild);
+            closeNewsModal();
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+
         // Расчет Masonry-эффекта для карточек состава
         function resizeGridItem(item) {
             if (!item || item.style.display === 'none') return;
