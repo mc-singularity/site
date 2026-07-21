@@ -718,18 +718,17 @@
             display: none;
         }
 
-        /* Показ инфо при клике: карточка вытягивается на 2 колонки и 2 строки */
+        /* Показ инфо при клике: занимает ровно столько места, сколько необходимо */
         .team-member.expanded {
             z-index: 100;
             background: rgba(0, 0, 0, 0.95);
             grid-column: span 2;
-            grid-row: span 2;
+            height: fit-content;
         }
 
         @media (max-width: 32rem) {
             .team-member.expanded {
                 grid-column: span 1;
-                grid-row: auto;
             }
         }
 
