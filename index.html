@@ -657,6 +657,7 @@
             grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
             gap: 1.25rem;
             padding: 1rem 0;
+            align-items: start; /* Вытягивается только активный элемент, а не весь ряд */
         }
 
         .team-members.hidden {
@@ -670,8 +671,8 @@
             background: rgba(255, 255, 255, 0.1);
             border: 0.1875rem solid #ffffff;
             padding: 1.25rem;
-            gap: 1rem;
-            justify-content: center;
+            gap: 0.5rem;
+            justify-content: flex-start;
             position: relative;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -702,46 +703,84 @@
             object-fit: cover;
         }
 
+        .team-member-name-preview {
+            font-size: 1.2rem;
+            color: #ffffff;
+            text-shadow: 0.125rem 0.125rem 0 #000000;
+            font-family: 'uvKits', sans-serif;
+            margin-top: 0.3125rem;
+            text-align: center;
+            word-break: break-word;
+        }
+
         .team-member-info {
             display: none;
         }
 
-        /* Показ инфо при клике/расширении карточки */
+        /* Показ инфо при клике: карточка вытягивается вниз, информация расположена сбоку */
         .team-member.expanded {
             z-index: 100;
             background: rgba(0, 0, 0, 0.95);
+            grid-column: span 2; /* Шире для комфортного размещения информации сбоку */
+        }
+
+        @media (max-width: 32rem) {
+            .team-member.expanded {
+                grid-column: span 1;
+            }
+        }
+
+        .team-member.expanded .team-member-name-preview {
+            display: none;
         }
 
         .team-member.expanded .team-member-info {
             display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
+            flex-direction: row; /* Информация расположена сбоку от карточки/картинки */
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
             width: 100%;
-            margin-top: 0.5rem;
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
+            border-top: 0.125rem solid #ffffff;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-0.625rem);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .team-member-card {
-            width: 100%;
-            max-width: 12rem;
-            align-self: center;
+            width: 6.5rem;
+            flex-shrink: 0;
         }
 
         .team-member-card img {
             width: 100%;
             height: auto;
             border: 0.125rem solid #ffffff;
+            display: block;
         }
 
         .team-member-details {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-            width: 100%;
+            align-items: flex-start;
+            text-align: left;
+            flex: 1;
+            min-width: 0;
         }
 
         .team-member-name {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: #ffffff;
             text-shadow: 0.125rem 0.125rem 0 #000000;
             margin-bottom: 0.3125rem;
@@ -752,14 +791,14 @@
         }
 
         .team-member-role {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #aaaaaa;
             margin-bottom: 0.3125rem;
             font-family: 'uvKits', sans-serif;
         }
 
         .team-member-realname {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #888888;
             margin-bottom: 0.625rem;
             font-family: 'uvKits', sans-serif;
@@ -769,15 +808,15 @@
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: flex-start;
         }
 
         .social-link {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: #ffffff;
             text-decoration: none;
             border: 0.125rem solid #ffffff;
-            padding: 0.25rem 0.625rem;
+            padding: 0.25rem 0.5rem;
             transition: all 0.2s;
             font-family: 'uvKits', sans-serif;
         }
@@ -914,6 +953,21 @@
 
             .team-members {
                 grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+            }
+
+            .team-member.expanded .team-member-info {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .team-member-details {
+                align-items: center;
+                text-align: center;
+            }
+
+            .team-member-socials {
+                justify-content: center;
             }
         }
     </style>
