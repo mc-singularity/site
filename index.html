@@ -154,6 +154,7 @@
         .logo-title-wrapper {
             position: relative;
             display: inline-block;
+            margin-bottom: 0.625rem;
         }
 
         .logo {
@@ -162,25 +163,26 @@
             color: #ffffff;
             text-shadow: 0.25rem 0.25rem 0 #000000, 0 0 20px rgba(255, 255, 255, 0.3);
             letter-spacing: 0.25rem;
-            margin-bottom: 0.625rem;
             font-family: 'uvKits', sans-serif;
             line-height: 1.1;
+            margin: 0;
         }
 
-        /* Майнкрафт-сплеш надпись */
+        /* Исправленная Майнкрафт-сплеш надпись */
         .splash-text {
             position: absolute;
-            right: -1rem;
-            bottom: -0.6rem;
-            font-size: clamp(0.8rem, 2.5vw, 1.3rem);
+            top: -0.2rem;
+            right: -1.5rem;
+            font-size: clamp(0.75rem, 2.2vw, 1.25rem);
             font-family: 'uvKits', sans-serif;
             color: #ffff55;
             text-shadow: 0.125rem 0.125rem 0 #000000;
             transform: rotate(-15deg);
+            transform-origin: center center;
             animation: splashPulse 0.5s infinite alternate ease-in-out;
             white-space: nowrap;
             pointer-events: none;
-            z-index: 5;
+            z-index: 10;
         }
 
         @keyframes splashPulse {
@@ -1005,6 +1007,11 @@
             .social-button .tooltip {
                 display: none;
             }
+
+            .splash-text {
+                right: -0.5rem;
+                top: -0.5rem;
+            }
         }
 
         @media (max-width: 30rem) {
@@ -1176,7 +1183,6 @@
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
             
-            // Фиксируем пиксельную графику
             ctx.imageSmoothingEnabled = false;
 
             let width = canvas.width = window.innerWidth;
@@ -1194,7 +1200,7 @@
                 stars.push({
                     x: Math.floor(Math.random() * width),
                     y: Math.floor(Math.random() * height),
-                    size: Math.random() < 0.2 ? 4 : 2, // Пиксели 2x2 или 4x4
+                    size: Math.random() < 0.2 ? 4 : 2,
                     alpha: Math.random(),
                     speed: Math.random() * 0.02 + 0.005
                 });
@@ -1208,7 +1214,7 @@
                     shootingStars.push({
                         x: Math.floor(Math.random() * width * 0.85),
                         y: Math.floor(Math.random() * height * 0.4),
-                        length: Math.floor(Math.random() * 8 + 6), // Длина в пиксельных сегментах
+                        length: Math.floor(Math.random() * 8 + 6),
                         speed: Math.floor(Math.random() * 6 + 6),
                         alpha: 1,
                         decay: Math.random() * 0.02 + 0.015
@@ -1219,22 +1225,18 @@
             function animateStars() {
                 ctx.clearRect(0, 0, width, height);
 
-                // Отрисовка фоновых пиксельных звезд
                 stars.forEach(star => {
                     star.alpha += star.speed;
                     if (star.alpha > 1 || star.alpha < 0.15) star.speed = -star.speed;
                     
                     ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(star.alpha)})`;
-                    // Отрисовка квадратного пикселя
                     ctx.fillRect(star.x, star.y, star.size, star.size);
                 });
 
-                // Отрисовка пиксельных метеоров
                 createShootingStar();
                 for (let i = shootingStars.length - 1; i >= 0; i--) {
                     const s = shootingStars[i];
                     
-                    // Рисуем ступенчатый шлейф из пиксельных блоков
                     for (let j = 0; j < s.length; j++) {
                         const pixelX = Math.floor(s.x - j * 3);
                         const pixelY = Math.floor(s.y - j * 3);
