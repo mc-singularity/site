@@ -1172,7 +1172,7 @@
         </footer>
     </div>
 
-    <!-- Firebase SDK & Persistent Data Logic -->
+    <!-- Firebase SDK & Safe Data Management -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -1181,143 +1181,140 @@
         const ACCESS_CODE = "SLFLKS-1331";
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'singularity-server';
 
-        // Стандартная дефолтная конфигурация Firebase
-        const defaultFirebaseConfig = {
-            apiKey: "",
-            authDomain: "singularity-sl.firebaseapp.com",
-            projectId: "singularity-sl",
-            storageBucket: "singularity-sl.firebasestorage.app",
-            messagingSenderId: "100000000000",
-            appId: "1:100000000000:web:abc123def456"
-        };
+        let db = null;
+        let auth = null;
+        let useFirebase = false;
 
-        let firebaseConfig = defaultFirebaseConfig;
         if (typeof __firebase_config !== 'undefined' && __firebase_config) {
             try {
-                firebaseConfig = JSON.parse(__firebase_config);
+                const firebaseConfig = JSON.parse(__firebase_config);
+                if (firebaseConfig && firebaseConfig.apiKey && firebaseConfig.apiKey.length > 0) {
+                    const app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    useFirebase = true;
+                }
             } catch (e) {
-                console.warn('Using default fallback firebase config');
+                console.warn('Firebase config parse error, fallback to LocalStorage:', e);
             }
         }
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let currentUser = null;
         let isAdminAuthenticated = false;
-
-        // Переменные состояния редактирования
-        let currentModalMode = ''; // 'news', 'lore', 'events'
+        let currentModalMode = '';
         let editingItemId = null;
-        let pendingAction = null; // Функция обратного вызова после подлинности пароля
+        let pendingAction = null;
 
-        // Аутентификация
-        async function initAuth() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
+        // Начальные данные по умолчанию
+        const defaultData = {
+            news: [
+                { id: "news_1", date: "7 дней назад", text: "Набор", priority: 5 },
+                { id: "news_2", date: "9 месяцев назад", text: "Набор", priority: 4 },
+                { id: "news_3", date: "9 месяцев назад", text: "Старт первого сезона", priority: 3 },
+                { id: "news_4", date: "10 месяцев назад", text: 'Сервер принимает участие в королевской битве составом "Лайн, Эндер, Озди, Тии"', priority: 2 },
+                { id: "news_5", date: "30 июня 2025", text: "Конец стартового сезона", priority: 1 }
+            ],
+            lore: [
+                { 
+                    id: "lore_1", 
+                    title: "СИНГУЛЯРИТИ - ЗАПУСК (0 сезон)", 
+                    text: "На сервере обнаружена гравитационная аномалия. Игроки, не посещавшие Энд, прыгают на 1 блок. После посещения Энда прыжок увеличивается до 9,5 блоков...\n\nДля исследований построили стеклянный купол. Во время экспериментов появились частицы из Энда...\n\nЛайн и Азурп разрушили портал в Энд...",
+                    priority: 1 
+                },
+                { 
+                    id: "lore_2", 
+                    title: "СИНГУЛЯРИТИ - 1 (Текущий)", 
+                    text: "В мире начинают происходить первые аномалии: появляются странные столбы из красной магмы, а на спавн падает метеорит...\n\nПри дальнейшем исследовании в разрастающихся корнях этого растения обнаруживают первые записки...",
+                    priority: 2 
                 }
-            } catch (err) {
-                console.error("Auth error:", err);
+            ],
+            events: [
+                { id: "event_1", title: "Запуск Сезона", date: "В процессе", text: "Основные события текущего сезона подготавливаются." }
+            ]
+        };
+
+        // Загрузка/сохранение в LocalStorage (для GitHub Pages)
+        function getLocalItems(key) {
+            const raw = localStorage.getItem('singularity_' + key);
+            if (!raw) {
+                localStorage.setItem('singularity_' + key, JSON.stringify(defaultData[key]));
+                return defaultData[key];
             }
+            try { return JSON.parse(raw); } catch(e) { return defaultData[key]; }
         }
 
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            if (user) {
-                setupRealtimeListeners();
-            }
-        });
+        function saveLocalItems(key, items) {
+            localStorage.setItem('singularity_' + key, JSON.stringify(items));
+            refreshLocalUI(key);
+        }
 
-        initAuth();
+        function refreshLocalUI(key) {
+            const items = getLocalItems(key);
+            if (key === 'news') renderNewsUI(items.sort((a,b) => (b.priority||0) - (a.priority||0)));
+            if (key === 'lore') renderLoreUI(items.sort((a,b) => (a.priority||0) - (b.priority||0)));
+            if (key === 'events') renderEventsUI(items);
+        }
 
-        // Начальные заготовки данных (если базы пусты)
-        const initialNews = [
-            { id: "news_1", date: "7 дней назад", text: "Набор", priority: 5 },
-            { id: "news_2", date: "9 месяцев назад", text: "Набор", priority: 4 },
-            { id: "news_3", date: "9 месяцев назад", text: "Старт первого сезона", priority: 3 },
-            { id: "news_4", date: "10 месяцев назад", text: 'Сервер принимает участие в королевской битве составом "Лайн, Эндер, Озди, Тии"', priority: 2 },
-            { id: "news_5", date: "30 июня 2025", text: "Конец стартового сезона", priority: 1 }
-        ];
+        // Запуск системы
+        if (useFirebase && auth) {
+            const initAuth = async () => {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (err) {
+                    console.error("Auth error:", err);
+                }
+            };
+            onAuthStateChanged(auth, (user) => {
+                if (user) setupRealtimeListeners();
+            });
+            initAuth();
+        } else {
+            // Режим GitHub Pages / LocalStorage
+            refreshLocalUI('news');
+            refreshLocalUI('lore');
+            refreshLocalUI('events');
+        }
 
-        const initialLore = [
-            { 
-                id: "lore_1", 
-                title: "СИНГУЛЯРИТИ - ЗАПУСК (0 сезон)", 
-                text: "На сервере обнаружена гравитационная аномалия. Игроки, не посещавшие Энд, прыгают на 1 блок. После посещения Энда прыжок увеличивается до 9,5 блоков...\n\nДля исследований построили стеклянный купол. Во время экспериментов появились частицы из Энда...\n\nЛайн и Азурп разрушили портал в Энд...",
-                priority: 1 
-            },
-            { 
-                id: "lore_2", 
-                title: "СИНГУЛЯРИТИ - 1 (Текущий)", 
-                text: "В мире начинают происходить первые аномалии: появляются странные столбы из красной магмы, а на спавн падает метеорит...\n\nПри дальнейшем исследовании в разрастающихся корнях этого растения обнаруживают первые записки...",
-                priority: 2 
-            }
-        ];
-
-        const initialEvents = [
-            { id: "event_1", title: "Запуск Сезона", date: "В процессе", text: "Основные события текущего сезона подготавливаются." }
-        ];
-
-        // Подписка на коллекцию в режиме реального времени
         function setupRealtimeListeners() {
-            if (!currentUser) return;
-
-            // Новости
-            const newsCol = collection(db, 'artifacts', appId, 'public', 'data', 'news');
-            onSnapshot(newsCol, (snapshot) => {
+            if (!db) return;
+            // Firebase listener для Новостей
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'news'), (snapshot) => {
                 let items = [];
                 snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
-                
                 if (items.length === 0) {
-                    initialNews.forEach(async (item) => {
-                        await addDoc(newsCol, item);
-                    });
+                    defaultData.news.forEach(async (item) => await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'news'), item));
                     return;
                 }
+                renderNewsUI(items.sort((a, b) => (b.priority || 0) - (a.priority || 0)));
+            }, (e) => console.error(e));
 
-                items.sort((a, b) => (b.priority || 0) - (a.priority || 0));
-                renderNewsUI(items);
-            }, (err) => console.error("Error news snapshot:", err));
-
-            // Лор
-            const loreCol = collection(db, 'artifacts', appId, 'public', 'data', 'lore');
-            onSnapshot(loreCol, (snapshot) => {
+            // Firebase listener для Лора
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'lore'), (snapshot) => {
                 let items = [];
                 snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
-
                 if (items.length === 0) {
-                    initialLore.forEach(async (item) => {
-                        await addDoc(loreCol, item);
-                    });
+                    defaultData.lore.forEach(async (item) => await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'lore'), item));
                     return;
                 }
+                renderLoreUI(items.sort((a, b) => (a.priority || 0) - (b.priority || 0)));
+            }, (e) => console.error(e));
 
-                items.sort((a, b) => (a.priority || 0) - (b.priority || 0));
-                renderLoreUI(items);
-            }, (err) => console.error("Error lore snapshot:", err));
-
-            // События
-            const eventsCol = collection(db, 'artifacts', appId, 'public', 'data', 'events');
-            onSnapshot(eventsCol, (snapshot) => {
+            // Firebase listener для Событий
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'events'), (snapshot) => {
                 let items = [];
                 snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
-
                 if (items.length === 0) {
-                    initialEvents.forEach(async (item) => {
-                        await addDoc(eventsCol, item);
-                    });
+                    defaultData.events.forEach(async (item) => await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'events'), item));
                     return;
                 }
-
                 renderEventsUI(items);
-            }, (err) => console.error("Error events snapshot:", err));
+            }, (e) => console.error(e));
         }
 
-        // Рендеринг списка Новостей
+        // Отрисовка UI
         function renderNewsUI(items) {
             const listContainer = document.getElementById('newsItemsList');
             if (!listContainer) return;
@@ -1333,7 +1330,6 @@
             `).join('');
         }
 
-        // Рендеринг списка Лора
         function renderLoreUI(items) {
             const listContainer = document.getElementById('loreItemsList');
             if (!listContainer) return;
@@ -1354,7 +1350,6 @@
             `).join('');
         }
 
-        // Рендеринг списка Событий
         function renderEventsUI(items) {
             const listContainer = document.getElementById('eventsItemsList');
             if (!listContainer) return;
@@ -1375,56 +1370,44 @@
             `).join('');
         }
 
-        // Вспомогательная фунция экранирования HTML
         function escapeHTML(str) {
             return String(str).replace(/[&<>'"]/g, 
-                tag => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#39;',
-                    '"': '&quot;'
-                }[tag] || tag)
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
             );
         }
 
-        // Управление Модальным окном
+        // Привязка управляющих функций к глобальному окну window
         window.openCreateModal = function(mode) {
             currentModalMode = mode;
             editingItemId = null;
-            
             document.getElementById('formFieldDate').value = mode === 'news' ? 'Только что' : '';
             document.getElementById('formFieldTitle').value = '';
             document.getElementById('formFieldText').value = '';
 
             configureFormFields(mode, false);
-            executeProtectedAction(() => {
-                showModalStepForm();
-            });
+            executeProtectedAction(() => { showModalStepForm(); });
         };
 
         window.triggerEditItem = function(mode, id, encodedDate, encodedTitle, encodedText) {
             currentModalMode = mode;
             editingItemId = id;
-
             document.getElementById('formFieldDate').value = decodeURIComponent(encodedDate || '');
             document.getElementById('formFieldTitle').value = decodeURIComponent(encodedTitle || '');
             document.getElementById('formFieldText').value = decodeURIComponent(encodedText || '');
 
             configureFormFields(mode, true);
-            executeProtectedAction(() => {
-                showModalStepForm();
-            });
+            executeProtectedAction(() => { showModalStepForm(); });
         };
 
         window.triggerDeleteItem = function(mode, id) {
             executeProtectedAction(async () => {
-                if (!currentUser) return;
-                try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', mode, id);
-                    await deleteDoc(docRef);
-                } catch (e) {
-                    console.error("Error deleting doc:", e);
+                if (useFirebase && db) {
+                    try {
+                        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', mode, id));
+                    } catch (e) { console.error("Error deleting doc:", e); }
+                } else {
+                    let items = getLocalItems(mode).filter(item => item.id !== id);
+                    saveLocalItems(mode, items);
                 }
             });
         };
@@ -1516,27 +1499,47 @@
                 return;
             }
 
-            if (!currentUser) {
-                errElem.textContent = 'Ошибка авторизации базы данных.';
-                return;
-            }
-
-            const colRef = collection(db, 'artifacts', appId, 'public', 'data', currentModalMode);
-
             try {
-                if (editingItemId) {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', currentModalMode, editingItemId);
-                    const updateData = { text: textVal };
-                    if (currentModalMode === 'news' || currentModalMode === 'events') updateData.date = dateVal;
-                    if (currentModalMode === 'lore' || currentModalMode === 'events') updateData.title = titleVal;
-
-                    await updateDoc(docRef, updateData);
+                if (useFirebase && db) {
+                    const colRef = collection(db, 'artifacts', appId, 'public', 'data', currentModalMode);
+                    if (editingItemId) {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', currentModalMode, editingItemId);
+                        const updateData = { text: textVal };
+                        if (currentModalMode === 'news' || currentModalMode === 'events') updateData.date = dateVal;
+                        if (currentModalMode === 'lore' || currentModalMode === 'events') updateData.title = titleVal;
+                        await updateDoc(docRef, updateData);
+                    } else {
+                        const newData = { text: textVal, priority: Date.now() };
+                        if (currentModalMode === 'news' || currentModalMode === 'events') newData.date = dateVal || 'Только что';
+                        if (currentModalMode === 'lore' || currentModalMode === 'events') newData.title = titleVal || 'Новый заголовок';
+                        await addDoc(colRef, newData);
+                    }
                 } else {
-                    const newData = { text: textVal, priority: Date.now() };
-                    if (currentModalMode === 'news' || currentModalMode === 'events') newData.date = dateVal || 'Только что';
-                    if (currentModalMode === 'lore' || currentModalMode === 'events') newData.title = titleVal || 'Новый заголовок';
-
-                    await addDoc(colRef, newData);
+                    // Режим LocalStorage для GitHub Pages
+                    let items = getLocalItems(currentModalMode);
+                    if (editingItemId) {
+                        items = items.map(item => {
+                            if (item.id === editingItemId) {
+                                return {
+                                    ...item,
+                                    text: textVal,
+                                    date: (currentModalMode === 'news' || currentModalMode === 'events') ? dateVal : item.date,
+                                    title: (currentModalMode === 'lore' || currentModalMode === 'events') ? titleVal : item.title
+                                };
+                            }
+                            return item;
+                        });
+                    } else {
+                        const newItem = {
+                            id: 'item_' + Date.now(),
+                            text: textVal,
+                            priority: Date.now(),
+                            date: (currentModalMode === 'news' || currentModalMode === 'events') ? (dateVal || 'Только что') : undefined,
+                            title: (currentModalMode === 'lore' || currentModalMode === 'events') ? (titleVal || 'Новый заголовок') : undefined
+                        };
+                        items.unshift(newItem);
+                    }
+                    saveLocalItems(currentModalMode, items);
                 }
 
                 window.closeAdminModal();
