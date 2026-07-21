@@ -1558,6 +1558,7 @@
                 const teamMembersContainer = document.getElementById('teamMembers');
                 
                 data.teamMembers.forEach(member => {
+                    console.log('Creating member:', member.name);
                     const memberDiv = document.createElement('div');
                     memberDiv.className = 'team-member';
                     memberDiv.dataset.priority = member.priority;
