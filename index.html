@@ -27,20 +27,38 @@
             position: relative;
         }
 
-        /* Стилизация скроллбара */
+        /* Стилизация пиксельного скроллбара */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 10px;
         }
         ::-webkit-scrollbar-track {
-            background: #050505;
-            border-left: 1px solid #333333;
+            background: #000000;
+            border-left: 2px solid #555555;
         }
         ::-webkit-scrollbar-thumb {
-            background: #ffffff;
-            border-radius: 0px;
+            background: #aaaaaa;
+            border: 2px solid #ffffff;
+            box-shadow: inset -2px -2px 0px #555555;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #cccccc;
+            background: #ffffff;
+        }
+
+        /* Ретро-эффект телевизора / сканлиний (CRT Scanlines) */
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none !important;
+            z-index: 99999;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px;
+            opacity: 0.6;
         }
 
         /* Холст пиксельного неба */
@@ -72,7 +90,8 @@
             z-index: 999999 !important;
             animation: spin 0.5s linear infinite;
             display: none;
-            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+            filter: drop-shadow(2px 2px 0px #000000);
+            image-rendering: pixelated;
         }
 
         .cursor-logo * {
@@ -105,6 +124,7 @@
             z-index: -1;
             transition: transform 0.1s ease-out;
             will-change: transform;
+            image-rendering: pixelated;
         }
 
         .background::after {
@@ -114,7 +134,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.85) 100%);
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.9) 100%);
         }
 
         .container {
@@ -143,12 +163,13 @@
             max-height: 9.375rem;
             object-fit: contain;
             mix-blend-mode: normal;
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
-            transition: transform 0.3s ease;
+            image-rendering: pixelated;
+            filter: drop-shadow(4px 4px 0px #000000);
+            transition: transform 0.2s ease;
         }
 
         .logo-image:hover {
-            transform: scale(1.03);
+            transform: scale(1.04);
         }
 
         .logo-title-wrapper {
@@ -161,14 +182,14 @@
             font-size: clamp(2.2rem, 8vw, 5rem);
             font-weight: normal;
             color: #ffffff;
-            text-shadow: 0.25rem 0.25rem 0 #000000, 0 0 20px rgba(255, 255, 255, 0.3);
-            letter-spacing: 0.25rem;
+            text-shadow: 0.25rem 0.25rem 0 #000000, -2px -2px 0 #333333;
+            letter-spacing: 0.3rem;
             font-family: 'uvKits', sans-serif;
             line-height: 1.1;
             margin: 0;
         }
 
-        /* Исправленная Майнкрафт-сплеш надпись */
+        /* Пиксельная Майнкрафт-сплеш надпись */
         .splash-text {
             position: absolute;
             top: -0.2rem;
@@ -179,7 +200,7 @@
             text-shadow: 0.125rem 0.125rem 0 #000000;
             transform: rotate(-15deg);
             transform-origin: center center;
-            animation: splashPulse 0.5s infinite alternate ease-in-out;
+            animation: splashPulse 0.4s infinite alternate ease-in-out;
             white-space: nowrap;
             pointer-events: none;
             z-index: 10;
@@ -187,10 +208,10 @@
 
         @keyframes splashPulse {
             from {
-                transform: rotate(-15deg) scale(1);
+                transform: rotate(-15deg) scale(0.98);
             }
             to {
-                transform: rotate(-15deg) scale(1.12);
+                transform: rotate(-15deg) scale(1.14);
             }
         }
 
@@ -206,23 +227,23 @@
             padding: 1.5rem 0;
         }
 
+        /* Ретро-пиксельные рамки для секций */
         .section {
-            background: rgba(0, 0, 0, 0.85);
-            border: 0.25rem solid #ffffff;
+            background: rgba(0, 0, 0, 0.9);
+            border: 4px solid #ffffff;
             padding: 1.875rem;
             margin: 1.875rem 0;
             position: relative;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px);
+            box-shadow: 6px 6px 0px #000000, inset 0 0 0 2px #555555;
         }
 
         .section-title {
             font-size: clamp(1.5rem, 5vw, 2.5rem);
             color: #ffffff;
-            text-shadow: 0.1875rem 0.1875rem 0 #000000, 0 0 10px rgba(255, 255, 255, 0.2);
+            text-shadow: 0.1875rem 0.1875rem 0 #000000;
             margin-bottom: 1.25rem;
             text-align: center;
-            border-bottom: 0.1875rem solid #ffffff;
+            border-bottom: 4px solid #ffffff;
             padding-bottom: 0.9375rem;
             font-family: 'uvKits', sans-serif;
             letter-spacing: 0.1rem;
@@ -254,8 +275,8 @@
         }
 
         .search-input {
-            background: rgba(255, 255, 255, 0.08);
-            border: 0.1875rem solid #ffffff;
+            background: #111111;
+            border: 3px solid #ffffff;
             color: #ffffff;
             padding: 0.625rem 1.25rem;
             font-size: 1.2rem;
@@ -263,16 +284,16 @@
             width: 100%;
             max-width: 18.75rem;
             outline: none;
-            transition: all 0.25s ease;
+            box-shadow: inset 3px 3px 0px #000000;
         }
 
         .search-input:focus {
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+            background: #222222;
+            border-color: #ffff55;
         }
 
         .search-input::placeholder {
-            color: #aaaaaa;
+            color: #888888;
         }
 
         /* Затемняющий фон при открытии панелей */
@@ -282,12 +303,11 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(3px);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 999;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: opacity 0.25s ease;
         }
 
         .panel-overlay.show {
@@ -301,13 +321,13 @@
             width: 28.125rem;
             max-width: 88vw;
             height: 100vh;
-            background: rgba(5, 5, 5, 0.96);
-            border: 0.1875rem solid #ffffff;
+            background: #000000;
+            border: 4px solid #ffffff;
             padding: 1.25rem;
             overflow-y: auto;
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.25s steps(8, end);
             z-index: 1002;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+            box-shadow: 10px 0 0px #000000, inset 0 0 0 2px #444444;
         }
 
         .side-panel.left {
@@ -324,18 +344,19 @@
             transform: translateX(0);
         }
 
+        /* Пиксельные кнопки вызова панелей */
         .panel-toggle {
             position: fixed;
-            background: rgba(0, 0, 0, 0.9);
-            border: 0.1875rem solid #ffffff;
+            background: #000000;
+            border: 3px solid #ffffff;
             color: #ffffff;
             padding: 0.8rem 0.6rem;
             cursor: pointer;
             z-index: 1001;
             font-family: 'uvKits', sans-serif;
             font-size: 1.1rem;
-            transition: all 0.25s ease;
-            box-shadow: 0 0 10px rgba(0,0,0,0.8);
+            box-shadow: 4px 4px 0px #000000;
+            transition: all 0.15s ease;
         }
 
         @media (min-width: 48.01rem) {
@@ -367,14 +388,14 @@
         .panel-toggle:hover {
             background: #ffffff;
             color: #000000;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            box-shadow: 2px 2px 0px #000000;
         }
 
         .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 0.125rem solid #ffffff;
+            border-bottom: 3px solid #ffffff;
             padding-bottom: 0.625rem;
             margin-bottom: 0.9375rem;
         }
@@ -395,12 +416,12 @@
             font-size: 1.8rem;
             cursor: pointer;
             line-height: 1;
-            transition: transform 0.2s ease, color 0.2s ease;
+            transition: transform 0.1s ease;
         }
 
         .panel-close:hover {
             transform: scale(1.2);
-            color: #aaaaaa;
+            color: #ff5555;
         }
 
         .panel-content p {
@@ -412,16 +433,16 @@
         }
 
         .panel-content .news-item, .event-item {
-            background: rgba(255, 255, 255, 0.07);
-            border: 0.125rem solid #ffffff;
+            background: #111111;
+            border: 2px solid #ffffff;
             padding: 0.9375rem;
             margin-bottom: 0.9375rem;
             position: relative;
-            transition: background 0.2s ease;
+            box-shadow: 3px 3px 0px #000000;
         }
 
         .panel-content .news-item:hover, .event-item:hover {
-            background: rgba(255, 255, 255, 0.12);
+            background: #222222;
         }
 
         .news-date, .event-date {
@@ -440,14 +461,14 @@
         }
 
         .lore-season {
-            background: rgba(255, 255, 255, 0.07);
-            border: 0.125rem solid #ffffff;
+            background: #111111;
+            border: 2px solid #ffffff;
             margin-bottom: 0.9375rem;
-            transition: background 0.2s ease;
+            box-shadow: 3px 3px 0px #000000;
         }
 
         .lore-season:hover {
-            background: rgba(255, 255, 255, 0.12);
+            background: #222222;
         }
 
         .lore-season-header {
@@ -469,8 +490,8 @@
         .lore-season-content {
             padding: 0.9375rem;
             display: none;
-            border-top: 0.125rem solid #ffffff;
-            background: rgba(0, 0, 0, 0.4);
+            border-top: 2px solid #ffffff;
+            background: #050505;
         }
 
         .lore-season-content.open {
@@ -480,7 +501,7 @@
         .lore-season-arrow {
             font-size: 1.3rem;
             color: #ffffff;
-            transition: transform 0.3s ease;
+            transition: transform 0.2s ease;
             font-weight: bold;
         }
 
@@ -510,18 +531,18 @@
             bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.95);
+            background: #000000;
             color: #ffffff;
             padding: 0.5rem 0.75rem;
-            border: 0.125rem solid #ffffff;
+            border: 2px solid #ffffff;
             font-size: 0.9rem;
             white-space: nowrap;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             z-index: 1000;
             margin-bottom: 0.625rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+            box-shadow: 4px 4px 0px #000000;
         }
 
         .social-button:hover .tooltip {
@@ -539,12 +560,11 @@
             padding: 0;
             display: flex;
             align-items: center;
-            transition: color 0.2s ease, transform 0.2s ease;
+            transition: color 0.15s ease;
         }
 
         .toggle-btn:hover {
-            color: #aaaaaa;
-            transform: translateY(-2px);
+            color: #ffff55;
         }
 
         .toggle-container {
@@ -567,21 +587,21 @@
         }
 
         .refresh-btn {
-            background: rgba(255, 255, 255, 0.1);
+            background: #000000;
             color: #ffffff;
-            border: 0.125rem solid #ffffff;
+            border: 2px solid #ffffff;
             padding: 0.4125rem 0.8rem;
             font-size: 0.9rem;
             cursor: pointer;
             font-family: 'uvKits', sans-serif;
-            transition: all 0.2s ease;
             margin-top: 0.3125rem;
+            box-shadow: 3px 3px 0px #000000;
         }
 
         .refresh-btn:hover {
             background: #ffffff;
             color: #000000;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            box-shadow: 1px 1px 0px #000000;
         }
 
         .status-indicator {
@@ -593,13 +613,13 @@
         }
 
         .status-indicator.online {
-            color: #4ecdc4;
-            text-shadow: 0 0 8px rgba(78, 205, 196, 0.4);
+            color: #55ff55;
+            text-shadow: 2px 2px 0px #000000;
         }
 
         .status-indicator.offline {
-            color: #ff6b6b;
-            text-shadow: 0 0 8px rgba(255, 107, 107, 0.4);
+            color: #ff5555;
+            text-shadow: 2px 2px 0px #000000;
         }
 
         .player-count {
@@ -632,7 +652,7 @@
             align-items: center;
             gap: 0.3125rem;
             position: relative;
-            transition: transform 0.2s ease;
+            transition: transform 0.15s ease;
         }
 
         .player-head:hover {
@@ -642,9 +662,9 @@
         .player-head img {
             width: 3rem;
             height: 3rem;
-            border: 0.125rem solid #ffffff;
+            border: 2px solid #ffffff;
             image-rendering: pixelated;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.8);
+            box-shadow: 3px 3px 0px #000000;
         }
 
         .player-name {
@@ -677,36 +697,37 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: rgba(255, 255, 255, 0.08);
-            border: 0.1875rem solid #ffffff;
+            background: #111111;
+            border: 3px solid #ffffff;
             padding: 1.25rem;
             gap: 0.5rem;
             justify-content: flex-start;
             position: relative;
             cursor: pointer;
-            transition: background 0.3s ease, border-color 0.3s ease, transform 0.25s ease, box-shadow 0.25s ease;
             z-index: 1;
             align-self: start;
             height: max-content;
+            box-shadow: 4px 4px 0px #000000;
+            transition: background 0.15s ease, transform 0.15s ease;
         }
 
         .team-member:hover {
-            transform: translateY(-0.25rem);
-            box-shadow: 0 0.5rem 1.25rem rgba(255, 255, 255, 0.15);
-            background: rgba(255, 255, 255, 0.15);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #000000;
+            background: #222222;
         }
 
         .team-member-avatar {
             width: 4.5rem;
             height: 4.5rem;
-            background: #222222;
-            border: 0.1875rem solid #ffffff;
+            background: #000000;
+            border: 2px solid #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             flex-shrink: 0;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+            box-shadow: 2px 2px 0px #000000;
         }
 
         .team-member-avatar img {
@@ -730,13 +751,13 @@
             display: none;
         }
 
-        /* Обычный развернутый игрок задействует 1 колонку без лишнего растяжения по ширине */
+        /* Обычный развернутый игрок задействует 1 колонку */
         .team-member.expanded {
             z-index: 100;
-            background: rgba(0, 0, 0, 0.95);
+            background: #050505;
             grid-column: span 1;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
-            border-color: #ffffff;
+            border-color: #ffff55;
+            box-shadow: 6px 6px 0px #000000;
         }
 
         .team-member.expanded .team-member-name-preview {
@@ -752,8 +773,8 @@
             width: 100%;
             margin-top: 0.8rem;
             padding-top: 0.8rem;
-            border-top: 0.125rem solid #ffffff;
-            animation: slideDown 0.3s ease-out forwards;
+            border-top: 2px solid #ffffff;
+            animation: slideDown 0.2s ease-out forwards;
         }
 
         .team-member.expanded .team-member-details {
@@ -812,7 +833,7 @@
         @keyframes slideDown {
             from {
                 opacity: 0;
-                transform: translateY(-0.625rem);
+                transform: translateY(-0.3rem);
             }
             to {
                 opacity: 1;
@@ -828,9 +849,10 @@
         .team-member-card img {
             width: 100%;
             height: auto;
-            border: 0.125rem solid #ffffff;
+            border: 2px solid #ffffff;
             display: block;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+            box-shadow: 3px 3px 0px #000000;
+            image-rendering: pixelated;
         }
 
         .team-member-details {
@@ -878,39 +900,45 @@
             font-size: 0.85rem;
             color: #ffffff;
             text-decoration: none;
-            border: 0.125rem solid #ffffff;
+            border: 2px solid #ffffff;
             padding: 0.25rem 0.5rem;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             font-family: 'uvKits', sans-serif;
-            background: rgba(0, 0, 0, 0.5);
+            background: #000000;
+            box-shadow: 2px 2px 0px #000000;
         }
 
         .social-link:hover {
             background: #ffffff;
             color: #000000;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+            box-shadow: 1px 1px 0px #000000;
         }
 
+        /* Кнопки в стиле Minecraft UI */
         .button {
-            background: #ffffff;
-            color: #000000;
-            border: 0.25rem solid #000000;
+            background: #555555;
+            color: #ffffff;
+            border: 3px solid #ffffff;
             padding: 0.8rem 2rem;
             font-size: 1.5rem;
             font-family: 'uvKits', sans-serif;
             cursor: pointer;
             margin: 0.5rem;
-            transition: all 0.25s ease;
-            text-shadow: none;
+            transition: all 0.1s ease;
+            text-shadow: 2px 2px 0px #000000;
             display: inline-block;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            box-shadow: inset -3px -3px 0px #222222, inset 3px 3px 0px #888888, 4px 4px 0px #000000;
         }
 
         .button:hover {
-            background: #000000;
-            color: #ffffff;
-            border-color: #ffffff;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+            background: #777777;
+            color: #ffff55;
+            box-shadow: inset -3px -3px 0px #333333, inset 3px 3px 0px #aaaaaa, 4px 4px 0px #000000;
+        }
+
+        .button:active {
+            box-shadow: inset 3px 3px 0px #222222, inset -3px -3px 0px #888888, 2px 2px 0px #000000;
+            transform: translate(2px, 2px);
         }
 
         footer {
@@ -1042,6 +1070,7 @@
             object-fit: contain;
             opacity: 0.9;
             transition: transform 0.2s;
+            image-rendering: pixelated;
         }
 
         .discord-badge:hover {
@@ -1050,9 +1079,10 @@
 
         .news-embed-image {
             max-width: 100%;
-            border: 0.125rem solid #ffffff;
+            border: 2px solid #ffffff;
             margin-top: 0.625rem;
             display: block;
+            image-rendering: pixelated;
         }
 
         .news-field {
@@ -1066,6 +1096,7 @@
     </style>
 </head>
 <body>
+    <div class="crt-overlay"></div>
     <div class="background"></div>
     <canvas id="starsCanvas"></canvas>
     <div class="cursor-logo"><img src="image.png" alt="cursor" style="width: 100%; height: 100%;"></div>
@@ -1281,7 +1312,7 @@
                         splashElem.textContent = randomItem.text;
                         if (randomItem.color) {
                             splashElem.style.color = randomItem.color;
-                            splashElem.style.textShadow = `0.125rem 0.125rem 0 #000000, 0 0 10px ${randomItem.color}`;
+                            splashElem.style.textShadow = `0.125rem 0.125rem 0 #000000`;
                         }
                     }
                 }
