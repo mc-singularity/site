@@ -229,27 +229,6 @@
       ]
     },
     {
-      "name": "erinaceus_",
-      "role": "Игрок проекта",
-      "realName": "Эрин",
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "#"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "#"
-        },
-        {
-          "platform": "TWITCH",
-          "url": "#"
-        }
-      ]
-    },
-    {
       "name": "impartialkus",
       "role": "Игрок проекта",
       "realName": "Кира",
