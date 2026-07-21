@@ -1,0 +1,308 @@
+{
+  "teamMembers": [
+    {
+      "name": "CloverS_Kid",
+      "role": "Основатель, Тех. админ",
+      "realName": "Кловер",
+      "priority": 3,
+      "hasCard": true,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "https://www.youtube.com/@realcloverskid"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "https://t.me/realcloverskid"
+        }
+      ]
+    },
+    {
+      "name": "MR_0zdi",
+      "role": "Билдер",
+      "realName": "Озди",
+      "priority": 1,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "TELEGRAM",
+          "url": "https://t.me/ozdi_channel"
+        }
+      ]
+    },
+    {
+      "name": "Agata_friss",
+      "role": "Игрок проекта",
+      "realName": "Агата",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "TWITCH",
+          "url": "https://www.twitch.tv/agata_friss"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "https://t.me/agata_friss"
+        }
+      ]
+    },
+    {
+      "name": "CHOMeQ418",
+      "role": "Игрок проекта",
+      "realName": "Хомяк",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "#"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "#"
+        },
+        {
+          "platform": "TWITCH",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "name": "EnderHack1",
+      "role": "Игрок проекта",
+      "realName": "Эндер",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "#"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "#"
+        },
+        {
+          "platform": "TWITCH",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "name": "Folksy13_dll",
+      "role": "Игрок проекта",
+      "realName": "Фолкси",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "https://www.youtube.com/@folksy13"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "https://t.me/Folksy13Family"
+        }
+      ]
+    },
+    {
+      "name": "g6thblood",
+      "role": "Игрок проекта",
+      "realName": "Егор",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "#"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "#"
+        },
+        {
+          "platform": "TWITCH",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "name": "horHyplace",
+      "role": "Игрок проекта",
+      "realName": "Марк",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "#"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "#"
+        },
+        {
+          "platform": "TWITCH",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "name": "LainBerg",
+      "role": "Игрок проекта",
+      "realName": "Лайн",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "https://www.youtube.com/@Negor_ll"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "https://t.me/LainBerg777"
+        }
+      ]
+    },
+    {
+      "name": "Maksimm205",
+      "role": "Игрок проекта",
+      "realName": "Максим (Макс) - Обрёл лицензию",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "#"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "#"
+        },
+        {
+          "platform": "TWITCH",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "name": "MrKhazinack",
+      "role": "Игрок проекта",
+      "realName": "Кази",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "#"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "#"
+        },
+        {
+          "platform": "TWITCH",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "name": "lousamik",
+      "role": "Игрок проекта",
+      "realName": "Лосьён",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "#"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "#"
+        },
+        {
+          "platform": "TWITCH",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "name": "erinaceus_",
+      "role": "Игрок проекта",
+      "realName": "Эрин",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "#"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "#"
+        },
+        {
+          "platform": "TWITCH",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "name": "impartialkus",
+      "role": "Игрок проекта",
+      "realName": "Кира",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "#"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "#"
+        },
+        {
+          "platform": "TWITCH",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "name": "ArtAzurp",
+      "role": "Игрок проекта",
+      "realName": "Азурп",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "#"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "#"
+        },
+        {
+          "platform": "TWITCH",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "name": "ba1toss",
+      "role": "Игрок проекта",
+      "realName": "Балтосс",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "https://www.youtube.com/@bal2oss"
+        }
+      ]
+    }
+  ]
+}
