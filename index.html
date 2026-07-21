@@ -629,6 +629,41 @@
             * {
                 cursor: auto !important;
             }
+
+            .background {
+                transition: none;
+            }
+
+            .panel-toggle {
+                writing-mode: horizontal-tb;
+                text-orientation: mixed;
+                letter-spacing: 2px;
+                padding: 10px 15px;
+                min-width: 80px;
+                min-height: 44px;
+            }
+
+            .panel-toggle.left {
+                left: 5px;
+                top: 10px;
+                transform: none;
+                border-radius: 5px;
+            }
+
+            .panel-toggle.right {
+                right: 5px;
+                top: 10px;
+                transform: none;
+                border-radius: 5px;
+            }
+
+            .panel-toggle.lore {
+                top: 60px;
+            }
+
+            .panel-toggle.events {
+                top: 110px;
+            }
         }
 
         .players-content {
@@ -860,37 +895,88 @@
         }
 
         @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            header {
+                padding: 20px 0;
+            }
+
             .logo {
-                font-size: 3rem;
+                font-size: 2.5rem;
+                letter-spacing: 2px;
+            }
+
+            .logo-image {
+                max-width: 200px;
+                max-height: 100px;
             }
 
             .tagline {
-                font-size: 1.4rem;
+                font-size: 1.2rem;
+            }
+
+            .section {
+                padding: 20px;
+                margin: 20px 0;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
             }
 
             .server-ip {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
+                padding: 12px;
+            }
+
+            .ip-label {
+                font-size: 1.2rem;
             }
 
             .stats {
-                gap: 30px;
+                gap: 20px;
             }
 
             .stat-value {
-                font-size: 2rem;
+                font-size: 1.8rem;
+            }
+
+            .stat-label {
+                font-size: 1.2rem;
             }
 
             .side-panel {
-                width: 85%;
+                width: 90%;
+                padding: 15px;
             }
 
             .panel-toggle {
-                padding: 10px 8px;
-                font-size: 1rem;
+                padding: 12px 10px;
+                font-size: 0.9rem;
+                letter-spacing: 3px;
+                min-height: 50px;
+                min-width: 50px;
+            }
+
+            .panel-toggle.left {
+                left: 0;
+            }
+
+            .panel-toggle.right {
+                right: 0;
             }
 
             .team-members {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .team-member {
+                padding: 15px;
             }
 
             .team-member-avatar img {
@@ -898,13 +984,27 @@
                 height: 60px;
             }
 
-            .button {
-                padding: 10px 20px;
-                font-size: 1.2rem;
+            .team-member-name {
+                font-size: 1.5rem;
             }
 
-            .section-title {
-                font-size: 2rem;
+            .team-member-role {
+                font-size: 1.1rem;
+            }
+
+            .team-member-realname {
+                font-size: 1rem;
+            }
+
+            .button {
+                padding: 12px 25px;
+                font-size: 1.1rem;
+                margin: 8px;
+                min-height: 44px;
+            }
+
+            .social-buttons {
+                gap: 10px;
             }
 
             .team-member.expanded .team-member-info {
@@ -940,19 +1040,122 @@
             }
 
             .search-input {
-                width: 200px;
+                width: 100%;
+                max-width: 250px;
+                font-size: 1rem;
+                padding: 12px 15px;
+            }
+
+            .copy-notification {
+                font-size: 1.2rem;
+                padding: 12px 20px;
+                top: 10px;
+                right: 10px;
+            }
+
+            .feature {
+                padding: 15px;
+            }
+
+            .feature-title {
+                font-size: 1.5rem;
+            }
+
+            .feature-text {
+                font-size: 1.1rem;
+            }
+
+            .rules {
+                font-size: 1.2rem;
+            }
+
+            .panel-content h3 {
+                font-size: 1.5rem;
+            }
+
+            .panel-content p {
+                font-size: 1rem;
+            }
+
+            .lore-season-header h4 {
                 font-size: 1rem;
             }
         }
 
         @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            header {
+                padding: 15px 0;
+            }
+
+            .logo {
+                font-size: 2rem;
+                letter-spacing: 1px;
+            }
+
+            .logo-image {
+                max-width: 150px;
+                max-height: 80px;
+            }
+
+            .tagline {
+                font-size: 1rem;
+            }
+
+            .section {
+                padding: 15px;
+                margin: 15px 0;
+                border-width: 3px;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+                margin-bottom: 12px;
+                padding-bottom: 10px;
+            }
+
+            .server-ip {
+                font-size: 1.2rem;
+                padding: 10px;
+                border-width: 2px;
+            }
+
+            .ip-label {
+                font-size: 1rem;
+            }
+
             .side-panel {
                 width: 95%;
+                padding: 12px;
+            }
+
+            .panel-toggle {
+                padding: 10px 8px;
+                font-size: 0.8rem;
+                letter-spacing: 2px;
+                min-height: 45px;
+                min-width: 45px;
+            }
+
+            .panel-toggle.lore {
+                top: 45%;
+            }
+
+            .panel-toggle.events {
+                top: 65%;
             }
 
             .team-members {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                gap: 15px;
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: 12px;
+                padding: 12px;
+            }
+
+            .team-member {
+                padding: 12px;
             }
 
             .team-member-avatar img {
@@ -960,22 +1163,68 @@
                 height: 50px;
             }
 
-            .button {
-                padding: 8px 15px;
-                font-size: 1rem;
+            .team-member-name {
+                font-size: 1.2rem;
             }
 
-            .section-title {
-                font-size: 1.5rem;
-            }
-
-            .search-input {
-                width: 150px;
+            .team-member-role {
                 font-size: 0.9rem;
             }
 
-            .panel-toggle {
-                padding: 8px 6px;
+            .team-member-realname {
+                font-size: 0.85rem;
+            }
+
+            .button {
+                padding: 10px 20px;
+                font-size: 1rem;
+                margin: 5px;
+                min-height: 44px;
+            }
+
+            .social-buttons {
+                gap: 8px;
+            }
+
+            .search-input {
+                width: 100%;
+                max-width: 200px;
+                font-size: 0.95rem;
+                padding: 10px 12px;
+            }
+
+            .copy-notification {
+                font-size: 1rem;
+                padding: 10px 15px;
+                top: 5px;
+                right: 5px;
+            }
+
+            .feature {
+                padding: 12px;
+            }
+
+            .feature-title {
+                font-size: 1.3rem;
+            }
+
+            .feature-text {
+                font-size: 1rem;
+            }
+
+            .rules {
+                font-size: 1.1rem;
+            }
+
+            .panel-content h3 {
+                font-size: 1.3rem;
+            }
+
+            .panel-content p {
+                font-size: 0.95rem;
+            }
+
+            .lore-season-header h4 {
                 font-size: 0.9rem;
             }
 
@@ -987,8 +1236,8 @@
                 background: rgba(0, 0, 0, 0.95);
                 border: 3px solid #ffffff;
                 border-top: none;
-                padding: 1rem;
-                margin-top: 0.625rem;
+                padding: 0.8rem;
+                margin-top: 0.5rem;
                 flex-direction: column;
                 overflow: visible;
                 word-wrap: break-word;
@@ -1004,11 +1253,11 @@
 
             .team-member-card {
                 width: 100%;
-                margin-bottom: 0.625rem;
+                margin-bottom: 0.5rem;
             }
 
             .team-member {
-                padding-bottom: 25px;
+                padding-bottom: 20px;
             }
 
             .team-member::after {
@@ -1016,6 +1265,29 @@
                 font-size: 0.6rem;
                 bottom: 8px;
                 color: #ffffff;
+            }
+
+            .social-link {
+                padding: 0.25rem 0.75rem;
+                font-size: 1rem;
+            }
+
+            .status-corner {
+                top: 5px;
+                right: 5px;
+            }
+
+            .refresh-btn {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+            }
+
+            .status-indicator {
+                font-size: 1rem;
+            }
+
+            .player-count {
+                font-size: 0.9rem;
             }
         }
 
@@ -1188,209 +1460,7 @@
                     <input type="text" class="search-input" id="searchInput" placeholder="Поиск по имени..." oninput="searchTeam()">
                 </div>
                 <div class="team-members hidden" id="teamMembers">
-                    <div class="team-member" data-priority="3" data-name="CloverS_Kid">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/CloverS_Kid/80" alt="CloverS_Kid"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-card"><img src="card.jpg" alt="Card"></div>
-                            <div class="team-member-details">
-                                <div class="team-member-name">CloverS_Kid</div>
-                                <div class="team-member-role">Основатель, Тех. админ</div>
-                                <div class="team-member-realname">Кловер</div>
-                                <div class="team-member-socials">
-                                    <a href="https://www.youtube.com/@realcloverskid" target="_blank" class="social-link">YOUTUBE</a>
-                                    <a href="https://t.me/realcloverskid" target="_blank" class="social-link">TELEGRAM</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="1" data-name="MR_0zdi">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/MR_0zdi/80" alt="MR_0zdi"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">MR_0zdi</div>
-                            <div class="team-member-role">Билдер</div>
-                            <div class="team-member-realname">Озди</div>
-                            <div class="team-member-socials">
-                                <a href="https://t.me/ozdi_channel" target="_blank" class="social-link">TELEGRAM</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="Agata_friss">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/Agata_friss/80" alt="Agata_friss"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">Agata_friss</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Агата</div>
-                            <div class="team-member-socials">
-                                <a href="https://www.twitch.tv/agata_friss" target="_blank" class="social-link">TWITCH</a>
-                                <a href="https://t.me/agata_friss" target="_blank" class="social-link">TELEGRAM</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="CHOMeQ418">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/CHOMeQ418/80" alt="CHOMeQ418"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">CHOMeQ418</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Хомяк</div>
-                            <div class="team-member-socials">
-                                <a href="#" class="social-link">YOUTUBE</a>
-                                <a href="#" class="social-link">TELEGRAM</a>
-                                <a href="#" class="social-link">TWITCH</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="EnderHack1">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/EnderHack1/80" alt="EnderHack1"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">EnderHack1</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Эндер</div>
-                            <div class="team-member-socials">
-                                <a href="#" class="social-link">YOUTUBE</a>
-                                <a href="#" class="social-link">TELEGRAM</a>
-                                <a href="#" class="social-link">TWITCH</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="Folksy13_dll">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/Folksy13_dll/80" alt="Folksy13_dll"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">Folksy13_dll</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Фолкси</div>
-                            <div class="team-member-socials">
-                                <a href="https://www.youtube.com/@folksy13" target="_blank" class="social-link">YOUTUBE</a>
-                                <a href="https://t.me/Folksy13Family" target="_blank" class="social-link">TELEGRAM</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="g6thblood">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/g6thblood/80" alt="g6thblood"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">g6thblood</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Егор</div>
-                            <div class="team-member-socials">
-                                <a href="#" class="social-link">YOUTUBE</a>
-                                <a href="#" class="social-link">TELEGRAM</a>
-                                <a href="#" class="social-link">TWITCH</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="horHyplace">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/horHyplace/80" alt="horHyplace"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">horHyplace</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Марк</div>
-                            <div class="team-member-socials">
-                                <a href="#" class="social-link">YOUTUBE</a>
-                                <a href="#" class="social-link">TELEGRAM</a>
-                                <a href="#" class="social-link">TWITCH</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="LainBerg">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/LainBerg/80" alt="LainBerg"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">LainBerg</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Лайн</div>
-                            <div class="team-member-socials">
-                                <a href="https://www.youtube.com/@Negor_ll" target="_blank" class="social-link">YOUTUBE</a>
-                                <a href="https://t.me/LainBerg777" target="_blank" class="social-link">TELEGRAM</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="Maksimm205">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/Maksimm205/80" alt="Maksimm205"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">Maksimm205</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Максим (Макс) - Обрёл лицензию</div>
-                            <div class="team-member-socials">
-                                <a href="#" class="social-link">YOUTUBE</a>
-                                <a href="#" class="social-link">TELEGRAM</a>
-                                <a href="#" class="social-link">TWITCH</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="MrKhazinack">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/MrKhazinack/80" alt="MrKhazinack"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">MrKhazinack</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Кази</div>
-                            <div class="team-member-socials">
-                                <a href="#" class="social-link">YOUTUBE</a>
-                                <a href="#" class="social-link">TELEGRAM</a>
-                                <a href="#" class="social-link">TWITCH</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="lousamik">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/lousamik/80" alt="lousamik"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">lousamik</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Лосьён</div>
-                            <div class="team-member-socials">
-                                <a href="#" class="social-link">YOUTUBE</a>
-                                <a href="#" class="social-link">TELEGRAM</a>
-                                <a href="#" class="social-link">TWITCH</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="erinaceus_">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/erinaceus_/80" alt="erinaceus_"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">erinaceus_</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Эрин</div>
-                            <div class="team-member-socials">
-                                <a href="#" class="social-link">YOUTUBE</a>
-                                <a href="#" class="social-link">TELEGRAM</a>
-                                <a href="#" class="social-link">TWITCH</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="impartialkus">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/impartialkus/80" alt="impartialkus"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">impartialkus</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Кира</div>
-                            <div class="team-member-socials">
-                                <a href="#" class="social-link">YOUTUBE</a>
-                                <a href="#" class="social-link">TELEGRAM</a>
-                                <a href="#" class="social-link">TWITCH</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="ArtAzurp">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/ArtAzurp/80" alt="ArtAzurp"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">ArtAzurp</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Азурп</div>
-                            <div class="team-member-socials">
-                                <a href="#" class="social-link">YOUTUBE</a>
-                                <a href="#" class="social-link">TELEGRAM</a>
-                                <a href="#" class="social-link">TWITCH</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-member" data-priority="0" data-name="ba1toss">
-                        <div class="team-member-avatar"><img src="https://minotar.net/helm/ba1toss/80" alt="ba1toss"></div>
-                        <div class="team-member-info">
-                            <div class="team-member-name">ba1toss</div>
-                            <div class="team-member-role">Игрок проекта</div>
-                            <div class="team-member-realname">Балтосс</div>
-                            <div class="team-member-socials">
-                                <a href="https://www.youtube.com/@bal2oss" target="_blank" class="social-link">YOUTUBE</a>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Team members will be loaded from team.json -->
                 </div>
             </div>
         </div>
@@ -1477,26 +1547,57 @@
             });
         }
 
-        // Add card images to all team members
-        document.querySelectorAll('.team-member-info').forEach(info => {
-            if (!info.querySelector('.team-member-card')) {
-                const card = document.createElement('div');
-                card.className = 'team-member-card';
-                card.innerHTML = '<img src="card.jpg" alt="Card">';
+        // Load team members from JSON file
+        async function loadTeamMembers() {
+            try {
+                const response = await fetch('team.json');
+                const data = await response.json();
+                const teamMembersContainer = document.getElementById('teamMembers');
                 
-                // Wrap existing content in details div
-                const details = document.createElement('div');
-                details.className = 'team-member-details';
+                data.teamMembers.forEach(member => {
+                    const memberDiv = document.createElement('div');
+                    memberDiv.className = 'team-member';
+                    memberDiv.dataset.priority = member.priority;
+                    memberDiv.dataset.name = member.name;
+                    
+                    // Build social links HTML
+                    const socialLinksHTML = member.socials.map(social => 
+                        `<a href="${social.url}" target="_blank" class="social-link">${social.platform}</a>`
+                    ).join('');
+                    
+                    // Build card HTML if member has card
+                    const cardHTML = member.hasCard ? 
+                        `<div class="team-member-card"><img src="card.jpg" alt="Card"></div>` : '';
+                    
+                    memberDiv.innerHTML = `
+                        <div class="team-member-avatar">
+                            <img src="https://minotar.net/helm/${member.name}/80" alt="${member.name}">
+                        </div>
+                        <div class="team-member-info">
+                            ${cardHTML}
+                            <div class="team-member-details">
+                                <div class="team-member-name">${member.name}</div>
+                                <div class="team-member-role">${member.role}</div>
+                                <div class="team-member-realname">${member.realName}</div>
+                                <div class="team-member-socials">
+                                    ${socialLinksHTML}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    teamMembersContainer.appendChild(memberDiv);
+                });
                 
-                // Move all children except the card to details
-                while (info.firstChild) {
-                    details.appendChild(info.firstChild);
-                }
-                
-                info.appendChild(card);
-                info.appendChild(details);
+                console.log('Team members loaded successfully');
+            } catch (error) {
+                console.error('Error loading team members:', error);
+                document.getElementById('teamMembers').innerHTML = '<p style="color: #ff6b6b; text-align: center;">Ошибка загрузки состава</p>';
             }
-        });
+        }
+
+        // Load team members on page load
+        loadTeamMembers();
 
         // Function to open team member profile from online players list
         function openTeamMember(playerName) {
