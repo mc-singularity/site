@@ -138,58 +138,6 @@
             padding: 1.5rem 0;
         }
 
-        .server-info {
-            background: rgba(0, 0, 0, 0.8);
-            border: 0.25rem solid #ffffff;
-            padding: 1.875rem;
-            margin: 1.875rem 0;
-            text-align: center;
-            border-radius: 0.25rem;
-        }
-
-        .server-ip {
-            font-size: clamp(1.2rem, 4vw, 2.5rem);
-            color: #ffffff;
-            text-shadow: 0.125rem 0.125rem 0 #000000;
-            margin: 1.25rem 0;
-            cursor: pointer;
-            padding: 0.9375rem;
-            border: 0.1875rem dashed #ffffff;
-            display: inline-block;
-            transition: all 0.2s;
-            word-break: break-all;
-        }
-
-        .server-ip:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .ip-label {
-            font-size: clamp(1rem, 2.5vw, 1.5rem);
-            color: #ffffff;
-            text-shadow: 0.125rem 0.125rem 0 #000000;
-            margin-bottom: 0.625rem;
-        }
-
-        .copy-notification {
-            position: fixed;
-            top: 1.25rem;
-            right: 1.25rem;
-            background: #ffffff;
-            color: #000000;
-            padding: 0.9375rem 1.875rem;
-            font-size: 1.2rem;
-            border: 0.25rem solid #000000;
-            transform: translateX(200%);
-            transition: transform 0.3s ease;
-            z-index: 10000;
-            max-width: 90vw;
-        }
-
-        .copy-notification.show {
-            transform: translateX(0);
-        }
-
         .section {
             background: rgba(0, 0, 0, 0.8);
             border: 0.25rem solid #ffffff;
@@ -207,67 +155,6 @@
             border-bottom: 0.1875rem solid #ffffff;
             padding-bottom: 0.9375rem;
             font-family: 'uvKits', sans-serif;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr));
-            gap: 1.25rem;
-        }
-
-        .feature {
-            background: rgba(255, 255, 255, 0.1);
-            border: 0.1875rem solid #ffffff;
-            padding: 1.25rem;
-            text-align: center;
-        }
-
-        .feature-title {
-            font-size: 1.8rem;
-            color: #ffffff;
-            text-shadow: 0.125rem 0.125rem 0 #000000;
-            margin-bottom: 0.625rem;
-        }
-
-        .feature-text {
-            font-size: 1.2rem;
-            color: #ffffff;
-            line-height: 1.4;
-        }
-
-        .rules {
-            font-size: 1.3rem;
-            color: #ffffff;
-            line-height: 1.8;
-        }
-
-        .rules li {
-            margin: 0.625rem 0;
-            padding-left: 1.25rem;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 1.875rem 0;
-            flex-wrap: wrap;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            color: #ffffff;
-            text-shadow: 0.1875rem 0.1875rem 0 #000000;
-        }
-
-        .stat-label {
-            font-size: 1.2rem;
-            color: #ffffff;
-            text-shadow: 0.125rem 0.125rem 0 #000000;
         }
 
         .team-section {
@@ -436,18 +323,56 @@
             font-family: 'uvKits', sans-serif;
         }
 
-        .panel-content .news-item {
+        .panel-content .news-item, .event-item {
             background: rgba(255, 255, 255, 0.1);
             border: 0.125rem solid #ffffff;
             padding: 0.9375rem;
             margin-bottom: 0.9375rem;
+            position: relative;
         }
 
-        .panel-content .news-date {
+        .news-date, .event-date {
             font-size: 0.9rem;
             color: #aaaaaa;
             margin-bottom: 0.3125rem;
             font-family: 'uvKits', sans-serif;
+        }
+
+        .event-title {
+            font-size: 1.2rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            font-family: 'uvKits', sans-serif;
+            text-shadow: 0.0625rem 0.0625rem 0 #000000;
+        }
+
+        .admin-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .admin-action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 0.0625rem solid #ffffff;
+            color: #ffffff;
+            padding: 0.2rem 0.5rem;
+            font-family: 'uvKits', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .admin-action-btn:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .admin-action-btn.delete:hover {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+            color: #ffffff;
         }
 
         .add-news-btn {
@@ -467,7 +392,7 @@
             background: rgba(255, 255, 255, 0.25);
         }
 
-        /* Модальное окно добавления новостей */
+        /* Модальное окно добавления / редактирования */
         .custom-modal {
             position: fixed;
             top: 0;
@@ -494,7 +419,7 @@
             border: 0.1875rem solid #ffffff;
             padding: 1.5rem;
             width: 90%;
-            max-width: 25rem;
+            max-width: 26rem;
             position: relative;
             text-align: center;
             box-shadow: 0 0 1.5rem rgba(255, 255, 255, 0.2);
@@ -520,7 +445,7 @@
         }
 
         .modal-textarea {
-            min-height: 5rem;
+            min-height: 6rem;
             resize: vertical;
         }
 
@@ -553,7 +478,6 @@
             background: rgba(255, 255, 255, 0.1);
             border: 0.125rem solid #ffffff;
             margin-bottom: 0.9375rem;
-            cursor: pointer;
         }
 
         .lore-season-header {
@@ -561,6 +485,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            cursor: pointer;
         }
 
         .lore-season-header h4 {
@@ -1126,49 +1051,8 @@
             <button class="panel-close" onclick="closeAllPanels()">&times;</button>
         </div>
         <div class="panel-content">
-            <button class="add-news-btn" onclick="openAddNewsModal()">+ ДОБАВИТЬ НОВОСТЬ</button>
-            <div id="newsItemsList">
-                <div class="news-item">
-                    <div class="news-date">7 дней назад</div>
-                    <p>Набор</p>
-                </div>
-                <div class="news-item">
-                    <div class="news-date">9 месяцев назад</div>
-                    <p>Набор</p>
-                </div>
-                <div class="news-item">
-                    <div class="news-date">9 месяцев назад</div>
-                    <p>Старт первого сезона</p>
-                </div>
-                <div class="news-item">
-                    <div class="news-date">10 месяцев назад</div>
-                    <p>Сервер принимает участие в королевской битве составом "Лайн, Эндер, Озди, Тии"</p>
-                </div>
-                <div class="news-item">
-                    <div class="news-date">30 июня 2025</div>
-                    <p>Конец стартового сезона</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Модальное окно для добавления новостей -->
-    <div class="custom-modal" id="newsModal">
-        <div class="custom-modal-content">
-            <button class="modal-close" onclick="closeNewsModal()">&times;</button>
-            <div id="modalStep1">
-                <h4 class="modal-title">ВВЕДИТЕ КОД ДОСТУПА</h4>
-                <input type="password" id="newsAccessCode" class="modal-input" placeholder="Код доступа..." onkeydown="if(event.key === 'Enter') verifyNewsCode()">
-                <div id="newsCodeError" class="modal-error"></div>
-                <button class="button modal-btn" onclick="verifyNewsCode()">ПОДТВЕРДИТЬ</button>
-            </div>
-            <div id="modalStep2" style="display: none;">
-                <h4 class="modal-title">НОВАЯ НОВОСТЬ</h4>
-                <input type="text" id="newsDateInput" class="modal-input" placeholder="Дата (например: Только что)">
-                <textarea id="newsTextInput" class="modal-input modal-textarea" placeholder="Текст новости..."></textarea>
-                <div id="newsFormError" class="modal-error"></div>
-                <button class="button modal-btn" onclick="publishNews()">ОПУБЛИКОВАТЬ</button>
-            </div>
+            <button class="add-news-btn" onclick="openCreateModal('news')">+ ДОБАВИТЬ НОВОСТЬ</button>
+            <div id="newsItemsList">Загрузка новостей...</div>
         </div>
     </div>
 
@@ -1179,43 +1063,8 @@
             <button class="panel-close" onclick="closeAllPanels()">&times;</button>
         </div>
         <div class="panel-content">
-            <div class="lore-season" onclick="toggleLoreSeason(this)">
-                <div class="lore-season-header">
-                    <h4>СИНГУЛЯРИТИ - ЗАПУСК (0 сезон)</h4>
-                    <span class="lore-season-arrow">&gt;</span>
-                </div>
-                <div class="lore-season-content">
-                    <p>На сервере обнаружена гравитационная аномалия. Игроки, не посещавшие Энд, прыгают на 1 блок. После посещения Энда прыжок увеличивается до 9,5 блоков без утяжелённого шлема, и сокращается до 1,5 блоков с ним. Такие игроки также влияют на мобов, увеличивая их прыжок.</p>
-                    <p>Для исследований построили стеклянный купол. Во время экспериментов появились частицы из Энда. Обнаружены два типа аномальных зон: притяжение и отталкивание от поверхности.</p>
-                    <p>Изучено свойство облучения — игрок теряет нормальную гравитацию и не может передавать энергию другим. Ситуация прогрессирует.</p>
-                    <p>Лайн и Азурп разрушили портал в Энд, подозревая через него аномалии. Основана исследовательская компания ГИК и построена лаборатория с тремя этажами для разных уровней знаний.</p>
-                    <p>Лайн собирает экспедицию в Энд. Там после странной аномалии с эндерманами ростом в 30 блоков они обнаруживают, что шалкеры стали сильнее.</p>
-                    <p>Шалкеры теперь накладывают эффект отравления, наносящий урон. Урон от нескольких шалкеров складывается, даже игрок в полной заритовой броне получает много урона.</p>
-                    <p>Воздействие Энда вызывает фиолетовые частицы, более мощную левитацию и эффект тьмы.</p>
-                    <p>Азурп нашёл чёрную парящую дыру на базе Эша, которая затянула его. После того как дыра исчезла, из неё вылетела корона Эша и упала в лаву, но не сгорела, а осталась плавать на поверхности.</p>
-                    <p>Азурп после взаимодействия с чёрной дырой избавился от всех видов излучения и заражения, и у него восстановилась нормальная гравитация, как у обычного игрока.</p>
-                    <p>Найдена таинственная записка. Группа игроков (автор, Озди, Эндер, Козинак, Ти и Кловер) отправляется к месту, указанному в записке с координатами, и находит огромную лестницу, ведущую в бездну. Спустившись, они оказываются в бункере.</p>
-                    <p>В бункере найдены пять новых предметов: резервуар для антифрм, ловушка для шалкеров, колба для инъекторов, инъектор с лфрм, инъектор с антифрм.</p>
-                    <p>Ловушка для шалкеров нужна, чтобы отлавливать шалкеров и создавать антифоре. С помощью колбы можно наполнить инъектор антифреймом и излечиться от заражения лфрм.</p>
-                    <p>Порядок использования: поймать шалкеров с помощью ловушки, переработать их в специальном оборудовании, передать вещество в колбу, с помощью одной колбы создать восемь инъекторов для излечения. Также колбы можно использовать для питания реактора антифреймом.</p>
-                    <p>В досье описывается левит-фермент (лфрм) — аномальный фермент, присутствующий в атмосфере края. Шалкеры накапливают этот фермент и могут выпускать его в концентрированном виде. При контакте с ферментом организм мгновенно заряжается и становится переносчиком. Есть первичные и вторичные симптомы заражения.</p>
-                    <p>Сезон заканчивается тем, что всех засасывает в некую чёрную дыру.</p>
-                </div>
-            </div>
-            <div class="lore-season" onclick="toggleLoreSeason(this)">
-                <div class="lore-season-header">
-                    <h4>СИНГУЛЯРИТИ - 1 (Текущий)</h4>
-                    <span class="lore-season-arrow">&gt;</span>
-                </div>
-                <div class="lore-season-content">
-                    <p>В мире начинают происходить первые аномалии: появляются странные столбы из красной магмы, а на спавн падает метеорит с непонятным сообщением. Вскоре игроки обнаруживают загадочный маленький росток, который абсолютно неуязвим к разрушению и иссушает всё вокруг себя, а рядом с ним также находят магмовые столбы.</p>
-                    <p>При дальнейшем исследовании в разрастающихся корнях этого растения обнаруживают первые записки, описывающие историю дерева и его способность высасывать жизнь из рек, лесов и морей.</p>
-                    <p>Параллельно с этим Эндер находит другие зашифрованные книги — на особом языке, шифром Цезаря и числовым кодом, которые рассказывают о природных аномалиях, кошмарах, потере памяти и жутких существах с фиолетовыми глазами.</p>
-                    <p>В это же время Озди спускается в шахты и находит пещеру с летающим аметистовым кристаллом, который бьет энергией во всё живое, а также логово неизвестного существа, предупреждающего о надвигающейся тьме.</p>
-                    <p>Дальше события начинают развиваться стремительно: дерево, которое раньше было небольшим, теперь стало совсем огромным и превысило предел высоты самой игры. Вдобавок заражение теперь распространяется прямо на глазах и уже успело охватить все базы игроков, даже самые дальние.</p>
-                    <p>Из древа прямо на поверхности выбрались корни; один из таких корней разрушил одну из адских башен, на месте которой теперь образовалась часть адского измерения. Сущности выбираются из этого измерения и сразу зомбифицируются.</p>
-                </div>
-            </div>
+            <button class="add-news-btn" onclick="openCreateModal('lore')">+ ДОБАВИТЬ СЕЗОН</button>
+            <div id="loreItemsList">Загрузка лора...</div>
         </div>
     </div>
 
@@ -1226,7 +1075,33 @@
             <button class="panel-close" onclick="closeAllPanels()">&times;</button>
         </div>
         <div class="panel-content">
-            <p>Скоро...</p>
+            <button class="add-news-btn" onclick="openCreateModal('events')">+ ДОБАВИТЬ СОБЫТИЕ</button>
+            <div id="eventsItemsList">Загрузка событий...</div>
+        </div>
+    </div>
+
+    <!-- Единое Модальное окно редактора/создания -->
+    <div class="custom-modal" id="adminModal">
+        <div class="custom-modal-content">
+            <button class="modal-close" onclick="closeAdminModal()">&times;</button>
+            
+            <!-- Шаг 1: Проверка кода -->
+            <div id="modalStepCode">
+                <h4 class="modal-title">ВВЕДИТЕ КОД ДОСТУПА</h4>
+                <input type="password" id="adminCodeInput" class="modal-input" placeholder="Код доступа..." onkeydown="if(event.key === 'Enter') checkAdminCode()">
+                <div id="modalCodeError" class="modal-error"></div>
+                <button class="button modal-btn" onclick="checkAdminCode()">ПОДТВЕРДИТЬ</button>
+            </div>
+
+            <!-- Шаг 2: Форма создания/редактирования -->
+            <div id="modalStepForm" style="display: none;">
+                <h4 class="modal-title" id="formModalTitle">РЕДАКТИРОВАНИЕ</h4>
+                <input type="text" id="formFieldDate" class="modal-input" placeholder="Дата (например: 30 июня 2025)">
+                <input type="text" id="formFieldTitle" class="modal-input" placeholder="Заголовок">
+                <textarea id="formFieldText" class="modal-input modal-textarea" placeholder="Текст / Описание..."></textarea>
+                <div id="modalFormError" class="modal-error"></div>
+                <button class="button modal-btn" id="modalSubmitBtn" onclick="submitAdminForm()">СОХРАНИТЬ</button>
+            </div>
         </div>
     </div>
 
@@ -1297,69 +1172,212 @@
         </footer>
     </div>
 
-    <script>
-        // Код доступа для публикации новостей
-        const NEWS_ACCESS_CODE = "SLFLKS-1331";
+    <!-- Firebase SDK & Persistent Data Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        function openAddNewsModal() {
-            document.getElementById('newsModal').classList.add('show');
-            document.getElementById('modalStep1').style.display = 'block';
-            document.getElementById('modalStep2').style.display = 'none';
-            document.getElementById('newsAccessCode').value = '';
-            document.getElementById('newsCodeError').textContent = '';
-            document.getElementById('newsTextInput').value = '';
-            document.getElementById('newsDateInput').value = 'Только что';
-            document.getElementById('newsFormError').textContent = '';
-            setTimeout(() => {
-                const input = document.getElementById('newsAccessCode');
-                if (input) input.focus();
-            }, 100);
-        }
+        const ACCESS_CODE = "SLFLKS-1331";
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'singularity-server';
 
-        function closeNewsModal() {
-            document.getElementById('newsModal').classList.remove('show');
-        }
+        // Стандартная дефолтная конфигурация Firebase
+        const defaultFirebaseConfig = {
+            apiKey: "",
+            authDomain: "singularity-sl.firebaseapp.com",
+            projectId: "singularity-sl",
+            storageBucket: "singularity-sl.firebasestorage.app",
+            messagingSenderId: "100000000000",
+            appId: "1:100000000000:web:abc123def456"
+        };
 
-        function verifyNewsCode() {
-            const codeInput = document.getElementById('newsAccessCode').value.trim();
-            const errorElem = document.getElementById('newsCodeError');
-            if (codeInput === NEWS_ACCESS_CODE) {
-                errorElem.textContent = '';
-                document.getElementById('modalStep1').style.display = 'none';
-                document.getElementById('modalStep2').style.display = 'block';
-                setTimeout(() => {
-                    const input = document.getElementById('newsTextInput');
-                    if (input) input.focus();
-                }, 100);
-            } else {
-                errorElem.textContent = 'Неверный код доступа!';
+        let firebaseConfig = defaultFirebaseConfig;
+        if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+            try {
+                firebaseConfig = JSON.parse(__firebase_config);
+            } catch (e) {
+                console.warn('Using default fallback firebase config');
             }
         }
 
-        function publishNews() {
-            const dateVal = document.getElementById('newsDateInput').value.trim() || 'Только что';
-            const textVal = document.getElementById('newsTextInput').value.trim();
-            const errorElem = document.getElementById('newsFormError');
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-            if (!textVal) {
-                errorElem.textContent = 'Введите текст новости!';
+        let currentUser = null;
+        let isAdminAuthenticated = false;
+
+        // Переменные состояния редактирования
+        let currentModalMode = ''; // 'news', 'lore', 'events'
+        let editingItemId = null;
+        let pendingAction = null; // Функция обратного вызова после подлинности пароля
+
+        // Аутентификация
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Auth error:", err);
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                setupRealtimeListeners();
+            }
+        });
+
+        initAuth();
+
+        // Начальные заготовки данных (если базы пусты)
+        const initialNews = [
+            { id: "news_1", date: "7 дней назад", text: "Набор", priority: 5 },
+            { id: "news_2", date: "9 месяцев назад", text: "Набор", priority: 4 },
+            { id: "news_3", date: "9 месяцев назад", text: "Старт первого сезона", priority: 3 },
+            { id: "news_4", date: "10 месяцев назад", text: 'Сервер принимает участие в королевской битве составом "Лайн, Эндер, Озди, Тии"', priority: 2 },
+            { id: "news_5", date: "30 июня 2025", text: "Конец стартового сезона", priority: 1 }
+        ];
+
+        const initialLore = [
+            { 
+                id: "lore_1", 
+                title: "СИНГУЛЯРИТИ - ЗАПУСК (0 сезон)", 
+                text: "На сервере обнаружена гравитационная аномалия. Игроки, не посещавшие Энд, прыгают на 1 блок. После посещения Энда прыжок увеличивается до 9,5 блоков...\n\nДля исследований построили стеклянный купол. Во время экспериментов появились частицы из Энда...\n\nЛайн и Азурп разрушили портал в Энд...",
+                priority: 1 
+            },
+            { 
+                id: "lore_2", 
+                title: "СИНГУЛЯРИТИ - 1 (Текущий)", 
+                text: "В мире начинают происходить первые аномалии: появляются странные столбы из красной магмы, а на спавн падает метеорит...\n\nПри дальнейшем исследовании в разрастающихся корнях этого растения обнаруживают первые записки...",
+                priority: 2 
+            }
+        ];
+
+        const initialEvents = [
+            { id: "event_1", title: "Запуск Сезона", date: "В процессе", text: "Основные события текущего сезона подготавливаются." }
+        ];
+
+        // Подписка на коллекцию в режиме реального времени
+        function setupRealtimeListeners() {
+            if (!currentUser) return;
+
+            // Новости
+            const newsCol = collection(db, 'artifacts', appId, 'public', 'data', 'news');
+            onSnapshot(newsCol, (snapshot) => {
+                let items = [];
+                snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
+                
+                if (items.length === 0) {
+                    initialNews.forEach(async (item) => {
+                        await addDoc(newsCol, item);
+                    });
+                    return;
+                }
+
+                items.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+                renderNewsUI(items);
+            }, (err) => console.error("Error news snapshot:", err));
+
+            // Лор
+            const loreCol = collection(db, 'artifacts', appId, 'public', 'data', 'lore');
+            onSnapshot(loreCol, (snapshot) => {
+                let items = [];
+                snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
+
+                if (items.length === 0) {
+                    initialLore.forEach(async (item) => {
+                        await addDoc(loreCol, item);
+                    });
+                    return;
+                }
+
+                items.sort((a, b) => (a.priority || 0) - (b.priority || 0));
+                renderLoreUI(items);
+            }, (err) => console.error("Error lore snapshot:", err));
+
+            // События
+            const eventsCol = collection(db, 'artifacts', appId, 'public', 'data', 'events');
+            onSnapshot(eventsCol, (snapshot) => {
+                let items = [];
+                snapshot.forEach(docSnap => items.push({ id: docSnap.id, ...docSnap.data() }));
+
+                if (items.length === 0) {
+                    initialEvents.forEach(async (item) => {
+                        await addDoc(eventsCol, item);
+                    });
+                    return;
+                }
+
+                renderEventsUI(items);
+            }, (err) => console.error("Error events snapshot:", err));
+        }
+
+        // Рендеринг списка Новостей
+        function renderNewsUI(items) {
+            const listContainer = document.getElementById('newsItemsList');
+            if (!listContainer) return;
+            listContainer.innerHTML = items.map(item => `
+                <div class="news-item">
+                    <div class="news-date">${escapeHTML(item.date || '')}</div>
+                    <p>${escapeHTML(item.text || '')}</p>
+                    <div class="admin-controls">
+                        <button class="admin-action-btn" onclick="window.triggerEditItem('news', '${item.id}', '${encodeURIComponent(item.date||'')}', '', '${encodeURIComponent(item.text||'')}')">Редактировать</button>
+                        <button class="admin-action-btn delete" onclick="window.triggerDeleteItem('news', '${item.id}')">Удалить</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Рендеринг списка Лора
+        function renderLoreUI(items) {
+            const listContainer = document.getElementById('loreItemsList');
+            if (!listContainer) return;
+            listContainer.innerHTML = items.map(item => `
+                <div class="lore-season">
+                    <div class="lore-season-header" onclick="window.toggleLoreSeason(this.parentElement)">
+                        <h4>${escapeHTML(item.title || '')}</h4>
+                        <span class="lore-season-arrow">&gt;</span>
+                    </div>
+                    <div class="lore-season-content">
+                        ${(item.text || '').split('\n\n').map(p => `<p>${escapeHTML(p)}</p>`).join('')}
+                        <div class="admin-controls" style="margin-top: 1rem;">
+                            <button class="admin-action-btn" onclick="window.triggerEditItem('lore', '${item.id}', '', '${encodeURIComponent(item.title||'')}', '${encodeURIComponent(item.text||'')}')">Редактировать</button>
+                            <button class="admin-action-btn delete" onclick="window.triggerDeleteItem('lore', '${item.id}')">Удалить</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Рендеринг списка Событий
+        function renderEventsUI(items) {
+            const listContainer = document.getElementById('eventsItemsList');
+            if (!listContainer) return;
+            if (items.length === 0) {
+                listContainer.innerHTML = '<p>Нет запланированных событий.</p>';
                 return;
             }
-
-            const newsList = document.getElementById('newsItemsList');
-            const newsItem = document.createElement('div');
-            newsItem.className = 'news-item';
-            newsItem.innerHTML = `
-                <div class="news-date">${escapeHTML(dateVal)}</div>
-                <p>${escapeHTML(textVal)}</p>
-            `;
-
-            newsList.insertBefore(newsItem, newsList.firstChild);
-            closeNewsModal();
+            listContainer.innerHTML = items.map(item => `
+                <div class="event-item">
+                    ${item.date ? `<div class="event-date">${escapeHTML(item.date)}</div>` : ''}
+                    ${item.title ? `<div class="event-title">${escapeHTML(item.title)}</div>` : ''}
+                    <p>${escapeHTML(item.text || '')}</p>
+                    <div class="admin-controls">
+                        <button class="admin-action-btn" onclick="window.triggerEditItem('events', '${item.id}', '${encodeURIComponent(item.date||'')}', '${encodeURIComponent(item.title||'')}', '${encodeURIComponent(item.text||'')}')">Редактировать</button>
+                        <button class="admin-action-btn delete" onclick="window.triggerDeleteItem('events', '${item.id}')">Удалить</button>
+                    </div>
+                </div>
+            `).join('');
         }
 
+        // Вспомогательная фунция экранирования HTML
         function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
+            return String(str).replace(/[&<>'"]/g, 
                 tag => ({
                     '&': '&amp;',
                     '<': '&lt;',
@@ -1370,6 +1388,167 @@
             );
         }
 
+        // Управление Модальным окном
+        window.openCreateModal = function(mode) {
+            currentModalMode = mode;
+            editingItemId = null;
+            
+            document.getElementById('formFieldDate').value = mode === 'news' ? 'Только что' : '';
+            document.getElementById('formFieldTitle').value = '';
+            document.getElementById('formFieldText').value = '';
+
+            configureFormFields(mode, false);
+            executeProtectedAction(() => {
+                showModalStepForm();
+            });
+        };
+
+        window.triggerEditItem = function(mode, id, encodedDate, encodedTitle, encodedText) {
+            currentModalMode = mode;
+            editingItemId = id;
+
+            document.getElementById('formFieldDate').value = decodeURIComponent(encodedDate || '');
+            document.getElementById('formFieldTitle').value = decodeURIComponent(encodedTitle || '');
+            document.getElementById('formFieldText').value = decodeURIComponent(encodedText || '');
+
+            configureFormFields(mode, true);
+            executeProtectedAction(() => {
+                showModalStepForm();
+            });
+        };
+
+        window.triggerDeleteItem = function(mode, id) {
+            executeProtectedAction(async () => {
+                if (!currentUser) return;
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', mode, id);
+                    await deleteDoc(docRef);
+                } catch (e) {
+                    console.error("Error deleting doc:", e);
+                }
+            });
+        };
+
+        function configureFormFields(mode, isEdit) {
+            const dateInput = document.getElementById('formFieldDate');
+            const titleInput = document.getElementById('formFieldTitle');
+            const modalTitle = document.getElementById('formModalTitle');
+
+            if (mode === 'news') {
+                modalTitle.textContent = isEdit ? 'РЕДАКТИРОВАТЬ НОВОСТЬ' : 'НОВАЯ НОВОСТЬ';
+                dateInput.style.display = 'block';
+                dateInput.placeholder = 'Дата (например: 7 дней назад)';
+                titleInput.style.display = 'none';
+            } else if (mode === 'lore') {
+                modalTitle.textContent = isEdit ? 'РЕДАКТИРОВАТЬ СЕЗОН' : 'НОВЫЙ СЕЗОН ЛОРА';
+                dateInput.style.display = 'none';
+                titleInput.style.display = 'block';
+                titleInput.placeholder = 'Заголовок сезона (например: 0 сезон)';
+            } else if (mode === 'events') {
+                modalTitle.textContent = isEdit ? 'РЕДАКТИРОВАТЬ СОБЫТИЕ' : 'НОВОЕ СОБЫТИЕ';
+                dateInput.style.display = 'block';
+                dateInput.placeholder = 'Дата или Статус';
+                titleInput.style.display = 'block';
+                titleInput.placeholder = 'Название события';
+            }
+        }
+
+        function executeProtectedAction(actionCallback) {
+            pendingAction = actionCallback;
+            document.getElementById('adminModal').classList.add('show');
+            document.getElementById('modalCodeError').textContent = '';
+            document.getElementById('modalFormError').textContent = '';
+
+            if (isAdminAuthenticated) {
+                if (pendingAction) {
+                    pendingAction();
+                    pendingAction = null;
+                }
+            } else {
+                document.getElementById('modalStepCode').style.display = 'block';
+                document.getElementById('modalStepForm').style.display = 'none';
+                document.getElementById('adminCodeInput').value = '';
+                setTimeout(() => {
+                    const input = document.getElementById('adminCodeInput');
+                    if (input) input.focus();
+                }, 100);
+            }
+        }
+
+        window.checkAdminCode = function() {
+            const inputVal = document.getElementById('adminCodeInput').value.trim();
+            const errElem = document.getElementById('modalCodeError');
+
+            if (inputVal === ACCESS_CODE) {
+                isAdminAuthenticated = true;
+                errElem.textContent = '';
+                if (pendingAction) {
+                    pendingAction();
+                    pendingAction = null;
+                }
+            } else {
+                errElem.textContent = 'Неверный код доступа!';
+            }
+        };
+
+        function showModalStepForm() {
+            document.getElementById('modalStepCode').style.display = 'none';
+            document.getElementById('modalStepForm').style.display = 'block';
+            setTimeout(() => {
+                const textElem = document.getElementById('formFieldText');
+                if (textElem) textElem.focus();
+            }, 100);
+        }
+
+        window.closeAdminModal = function() {
+            document.getElementById('adminModal').classList.remove('show');
+            pendingAction = null;
+        };
+
+        window.submitAdminForm = async function() {
+            const dateVal = document.getElementById('formFieldDate').value.trim();
+            const titleVal = document.getElementById('formFieldTitle').value.trim();
+            const textVal = document.getElementById('formFieldText').value.trim();
+            const errElem = document.getElementById('modalFormError');
+
+            if (!textVal) {
+                errElem.textContent = 'Пожалуйста, заполните текст!';
+                return;
+            }
+
+            if (!currentUser) {
+                errElem.textContent = 'Ошибка авторизации базы данных.';
+                return;
+            }
+
+            const colRef = collection(db, 'artifacts', appId, 'public', 'data', currentModalMode);
+
+            try {
+                if (editingItemId) {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', currentModalMode, editingItemId);
+                    const updateData = { text: textVal };
+                    if (currentModalMode === 'news' || currentModalMode === 'events') updateData.date = dateVal;
+                    if (currentModalMode === 'lore' || currentModalMode === 'events') updateData.title = titleVal;
+
+                    await updateDoc(docRef, updateData);
+                } else {
+                    const newData = { text: textVal, priority: Date.now() };
+                    if (currentModalMode === 'news' || currentModalMode === 'events') newData.date = dateVal || 'Только что';
+                    if (currentModalMode === 'lore' || currentModalMode === 'events') newData.title = titleVal || 'Новый заголовок';
+
+                    await addDoc(colRef, newData);
+                }
+
+                window.closeAdminModal();
+            } catch (err) {
+                console.error("Error submitting form:", err);
+                errElem.textContent = 'Ошибка сохранения!';
+            }
+        };
+    </script>
+
+    <!-- Основные скрипты интерфейса -->
+    <script>
         // Расчет Masonry-эффекта для карточек состава
         function resizeGridItem(item) {
             if (!item || item.style.display === 'none') return;
@@ -1640,11 +1819,11 @@
             document.getElementById('panelOverlay').classList.remove('show');
         }
 
-        function toggleLoreSeason(season) {
+        window.toggleLoreSeason = function(season) {
             season.classList.toggle('open');
             const content = season.querySelector('.lore-season-content');
-            content.classList.toggle('open');
-        }
+            if (content) content.classList.toggle('open');
+        };
     </script>
 </body>
 </html>
