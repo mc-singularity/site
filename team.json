@@ -230,8 +230,8 @@
     },
     {
       "name": "erinaceus_",
-      "role": "Игрок проекта",
-      "realName": "Эрин",
+      "role": "Ливнул,гандонище",
+      "realName": "Ливнул..",
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -301,6 +301,17 @@
         {
           "platform": "YOUTUBE",
           "url": "https://www.youtube.com/@bal2oss"
+        }
+            {
+      "name": "Yrk1z",
+      "role": "Игрок проекта",
+      "realName": "Иркиз",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "https://www.youtube.com/@Yrk1zzz"
         }
       ]
     }
