@@ -980,6 +980,41 @@
                 grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
             }
         }
+
+.news-item {
+            position: relative;
+        }
+
+        .discord-badge {
+            position: absolute;
+            top: 0.625rem;
+            right: 0.625rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            object-fit: contain;
+            opacity: 0.9;
+            transition: transform 0.2s;
+        }
+
+        .discord-badge:hover {
+            transform: scale(1.15);
+        }
+
+        .news-embed-image {
+            max-width: 100%;
+            border: 0.125rem solid #ffffff;
+            margin-top: 0.625rem;
+            display: block;
+        }
+
+        .news-field {
+            margin-top: 0.5rem;
+        }
+
+        .news-field-title {
+            font-weight: bold;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -1097,29 +1132,80 @@
             );
         }
 
-        // Загрузка Новостей из news.json
+
+// Загрузка новостей
         async function loadNews() {
             const listContainer = document.getElementById('newsItemsList');
-            try {
-                const response = await fetch('news.json?v=' + Date.now(), { cache: 'no-store' });
-                const data = await response.json();
-                const news = data.news || [];
-                
-                if (news.length === 0) {
-                    listContainer.innerHTML = '<p style="color: #888;">Нет новостей.</p>';
-                    return;
-                }
+            listContainer.innerHTML = 'Загрузка новостей...';
 
-                listContainer.innerHTML = news.map(item => `
-                    <div class="news-item">
-                        <div class="news-date">${escapeHTML(item.date)}</div>
-                        <p>${escapeHTML(item.text)}</p>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error('Ошибка загрузки news.json:', error);
-                listContainer.innerHTML = '<p style="color: #ff6b6b;">Ошибка загрузки news.json</p>';
+            const discordBadgeHTML = `<img src="discord-icon.png" class="discord-badge" title="Из Discord" alt="Discord">`;
+
+            let html = '';
+
+            // news.json
+            try {
+                const resNews = await fetch('news.json?v=' + Date.now(), { cache: 'no-store' });
+                if (resNews.ok) {
+                    const dataNews = await resNews.json();
+                    const news = dataNews.news || [];
+                    news.forEach(item => {
+                        html += `
+                            <div class="news-item">
+                                <div class="news-date">${escapeHTML(item.date || '')}</div>
+                                <p>${escapeHTML(item.text || '')}</p>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) {
+                console.error('news.json err:', e);
             }
+
+            // discord_news.json
+            try {
+                const resDiscord = await fetch('discord_news.json?v=' + Date.now(), { cache: 'no-store' });
+                if (resDiscord.ok) {
+                    const dataDiscord = await resDiscord.json();
+                    const rawItems = Array.isArray(dataDiscord) ? dataDiscord : (dataDiscord.news || [dataDiscord]);
+
+                    rawItems.forEach(item => {
+                        let dateStr = item.date || (item.timestamp ? new Date(item.timestamp).toLocaleDateString('ru-RU') : 'Discord');
+                        let textStr = item.text || item.content || '';
+                        
+                        let embedsHTML = '';
+                        if (item.embeds && Array.isArray(item.embeds)) {
+                            item.embeds.forEach(embed => {
+                                if (embed.fields) {
+                                    embed.fields.forEach(f => {
+                                        embedsHTML += `
+                                            <div class="news-field">
+                                                <div class="news-field-title">${escapeHTML(f.rawName || f.name || '')}</div>
+                                                <div>${escapeHTML(f.rawValue || f.value || '')}</div>
+                                            </div>
+                                        `;
+                                    });
+                                }
+                                if (embed.image && embed.image.url) {
+                                    embedsHTML += `<img src="${escapeHTML(embed.image.url)}" class="news-embed-image" alt="attachment">`;
+                                }
+                            });
+                        }
+
+                        html += `
+                            <div class="news-item">
+                                ${discordBadgeHTML}
+                                <div class="news-date">${escapeHTML(dateStr)}</div>
+                                ${textStr ? `<p>${escapeHTML(textStr)}</p>` : ''}
+                                ${embedsHTML}
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) {
+                console.error('discord_news.json err:', e);
+            }
+
+            listContainer.innerHTML = html || '<p style="color: #888;">No news.</p>';
         }
 
         // Загрузка Лора из lore.json
