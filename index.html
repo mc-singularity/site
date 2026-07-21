@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -721,17 +720,11 @@
             display: none;
         }
 
-        /* Показ инфо при клике: задействуется 2 колонки, карточка плавно разворачивается */
+        /* Обычный развернутый игрок задействует 1 колонку без лишнего растяжения по ширине */
         .team-member.expanded {
             z-index: 100;
             background: rgba(0, 0, 0, 0.95);
-            grid-column: span 2;
-        }
-
-        @media (max-width: 32rem) {
-            .team-member.expanded {
-                grid-column: span 1;
-            }
+            grid-column: span 1;
         }
 
         .team-member.expanded .team-member-name-preview {
@@ -740,15 +733,68 @@
 
         .team-member.expanded .team-member-info {
             display: flex;
-            flex-direction: row; /* Карточка слева, инфо справа */
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
+            gap: 0.8rem;
             width: 100%;
             margin-top: 0.8rem;
             padding-top: 0.8rem;
             border-top: 0.125rem solid #ffffff;
             animation: slideDown 0.3s ease-out forwards;
+        }
+
+        .team-member.expanded .team-member-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+        }
+
+        .team-member.expanded .team-member-socials {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Только если у игрока есть специальная коллекционная карточка, расширяем до 2 колонок */
+        .team-member.expanded.has-card-member {
+            grid-column: span 2;
+        }
+
+        .team-member.expanded.has-card-member .team-member-info {
+            flex-direction: row; /* Картинка слева, текст справа */
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .team-member.expanded.has-card-member .team-member-details {
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .team-member.expanded.has-card-member .team-member-socials {
+            justify-content: flex-start;
+        }
+
+        @media (max-width: 32rem) {
+            .team-member.expanded.has-card-member {
+                grid-column: span 1;
+            }
+            .team-member.expanded.has-card-member .team-member-info {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .team-member.expanded.has-card-member .team-member-details {
+                align-items: center;
+                text-align: center;
+            }
+            .team-member.expanded.has-card-member .team-member-socials {
+                justify-content: center;
+            }
         }
 
         @keyframes slideDown {
@@ -959,21 +1005,6 @@
             .team-members {
                 grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
             }
-
-            .team-member.expanded .team-member-info {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .team-member-details {
-                align-items: center;
-                text-align: center;
-            }
-
-            .team-member-socials {
-                justify-content: center;
-            }
         }
     </style>
 </head>
@@ -1078,7 +1109,7 @@
     <button class="panel-toggle right events" onclick="togglePanel('events')">СОБЫТИЯ</button>
 
     <div class="container">
-        <header>
+        header>
             <div class="logo-container">
                 <img src="logo.png" alt="Singularity Logo" class="logo-image" onerror="this.style.display='none'">
                 <h1 class="logo">SINGULARITY</h1>
@@ -1243,7 +1274,7 @@
                 
                 (data.teamMembers || []).forEach(member => {
                     const memberDiv = document.createElement('div');
-                    memberDiv.className = 'team-member';
+                    memberDiv.className = 'team-member' + (member.hasCard ? ' has-card-member' : '');
                     memberDiv.dataset.priority = member.priority || 0;
                     memberDiv.dataset.name = member.name;
                     
