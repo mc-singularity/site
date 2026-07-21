@@ -301,6 +301,29 @@
         {
           "platform": "YOUTUBE",
           "url": "https://www.youtube.com/@bal2oss"
+        },
+    {
+      "name": "Yrk1z",
+      "role": "Игрок проекта",
+      "realName": "Иркиз",
+      "priority": 0,
+      "hasCard": false,
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "https://www.youtube.com/@Yrk1zzz"
+        },
+        {
+          "platform": "TELEGRAM",
+          "url": "https://t.me/Yrk1z"
+        },
+        {
+          "platform": "TWITCH",
+          "url": "https://twitch.tv/yrk1zz"
+        },
+        {
+          "platform": "STEAM",
+          "url": "https://steamcommunity.com/id/popa137/"
         }
       ]
     }
