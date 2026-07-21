@@ -657,7 +657,8 @@
             grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
             gap: 1.25rem;
             padding: 1rem 0;
-            align-items: start; /* Вытягивается только активный элемент, а не весь ряд */
+            align-items: start;
+            grid-auto-flow: dense;
         }
 
         .team-members.hidden {
@@ -717,16 +718,18 @@
             display: none;
         }
 
-        /* Показ инфо при клике: карточка вытягивается вниз, информация расположена сбоку */
+        /* Показ инфо при клике: карточка вытягивается на 2 колонки и 2 строки */
         .team-member.expanded {
             z-index: 100;
             background: rgba(0, 0, 0, 0.95);
-            grid-column: span 2; /* Шире для комфортного размещения информации сбоку */
+            grid-column: span 2;
+            grid-row: span 2;
         }
 
         @media (max-width: 32rem) {
             .team-member.expanded {
                 grid-column: span 1;
+                grid-row: auto;
             }
         }
 
