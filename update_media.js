@@ -96,13 +96,16 @@ function loadChannelsFromTeamJson() {
     }
 
     // Получаем массив участников
-    const members = Array.isArray(teamData) ? teamData : (teamData.members || teamData.team || []);
+    const members = Array.isArray(teamData) ? teamData : (teamData.members || teamData.team || teamData.teamMembers || []);
 
     for (const member of members) {
         const authorName = member.name || member.username || member.nickname || 'Участник';
         let ytUrl = null;
 
-        if (member.socials && (member.socials.youtube || member.socials.yt)) {
+        if (member.socials && Array.isArray(member.socials)) {
+            const ytSocial = member.socials.find(s => s.platform && (s.platform.toLowerCase() === 'youtube' || s.platform.toLowerCase() === 'yt'));
+            if (ytSocial) ytUrl = ytSocial.url;
+        } else if (member.socials && (member.socials.youtube || member.socials.yt)) {
             ytUrl = member.socials.youtube || member.socials.yt;
         } else if (member.youtube) {
             ytUrl = member.youtube;
@@ -198,10 +201,6 @@ async function updateMediaJson() {
                 allMedia.push(item);
             }
         }
-    const resultPayload = {
-        media: cleanedMedia
-    };
-
     }
 
     // Сортировка всех материалов от самых свежих к старым
@@ -209,6 +208,10 @@ async function updateMediaJson() {
 
     // Удаляем служебные поля перед сохранением
     const cleanedMedia = allMedia.map(({ rawDate, videoId, ...item }) => item);
+
+    const resultPayload = {
+        media: cleanedMedia
+    };
 
     const outputPath = path.join(__dirname, 'media.json');
     fs.writeFileSync(outputPath, JSON.stringify(resultPayload, null, 2), 'utf-8');
