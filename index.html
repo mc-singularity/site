@@ -2247,27 +2247,33 @@
             );
         }
 
+        function escapeJsAttribute(str) {
+            return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+        }
+
         function parseMarkdownLinks(text) {
             if (!text) return '';
             let escaped = escapeHTML(text);
-
-            // Обработка спойлеров ||текст||
+        
+            // Спойлеры Discord ||текст||
             escaped = escaped.replace(/\|\|([\s\S]+?)\|\|/g, function(match, content) {
                 return `<span class="discord-spoiler" onclick="this.classList.add('revealed')">${content}</span>`;
             });
-
+        
             // Эмодзи Discord
             escaped = escaped.replace(/&lt;:([a-zA-Z0-9_]+):[0-9]+&gt;/g, ':$1:');
-
-            // Маркировка текста и ссылки
+        
+            // Markdown ссылки и форматирование (включая __подчеркивания__)
             return escaped
                 .replace(/\n/g, '<br>')
                 .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #4ecdc4; text-decoration: underline;">$1</a>')
+                .replace(/__([\s\S]+?)__/g, '<strong>$1</strong>')
                 .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/_([\s\S]+?)_/g, '<em>$1</em>')
                 .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')
                 .replace(/~~([\s\S]+?)~~/g, '<del>$1</del>')
                 .replace(/`([^`]+)`/g, '<code style="background: rgba(255,255,255,0.1); padding: 2px 4px;">$1</code>');
-        }
+}
 
         async function loadNews() {
             const listContainer = document.getElementById('newsItemsList');
