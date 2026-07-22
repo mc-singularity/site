@@ -4,6 +4,9 @@
       "name": "horHyplace",
       "role": "Игрок проекта",
       "realName": "Марк",
+      "color": 16441964,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385487143113/image.png?ex=6a60fe36&is=6a5facb6&hm=39712675aef21f3652ea3d137b690c329d50f9b1902bc0aa6cee50ca451bf528&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": []
@@ -12,6 +15,9 @@
       "name": "MrKhazinack",
       "role": "Игрок проекта",
       "realName": "Кази",
+      "color": 14322492,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385046872205/image.png?ex=6a60fe36&is=6a5facb6&hm=1125bb023512e9d4e466e0939b3fdb32ae617f0c180ab235eabcf0bce0ad5d3f&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -29,6 +35,9 @@
       "name": "CHOMeQ418",
       "role": "Игрок проекта",
       "realName": "Хомяк",
+      "color": 15664903,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816384744620164/image.png?ex=6a60fe36&is=6a5facb6&hm=fe2acb007e7109282fbe7e9ba8222c1603cae327ebc4e4b29ff900c91bf4556a&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -46,6 +55,9 @@
       "name": "Maksimm205",
       "role": "Игрок проекта, Максим, Макс",
       "realName": "Обрёл лицензию",
+      "color": 15473,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528818551790637146/image.png?ex=6a61003a&is=6a5faeba&hm=d88c8d9872288d23c43f665e77a3fb871c7cf14e960cc7dfd306166c4e4bb543&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -63,6 +75,9 @@
       "name": "ArtAzurp",
       "role": "Игрок проекта, Стример",
       "realName": "Азурп",
+      "color": 16422717,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816384409342113/image.png?ex=6a60fe36&is=6a5facb6&hm=539ddd8bb852543dbba8c1637db763854f10a9ef9183d17d224def66f80d4034&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -84,6 +99,9 @@
       "name": "lousamik",
       "role": "Игрок проекта",
       "realName": "Лусэм",
+      "color": 5123584,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528811024252272650/image.png?ex=6a60f938&is=6a5fa7b8&hm=e5eba5d3daa524528edc1a379a49f1c0fbdf9953d8ed23d37c1da1a09416144b&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -101,6 +119,9 @@
       "name": "Yrk1z",
       "role": "Игрок проекта",
       "realName": "Яркиз",
+      "color": 12632256,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383092068614/image.png?ex=6a60fe35&is=6a5facb5&hm=c0c3884485b06c50299bf40dc519feff234dc2f3c0b3c5c028f231c7e57fc5c7&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -122,6 +143,9 @@
       "name": "pitrmatti",
       "role": "Игрок проекта, Итальянец",
       "realName": "ПиццаПаста",
+      "color": 6645093,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383956095126/image.png?ex=6a60fe35&is=6a5facb5&hm=6ff55696e7c658ccf68dea454b4fa4be4e7c59b5e14568f048784bf13d058daa&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -135,6 +159,9 @@
       "name": "maloi221",
       "role": "Игрок проекта",
       "realName": "Врай",
+      "color": 12491100,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383465623653/image.png?ex=6a60fe35&is=6a5facb5&hm=2e4c5dc39b700ac63328558374fb10323301b392f77627586ebd4ce1e2e74923&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -152,6 +179,9 @@
       "name": "TheNDay",
       "role": "Игрок проекта",
       "realName": "Зендай",
+      "color": 14286848,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1529046125116395540/image.png?ex=6a612b6c&is=6a5fd9ec&hm=951ed53d512ce65240fa8fe8aa705bd42d730d831e5e68b876ab3867b2ae02ab&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -169,6 +199,9 @@
       "name": "CloverS_Kid",
       "role": "Основатель, Тех. админ, Игрок проекта",
       "realName": "Кловер",
+      "color": 16719708,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693751578684/image.png?ex=6a60fe7f&is=6a5facff&hm=d117dc10112d95cfb78e3d42b4b8939defb275ee4aef42c1f1cad29eac7ff4d0&",
+      "imageUrl": null,
       "priority": 3,
       "hasCard": true,
       "socials": [
@@ -186,6 +219,9 @@
       "name": "MR_0zdi",
       "role": "Билдер, Сценарист, Игрок проекта",
       "realName": "Озди",
+      "color": 5848354,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693416300594/image.png?ex=6a60fe7f&is=6a5facff&hm=9076cfce90f2fa459a52268c415b7a1828055e10c8ea859f4177a27fc5f080bf&",
+      "imageUrl": null,
       "priority": 1,
       "hasCard": false,
       "socials": [
@@ -203,6 +239,9 @@
       "name": "LainBerg",
       "role": "Игрок проекта",
       "realName": "Лайн",
+      "color": null,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693122568345/image.png?ex=6a60fe7f&is=6a5facff&hm=03a7cf358b16a93b25939f79eb0e3bc6a5d646eff00b70a6f879966c22c28853&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -220,6 +259,9 @@
       "name": "Agata_friss",
       "role": "Игрок проекта, Художник",
       "realName": "Агата",
+      "color": 10165019,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692770111548/image.png?ex=6a60fe7f&is=6a5facff&hm=8a65c15368bd662a637cec43fa49e828d8fdc8e34cac3d7750635ecc2fa08cbb&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -237,6 +279,9 @@
       "name": "EnderHack1",
       "role": "Игрок проекта",
       "realName": "Эндер",
+      "color": 10359486,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692409667755/image.png?ex=6a60fe7f&is=6a5facff&hm=85a350012a7ad25a8f28e7be4dd18f91869af62c6303209efa2987554dd88fb0&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": []
@@ -245,6 +290,9 @@
       "name": "Folksy13_dll",
       "role": "Игрок проекта",
       "realName": "Фолкси",
+      "color": 7950079,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692107546805/image.png?ex=6a60fe7f&is=6a5facff&hm=524de4227f49a63e84420499de8f1c5b24c0e3e5f87f58ffecdc7926d2274f55&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
@@ -262,6 +310,9 @@
       "name": "g6thblood",
       "role": "Игрок проекта",
       "realName": "Егор",
+      "color": 13510924,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816386401374329/image.png?ex=6a60fe36&is=6a5facb6&hm=6be3b3ff8ab664907360eeee3d84dd7967f84286f62cb5a80c9df12aabedd680&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": []
@@ -270,6 +321,9 @@
       "name": "impartialkus",
       "role": "Игрок проекта",
       "realName": "Кира",
+      "color": 16101094,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816386128740372/image.png?ex=6a60fe36&is=6a5facb6&hm=27b84c1bd57c73250d107fbac89ae3bf8c5e088046b18d967e58db54a976146d&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": []
@@ -278,6 +332,9 @@
       "name": "ba1toss",
       "role": "Игрок проекта",
       "realName": "Балтос",
+      "color": 15704887,
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385822560387/image.png?ex=6a60fe36&is=6a5facb6&hm=723a1b9e61effd008a1e5fdf95703d6e2ac42de37658389c86347b12325c390c&",
+      "imageUrl": null,
       "priority": 0,
       "hasCard": false,
       "socials": [
