@@ -91,13 +91,6 @@ function getYouTubeThumbnail(snippet, videoId) {
 }
 
 /**
- * Получение анимированного WebP превью для YouTube (6 секунд)
- */
-function getYouTubeAnimatedPreview(videoId) {
-    return `https://i.ytimg.com/an_webp/${videoId}/mqdefault_6s.webp`;
-}
-
-/**
  * Получить YouTube Channel ID из URL или хэндла (@username)
  */
 async function resolveYouTubeChannelId(youtubeUrl, authorName) {
@@ -314,7 +307,7 @@ async function fetchYouTubeMedia(channelId, authorName) {
             if (isStream) mediaType = 'stream';
             else if (isShort) mediaType = 'short';
 
-            const animatedPreview = getYouTubeAnimatedPreview(videoId);
+            const staticThumbnail = getYouTubeThumbnail(detailItem?.snippet || snippet, videoId);
             const publishedAt = snippet.publishedAt || snippet.addedToPlaylist;
             const dateObj = new Date(publishedAt);
 
@@ -324,8 +317,7 @@ async function fetchYouTubeMedia(channelId, authorName) {
                 platform: 'youtube',
                 type: mediaType,
                 url: `https://www.youtube.com/watch?v=${videoId}`,
-                thumbnail: animatedPreview, // Сохраняем анимированное WebP превью напрямую в thumbnail
-                preview: animatedPreview,
+                thumbnail: staticThumbnail,
                 date: dateObj.toISOString().split('T')[0],
                 rawDate: dateObj.getTime(),
                 videoId: videoId
@@ -374,7 +366,6 @@ async function fetchTwitchMedia(username, authorName) {
                     type: 'stream',
                     url: `https://www.twitch.tv/${stream.user_login}`,
                     thumbnail: thumb,
-                    preview: thumb,
                     date: dateObj.toISOString().split('T')[0],
                     rawDate: dateObj.getTime(),
                     videoId: `stream_${stream.id}`
@@ -398,7 +389,6 @@ async function fetchTwitchMedia(username, authorName) {
                         type: v.type === 'archive' ? 'stream' : 'video',
                         url: v.url,
                         thumbnail: thumb,
-                        preview: thumb,
                         date: dateObj.toISOString().split('T')[0],
                         rawDate: dateObj.getTime(),
                         videoId: `vod_${v.id}`
@@ -474,6 +464,14 @@ async function updateMediaJson() {
     };
 
     const outputPath = path.join(__dirname, 'media.json');
+
+    // Проверяем и создаем директорию, если её не существует
+    const dir = path.dirname(outputPath);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+    }
+
+    // Записываем файл (если media.json отсутствует, Node.js создаст его автоматически)
     fs.writeFileSync(outputPath, JSON.stringify(resultPayload, null, 2), 'utf-8');
     console.log(`Успешно обновлено! Сохранено ${cleanedMedia.length} элементов в media.json.`);
 }
