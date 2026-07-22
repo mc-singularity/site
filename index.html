@@ -1922,7 +1922,7 @@
             container.innerHTML = authorsList.map(author => {
                 const headSrc = `https://minotar.net/helm/${encodeURIComponent(author)}/30`;
                 return `
-                    <button class="author-chip ${window.selectedAuthorFilter === author ? 'active' : ''}" onclick="toggleAuthorFilter('${escapeHTML(author)}', this)">
+                    <button class="author-chip ${window.selectedAuthorFilter === author ? 'active' : ''}" onclick="toggleAuthorFilter('${escapeJsAttribute(author)}', this)">
                         <img src="${headSrc}" alt="${escapeHTML(author)}" onerror="this.src='https://minotar.net/helm/Steve/30'">
                         <span>${escapeHTML(author)}</span>
                     </button>
