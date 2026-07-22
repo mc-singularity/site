@@ -53,14 +53,23 @@
     },
     {
       "name": "Maksimm205",
-      "role": "Игрок проекта",
-      "realName": "Максим",
+      "role": "Игрок проекта, Максим, Макс",
+      "realName": "Обрёл лицензию",
       "color": 15473,
       "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528818551790637146/image.png?ex=6a6251ba&is=6a61003a&hm=2ed8e021a3c76f0c3174f8148435ab73cf7b9313b05118f113da422f6f4f21da&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
-      "socials": []
+      "socials": [
+        {
+          "platform": "YOUTUBE",
+          "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUXTmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA%3D"
+        },
+        {
+          "platform": "YOUTUBE",
+          "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUXTmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA%3D"
+        }
+      ]
     },
     {
       "name": "ArtAzurp",
@@ -106,24 +115,15 @@
         }
       ]
     },
-{
+    {
       "name": "Yrk1z",
       "role": "Игрок проекта",
       "realName": "Яркиз",
       "color": 12632256,
-<<<<<<< Updated upstream
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383092068614/image.png?ex=6a61a6f5&is=6a605575&hm=4615739795d6943bfc817d93458217f1a19ce5ed70a7266fa3b50a5e9870fcd7&",
-      "imageUrl": "https://media.discordapp.net/attachments/1522962463182819369/1523303456746639360/b3197298-898e-4e40-a777-66369b1d6d2d.png?ex=6a6207e5&is=6a60b665&hm=af16a4ea61ca657b2b073f1bc17cd91674859543d54f7697ca5f0d8cde84a1e3&=&format=webp&quality=lossless&width=506&height=900",
-      "imageUrls": [
-        "https://media.discordapp.net/attachments/1522962463182819369/1523303456746639360/b3197298-898e-4e40-a777-66369b1d6d2d.png?ex=6a6207e5&is=6a60b665&hm=af16a4ea61ca657b2b073f1bc17cd91674859543d54f7697ca5f0d8cde84a1e3&=&format=webp&quality=lossless&width=506&height=900",
-        "https://media.discordapp.net/attachments/1522962463182819369/1523303456746639360/b3197298-898e-4e40-a777-66369b1d6d2d.png?ex=6a6207e5&is=6a60b665&hm=af16a4ea61ca657b2b073f1bc17cd91674859543d54f7697ca5f0d8cde84a1e3&=&format=webp&quality=lossless&width=506&height=900"
-      ],
-=======
       "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383092068614/image.png?ex=6a624fb5&is=6a60fe35&hm=560cebd489894238555c3433e0fe67e340f232ddadac693673d1ada274a141d0&",
       "imageUrl": null,
->>>>>>> Stashed changes
       "priority": 0,
-      "hasCard": true,
+      "hasCard": false,
       "socials": [
         {
           "platform": "YOUTUBE",
@@ -164,9 +164,6 @@
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
-<<<<<<< Updated upstream
-      "socials": []
-=======
       "socials": [
         {
           "platform": "YOUTUBE",
@@ -177,7 +174,6 @@
           "url": "https://t.me/vraihhp"
         }
       ]
->>>>>>> Stashed changes
     },
     {
       "name": "TheNDay",
@@ -243,13 +239,8 @@
       "name": "LainBerg",
       "role": "Игрок проекта",
       "realName": "Лайн",
-<<<<<<< Updated upstream
-      "color": 16777215,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693122568345/image.png?ex=6a61a73f&is=6a6055bf&hm=b64e8a95133aedc18b57378f7ab3db8494794f6af5de67e2e1fd580f777aea95&",
-=======
       "color": null,
       "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693122568345/image.png?ex=6a624fff&is=6a60fe7f&hm=e2be10938502bb63844f5401cbc950f97b482bad6168a36fc800538264600cfb&",
->>>>>>> Stashed changes
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
