@@ -190,6 +190,16 @@ function loadChannelsFromTeamJson() {
 /**
  * Запрос контента из YouTube API
  */
+function decodeHTMLEntities(text) {
+    if (!text) return '';
+    return text
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>');
+}
+
 async function fetchYouTubeMedia(channelId, authorName) {
     if (!YOUTUBE_API_KEY) return [];
 
@@ -242,7 +252,7 @@ async function fetchYouTubeMedia(channelId, authorName) {
             const dateObj = new Date(snippet.publishedAt);
 
             return {
-                title: snippet.title,
+                title: decodeHTMLEntities(snippet.title), // <-- ЗДЕСЬ ДЕКОДИРУЕМ ТЕКСТ
                 author: authorName || snippet.channelTitle,
                 platform: 'youtube',
                 type: mediaType,
