@@ -1,1 +1,394 @@
-
+{
+  "media": [
+    {
+      "title": "Singularity | Season 1  | Финальные титры",
+      "author": "ArtAzurp",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=9_cXGrKuyQ4",
+      "videoUrl": "https://www.youtube.com/embed/9_cXGrKuyQ4?autoplay=1&mute=1&controls=0&loop=1&playlist=9_cXGrKuyQ4",
+      "thumbnail": "https://i.ytimg.com/vi/9_cXGrKuyQ4/hqdefault.jpg",
+      "date": "2026-07-17"
+    },
+    {
+      "title": "страдаем в марвл(  и зашли в репо)",
+      "author": "Agata_friss",
+      "platform": "twitch",
+      "type": "stream",
+      "url": "https://www.twitch.tv/videos/2822146979",
+      "videoUrl": null,
+      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/dgeft87wbj63p/acd95f3261984f9c0843_agata_friss_316440977749_1784293455//thumb/thumb0-%{width}x%{height}.jpg",
+      "date": "2026-07-17"
+    },
+    {
+      "title": "Играю на синге",
+      "author": "ArtAzurp",
+      "platform": "twitch",
+      "type": "stream",
+      "url": "https://www.twitch.tv/videos/2822113289",
+      "videoUrl": null,
+      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/dgeft87wbj63p/1cca0ba1d1ae3226e383_azurpa12_316440581461_1784289340//thumb/thumb0-%{width}x%{height}.jpg",
+      "date": "2026-07-17"
+    },
+    {
+      "title": "Играю на синге",
+      "author": "ArtAzurp",
+      "platform": "twitch",
+      "type": "stream",
+      "url": "https://www.twitch.tv/videos/2822086128",
+      "videoUrl": null,
+      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/dgeft87wbj63p/13c7286b74b26519b4a2_azurpa12_316440186837_1784285099//thumb/thumb0-%{width}x%{height}.jpg",
+      "date": "2026-07-17"
+    },
+    {
+      "title": "Demonstration of Griffin Corp.'s \"Test #2\" technologies",
+      "author": "MR_0zdi",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=LBojI6SQyVs",
+      "videoUrl": "https://www.youtube.com/embed/LBojI6SQyVs?autoplay=1&mute=1&controls=0&loop=1&playlist=LBojI6SQyVs",
+      "thumbnail": "https://i.ytimg.com/vi/LBojI6SQyVs/hqdefault.jpg",
+      "date": "2026-07-17"
+    },
+    {
+      "title": "Singularity, второй день на сервере| сервер для контент-мейкеров",
+      "author": "maloi221",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=mnCUHu2KDhc",
+      "videoUrl": "https://www.youtube.com/embed/mnCUHu2KDhc?autoplay=1&mute=1&controls=0&loop=1&playlist=mnCUHu2KDhc",
+      "thumbnail": "https://i.ytimg.com/vi/mnCUHu2KDhc/hqdefault.jpg",
+      "date": "2026-07-17"
+    },
+    {
+      "title": "Singularity сервер для контент-мейкеров| Minecraft 😁",
+      "author": "maloi221",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=5oCHgVAmCho",
+      "videoUrl": "https://www.youtube.com/embed/5oCHgVAmCho?autoplay=1&mute=1&controls=0&loop=1&playlist=5oCHgVAmCho",
+      "thumbnail": "https://i.ytimg.com/vi/5oCHgVAmCho/hqdefault.jpg",
+      "date": "2026-07-15"
+    },
+    {
+      "title": "Смотрю в стену",
+      "author": "Yrk1z",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=6-71VIlDgCI",
+      "videoUrl": "https://www.youtube.com/embed/6-71VIlDgCI?autoplay=1&mute=1&controls=0&loop=1&playlist=6-71VIlDgCI",
+      "thumbnail": "https://i.ytimg.com/vi/6-71VIlDgCI/hqdefault.jpg",
+      "date": "2026-07-15"
+    },
+    {
+      "title": "#майнкрафт",
+      "author": "Yrk1z",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=Cydi3QF4RiA",
+      "videoUrl": "https://www.youtube.com/embed/Cydi3QF4RiA?autoplay=1&mute=1&controls=0&loop=1&playlist=Cydi3QF4RiA",
+      "thumbnail": "https://i.ytimg.com/vi/Cydi3QF4RiA/hqdefault.jpg",
+      "date": "2026-07-14"
+    },
+    {
+      "title": "#repo #репо",
+      "author": "Yrk1z",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=1-5Fq5hYp0g",
+      "videoUrl": "https://www.youtube.com/embed/1-5Fq5hYp0g?autoplay=1&mute=1&controls=0&loop=1&playlist=1-5Fq5hYp0g",
+      "thumbnail": "https://i.ytimg.com/vi/1-5Fq5hYp0g/hqdefault.jpg",
+      "date": "2026-07-14"
+    },
+    {
+      "title": "еее Эдит про врая 😁😁😁 #Vraih #edit #minecraft #serial",
+      "author": "maloi221",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=Ki1rssW6Usg",
+      "videoUrl": "https://www.youtube.com/embed/Ki1rssW6Usg?autoplay=1&mute=1&controls=0&loop=1&playlist=Ki1rssW6Usg",
+      "thumbnail": "https://i.ytimg.com/vi/Ki1rssW6Usg/hqdefault.jpg",
+      "date": "2026-07-11"
+    },
+    {
+      "title": "Затроллил какого-то чувака Сервера SINGULARITY",
+      "author": "Yrk1z",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=MZKfLfQrMnc",
+      "videoUrl": "https://www.youtube.com/embed/MZKfLfQrMnc?autoplay=1&mute=1&controls=0&loop=1&playlist=MZKfLfQrMnc",
+      "thumbnail": "https://i.ytimg.com/vi/MZKfLfQrMnc/hqdefault.jpg",
+      "date": "2026-07-07"
+    },
+    {
+      "title": "SL 1 - ИГРАЕМ НА СИНГУЛЯРИТИ В ВР - продолжение",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=3ISIQBUn6HI",
+      "videoUrl": "https://www.youtube.com/embed/3ISIQBUn6HI?autoplay=1&mute=1&controls=0&loop=1&playlist=3ISIQBUn6HI",
+      "thumbnail": "https://i.ytimg.com/vi/3ISIQBUn6HI/hqdefault.jpg",
+      "date": "2026-07-02"
+    },
+    {
+      "title": "SL 1 - ИГРАЕМ НА СИНГУЛЯРИТИ В ВР",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=GkM0pQd4jRw",
+      "videoUrl": "https://www.youtube.com/embed/GkM0pQd4jRw?autoplay=1&mute=1&controls=0&loop=1&playlist=GkM0pQd4jRw",
+      "thumbnail": "https://i.ytimg.com/vi/GkM0pQd4jRw/hqdefault.jpg",
+      "date": "2026-07-02"
+    },
+    {
+      "title": "Тест",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=9cHLiSCziKw",
+      "videoUrl": "https://www.youtube.com/embed/9cHLiSCziKw?autoplay=1&mute=1&controls=0&loop=1&playlist=9cHLiSCziKw",
+      "thumbnail": "https://i.ytimg.com/vi/9cHLiSCziKw/hqdefault.jpg",
+      "date": "2026-07-02"
+    },
+    {
+      "title": "Тест",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=i6M9CqmTggA",
+      "videoUrl": "https://www.youtube.com/embed/i6M9CqmTggA?autoplay=1&mute=1&controls=0&loop=1&playlist=i6M9CqmTggA",
+      "thumbnail": "https://i.ytimg.com/vi/i6M9CqmTggA/hqdefault_live.jpg",
+      "date": "2026-07-01"
+    },
+    {
+      "title": "УНГА БУНГА 🍌",
+      "author": "Yrk1z",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=R3vGKzo2v8U",
+      "videoUrl": "https://www.youtube.com/embed/R3vGKzo2v8U?autoplay=1&mute=1&controls=0&loop=1&playlist=R3vGKzo2v8U",
+      "thumbnail": "https://i.ytimg.com/vi/R3vGKzo2v8U/hqdefault.jpg",
+      "date": "2026-06-30"
+    },
+    {
+      "title": "Начало 2 сезона FineWorld|Minecraft",
+      "author": "maloi221",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=wVOgesnKHt8",
+      "videoUrl": "https://www.youtube.com/embed/wVOgesnKHt8?autoplay=1&mute=1&controls=0&loop=1&playlist=wVOgesnKHt8",
+      "thumbnail": "https://i.ytimg.com/vi/wVOgesnKHt8/hqdefault.jpg",
+      "date": "2026-06-28"
+    },
+    {
+      "title": "test",
+      "author": "CloverS_Kid",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=pHMoM3TiuHM",
+      "videoUrl": "https://www.youtube.com/embed/pHMoM3TiuHM?autoplay=1&mute=1&controls=0&loop=1&playlist=pHMoM3TiuHM",
+      "thumbnail": "https://i.ytimg.com/vi/pHMoM3TiuHM/hqdefault.jpg",
+      "date": "2026-06-26"
+    },
+    {
+      "title": "Набор на сервер FineWorld | Minecraft",
+      "author": "maloi221",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=zaP1kpv_aIs",
+      "videoUrl": "https://www.youtube.com/embed/zaP1kpv_aIs?autoplay=1&mute=1&controls=0&loop=1&playlist=zaP1kpv_aIs",
+      "thumbnail": "https://i.ytimg.com/vi/zaP1kpv_aIs/hqdefault.jpg",
+      "date": "2026-06-24"
+    },
+    {
+      "title": "заявка на SINGULARITY",
+      "author": "lousamik",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=AIlkfRHSHko",
+      "videoUrl": "https://www.youtube.com/embed/AIlkfRHSHko?autoplay=1&mute=1&controls=0&loop=1&playlist=AIlkfRHSHko",
+      "thumbnail": "https://i.ytimg.com/vi/AIlkfRHSHko/hqdefault.jpg",
+      "date": "2026-06-10"
+    },
+    {
+      "title": "ТЫ НУЖЕН НАМ! | Приватный сервер Minecraft 1.21.11",
+      "author": "LainBerg",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=UT7iZD87lqM",
+      "videoUrl": "https://www.youtube.com/embed/UT7iZD87lqM?autoplay=1&mute=1&controls=0&loop=1&playlist=UT7iZD87lqM",
+      "thumbnail": "https://i.ytimg.com/vi/UT7iZD87lqM/hqdefault.jpg",
+      "date": "2026-06-05"
+    },
+    {
+      "title": "Поспали..",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=_CiPr6OEWaM",
+      "videoUrl": "https://www.youtube.com/embed/_CiPr6OEWaM?autoplay=1&mute=1&controls=0&loop=1&playlist=_CiPr6OEWaM",
+      "thumbnail": "https://i.ytimg.com/vi/_CiPr6OEWaM/hqdefault.jpg",
+      "date": "2026-03-28"
+    },
+    {
+      "title": "Это изменит твой Minecraft навсегда #майнкрафт #моды",
+      "author": "LainBerg",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=NtL8g0dskPI",
+      "videoUrl": "https://www.youtube.com/embed/NtL8g0dskPI?autoplay=1&mute=1&controls=0&loop=1&playlist=NtL8g0dskPI",
+      "thumbnail": "https://i.ytimg.com/vi/NtL8g0dskPI/hqdefault.jpg",
+      "date": "2026-02-23"
+    },
+    {
+      "title": "КАК МЫ УЗНАЛИ О ВЕЛИКОМ ЗАРАЖЕНИИ ДЕРЕВА В МАЙНКРАФТЕ SINGULARITY",
+      "author": "LainBerg",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=-OcdN0UrfxY",
+      "videoUrl": "https://www.youtube.com/embed/-OcdN0UrfxY?autoplay=1&mute=1&controls=0&loop=1&playlist=-OcdN0UrfxY",
+      "thumbnail": "https://i.ytimg.com/vi/-OcdN0UrfxY/hqdefault.jpg",
+      "date": "2026-02-11"
+    },
+    {
+      "title": "Мемы из Майнкрафта майнкрафт #memes #мем #алмазы #вирусное #втренде  #майнкрафт #жиза #лол",
+      "author": "LainBerg",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=51CDIzBYJFg",
+      "videoUrl": "https://www.youtube.com/embed/51CDIzBYJFg?autoplay=1&mute=1&controls=0&loop=1&playlist=51CDIzBYJFg",
+      "thumbnail": "https://i.ytimg.com/vi/51CDIzBYJFg/hqdefault.jpg",
+      "date": "2025-12-31"
+    },
+    {
+      "title": "Мемы из Майнкрафта майнкрафт #memes #мем #алмазы #вирусное #втренде  #майнкрафт #жиза #лол",
+      "author": "LainBerg",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=1WX0j6VDQVQ",
+      "videoUrl": "https://www.youtube.com/embed/1WX0j6VDQVQ?autoplay=1&mute=1&controls=0&loop=1&playlist=1WX0j6VDQVQ",
+      "thumbnail": "https://i.ytimg.com/vi/1WX0j6VDQVQ/hqdefault.jpg",
+      "date": "2025-12-30"
+    },
+    {
+      "title": "типичная целевая Тохи#t2x2",
+      "author": "CHOMeQ418",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=zL-QHWwaw5M",
+      "videoUrl": "https://www.youtube.com/embed/zL-QHWwaw5M?autoplay=1&mute=1&controls=0&loop=1&playlist=zL-QHWwaw5M",
+      "thumbnail": "https://i.ytimg.com/vi/zL-QHWwaw5M/hqdefault.jpg",
+      "date": "2025-10-26"
+    },
+    {
+      "title": "Хотел бы с таким красавчиком потанцевать?) #t2x2 #тоха",
+      "author": "CHOMeQ418",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=guneChBcwH0",
+      "videoUrl": "https://www.youtube.com/embed/guneChBcwH0?autoplay=1&mute=1&controls=0&loop=1&playlist=guneChBcwH0",
+      "thumbnail": "https://i.ytimg.com/vi/guneChBcwH0/hqdefault.jpg",
+      "date": "2025-10-22"
+    },
+    {
+      "title": "Секретные кадры letsplay Тохи в мире Майнкрафта \"НЕ ФЕЙК🥲\"#t2x2",
+      "author": "CHOMeQ418",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=jl_ZvPMVxG8",
+      "videoUrl": "https://www.youtube.com/embed/jl_ZvPMVxG8?autoplay=1&mute=1&controls=0&loop=1&playlist=jl_ZvPMVxG8",
+      "thumbnail": "https://i.ytimg.com/vi/jl_ZvPMVxG8/hqdefault.jpg",
+      "date": "2025-10-22"
+    },
+    {
+      "title": "эта битва будет легендарной #t2x2",
+      "author": "CHOMeQ418",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=g8gysMqbdvI",
+      "videoUrl": "https://www.youtube.com/embed/g8gysMqbdvI?autoplay=1&mute=1&controls=0&loop=1&playlist=g8gysMqbdvI",
+      "thumbnail": "https://i.ytimg.com/vi/g8gysMqbdvI/hqdefault.jpg",
+      "date": "2025-10-20"
+    },
+    {
+      "title": "если бы тоха не скрывал все свои мысли в начале стрима. #t2x2",
+      "author": "CHOMeQ418",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=oWbbunvbc9o",
+      "videoUrl": "https://www.youtube.com/embed/oWbbunvbc9o?autoplay=1&mute=1&controls=0&loop=1&playlist=oWbbunvbc9o",
+      "thumbnail": "https://i.ytimg.com/vi/oWbbunvbc9o/hqdefault.jpg",
+      "date": "2025-10-19"
+    },
+    {
+      "title": "Useless adult",
+      "author": "MrKhazinack",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=p1ixAxNk4Hc",
+      "videoUrl": "https://www.youtube.com/embed/p1ixAxNk4Hc?autoplay=1&mute=1&controls=0&loop=1&playlist=p1ixAxNk4Hc",
+      "thumbnail": "https://i.ytimg.com/vi/p1ixAxNk4Hc/hqdefault.jpg",
+      "date": "2025-05-30"
+    },
+    {
+      "title": "Bounce dance",
+      "author": "MrKhazinack",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=Rd4Oh3GAiOE",
+      "videoUrl": "https://www.youtube.com/embed/Rd4Oh3GAiOE?autoplay=1&mute=1&controls=0&loop=1&playlist=Rd4Oh3GAiOE",
+      "thumbnail": "https://i.ytimg.com/vi/Rd4Oh3GAiOE/hqdefault.jpg",
+      "date": "2025-05-30"
+    },
+    {
+      "title": "#minecraft #music #anime",
+      "author": "ba1toss",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=MGt3cDMZqFA",
+      "videoUrl": "https://www.youtube.com/embed/MGt3cDMZqFA?autoplay=1&mute=1&controls=0&loop=1&playlist=MGt3cDMZqFA",
+      "thumbnail": "https://i.ytimg.com/vi/MGt3cDMZqFA/hqdefault.jpg",
+      "date": "2025-04-20"
+    },
+    {
+      "title": "mibombo",
+      "author": "ba1toss",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=_xLFh62_yW0",
+      "videoUrl": "https://www.youtube.com/embed/_xLFh62_yW0?autoplay=1&mute=1&controls=0&loop=1&playlist=_xLFh62_yW0",
+      "thumbnail": "https://i.ytimg.com/vi/_xLFh62_yW0/hqdefault.jpg",
+      "date": "2025-03-15"
+    },
+    {
+      "title": "the result of 5 hours of looting",
+      "author": "ba1toss",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=vYnLjKJJ6Bw",
+      "videoUrl": "https://www.youtube.com/embed/vYnLjKJJ6Bw?autoplay=1&mute=1&controls=0&loop=1&playlist=vYnLjKJJ6Bw",
+      "thumbnail": "https://i.ytimg.com/vi/vYnLjKJJ6Bw/hqdefault.jpg",
+      "date": "2025-03-02"
+    },
+    {
+      "title": "home",
+      "author": "ba1toss",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=WbE93TQsR3U",
+      "videoUrl": "https://www.youtube.com/embed/WbE93TQsR3U?autoplay=1&mute=1&controls=0&loop=1&playlist=WbE93TQsR3U",
+      "thumbnail": "https://i.ytimg.com/vi/WbE93TQsR3U/hqdefault.jpg",
+      "date": "2025-02-28"
+    },
+    {
+      "title": "Заявка на приватный майнкрафт Singularity",
+      "author": "MrKhazinack",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=UiDJGX5v7_I",
+      "videoUrl": "https://www.youtube.com/embed/UiDJGX5v7_I?autoplay=1&mute=1&controls=0&loop=1&playlist=UiDJGX5v7_I",
+      "thumbnail": "https://i.ytimg.com/vi/UiDJGX5v7_I/hqdefault.jpg",
+      "date": "2025-02-06"
+    }
+  ]
+}
