@@ -1,9 +1,9 @@
-name: Update YouTube Media JSON
+name: Update YouTube & Twitch Media JSON
 
 on:
   schedule:
     # Автоматический запуск каждые 6 часов
-    - cron: '0 */6 * * *'
+    - cron: '0 * * * *'  
   workflow_dispatch: # Возможность запустить вручную через вкладку Actions
 
 jobs:
@@ -21,10 +21,12 @@ jobs:
         with:
           node-version: '22'
 
-      # 3. Запускаем JS скрипт с передачей секретного ключа
+      # 3. Запускаем JS скрипт с передачей секретных ключей
       - name: Run media updater script
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
         run: node update_media.js
 
       # 4. Проверяем изменения, синхронизируем с веткой main и отправляем обновленный media.json
@@ -36,7 +38,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "Изменений в media.json нет."
           else
-            git commit -m "Auto-update media.json via YouTube API [skip ci]"
+            git commit -m "Auto-update media.json via YouTube & Twitch API [skip ci]"
             git pull --rebase origin main
             git push
           fi
