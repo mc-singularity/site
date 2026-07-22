@@ -1223,7 +1223,7 @@
             <div class="loader-bar-fill" id="loaderBar"></div>
         </div>
         <div class="loader-percent" id="loaderPercent">0%</div>
-        <div class="loader-status" id="loaderStatus">ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ...</div>
+        <div class="loader-status" id="loaderStatus">ЗАГРУЗКА НАСТРОЕК...</div>
     </div>
 
     <div class="crt-overlay"></div>
@@ -1337,9 +1337,9 @@
         </footer>
     </div>
 
-    <!-- Логика ретро заставки загрузки -->
+    <!-- Логика ретро заставки загрузки из loader.json -->
     <script>
-        function runRetroLoader() {
+        async function runRetroLoader() {
             const loader = document.getElementById('retroLoader');
             const bar = document.getElementById('loaderBar');
             const percentText = document.getElementById('loaderPercent');
@@ -1347,7 +1347,7 @@
 
             if (!loader || !bar) return;
 
-            const statuses = [
+            let statuses = [
                 'ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ...',
                 'ЗАГРУЗКА ЗВЁЗДНОГО НЕБА...',
                 'ПОДКЛЮЧЕНИЕ К БАЗЕ ДАННЫХ...',
@@ -1356,8 +1356,21 @@
                 'ГОТОВО!'
             ];
 
+            try {
+                const response = await fetch('loader.json?v=' + Date.now(), { cache: 'no-store' });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.statuses && Array.isArray(data.statuses) && data.statuses.length > 0) {
+                        statuses = data.statuses;
+                    }
+                }
+            } catch (e) {
+                console.warn('loader.json не найден, используются базовые статусы.');
+            }
+
             let progress = 0;
             let statusIdx = 0;
+            statusText.textContent = statuses[0] || 'ЗАГРУЗКА...';
 
             const interval = setInterval(() => {
                 progress += Math.floor(Math.random() * 12) + 5;
@@ -1366,14 +1379,15 @@
                 bar.style.width = progress + '%';
                 percentText.textContent = progress + '%';
 
-                if (progress > 20 && statusIdx === 0) { statusIdx = 1; statusText.textContent = statuses[1]; }
-                if (progress > 45 && statusIdx === 1) { statusIdx = 2; statusText.textContent = statuses[2]; }
-                if (progress > 70 && statusIdx === 2) { statusIdx = 3; statusText.textContent = statuses[3]; }
-                if (progress > 88 && statusIdx === 3) { statusIdx = 4; statusText.textContent = statuses[4]; }
+                const nextIdx = Math.floor((progress / 100) * (statuses.length - 1));
+                if (nextIdx !== statusIdx && nextIdx < statuses.length) {
+                    statusIdx = nextIdx;
+                    statusText.textContent = statuses[statusIdx];
+                }
 
                 if (progress >= 100) {
                     clearInterval(interval);
-                    statusText.textContent = statuses[5];
+                    statusText.textContent = statuses[statuses.length - 1] || 'ГОТОВО!';
                     setTimeout(() => {
                         loader.classList.add('hidden');
                         document.body.classList.add('loaded');
