@@ -12,27 +12,29 @@ const channelIdCache = {};
 /**
  * Получить Channel ID из YouTube URL или хэндла (@username)
  */
-async function resolveChannelId(youtubeUrl) {
+async function resolveChannelId(youtubeUrl, authorName) {
     if (!youtubeUrl) return null;
 
-    // 1. Если это прямая ссылка вида youtube.com/channel/UC...
-    const directChannelMatch = youtubeUrl.match(/channel\/(UC[a-zA-Z0-9_-]+)/);
+    const trimmedUrl = youtubeUrl.trim();
+
+    // 1. Прямая ссылка вида youtube.com/channel/UC...
+    const directChannelMatch = trimmedUrl.match(/channel\/(UC[a-zA-Z0-9_-]+)/);
     if (directChannelMatch) {
         return directChannelMatch[1];
     }
 
     // 2. Если введена строка вида UC...
-    if (/^UC[a-zA-Z0-9_-]{22}$/.test(youtubeUrl.trim())) {
-        return youtubeUrl.trim();
+    if (/^UC[a-zA-Z0-9_-]{22}$/.test(trimmedUrl)) {
+        return trimmedUrl;
     }
 
-    // 3. Извлечение @хэндла из URL
+    // 3. Извлечение @хэндла или имя пользователя
     let handle = null;
-    const handleMatch = youtubeUrl.match(/@([a-zA-Z0-9_.-]+)/);
+    const handleMatch = trimmedUrl.match(/@([a-zA-Z0-9_.-]+)/);
     if (handleMatch) {
         handle = handleMatch[1];
     } else {
-        const parts = youtubeUrl.replace(/\/$/, '').split('/');
+        const parts = trimmedUrl.replace(/\/$/, '').split('/');
         const lastPart = parts[parts.length - 1];
         if (lastPart && !lastPart.includes('.')) {
             handle = lastPart.replace(/^@/, '');
@@ -42,20 +44,39 @@ async function resolveChannelId(youtubeUrl) {
     if (!handle) return null;
     if (channelIdCache[handle]) return channelIdCache[handle];
 
-    // Запрос к YouTube API для получения ID по @хэндлу
+    // Запрос 1: К YouTube API для получения ID по forHandle
     try {
         const url = `https://www.googleapis.com/youtube/v3/channels?part=id&forHandle=${encodeURIComponent(handle)}&key=${YOUTUBE_API_KEY}`;
         const res = await fetch(url);
-        if (!res.ok) return null;
-
-        const data = await res.json();
-        if (data.items && data.items.length > 0) {
-            const channelId = data.items[0].id;
-            channelIdCache[handle] = channelId;
-            return channelId;
+        if (res.ok) {
+            const data = await res.json();
+            if (data.items && data.items.length > 0) {
+                const channelId = data.items[0].id;
+                channelIdCache[handle] = channelId;
+                return channelId;
+            }
         }
     } catch (e) {
         console.error(`Ошибка при поиске ID для @${handle}:`, e.message);
+    }
+
+    // Запрос 2: Резервный поиск по имени автора или хэндлу
+    try {
+        const searchQuery = authorName || handle;
+        const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${encodeURIComponent(searchQuery)}&key=${YOUTUBE_API_KEY}`;
+        const res = await fetch(searchUrl);
+        if (res.ok) {
+            const data = await res.json();
+            if (data.items && data.items.length > 0) {
+                const channelId = data.items[0].id?.channelId;
+                if (channelId) {
+                    channelIdCache[handle] = channelId;
+                    return channelId;
+                }
+            }
+        }
+    } catch (e) {
+        console.error(`Резервный поиск не удался для ${handle}:`, e.message);
     }
 
     return null;
@@ -186,7 +207,7 @@ async function updateMediaJson() {
     const processedVideoIds = new Set();
 
     for (const ch of channelList) {
-        const channelId = await resolveChannelId(ch.channelUrl);
+        const channelId = await resolveChannelId(ch.channelUrl, ch.authorName);
         if (!channelId) {
             console.log(`Не удалось определить Channel ID для: ${ch.channelUrl} (${ch.authorName})`);
             continue;
