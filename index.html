@@ -886,7 +886,7 @@
             display: none;
         }
 
-        /* Серый цвет рамки развернутой карточки вместо желтого */
+        /* Цвет обводки карточки динамически задается через JS/inline style */
         .team-member.expanded {
             z-index: 100;
             background: rgba(0, 0, 0, 0.95);
@@ -1178,7 +1178,7 @@
             }
         }
 
-.news-item {
+        .news-item {
             position: relative;
         }
 
@@ -1191,88 +1191,69 @@
             object-fit: contain;
             opacity: 0.9;
             transition: transform 0.2s;
+            image-rendering: pixelated;
         }
 
         .discord-badge:hover {
             transform: scale(1.15);
         }
 
-        .news-embed-image {
-            max-width: 100%;
-            border: 0.125rem solid #ffffff;
-            margin-top: 0.625rem;
-            display: block;
+        .discord-gallery {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            gap: 8px;
+            margin-top: 10px;
+            width: 100%;
+            overflow: hidden;
         }
 
-        .news-field {
-            margin-top: 0.5rem;
+        .discord-gallery-item {
+            flex: 1 1 0px;
+            min-width: 0;
+            height: 160px;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+            transition: transform 0.2s ease, filter 0.2s ease;
         }
 
-        .news-field-title {
-            font-weight: bold;
-            color: #ffffff;
+        .discord-gallery-item:hover {
+            filter: brightness(1.15);
+            transform: scale(1.02);
         }
 
-.discord-gallery {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    gap: 8px;
-    margin-top: 10px;
-    width: 100%;
-    overflow: hidden;
-}
+        .image-lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
 
-.discord-gallery.single {
-    grid-template-columns: 1fr;
-}
+        .image-lightbox.show {
+            opacity: 1;
+            visibility: visible;
+        }
 
-.discord-gallery-item {
-    flex: 1 1 0px;
-    min-width: 0;
-    height: 160px;
-    object-fit: cover;
-    border: 2px solid #ffffff;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-    cursor: pointer;
-    transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-.discord-gallery-item:hover {
-    filter: brightness(1.15);
-    transform: scale(1.02);
-}
-
-.image-lightbox {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 99999;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
-}
-
-.image-lightbox.show {
-    opacity: 1;
-    visibility: visible;
-}
-
-.image-lightbox img {
-    max-width: 90vw;
-    max-height: 90vh;
-    border: 2px solid #ffffff;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
-    object-fit: contain;
-    cursor: pointer;
-}
+        .image-lightbox img {
+            max-width: 90vw;
+            max-height: 90vh;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+            object-fit: contain;
+            cursor: pointer;
+        }
 
         .news-embed-image {
             max-width: 100%;
@@ -1291,48 +1272,47 @@
             color: #ffffff;
         }
 
-.discord-spoiler {
-    background-color: #1a1a1a;
-    color: transparent;
-    border-radius: 3px;
-    padding: 0 4px;
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
-    filter: blur(4px);
-    position: relative;
-    display: inline-block;
-}
+        .discord-spoiler {
+            background-color: #1a1a1a;
+            color: transparent;
+            border-radius: 3px;
+            padding: 0 4px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
+            filter: blur(4px);
+            position: relative;
+            display: inline-block;
+        }
 
-.discord-spoiler:hover:not(.revealed) {
-    background-color: #2b2b2b;
-    filter: blur(2px);
-    animation: spoilerGlitch 0.2s infinite alternate;
-}
+        .discord-spoiler:hover:not(.revealed) {
+            background-color: #2b2b2b;
+            filter: blur(2px);
+            animation: spoilerGlitch 0.2s infinite alternate;
+        }
 
-@keyframes spoilerGlitch {
-    0% {
-        transform: translate(0, 0);
-        text-shadow: -1px 0 #ff0055, 1px 0 #00ffff;
-    }
-    50% {
-        transform: translate(-1px, 1px);
-    }
-    100% {
-        transform: translate(1px, -1px);
-        text-shadow: 1px 0 #ff0055, -1px 0 #00ffff;
-    }
-}
+        @keyframes spoilerGlitch {
+            0% {
+                transform: translate(0, 0);
+                text-shadow: -1px 0 #ff0055, 1px 0 #00ffff;
+            }
+            50% {
+                transform: translate(-1px, 1px);
+            }
+            100% {
+                transform: translate(1px, -1px);
+                text-shadow: 1px 0 #ff0055, -1px 0 #00ffff;
+            }
+        }
 
-.discord-spoiler.revealed {
-    background-color: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
-    filter: blur(0);
-    cursor: text;
-    user-select: text;
-    animation: none;
-}
-        
+        .discord-spoiler.revealed {
+            background-color: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            filter: blur(0);
+            cursor: text;
+            user-select: text;
+            animation: none;
+        }
     </style>
 </head>
 <body>
@@ -1634,7 +1614,7 @@
             const cursor = document.querySelector('.cursor-logo');
 
             // Обработка увеличения курсора при наведении на любые интерактивные элементы
-            const interactiveSelector = 'button, a, input, .team-member, .lore-season-header, .player-head, .panel-close, .social-button';
+            const interactiveSelector = 'button, a, input, .team-member, .lore-season-header, .player-head, .panel-close, .social-button, .discord-gallery-item';
 
             document.addEventListener('mouseover', (e) => {
                 if (e.target.closest(interactiveSelector)) {
@@ -1687,158 +1667,151 @@
             );
         }
 
-        // Загрузка новостей 
-function parseMarkdownLinks(text) {
-    if (!text) return '';
-    let escaped = escapeHTML(text);
+        function parseMarkdownLinks(text) {
+            if (!text) return '';
+            let escaped = escapeHTML(text);
 
-    escaped = escaped.replace(/\|\|([\s\S]+?)\|\|/g, function(match, content) {
-        return `<span class="discord-spoiler" onclick="this.classList.add('revealed')">${content}</span>`;
-    });
-
-    escaped = escaped.replace(/&lt;:([a-zA-Z0-9_]+):[0-9]+&gt;/g, ':$1:');
-
-    return escaped
-        .replace(/\n/g, '<br>')
-        .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #4ecdc4; text-decoration: underline;">$1</a>');
-}
-
-async function loadNews() {
-    const listContainer = document.getElementById('newsItemsList');
-    listContainer.innerHTML = 'Загрузка новостей...';
-
-    const discordBadgeHTML = `<img src="discord-icon.png" class="discord-badge" title="Из Discord" alt="Discord">`;
-    let html = '';
-
-
-    try {
-        const resNews = await fetch('news.json?v=' + Date.now(), { cache: 'no-store' });
-        if (resNews.ok) {
-            const dataNews = await resNews.json();
-            const news = dataNews.news || [];
-            news.forEach(item => {
-                html += `
-                    <div class="news-item">
-                        <div class="news-date">${escapeHTML(item.date || '')}</div>
-                        <p>${parseMarkdownLinks(item.text || '')}</p>
-                    </div>
-                `;
+            escaped = escaped.replace(/\|\|([\s\S]+?)\|\|/g, function(match, content) {
+                return `<span class="discord-spoiler" onclick="this.classList.add('revealed')">${content}</span>`;
             });
+
+            escaped = escaped.replace(/&lt;:([a-zA-Z0-9_]+):[0-9]+&gt;/g, ':$1:');
+
+            return escaped
+                .replace(/\n/g, '<br>')
+                .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #4ecdc4; text-decoration: underline;">$1</a>');
         }
-    } catch (e) {
-        console.error('news.json err:', e);
-    }
 
+        async function loadNews() {
+            const listContainer = document.getElementById('newsItemsList');
+            listContainer.innerHTML = 'Загрузка новостей...';
 
-    try {
-        const resDiscord = await fetch('discord_news.json?v=' + Date.now(), { cache: 'no-store' });
-        if (resDiscord.ok) {
-            const dataDiscord = await resDiscord.json();
-            const messages = Array.isArray(dataDiscord) ? dataDiscord : (dataDiscord.news ? dataDiscord.news : [dataDiscord]);
+            const discordBadgeHTML = `<img src="discord-icon.png" class="discord-badge" title="Из Discord" alt="Discord">`;
+            let html = '';
 
-            messages.forEach(msg => {
-                let dateStr = msg.date || (msg.timestamp ? new Date(msg.timestamp).toLocaleDateString('ru-RU') : 'Discord');
-                let mainContent = msg.content || msg.description || msg.text || '';
-
-                let messageHTML = '';
-
-
-                if (mainContent) {
-                    messageHTML += `<p style="margin-bottom: 0.8rem;">${parseMarkdownLinks(mainContent)}</p>`;
-                }
-
-
-                if (msg.attachments && Array.isArray(msg.attachments) && msg.attachments.length > 0) {
-                    let attachGalleryHTML = `<div class="discord-gallery">`;
-                    msg.attachments.forEach(att => {
-                        const safeUrl = escapeHTML(att.url || att);
-                        attachGalleryHTML += `<img src="${safeUrl}" class="discord-gallery-item" onclick="openLightbox('${safeUrl}')" alt="attachment">`;
+            try {
+                const resNews = await fetch('news.json?v=' + Date.now(), { cache: 'no-store' });
+                if (resNews.ok) {
+                    const dataNews = await resNews.json();
+                    const news = dataNews.news || [];
+                    news.forEach(item => {
+                        html += `
+                            <div class="news-item">
+                                <div class="news-date">${escapeHTML(item.date || '')}</div>
+                                <p>${parseMarkdownLinks(item.text || '')}</p>
+                            </div>
+                        `;
                     });
-                    attachGalleryHTML += `</div>`;
-                    messageHTML += attachGalleryHTML;
                 }
+            } catch (e) {
+                console.error('news.json err:', e);
+            }
 
+            try {
+                const resDiscord = await fetch('discord_news.json?v=' + Date.now(), { cache: 'no-store' });
+                if (resDiscord.ok) {
+                    const dataDiscord = await resDiscord.json();
+                    const messages = Array.isArray(dataDiscord) ? dataDiscord : (dataDiscord.news ? dataDiscord.news : [dataDiscord]);
 
-if (msg.embeds && Array.isArray(msg.embeds)) {
-    msg.embeds.forEach(embed => {
-        let embedSection = '';
+                    messages.forEach(msg => {
+                        let dateStr = msg.date || (msg.timestamp ? new Date(msg.timestamp).toLocaleDateString('ru-RU') : 'Discord');
+                        let mainContent = msg.content || msg.description || msg.text || '';
 
+                        let messageHTML = '';
 
-        if (embed.author && embed.author.name) {
-            embedSection += `<div class="event-title" style="margin-top: 0.6rem;">${parseMarkdownLinks(embed.author.name)}</div>`;
+                        if (mainContent) {
+                            messageHTML += `<p style="margin-bottom: 0.8rem;">${parseMarkdownLinks(mainContent)}</p>`;
+                        }
+
+                        if (msg.attachments && Array.isArray(msg.attachments) && msg.attachments.length > 0) {
+                            let attachGalleryHTML = `<div class="discord-gallery">`;
+                            msg.attachments.forEach(att => {
+                                const safeUrl = escapeHTML(att.url || att);
+                                attachGalleryHTML += `<img src="${safeUrl}" class="discord-gallery-item" onclick="openLightbox('${safeUrl}')" alt="attachment">`;
+                            });
+                            attachGalleryHTML += `</div>`;
+                            messageHTML += attachGalleryHTML;
+                        }
+
+                        if (msg.embeds && Array.isArray(msg.embeds)) {
+                            msg.embeds.forEach(embed => {
+                                let embedSection = '';
+
+                                if (embed.author && embed.author.name) {
+                                    embedSection += `<div class="event-title" style="margin-top: 0.6rem;">${parseMarkdownLinks(embed.author.name)}</div>`;
+                                }
+                                if (embed.title) {
+                                    embedSection += `<div class="event-title" style="margin-top: 0.4rem;">${parseMarkdownLinks(embed.title)}</div>`;
+                                }
+                                if (embed.description) {
+                                    embedSection += `<p style="margin-bottom: 0.6rem;">${parseMarkdownLinks(embed.description)}</p>`;
+                                }
+
+                                if (embed.fields && Array.isArray(embed.fields)) {
+                                    embed.fields.forEach(f => {
+                                        const fieldName = f.name || f.rawName || '';
+                                        const fieldValue = f.value || f.rawValue || '';
+                                        embedSection += `
+                                            <div class="news-field">
+                                                ${fieldName ? `<div class="news-field-title">${parseMarkdownLinks(fieldName)}</div>` : ''}
+                                                ${fieldValue ? `<div>${parseMarkdownLinks(fieldValue)}</div>` : ''}
+                                            </div>
+                                        `;
+                                    });
+                                }
+
+                                let images = [];
+                                if (embed.images && Array.isArray(embed.images)) {
+                                    images = embed.images.map(img => typeof img === 'object' ? img.url : img).filter(Boolean);
+                                } else if (embed.image && embed.image.url) {
+                                    images.push(embed.image.url);
+                                }
+
+                                if (images.length > 0) {
+                                    let galleryHTML = `<div class="discord-gallery">`;
+                                    images.forEach(imgUrl => {
+                                        const safeUrl = escapeHTML(imgUrl);
+                                        galleryHTML += `<img src="${safeUrl}" class="discord-gallery-item" onclick="openLightbox('${safeUrl}')" alt="preview">`;
+                                    });
+                                    galleryHTML += `</div>`;
+                                    embedSection += galleryHTML;
+                                }
+
+                                messageHTML += embedSection;
+                            });
+                        }
+
+                        html += `
+                            <div class="news-item">
+                                ${discordBadgeHTML}
+                                <div class="news-date">${escapeHTML(dateStr)}</div>
+                                ${messageHTML}
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) {
+                console.error('discord_news.json err:', e);
+            }
+
+            listContainer.innerHTML = html || '<p style="color: #888;">Нет новостей.</p>';
         }
-        if (embed.title) {
-            embedSection += `<div class="event-title" style="margin-top: 0.4rem;">${parseMarkdownLinks(embed.title)}</div>`;
-        }
-        if (embed.description) {
-            embedSection += `<p style="margin-bottom: 0.6rem;">${parseMarkdownLinks(embed.description)}</p>`;
-        }
 
-        // Текстовые поля (fields)
-        if (embed.fields && Array.isArray(embed.fields)) {
-            embed.fields.forEach(f => {
-                const fieldName = f.name || f.rawName || '';
-                const fieldValue = f.value || f.rawValue || '';
-                embedSection += `
-                    <div class="news-field">
-                        ${fieldName ? `<div class="news-field-title">${parseMarkdownLinks(fieldName)}</div>` : ''}
-                        ${fieldValue ? `<div>${parseMarkdownLinks(fieldValue)}</div>` : ''}
-                    </div>
-                `;
-            });
+        function openLightbox(url) {
+            const lightbox = document.getElementById('imageLightbox');
+            const lightboxImg = document.getElementById('lightboxImage');
+            if (lightbox && lightboxImg) {
+                lightboxImg.src = url;
+                lightbox.classList.add('show');
+            }
         }
 
-
-        let images = [];
-        if (embed.images && Array.isArray(embed.images)) {
-            images = embed.images.map(img => typeof img === 'object' ? img.url : img).filter(Boolean);
-        } else if (embed.image && embed.image.url) {
-            images.push(embed.image.url);
+        function closeLightbox() {
+            const lightbox = document.getElementById('imageLightbox');
+            if (lightbox) {
+                lightbox.classList.remove('show');
+            }
         }
-
-
-        if (images.length > 0) {
-            let galleryHTML = `<div class="discord-gallery">`;
-            images.forEach(imgUrl => {
-                const safeUrl = escapeHTML(imgUrl);
-                galleryHTML += `<img src="${safeUrl}" class="discord-gallery-item" onclick="openLightbox('${safeUrl}')" alt="preview">`;
-            });
-            galleryHTML += `</div>`;
-            embedSection += galleryHTML;
-        }
-
-        messageHTML += embedSection;
-    });
-}
-
-                html += `
-                    <div class="news-item">
-                        ${discordBadgeHTML}
-                        <div class="news-date">${escapeHTML(dateStr)}</div>
-                        ${messageHTML}
-                    </div>
-                `;
-            });
-        }
-    } catch (e) {
-        console.error('discord_news.json err:', e);
-    }
-
-    listContainer.innerHTML = html || '<p style="color: #888;">Нет новостей.</p>';
-}
-
-
-function openLightbox(url) {
-    const lightbox = document.getElementById('imageLightbox');
-    const lightboxImg = document.getElementById('lightboxImage');
-    lightboxImg.src = url;
-    lightbox.classList.add('show');
-}
-
-function closeLightbox() {
-    const lightbox = document.getElementById('imageLightbox');
-    lightbox.classList.remove('show');
-}
 
         // Загрузка Лора из lore.json
         async function loadLore() {
@@ -1904,6 +1877,13 @@ function closeLightbox() {
 
     <!-- Основные скрипты интерфейса -->
     <script>
+        // Вспомогательная функция перевода decimal цвета в HEX
+        function decimalToHex(decimalColor) {
+            if (decimalColor === null || decimalColor === undefined) return null;
+            const hex = Number(decimalColor).toString(16).padStart(6, '0');
+            return '#' + hex;
+        }
+
         // Расчет Masonry-эффекта для карточек состава
         function resizeGridItem(item) {
             if (!item || item.style.display === 'none') return;
@@ -1995,7 +1975,7 @@ function closeLightbox() {
             });
         }
 
-        // Загрузка участников
+        // Загрузка участников с поддержкой цвета (decimal -> hex) и ссылок на большой аватр
         async function loadTeamMembers() {
             try {
                 const response = await fetch('team.json?v=' + Date.now(), { 
@@ -2010,23 +1990,33 @@ function closeLightbox() {
                     memberDiv.className = 'team-member' + (member.hasCard ? ' has-card-member' : '');
                     memberDiv.dataset.priority = member.priority || 0;
                     memberDiv.dataset.name = member.name;
+
+                    // Сохраняем HEX цвет в датасет
+                    const hexColor = decimalToHex(member.color);
+                    if (hexColor) {
+                        memberDiv.dataset.color = hexColor;
+                    }
                     
                     const socialLinksHTML = (member.socials || []).map(social => 
                         `<a href="${social.url}" target="_blank" class="social-link">${social.platform}</a>`
                     ).join('');
                     
+                    // Выбор большой картинки карточки: imageUrl или запасной card.jpg
+                    const cardSrc = member.imageUrl ? member.imageUrl : 'card.jpg';
                     const cardHTML = member.hasCard ? 
-                        `<div class="team-member-card"><img src="card.jpg" alt="Card" onerror="this.style.display='none'"></div>` : '';
+                        `<div class="team-member-card"><img src="${cardSrc}" alt="Card" onerror="this.src='card.jpg'"></div>` : '';
                     
+                    const avatarSrc = member.avatarUrl || `https://minotar.net/helm/${member.name}/80`;
+
                     memberDiv.innerHTML = `
                         <div class="team-member-avatar">
-                            <img src="https://minotar.net/helm/${member.name}/80" alt="${member.name}" onerror="this.src='https://minotar.net/helm/Steve/80'">
+                            <img src="${avatarSrc}" alt="${member.name}" onerror="this.src='https://minotar.net/helm/Steve/80'">
                         </div>
                         <div class="team-member-name-preview">${member.name}</div>
                         <div class="team-member-info">
                             ${cardHTML}
                             <div class="team-member-details">
-                                <div class="team-member-name">${member.name}</div>
+                                <div class="team-member-name" ${hexColor ? `style="color: ${hexColor};"` : ''}>${member.name}</div>
                                 <div class="team-member-role">${member.role || ''}</div>
                                 ${member.realName ? `<div class="team-member-realname">${member.realName}</div>` : ''}
                                 <div class="team-member-socials">
@@ -2064,11 +2054,18 @@ function closeLightbox() {
                 sortTeam('az');
             }
 
-            teamMembers.forEach(m => m.classList.remove('expanded'));
+            teamMembers.forEach(m => {
+                m.classList.remove('expanded');
+                m.style.borderColor = '#ffffff';
+                m.style.boxShadow = 'none';
+            });
 
             teamMembers.forEach(member => {
                 if (member.dataset.name === playerName) {
                     member.classList.add('expanded');
+                    const color = member.dataset.color || '#cccccc';
+                    member.style.borderColor = color;
+                    member.style.boxShadow = `0 0 15px ${color}66`;
                     member.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             });
@@ -2103,12 +2100,20 @@ function closeLightbox() {
             const member = e.target.closest('.team-member');
             if (member && !e.target.closest('.social-link')) {
                 const isExpanded = member.classList.contains('expanded');
+                
                 document.querySelectorAll('.team-member').forEach(m => {
                     m.classList.remove('expanded');
+                    m.style.borderColor = '#ffffff';
+                    m.style.boxShadow = 'none';
                 });
+
                 if (!isExpanded) {
                     member.classList.add('expanded');
+                    const color = member.dataset.color || '#cccccc';
+                    member.style.borderColor = color;
+                    member.style.boxShadow = `0 0 15px ${color}88`;
                 }
+
                 resizeAllGridItems();
                 setTimeout(resizeAllGridItems, 50);
                 setTimeout(resizeAllGridItems, 300);
@@ -2180,9 +2185,10 @@ function closeLightbox() {
             if (content) content.classList.toggle('open');
         }
     </script>
+
     <!-- Модальное окно для полноэкранного просмотра картинок (Lightbox) -->
-<div class="image-lightbox" id="imageLightbox" onclick="closeLightbox()">
-    <img id="lightboxImage" src="" alt="Full view">
-</div>
+    <div class="image-lightbox" id="imageLightbox" onclick="closeLightbox()">
+        <img id="lightboxImage" src="" alt="Full view">
+    </div>
 </body>
 </html>
