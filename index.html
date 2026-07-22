@@ -161,6 +161,7 @@
             }
         }
 
+        /* Чистый курсор без тени */
         .cursor-logo {
             position: fixed;
             width: 2rem;
@@ -169,15 +170,13 @@
             z-index: 999999 !important;
             animation: spin 0.5s linear infinite;
             display: none;
-            filter: drop-shadow(2px 2px 0px #000000);
             image-rendering: pixelated;
             transition: transform 0.15s ease-out;
         }
 
-        /* Увеличение курсора при наведении на кликабельные элементы */
+        /* Увеличение курсора при наведении без тени */
         .cursor-logo.hovered {
             transform: scale(1.45) !important;
-            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
         }
 
         .cursor-logo * {
@@ -1975,7 +1974,7 @@
             });
         }
 
-        // Загрузка участников с поддержкой цвета (decimal -> hex) и ссылок на большой аватр
+        // Загрузка участников с поддержкой цвета (decimal -> hex) и голов майнкрафта
         async function loadTeamMembers() {
             try {
                 const response = await fetch('team.json?v=' + Date.now(), { 
@@ -2006,7 +2005,8 @@
                     const cardHTML = member.hasCard ? 
                         `<div class="team-member-card"><img src="${cardSrc}" alt="Card" onerror="this.src='card.jpg'"></div>` : '';
                     
-                    const avatarSrc = member.avatarUrl || `https://minotar.net/helm/${member.name}/80`;
+                    // Возвращены стандартные головы игроков
+                    const avatarSrc = `https://minotar.net/helm/${member.name}/80`;
 
                     memberDiv.innerHTML = `
                         <div class="team-member-avatar">
