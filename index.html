@@ -1535,17 +1535,33 @@
             .button { padding: 0.625rem 1.25rem; font-size: 1.1rem; }
         }
 
-        .news-item { position: relative; }
+        .news-item {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--accent-dim);
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .news-date {
+            font-size: 0.9rem;
+            color: #888888;
+            line-height: 1;
+            margin-bottom: 0.6rem;
+            font-family: 'uvKits', sans-serif !important;
+        }
+
         .discord-badge {
             position: absolute;
-            top: 0.35rem;
-            right: 0.625rem;
-            width: 1.25rem;
-            height: 1.25rem;
+            top: 0.8rem;
+            right: 0.8rem;
+            height: 0.9rem;
+            width: auto;
             object-fit: contain;
             opacity: 0.9;
             image-rendering: pixelated;
         }
+
         .discord-gallery {
             display: flex !important;
             flex-direction: row !important;
@@ -1554,6 +1570,7 @@
             width: 100%;
             overflow: hidden;
         }
+
         .discord-gallery-item {
             flex: 1 1 0px;
             min-width: 0;
@@ -1563,6 +1580,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .image-lightbox {
             position: fixed;
             top: 0;
@@ -1578,6 +1596,7 @@
             visibility: hidden;
             transition: opacity 0.25s ease;
         }
+
         .image-lightbox.show { opacity: 1; visibility: visible; }
         .image-lightbox img {
             max-width: 90vw;
@@ -1585,19 +1604,48 @@
             border: 2px solid var(--accent-color);
             object-fit: contain;
         }
+
+        /* Ретро Глитч-эффект для скрытых спойлеров */
         .discord-spoiler {
             background-color: #1a1a1a;
             color: transparent;
             border-radius: 3px;
             padding: 0 4px;
             cursor: pointer;
+            user-select: none;
+            transition: background 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
             filter: blur(4px);
+            position: relative;
             display: inline-block;
         }
+
+        .discord-spoiler:hover:not(.revealed) {
+            background-color: #2b2b2b;
+            filter: blur(2px);
+            animation: spoilerGlitch 0.2s infinite alternate;
+        }
+
+        @keyframes spoilerGlitch {
+            0% {
+                transform: translate(0, 0);
+                text-shadow: -1px 0 #ff0055, 1px 0 #00ffff;
+            }
+            50% {
+                transform: translate(-1px, 1px);
+            }
+            100% {
+                transform: translate(1px, -1px);
+                text-shadow: 1px 0 #ff0055, -1px 0 #00ffff;
+            }
+        }
+
         .discord-spoiler.revealed {
             background-color: rgba(255, 255, 255, 0.12);
             color: #ffffff;
             filter: blur(0);
+            cursor: text;
+            user-select: text;
+            animation: none;
         }
     </style>
 </head>
@@ -2202,11 +2250,23 @@
         function parseMarkdownLinks(text) {
             if (!text) return '';
             let escaped = escapeHTML(text);
-            escaped = escaped.replace(/\|\|([\s\S]+?)\|\|/g, '<span class="discord-spoiler" onclick="this.classList.add(\'revealed\')">$1</span>');
+
+            // Обработка спойлеров ||текст||
+            escaped = escaped.replace(/\|\|([\s\S]+?)\|\|/g, function(match, content) {
+                return `<span class="discord-spoiler" onclick="this.classList.add('revealed')">${content}</span>`;
+            });
+
+            // Эмодзи Discord
             escaped = escaped.replace(/&lt;:([a-zA-Z0-9_]+):[0-9]+&gt;/g, ':$1:');
+
+            // Маркировка текста и ссылки
             return escaped
                 .replace(/\n/g, '<br>')
-                .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #4ecdc4; text-decoration: underline;">$1</a>');
+                .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #4ecdc4; text-decoration: underline;">$1</a>')
+                .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')
+                .replace(/~~([\s\S]+?)~~/g, '<del>$1</del>')
+                .replace(/`([^`]+)`/g, '<code style="background: rgba(255,255,255,0.1); padding: 2px 4px;">$1</code>');
         }
 
         async function loadNews() {
