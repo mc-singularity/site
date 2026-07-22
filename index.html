@@ -517,7 +517,78 @@
             text-shadow: -2px 0 #ff0055, 2px 0 #00ffff, 0.1875rem 0.1875rem 0 #000000;
         }
 
-        /* Стили плашки Медиа */
+        /* Стили фильтров секции Медиа */
+        .media-filter-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        .media-type-filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: rgba(0, 0, 0, 0.8);
+            border: 0.125rem solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.4rem 0.9rem;
+            font-size: 0.95rem;
+            font-family: 'uvKits', sans-serif !important;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 2px 2px 0 #000000;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--accent-color);
+            color: #000000;
+        }
+
+        .media-author-filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 100%;
+        }
+
+        .author-chip {
+            background: rgba(255, 255, 255, 0.08);
+            border: 0.125rem solid var(--accent-color);
+            color: #ffffff;
+            padding: 0.3rem 0.7rem;
+            font-size: 0.85rem;
+            font-family: 'uvKits', sans-serif !important;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s ease;
+        }
+
+        .author-chip img {
+            width: 1.3rem;
+            height: 1.3rem;
+            border: 1px solid var(--accent-color);
+            image-rendering: pixelated;
+        }
+
+        .author-chip:hover, .author-chip.active {
+            background: var(--accent-color);
+            color: #000000;
+        }
+
+        .author-chip.active img {
+            border-color: #000000;
+        }
+
+        /* Стили карточек Медиа */
         .media-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
@@ -561,6 +632,11 @@
             color: #ff5555;
         }
 
+        .media-type-badge.short {
+            border-color: #ff0055;
+            color: #ff55ff;
+        }
+
         .media-thumb-wrapper {
             width: 100%;
             height: 9rem;
@@ -597,13 +673,28 @@
             word-break: break-word;
         }
 
+        .media-author-box {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: auto;
+        }
+
+        .media-author-avatar {
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 1px solid var(--accent-color);
+            image-rendering: pixelated;
+        }
+
         .media-meta {
             font-size: 0.85rem;
             color: #aaaaaa;
             display: flex;
             justify-content: space-between;
+            align-items: center;
             font-family: 'uvKits', sans-serif !important;
-            margin-top: auto;
+            width: 100%;
         }
 
         .media-watch-btn {
@@ -1381,7 +1472,6 @@
             .container { padding: 0 0.9375rem; }
             header { padding: 1rem 0 1rem 0; }
 
-            /* На мобильных устройствах перенос цветов происходит строго после 7-го элемента */
             .theme-options {
                 flex-wrap: wrap;
                 max-width: calc(7 * 0.95rem + 6 * 0.35rem);
@@ -1616,9 +1706,25 @@
                 </div>
             </div>
 
-            <!-- Блок Медиа (Новые видео и стримы) -->
+            <!-- Блок Медиа с фильтрацией (Видео, Стримы, Shorts, Авторы) -->
             <div class="section media-section reveal-item">
                 <h2 class="section-title">МЕДИА</h2>
+                
+                <div class="media-filter-bar">
+                    <!-- Фильтр по типам контента -->
+                    <div class="media-type-filters">
+                        <button class="filter-btn active" data-type="all" onclick="setMediaTypeFilter('all', this)">ВСЕ</button>
+                        <button class="filter-btn" data-type="video" onclick="setMediaTypeFilter('video', this)">ВИДЕО</button>
+                        <button class="filter-btn" data-type="stream" onclick="setMediaTypeFilter('stream', this)">СТРИМЫ</button>
+                        <button class="filter-btn" data-type="short" onclick="setMediaTypeFilter('short', this)">SHORTS</button>
+                    </div>
+
+                    <!-- Фильтр по авторам с пиксельной головой игрока -->
+                    <div class="media-author-filters" id="mediaAuthorFilters">
+                        <!-- Динамически заполняется авторами -->
+                    </div>
+                </div>
+
                 <div class="media-grid" id="mediaGrid">
                     <!-- Загружается из media.json -->
                 </div>
@@ -1688,50 +1794,125 @@
         window.addEventListener('DOMContentLoaded', loadSplashText);
     </script>
 
-    <!-- Загрузка Медиа-материалов из media.json -->
+    <!-- Переменные фильтрации медиа -->
     <script>
-        async function loadMedia() {
+        window.allMediaData = [];
+        window.currentMediaTypeFilter = 'all';
+        window.selectedAuthorFilter = null;
+
+        function setMediaTypeFilter(type, btnElem) {
+            window.currentMediaTypeFilter = type;
+            document.querySelectorAll('.media-type-filters .filter-btn').forEach(b => b.classList.remove('active'));
+            if (btnElem) btnElem.classList.add('active');
+            renderFilteredMedia();
+        }
+
+        function toggleAuthorFilter(authorName, chipElem) {
+            if (window.selectedAuthorFilter === authorName) {
+                window.selectedAuthorFilter = null;
+                chipElem.classList.remove('active');
+            } else {
+                window.selectedAuthorFilter = authorName;
+                document.querySelectorAll('.author-chip').forEach(c => c.classList.remove('active'));
+                chipElem.classList.add('active');
+            }
+            renderFilteredMedia();
+        }
+
+        function renderAuthorFilters(mediaItems) {
+            const container = document.getElementById('mediaAuthorFilters');
+            if (!container) return;
+
+            // Собираем уникальных авторов
+            const authorsSet = new Set();
+            mediaItems.forEach(item => {
+                if (item.author) authorsSet.add(item.author);
+            });
+
+            const authorsList = Array.from(authorsSet).sort();
+
+            container.innerHTML = authorsList.map(author => {
+                const headSrc = `https://minotar.net/helm/${encodeURIComponent(author)}/30`;
+                return `
+                    <button class="author-chip ${window.selectedAuthorFilter === author ? 'active' : ''}" onclick="toggleAuthorFilter('${escapeHTML(author)}', this)">
+                        <img src="${headSrc}" alt="${escapeHTML(author)}" onerror="this.src='https://minotar.net/helm/Steve/30'">
+                        <span>${escapeHTML(author)}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function renderFilteredMedia() {
             const mediaGrid = document.getElementById('mediaGrid');
             if (!mediaGrid) return;
 
+            let filtered = window.allMediaData;
+
+            // 1. Фильтр по типу (video, stream, short)
+            if (window.currentMediaTypeFilter !== 'all') {
+                filtered = filtered.filter(item => item.type === window.currentMediaTypeFilter);
+            }
+
+            // 2. Фильтр по автору
+            if (window.selectedAuthorFilter) {
+                filtered = filtered.filter(item => item.author === window.selectedAuthorFilter);
+            }
+
+            if (filtered.length === 0) {
+                mediaGrid.innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Контент по выбранному фильтру не найден.</p>';
+                return;
+            }
+
+            mediaGrid.innerHTML = filtered.map(item => {
+                let badgeText = 'ВИДЕО';
+                let badgeClass = 'video';
+
+                if (item.type === 'stream') {
+                    badgeText = 'СТРИМ';
+                    badgeClass = 'stream';
+                } else if (item.type === 'short') {
+                    badgeText = 'SHORTS';
+                    badgeClass = 'short';
+                }
+
+                const authorHeadSrc = `https://minotar.net/helm/${encodeURIComponent(item.author || 'Steve')}/24`;
+
+                return `
+                    <div class="media-card">
+                        <span class="media-type-badge ${badgeClass}">${badgeText}</span>
+                        <div class="media-thumb-wrapper">
+                            <img src="${escapeHTML(item.thumbnail || 'card.jpg')}" class="media-thumbnail" alt="${escapeHTML(item.title)}" onerror="this.src='card.jpg'">
+                        </div>
+                        <div class="media-info">
+                            <div class="media-title">${escapeHTML(item.title)}</div>
+                            <div class="media-meta">
+                                <div class="media-author-box">
+                                    <img src="${authorHeadSrc}" class="media-author-avatar" alt="${escapeHTML(item.author || '')}" onerror="this.src='https://minotar.net/helm/Steve/24'">
+                                    <span>${escapeHTML(item.author || '')}</span>
+                                </div>
+                                <span>${escapeHTML(item.date || '')}</span>
+                            </div>
+                        </div>
+                        <a href="${escapeHTML(item.url || '#')}" target="_blank" rel="noopener noreferrer" class="more-info-btn media-watch-btn">СМОТРЕТЬ</a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function loadMedia() {
             try {
                 const response = await fetch('media.json?v=' + Date.now(), { cache: 'no-store' });
                 if (response.ok) {
                     const data = await response.json();
-                    const mediaItems = data.media || [];
-
-                    if (mediaItems.length === 0) {
-                        mediaGrid.innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Медиа-контент пока отсутствует.</p>';
-                        return;
-                    }
-
-                    mediaGrid.innerHTML = mediaItems.map(item => {
-                        const isStream = item.type === 'stream';
-                        const badgeText = isStream ? 'СТРИМ' : 'ВИДЕО';
-                        const badgeClass = isStream ? 'stream' : 'video';
-                        return `
-                            <div class="media-card">
-                                <span class="media-type-badge ${badgeClass}">${badgeText}</span>
-                                <div class="media-thumb-wrapper">
-                                    <img src="${escapeHTML(item.thumbnail || 'card.jpg')}" class="media-thumbnail" alt="${escapeHTML(item.title)}" onerror="this.src='card.jpg'">
-                                </div>
-                                <div class="media-info">
-                                    <div class="media-title">${escapeHTML(item.title)}</div>
-                                    <div class="media-meta">
-                                        <span>${escapeHTML(item.author || '')}</span>
-                                        <span>${escapeHTML(item.date || '')}</span>
-                                    </div>
-                                </div>
-                                <a href="${escapeHTML(item.url || '#')}" target="_blank" rel="noopener noreferrer" class="more-info-btn media-watch-btn">СМОТРЕТЬ</a>
-                            </div>
-                        `;
-                    }).join('');
+                    window.allMediaData = data.media || [];
+                    renderAuthorFilters(window.allMediaData);
+                    renderFilteredMedia();
                 } else {
-                    mediaGrid.innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Медиа-контент пока отсутствует.</p>';
+                    document.getElementById('mediaGrid').innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Медиа-контент пока отсутствует.</p>';
                 }
             } catch (e) {
                 console.error('Ошибка загрузки media.json:', e);
-                mediaGrid.innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Медиа-контент пока отсутствует.</p>';
+                document.getElementById('mediaGrid').innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Медиа-контент пока отсутствует.</p>';
             }
         }
 
@@ -1934,7 +2115,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const cursor = document.querySelector('.cursor-logo');
-            const interactiveSelector = 'button, a, input, .team-member, .lore-season-header, .player-head, .panel-close, .social-button, .discord-gallery-item, .card-nav-btn, .theme-swatch, .more-info-btn, .refresh-btn, .logo-container';
+            const interactiveSelector = 'button, a, input, .team-member, .lore-season-header, .player-head, .panel-close, .social-button, .discord-gallery-item, .card-nav-btn, .theme-swatch, .more-info-btn, .refresh-btn, .logo-container, .author-chip, .filter-btn';
 
             document.addEventListener('mouseover', (e) => {
                 if (e.target.closest(interactiveSelector)) cursor && cursor.classList.add('hovered');
@@ -2018,7 +2199,6 @@
                             messageHTML += `<p style="margin-bottom: 0.8rem;">${parseMarkdownLinks(mainContent)}</p>`;
                         }
 
-                        // Аттачменты
                         if (msg.attachments && Array.isArray(msg.attachments) && msg.attachments.length > 0) {
                             let attachGalleryHTML = `<div class="discord-gallery">`;
                             msg.attachments.forEach(att => {
@@ -2029,7 +2209,6 @@
                             messageHTML += attachGalleryHTML;
                         }
 
-                        // Эмбеды Discord
                         if (msg.embeds && Array.isArray(msg.embeds)) {
                             msg.embeds.forEach(embed => {
                                 let embedSection = '';
@@ -2291,7 +2470,6 @@
 
         async function loadTeamMembers() {
             try {
-                // 1. Подгрузка info.json
                 try {
                     const infoRes = await fetch('info.json?v=' + Date.now(), { cache: 'no-store' });
                     if (infoRes.ok) {
@@ -2302,7 +2480,6 @@
                     }
                 } catch (e) {}
 
-                // 2. Подгрузка team.json
                 const response = await fetch('team.json?v=' + Date.now(), { cache: 'no-store' });
                 const data = await response.json();
                 window.fullTeamMembers = data.teamMembers || [];
@@ -2313,7 +2490,6 @@
                     teamMembersContainer.appendChild(createMemberElement(member));
                 });
 
-                // 3. Подгрузка archive.json (ушедшие игроки)
                 try {
                     const archiveRes = await fetch('archive.json?v=' + Date.now(), { cache: 'no-store' });
                     if (archiveRes.ok) {
@@ -2337,7 +2513,6 @@
             }
         }
 
-        // Поп-ап подробной информации
         function openPlayerModal(playerName, event) {
             if (event) event.stopPropagation();
 
