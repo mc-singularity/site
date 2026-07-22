@@ -173,12 +173,12 @@ async function fetchYouTubeMedia(channelId, authorName) {
         const data = await response.json();
         if (!data.items || data.items.length === 0) return [];
 
-        // Собираем видео ID для деталей
+        // Собираем видео ID для получения точных деталей
         const videoIds = data.items.map(item => item.id?.videoId).filter(Boolean);
         if (videoIds.length === 0) return [];
 
-        // Запрос детальнее: получение длительности роликов (contentDetails)
-        const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${videoIds.join(',')}&key=${YOUTUBE_API_KEY}`;
+        // Запрос с получением информации о стримах (liveStreamingDetails) и длительности (contentDetails)
+        const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet,liveStreamingDetails&id=${videoIds.join(',')}&key=${YOUTUBE_API_KEY}`;
         const detailsRes = await fetch(detailsUrl);
         const detailsData = detailsRes.ok ? await detailsRes.json() : { items: [] };
 
@@ -198,11 +198,18 @@ async function fetchYouTubeMedia(channelId, authorName) {
             const detailItem = detailsMap[videoId];
             const durationSec = detailItem ? parseISO8601Duration(detailItem.contentDetails?.duration) : 0;
 
-            const isLive = snippet.liveBroadcastContent === 'live' || snippet.liveBroadcastContent === 'upcoming';
-            const isShort = !isLive && (durationSec > 0 && durationSec <= 60) || snippet.title.toLowerCase().includes('#shorts');
+            // Наличие liveStreamingDetails гарантирует, что это был или идет прямой эфир
+            const isStream = Boolean(
+                detailItem?.liveStreamingDetails ||
+                snippet.liveBroadcastContent === 'live' ||
+                snippet.liveBroadcastContent === 'upcoming'
+            );
+
+            // Если не стрим и длина <= 60 сек (или содержит #shorts)
+            const isShort = !isStream && ((durationSec > 0 && durationSec <= 60) || snippet.title.toLowerCase().includes('#shorts'));
 
             let mediaType = 'video';
-            if (isLive) {
+            if (isStream) {
                 mediaType = 'stream';
             } else if (isShort) {
                 mediaType = 'short';
