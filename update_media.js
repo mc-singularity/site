@@ -188,7 +188,7 @@ function loadChannelsFromTeamJson() {
 }
 
 /**
- * Запрос контента из YouTube API
+ * Декодирование HTML сущностей
  */
 function decodeHTMLEntities(text) {
     if (!text) return '';
@@ -200,6 +200,9 @@ function decodeHTMLEntities(text) {
         .replace(/&gt;/g, '>');
 }
 
+/**
+ * Запрос контента из YouTube API
+ */
 async function fetchYouTubeMedia(channelId, authorName) {
     if (!YOUTUBE_API_KEY) return [];
 
@@ -252,11 +255,12 @@ async function fetchYouTubeMedia(channelId, authorName) {
             const dateObj = new Date(snippet.publishedAt);
 
             return {
-                title: decodeHTMLEntities(snippet.title), // <-- ЗДЕСЬ ДЕКОДИРУЕМ ТЕКСТ
+                title: decodeHTMLEntities(snippet.title),
                 author: authorName || snippet.channelTitle,
                 platform: 'youtube',
                 type: mediaType,
                 url: `https://www.youtube.com/watch?v=${videoId}`,
+                videoUrl: `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${videoId}`,
                 thumbnail: thumbnail,
                 date: dateObj.toISOString().split('T')[0],
                 rawDate: dateObj.getTime(),
@@ -282,7 +286,6 @@ async function fetchTwitchMedia(username, authorName) {
     };
 
     try {
-        // 1. Получаем ID пользователя по юзернейму
         const userRes = await fetch(`https://api.twitch.tv/helix/users?login=${username}`, { headers });
         if (!userRes.ok) return [];
         const userData = await userRes.json();
@@ -291,7 +294,7 @@ async function fetchTwitchMedia(username, authorName) {
         const userId = userData.data[0].id;
         const mediaList = [];
 
-        // 2. Проверяем текущий онлайн-стрим
+        // Онлайн-стрим
         const streamRes = await fetch(`https://api.twitch.tv/helix/streams?user_id=${userId}`, { headers });
         if (streamRes.ok) {
             const streamData = await streamRes.json();
@@ -306,6 +309,7 @@ async function fetchTwitchMedia(username, authorName) {
                     platform: 'twitch',
                     type: 'stream',
                     url: `https://www.twitch.tv/${stream.user_login}`,
+                    videoUrl: null,
                     thumbnail: thumb,
                     date: dateObj.toISOString().split('T')[0],
                     rawDate: dateObj.getTime(),
@@ -314,7 +318,7 @@ async function fetchTwitchMedia(username, authorName) {
             }
         }
 
-        // 3. Получаем список сохраненных VOD (записей стримов/роликов)
+        // Сохраненные VOD
         const videosRes = await fetch(`https://api.twitch.tv/helix/videos?user_id=${userId}&first=${MAX_RESULTS_PER_CHANNEL}`, { headers });
         if (videosRes.ok) {
             const videosData = await videosRes.json();
@@ -331,6 +335,7 @@ async function fetchTwitchMedia(username, authorName) {
                         platform: 'twitch',
                         type: v.type === 'archive' ? 'stream' : 'video',
                         url: v.url,
+                        videoUrl: null,
                         thumbnail: thumb,
                         date: dateObj.toISOString().split('T')[0],
                         rawDate: dateObj.getTime(),
