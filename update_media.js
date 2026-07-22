@@ -64,6 +64,38 @@ function extractTwitchUsername(url) {
 }
 
 /**
+ * Форматирование обложки Twitch (замена %{width}/%{height}, {width}/{height} и %width%/%height%)
+ */
+function formatTwitchThumbnail(url) {
+    if (!url || typeof url !== 'string' || url.trim() === '') {
+        return 'https://static-cdn.jtvnw.net/ttv-static/404_preview-1280x720.jpg';
+    }
+    return url
+        .replace(/%?\{?width\}?%?/gi, '1280')
+        .replace(/%?\{?height\}?%?/gi, '720');
+}
+
+/**
+ * Надежное получение статичной обложки YouTube без 404
+ */
+function getYouTubeThumbnail(snippet, videoId) {
+    if (snippet && snippet.thumbnails) {
+        if (snippet.thumbnails.high?.url) return snippet.thumbnails.high.url;
+        if (snippet.thumbnails.standard?.url) return snippet.thumbnails.standard.url;
+        if (snippet.thumbnails.medium?.url) return snippet.thumbnails.medium.url;
+        if (snippet.thumbnails.default?.url) return snippet.thumbnails.default.url;
+    }
+    return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+}
+
+/**
+ * Получение анимированного WebP-превью YouTube (анимация при наведении)
+ */
+function getYouTubeAnimatedPreview(videoId) {
+    return `https://i.ytimg.com/an_webp/${videoId}/mqdefault_60fps.webp`;
+}
+
+/**
  * Получить YouTube Channel ID из URL или хэндла (@username)
  */
 async function resolveYouTubeChannelId(youtubeUrl, authorName) {
@@ -190,16 +222,6 @@ function loadChannelsFromTeamJson() {
 /**
  * Запрос контента из YouTube API
  */
-function decodeHTMLEntities(text) {
-    if (!text) return '';
-    return text
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
-        .replace(/&amp;/g, '&')
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>');
-}
-
 async function fetchYouTubeMedia(channelId, authorName) {
     if (!YOUTUBE_API_KEY) return [];
 
@@ -244,20 +266,18 @@ async function fetchYouTubeMedia(channelId, authorName) {
             if (isStream) mediaType = 'stream';
             else if (isShort) mediaType = 'short';
 
-            const thumbnail = snippet.thumbnails?.maxres?.url ||
-                              snippet.thumbnails?.high?.url ||
-                              snippet.thumbnails?.medium?.url ||
-                              `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-
+            const thumbnail = getYouTubeThumbnail(snippet, videoId);
+            const animatedPreview = getYouTubeAnimatedPreview(videoId);
             const dateObj = new Date(snippet.publishedAt);
 
             return {
-                title: decodeHTMLEntities(snippet.title), // <-- ЗДЕСЬ ДЕКОДИРУЕМ ТЕКСТ
+                title: snippet.title,
                 author: authorName || snippet.channelTitle,
                 platform: 'youtube',
                 type: mediaType,
                 url: `https://www.youtube.com/watch?v=${videoId}`,
                 thumbnail: thumbnail,
+                preview: animatedPreview,
                 date: dateObj.toISOString().split('T')[0],
                 rawDate: dateObj.getTime(),
                 uniqueId: `yt_${videoId}`
@@ -298,7 +318,7 @@ async function fetchTwitchMedia(username, authorName) {
             if (streamData.data && streamData.data.length > 0) {
                 const stream = streamData.data[0];
                 const dateObj = new Date(stream.started_at);
-                const thumb = stream.thumbnail_url.replace('{width}', '1280').replace('{height}', '720');
+                const thumb = formatTwitchThumbnail(stream.thumbnail_url);
 
                 mediaList.push({
                     title: stream.title,
@@ -307,6 +327,7 @@ async function fetchTwitchMedia(username, authorName) {
                     type: 'stream',
                     url: `https://www.twitch.tv/${stream.user_login}`,
                     thumbnail: thumb,
+                    preview: thumb,
                     date: dateObj.toISOString().split('T')[0],
                     rawDate: dateObj.getTime(),
                     uniqueId: `tw_live_${stream.id}`
@@ -321,9 +342,7 @@ async function fetchTwitchMedia(username, authorName) {
             if (videosData.data && videosData.data.length > 0) {
                 for (const v of videosData.data) {
                     const dateObj = new Date(v.created_at);
-                    let thumb = v.thumbnail_url
-                        ? v.thumbnail_url.replace('%width%', '1280').replace('%height%', '720')
-                        : `https://static-cdn.jtvnw.net/ttv-static/404_preview-1280x720.jpg`;
+                    const thumb = formatTwitchThumbnail(v.thumbnail_url);
 
                     mediaList.push({
                         title: v.title,
@@ -332,6 +351,7 @@ async function fetchTwitchMedia(username, authorName) {
                         type: v.type === 'archive' ? 'stream' : 'video',
                         url: v.url,
                         thumbnail: thumb,
+                        preview: thumb,
                         date: dateObj.toISOString().split('T')[0],
                         rawDate: dateObj.getTime(),
                         uniqueId: `tw_vod_${v.id}`
