@@ -2060,7 +2060,7 @@
                         `<a href="${social.url}" target="_blank" class="social-link">${social.platform}</a>`
                     ).join('');
                     
-                    // Формирование массива картинок для галереи переключения
+                    // Формирование массива только из реальных картинок без затычек
                     let images = [];
                     if (member.imageUrls && Array.isArray(member.imageUrls) && member.imageUrls.length > 0) {
                         images = member.imageUrls.map(u => String(u).trim().replace(/,$/, '')).filter(Boolean);
@@ -2068,30 +2068,30 @@
                         images = [String(member.imageUrl).trim().replace(/,$/, '')];
                     }
 
-                    // Если картинка 1, добавляем вторую дефолтную (card.jpg)
-                    if (images.length === 1) {
-                        if (images[0] !== 'card.jpg') {
-                            images.push('card.jpg');
-                        } else {
-                            images.push('card.jpg');
-                        }
-                    } else if (images.length === 0) {
-                        images = ['card.jpg', 'card.jpg'];
+                    // Если реальных изображений вообще нет, ставим дефолтную локальную карточку
+                    if (images.length === 0) {
+                        images = ['card.jpg'];
                     }
 
                     window.playerCardImages[member.name] = images;
                     window.playerCardIndices[member.name] = 0;
+
+                    // Панель навигации отображается только если изображений больше 1
+                    const hasMultipleImages = images.length > 1;
+                    const navControlsHTML = hasMultipleImages ? `
+                        <div class="card-nav-controls">
+                            <button class="card-nav-btn" onclick="switchCard('${member.name}', -1, event)">&lt;</button>
+                            <span class="card-counter" id="card-counter-${member.name}">1/${images.length}</span>
+                            <button class="card-nav-btn" onclick="switchCard('${member.name}', 1, event)">&gt;</button>
+                        </div>
+                    ` : '';
 
                     const cardHTML = `
                         <div class="team-member-card">
                             <div class="card-img-wrapper">
                                 <img id="card-img-${member.name}" src="${images[0]}" alt="Card" onerror="this.src='card.jpg'">
                             </div>
-                            <div class="card-nav-controls">
-                                <button class="card-nav-btn" onclick="switchCard('${member.name}', -1, event)">&lt;</button>
-                                <span class="card-counter" id="card-counter-${member.name}">1/${images.length}</span>
-                                <button class="card-nav-btn" onclick="switchCard('${member.name}', 1, event)">&gt;</button>
-                            </div>
+                            ${navControlsHTML}
                         </div>
                     `;
                     
