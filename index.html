@@ -91,6 +91,13 @@
             display: none;
             filter: drop-shadow(2px 2px 0px #000000);
             image-rendering: pixelated;
+            transition: transform 0.15s ease-out;
+        }
+
+        /* Увеличение курсора при наведении на кликабельные элементы */
+        .cursor-logo.hovered {
+            transform: scale(1.45) !important;
+            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
         }
 
         .cursor-logo * {
@@ -635,26 +642,41 @@
             text-shadow: 0 0 5px #ffffff;
         }
 
+        /* Пиксельный квадратный индикатор вместо круглых эмодзи */
         .status-indicator {
             font-size: 1.2rem;
             margin-bottom: 0.3125rem;
             color: #ffffff;
             text-shadow: 0.125rem 0.125rem 0 #000000;
             font-family: 'uvKits', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
         }
 
-        .status-indicator.online {
-            color: #4ecdc4;
-            animation: retroGlow 2s infinite alternate;
+        .status-pixel-box {
+            width: 0.85rem;
+            height: 0.85rem;
+            display: inline-block;
+            border: 2px solid #000000;
+            image-rendering: pixelated;
         }
 
-        @keyframes retroGlow {
-            from { text-shadow: 0 0 2px #4ecdc4; }
-            to { text-shadow: 0 0 8px #4ecdc4; }
+        .status-indicator.online .status-pixel-box {
+            background-color: #55ff55;
+            box-shadow: 0 0 8px #55ff55;
+            animation: pixelGlow 1.5s infinite alternate steps(4, end);
         }
 
-        .status-indicator.offline {
-            color: #ff6b6b;
+        .status-indicator.offline .status-pixel-box {
+            background-color: #ff5555;
+            box-shadow: 0 0 8px #ff5555;
+        }
+
+        @keyframes pixelGlow {
+            from { opacity: 0.6; }
+            to { opacity: 1; }
         }
 
         .player-count {
@@ -1161,7 +1183,7 @@
     <button class="panel-toggle right events" onclick="togglePanel('events')">СОБЫТИЯ</button>
 
     <div class="container">
-        header>
+        <header>
             <div class="logo-container">
                 <img src="logo.png" alt="Singularity Logo" class="logo-image" onerror="this.style.display='none'">
                 <div class="logo-title-wrapper">
@@ -1316,6 +1338,28 @@
         }
 
         window.addEventListener('DOMContentLoaded', initStarsCanvas);
+    </script>
+
+    <!-- Инициализация интерактивности курсора -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursor = document.querySelector('.cursor-logo');
+
+            // Обработка увеличения курсора при наведении на любые интерактивные элементы
+            const interactiveSelector = 'button, a, input, .team-member, .lore-season-header, .player-head, .panel-close, .social-button';
+
+            document.addEventListener('mouseover', (e) => {
+                if (e.target.closest(interactiveSelector)) {
+                    if (cursor) cursor.classList.add('hovered');
+                }
+            });
+
+            document.addEventListener('mouseout', (e) => {
+                if (e.target.closest(interactiveSelector)) {
+                    if (cursor) cursor.classList.remove('hovered');
+                }
+            });
+        });
     </script>
 
     <!-- Загрузка Сплешей из splashes.json -->
@@ -1541,7 +1585,7 @@
                 const data = await response.json();
 
                 if (data.players && data.players.max !== undefined) {
-                    statusIndicator.textContent = '🟢 Сервер онлайн';
+                    statusIndicator.innerHTML = '<span class="status-pixel-box"></span> Сервер онлайн';
                     statusIndicator.className = 'status-indicator online';
                     playerCount.textContent = `${data.players.online} / ${data.players.max}`;
 
@@ -1556,13 +1600,13 @@
                         playersContent.innerHTML = '<div style="color: #888; font-size: 1rem;">Нет игроков онлайн</div>';
                     }
                 } else {
-                    statusIndicator.textContent = '🔴 Сервер оффлайн';
+                    statusIndicator.innerHTML = '<span class="status-pixel-box"></span> Сервер оффлайн';
                     statusIndicator.className = 'status-indicator offline';
                     playerCount.textContent = '';
                     playersContent.innerHTML = '';
                 }
             } catch (error) {
-                statusIndicator.textContent = '🔴 Ошибка проверки';
+                statusIndicator.innerHTML = '<span class="status-pixel-box"></span> Ошибка проверки';
                 statusIndicator.className = 'status-indicator offline';
                 playerCount.textContent = '';
                 playersContent.innerHTML = '';
