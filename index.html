@@ -18,6 +18,17 @@
             box-sizing: border-box;
         }
 
+        @font-face {
+            font-family: 'uvKits';
+            src: url('uvKits.ttf') format('truetype');
+            font-display: swap;
+        }
+
+        /* Принудительное наследование шрифта uvKits всеми кнопками, ссылками и инпутами */
+        button, input, select, textarea, a, .button {
+            font-family: 'uvKits', sans-serif !important;
+        }
+
         /* Кастомный курсор только для ПК */
         @media (hover: hover) and (pointer: fine) {
             * {
@@ -53,7 +64,7 @@
 
         .theme-switcher-label {
             font-size: 0.75rem;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             color: var(--accent-color);
             letter-spacing: 0.05rem;
             transition: color 0.3s ease;
@@ -105,7 +116,7 @@
 
         .loader-logo {
             font-size: clamp(2rem, 6vw, 3.5rem);
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             color: var(--accent-color);
             text-shadow: 0.2rem 0.2rem 0 #000000, -2px -2px 0 #333333;
             letter-spacing: 0.25rem;
@@ -133,7 +144,7 @@
 
         .loader-status {
             font-size: clamp(0.85rem, 2vw, 1.1rem);
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             color: #aaaaaa;
             text-shadow: 1px 1px 0 #000000;
             min-height: 1.5rem;
@@ -144,7 +155,7 @@
         .loader-percent {
             font-size: 1.2rem;
             color: #ffff55;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             text-shadow: 1px 1px 0 #000000;
         }
 
@@ -288,12 +299,6 @@
             }
         }
 
-        @font-face {
-            font-family: 'uvKits';
-            src: url('uvKits.ttf') format('truetype');
-            font-display: swap;
-        }
-
         .background {
             position: fixed;
             top: -10%;
@@ -369,7 +374,7 @@
             font-weight: normal;
             color: var(--accent-color);
             letter-spacing: 0.3rem;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             line-height: 1.1;
             margin: 0;
             position: relative;
@@ -393,7 +398,7 @@
 
         .splash-text {
             font-size: clamp(0.85rem, 2.5vw, 1.35rem);
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             color: #ffff55;
             text-shadow: 0.125rem 0.125rem 0 #000000;
             margin-top: 0.4rem;
@@ -412,7 +417,7 @@
             font-size: clamp(1rem, 3vw, 1.8rem);
             color: #dddddd;
             text-shadow: 0.125rem 0.125rem 0 #000000;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             letter-spacing: 0.05rem;
             animation: retroFlicker 4s infinite ease-in-out;
         }
@@ -447,13 +452,33 @@
             text-align: center;
             border-bottom: 0.1875rem solid var(--accent-color);
             padding-bottom: 0.9375rem;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             letter-spacing: 0.1rem;
             transition: text-shadow 0.2s ease, transform 0.2s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
         .section-title:hover {
             text-shadow: -2px 0 #ff0055, 2px 0 #00ffff, 0.1875rem 0.1875rem 0 #000000;
+        }
+
+        /* Строгое центрирование соц-кнопок */
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.9375rem;
+            flex-wrap: wrap;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .social-button {
+            text-decoration: none;
+            position: relative;
+            display: inline-flex !important;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
         .team-section {
@@ -464,18 +489,29 @@
             margin-top: 2.5rem;
             font-size: 1.5rem;
             text-align: center;
-            color: #888888;
-            border-top: 1px dashed var(--accent-color);
+            color: #aaaaaa;
+            border-top: 2px dashed var(--accent-color);
             padding-top: 1.5rem;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             letter-spacing: 0.08rem;
+            text-shadow: 0.1rem 0.1rem 0 #000000;
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            width: 100%;
         }
 
         .sort-buttons {
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 0.625rem;
             margin-bottom: 1.25rem;
+            width: 100%;
         }
 
         .sort-buttons.hidden {
@@ -485,7 +521,9 @@
         .search-container {
             display: flex;
             justify-content: center;
+            align-items: center;
             margin-bottom: 1.25rem;
+            width: 100%;
         }
 
         .search-container.hidden {
@@ -498,11 +536,12 @@
             color: #ffffff;
             padding: 0.625rem 1.25rem;
             font-size: 1.2rem;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             width: 100%;
             max-width: 18.75rem;
             outline: none;
             transition: all 0.2s ease;
+            text-align: center;
         }
 
         .search-input:focus {
@@ -559,7 +598,7 @@
             padding: 0.8rem 0.6rem;
             cursor: pointer;
             z-index: 1001;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             font-size: 1.1rem;
             transition: all 0.2s ease;
             box-shadow: 0 0 0.5rem rgba(0,0,0,0.8);
@@ -598,7 +637,7 @@
             font-size: 1.8rem;
             color: var(--accent-color);
             text-shadow: 0.125rem 0.125rem 0 #000000;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             margin: 0;
             letter-spacing: 0.05rem;
             transition: color 0.3s ease;
@@ -619,7 +658,7 @@
             color: #ffffff;
             margin-bottom: 0.9375rem;
             line-height: 1.6;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
         }
 
         .status-indicator {
@@ -627,7 +666,7 @@
             margin-bottom: 0.3125rem;
             color: #ffffff;
             text-shadow: 0.125rem 0.125rem 0 #000000;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -662,7 +701,7 @@
             font-size: 1rem;
             color: #ffffff;
             text-shadow: 0.125rem 0.125rem 0 #000000;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
         }
 
         .players-list {
@@ -698,6 +737,18 @@
             border: 0.125rem solid var(--accent-color);
             image-rendering: pixelated;
             transition: border-color 0.3s ease;
+        }
+
+        .player-name {
+            font-size: 0.85rem;
+            color: #ffffff;
+            text-shadow: 0.0625rem 0.0625rem 0 #000000;
+            font-family: 'uvKits', sans-serif !important;
+            text-align: center;
+            max-width: 5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .team-members, .archive-members {
@@ -758,7 +809,7 @@
             font-size: 1.2rem;
             color: #ffffff;
             text-shadow: 0.125rem 0.125rem 0 #000000;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             margin-top: 0.3125rem;
             text-align: center;
             word-break: break-word;
@@ -846,7 +897,7 @@
             background: rgba(0, 0, 0, 0.8);
             border: 1px solid var(--member-color, var(--accent-color));
             color: var(--member-color, var(--accent-color));
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             font-size: 0.75rem;
             padding: 0.1rem 0.35rem;
             cursor: pointer;
@@ -861,7 +912,7 @@
         .card-counter {
             font-size: 0.7rem;
             color: #aaaaaa;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
         }
 
         .team-member-details {
@@ -878,7 +929,7 @@
             color: var(--member-color, #ffffff);
             text-shadow: 0.125rem 0.125rem 0 #000000, 0 0 8px var(--member-shadow, rgba(255,255,255,0.2));
             margin-bottom: 0.3125rem;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             word-wrap: break-word;
             word-break: break-word;
             max-width: 100%;
@@ -888,14 +939,14 @@
             font-size: 1rem;
             color: var(--member-color-dim, #aaaaaa);
             margin-bottom: 0.3125rem;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
         }
 
         .team-member-realname {
             font-size: 0.9rem;
             color: var(--member-color-dim, #888888);
             margin-bottom: 0.625rem;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             opacity: 0.8;
         }
 
@@ -914,8 +965,12 @@
             border: 0.125rem solid var(--member-color, var(--accent-color));
             padding: 0.25rem 0.5rem;
             transition: all 0.2s ease;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             background: rgba(0, 0, 0, 0.6);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
         .social-link:hover {
@@ -929,11 +984,15 @@
             color: var(--member-color, var(--accent-color));
             padding: 0.3rem 0.8rem;
             font-size: 0.9rem;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: 2px 2px 0 #000000;
             margin-top: 0.3rem;
+            text-align: center;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .more-info-btn:hover {
@@ -988,7 +1047,7 @@
         .modal-title {
             font-size: 1.6rem;
             color: var(--modal-accent-color, var(--accent-color));
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             text-shadow: 0 0 6px var(--modal-accent-shadow, rgba(255,255,255,0.2));
         }
 
@@ -1034,6 +1093,7 @@
             font-size: 0.95rem;
             color: #dddddd;
             line-height: 1.4;
+            font-family: 'uvKits', sans-serif !important;
         }
 
         .meta-label {
@@ -1048,27 +1108,72 @@
             line-height: 1.5;
             font-size: 0.95rem;
             color: #cccccc;
+            font-family: 'uvKits', sans-serif !important;
         }
 
+        /* Возвращенные универсальные кнопки со строгой централизацией */
         .button {
-            background: var(--accent-color);
+            background: #ffffff;
             color: #000000;
             border: 0.25rem solid #000000;
             padding: 0.8rem 2rem;
             font-size: 1.5rem;
-            font-family: 'uvKits', sans-serif;
+            font-family: 'uvKits', sans-serif !important;
             cursor: pointer;
             margin: 0.5rem;
             transition: all 0.2s ease;
             text-shadow: none;
-            display: inline-block;
+            display: inline-flex !important;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            line-height: 1;
         }
 
         .button:hover {
             background: #000000;
+            color: #ffffff;
+            border-color: #ffffff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Исправленная кнопка "Обновить" в блоке статуса сервера */
+        .refresh-btn {
+            background: #ffffff;
+            color: #000000;
+            border: 0.1875rem solid #000000;
+            padding: 0.5rem 1.2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: 'uvKits', sans-serif !important;
+            transition: all 0.2s ease;
+            margin-top: 0.5rem;
+            display: inline-flex !important;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .refresh-btn:hover {
+            background: #000000;
             color: var(--accent-color);
             border-color: var(--accent-color);
             box-shadow: 0 0 10px var(--accent-shadow);
+        }
+
+        .refresh-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .sort-btn {
+            padding: 0.625rem 1.25rem;
+            font-size: 1.2rem;
+            font-family: 'uvKits', sans-serif !important;
+            display: inline-flex !important;
+            justify-content: center;
+            align-items: center;
         }
 
         footer {
@@ -1515,7 +1620,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const cursor = document.querySelector('.cursor-logo');
-            const interactiveSelector = 'button, a, input, .team-member, .lore-season-header, .player-head, .panel-close, .social-button, .discord-gallery-item, .card-nav-btn, .theme-swatch, .more-info-btn';
+            const interactiveSelector = 'button, a, input, .team-member, .lore-season-header, .player-head, .panel-close, .social-button, .discord-gallery-item, .card-nav-btn, .theme-swatch, .more-info-btn, .refresh-btn';
 
             document.addEventListener('mouseover', (e) => {
                 if (e.target.closest(interactiveSelector)) cursor && cursor.classList.add('hovered');
@@ -1883,7 +1988,7 @@
         }
 
         document.addEventListener('click', function(e) {
-            if (e.target.closest('.card-nav-btn') || e.target.closest('.more-info-btn')) return;
+            if (e.target.closest('.card-nav-btn') || e.target.closest('.more-info-btn') || e.target.closest('.refresh-btn')) return;
 
             const member = e.target.closest('.team-member');
             if (member && !e.target.closest('.social-link')) {
@@ -2012,6 +2117,19 @@
 
         checkServerStatus();
         setInterval(checkServerStatus, 10000);
+
+        const refreshBtn = document.getElementById('refreshBtn');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                refreshBtn.textContent = 'Обновление...';
+                refreshBtn.disabled = true;
+                checkServerStatus().then(() => {
+                    refreshBtn.textContent = 'Обновить';
+                    refreshBtn.disabled = false;
+                });
+            });
+        }
     </script>
 
     <!-- Модальное окно просмотра картинок (Lightbox) -->
