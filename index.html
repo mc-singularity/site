@@ -975,9 +975,20 @@
             }
         }
 
+        /* Контейнер карточки с галерей и кнопками переключения */
         .team-member-card {
             width: 6.5rem;
             flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            position: relative;
+        }
+
+        .card-img-wrapper {
+            width: 100%;
+            position: relative;
         }
 
         .team-member-card img {
@@ -986,6 +997,37 @@
             border: 0.125rem solid #ffffff;
             display: block;
             image-rendering: pixelated;
+        }
+
+        .card-nav-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 0.2rem;
+        }
+
+        .card-nav-btn {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            font-family: 'uvKits', sans-serif;
+            font-size: 0.75rem;
+            padding: 0.1rem 0.35rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .card-nav-btn:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .card-counter {
+            font-size: 0.7rem;
+            color: #aaaaaa;
+            font-family: 'uvKits', sans-serif;
         }
 
         .team-member-details {
@@ -1468,7 +1510,6 @@
                 console.warn('loader.json не найден, используются стандартные статусы.');
             }
 
-            // Выбираем ровно 3 уникальные фразы на всю загрузку
             function shuffleArray(arr) {
                 return [...arr].sort(() => Math.random() - 0.5);
             }
@@ -1488,13 +1529,11 @@
                 bar.style.width = progress + '%';
                 percentText.textContent = progress + '%';
 
-                // Смена 1: около 35% прогресса
                 if (progress >= 35 && phase === 0 && chosenStatuses[1]) {
                     phase = 1;
                     statusText.textContent = chosenStatuses[1];
                 }
 
-                // Смена 2: около 70% прогресса
                 if (progress >= 70 && phase === 1 && chosenStatuses[2]) {
                     phase = 2;
                     statusText.textContent = chosenStatuses[2];
@@ -1531,7 +1570,6 @@
                 height = canvas.height = window.innerHeight;
             });
 
-            // Статичные фоновые пиксельные звезды
             const stars = [];
             const numStars = 110;
             for (let i = 0; i < numStars; i++) {
@@ -1544,7 +1582,6 @@
                 });
             }
 
-            // Пиксельные падающие звезды
             const shootingStars = [];
 
             function createShootingStar() {
@@ -1563,7 +1600,6 @@
             function animateStars() {
                 ctx.clearRect(0, 0, width, height);
 
-                // Отрисовка звезд с пошаговой альфой
                 stars.forEach(star => {
                     star.alpha += star.speed;
                     if (star.alpha > 1 || star.alpha < 0.15) star.speed = -star.speed;
@@ -1573,7 +1609,6 @@
                     ctx.fillRect(star.x, star.y, star.size, star.size);
                 });
 
-                // Отрисовка падающих метеоров
                 createShootingStar();
                 for (let i = shootingStars.length - 1; i >= 0; i--) {
                     const s = shootingStars[i];
@@ -1612,8 +1647,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const cursor = document.querySelector('.cursor-logo');
 
-            // Обработка увеличения курсора при наведении на любые интерактивные элементы
-            const interactiveSelector = 'button, a, input, .team-member, .lore-season-header, .player-head, .panel-close, .social-button, .discord-gallery-item';
+            const interactiveSelector = 'button, a, input, .team-member, .lore-season-header, .player-head, .panel-close, .social-button, .discord-gallery-item, .card-nav-btn';
 
             document.addEventListener('mouseover', (e) => {
                 if (e.target.closest(interactiveSelector)) {
@@ -1868,7 +1902,6 @@
             }
         }
 
-        // Запуск загрузки всех панелей
         loadNews();
         loadLore();
         loadEvents();
@@ -1882,6 +1915,34 @@
             const hex = Number(decimalColor).toString(16).padStart(6, '0');
             return '#' + hex;
         }
+
+        // Глобальное хранилище текущих индексов галереи для участников
+        window.playerCardIndices = {};
+        window.playerCardImages = {};
+
+        // Функция переключения карточки назад/вперед
+        window.switchCard = function(playerName, direction, event) {
+            if (event) event.stopPropagation();
+
+            const images = window.playerCardImages[playerName];
+            if (!images || images.length <= 1) return;
+
+            let currentIndex = window.playerCardIndices[playerName] || 0;
+            currentIndex = (currentIndex + direction + images.length) % images.length;
+            window.playerCardIndices[playerName] = currentIndex;
+
+            const cardImg = document.getElementById(`card-img-${playerName}`);
+            const counter = document.getElementById(`card-counter-${playerName}`);
+
+            if (cardImg) {
+                cardImg.src = images[currentIndex];
+            }
+            if (counter) {
+                counter.textContent = `${currentIndex + 1}/${images.length}`;
+            }
+
+            resizeAllGridItems();
+        };
 
         // Расчет Masonry-эффекта для карточек состава
         function resizeGridItem(item) {
@@ -1974,7 +2035,7 @@
             });
         }
 
-        // Загрузка участников: теперь карточки есть у каждого участника
+        // Загрузка участников
         async function loadTeamMembers() {
             try {
                 const response = await fetch('team.json?v=' + Date.now(), { 
@@ -1986,12 +2047,10 @@
                 
                 (data.teamMembers || []).forEach(member => {
                     const memberDiv = document.createElement('div');
-                    // Все карточки имеют класс has-card-member
                     memberDiv.className = 'team-member has-card-member';
                     memberDiv.dataset.priority = member.priority || 0;
                     memberDiv.dataset.name = member.name;
 
-                    // Сохраняем HEX цвет в датасет
                     const hexColor = decimalToHex(member.color);
                     if (hexColor) {
                         memberDiv.dataset.color = hexColor;
@@ -2001,11 +2060,41 @@
                         `<a href="${social.url}" target="_blank" class="social-link">${social.platform}</a>`
                     ).join('');
                     
-                    // Выбор большой картинки карточки: imageUrl или локальный card.jpg
-                    const cardSrc = (member.imageUrl && member.imageUrl.trim() !== '') ? member.imageUrl : 'card.jpg';
-                    const cardHTML = `<div class="team-member-card"><img src="${cardSrc}" alt="Card" onerror="this.src='card.jpg'"></div>`;
+                    // Формирование массива картинок для галереи переключения
+                    let images = [];
+                    if (member.imageUrls && Array.isArray(member.imageUrls) && member.imageUrls.length > 0) {
+                        images = member.imageUrls.map(u => String(u).trim().replace(/,$/, '')).filter(Boolean);
+                    } else if (member.imageUrl && String(member.imageUrl).trim() !== '' && String(member.imageUrl) !== 'null') {
+                        images = [String(member.imageUrl).trim().replace(/,$/, '')];
+                    }
+
+                    // Если картинка 1, добавляем вторую дефолтную (card.jpg)
+                    if (images.length === 1) {
+                        if (images[0] !== 'card.jpg') {
+                            images.push('card.jpg');
+                        } else {
+                            images.push('card.jpg');
+                        }
+                    } else if (images.length === 0) {
+                        images = ['card.jpg', 'card.jpg'];
+                    }
+
+                    window.playerCardImages[member.name] = images;
+                    window.playerCardIndices[member.name] = 0;
+
+                    const cardHTML = `
+                        <div class="team-member-card">
+                            <div class="card-img-wrapper">
+                                <img id="card-img-${member.name}" src="${images[0]}" alt="Card" onerror="this.src='card.jpg'">
+                            </div>
+                            <div class="card-nav-controls">
+                                <button class="card-nav-btn" onclick="switchCard('${member.name}', -1, event)">&lt;</button>
+                                <span class="card-counter" id="card-counter-${member.name}">1/${images.length}</span>
+                                <button class="card-nav-btn" onclick="switchCard('${member.name}', 1, event)">&gt;</button>
+                            </div>
+                        </div>
+                    `;
                     
-                    // Стандартные головы игроков через Minotar
                     const avatarSrc = `https://minotar.net/helm/${member.name}/80`;
 
                     memberDiv.innerHTML = `
@@ -2095,8 +2184,10 @@
             }
         }
 
-        // Клик по карточке участника
+        // Клик по карточке участника (не срабатывает при клике по кнопкам переключения галереи)
         document.getElementById('teamMembers').addEventListener('click', function(e) {
+            if (e.target.closest('.card-nav-btn')) return;
+
             const member = e.target.closest('.team-member');
             if (member && !e.target.closest('.social-link')) {
                 const isExpanded = member.classList.contains('expanded');
