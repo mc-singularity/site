@@ -58,7 +58,6 @@
             border: 2px solid var(--accent-color);
             padding: 0.3rem 0.6rem;
             box-shadow: 2px 2px 0px #000000;
-            flex-wrap: wrap;
             transition: border-color 0.3s ease;
         }
 
@@ -73,7 +72,7 @@
         .theme-options {
             display: flex;
             gap: 0.35rem;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
         }
 
         .theme-swatch {
@@ -489,12 +488,12 @@
             margin-top: 2.5rem;
             font-size: 1.5rem;
             text-align: center;
-            color: #aaaaaa;
-            border-top: 2px dashed var(--accent-color);
+            color: #888888;
+            border-top: 2px dashed #444444;
             padding-top: 1.5rem;
             font-family: 'uvKits', sans-serif !important;
             letter-spacing: 0.08rem;
-            text-shadow: 0.1rem 0.1rem 0 #000000;
+            text-shadow: -1px 0 #ff0055, 1px 0 #00ffff;
         }
 
         .toggle-container {
@@ -783,6 +782,45 @@
             transform: translateY(-0.25rem);
             background: rgba(255, 255, 255, 0.15);
             box-shadow: 0 0 10px var(--accent-shadow);
+        }
+
+        /* --- Сломанный ретро-стиль для игроков Архива --- */
+        .archive-members .team-member {
+            background: rgba(15, 15, 20, 0.85);
+            border: 0.1875rem dashed #666666;
+            filter: grayscale(0.4) opacity(0.9);
+            position: relative;
+            box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.9);
+        }
+
+        .archive-members .team-member::before {
+            content: "[ARCHIVE]";
+            position: absolute;
+            top: 0.25rem;
+            right: 0.25rem;
+            font-size: 0.6rem;
+            font-family: 'uvKits', sans-serif !important;
+            color: #ff5555;
+            background: #000000;
+            border: 1px solid #ff5555;
+            padding: 1px 4px;
+            letter-spacing: 0.05rem;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .archive-members .team-member:hover {
+            filter: grayscale(0.1) opacity(1);
+            border-style: solid;
+            border-color: #ff5555 !important;
+            box-shadow: 0 0 12px rgba(255, 85, 85, 0.5) !important;
+            animation: glitchCard 0.25s infinite alternate;
+        }
+
+        @keyframes glitchCard {
+            0% { transform: translateY(-0.25rem) translate(0, 0); }
+            50% { transform: translateY(-0.25rem) translate(-1px, 1px); }
+            100% { transform: translateY(-0.25rem) translate(1px, -1px); }
         }
 
         .team-member-avatar {
@@ -1199,6 +1237,14 @@
                 max-width: 100%;
                 justify-content: center;
             }
+
+            /* На мобильных устройствах перенос цветов происходит строго после 7-го элемента */
+            .theme-options {
+                flex-wrap: wrap;
+                max-width: calc(7 * 0.95rem + 6 * 0.35rem);
+                justify-content: center;
+            }
+
             .section { padding: 1.25rem 0.9375rem; margin: 1.25rem 0; }
             .side-panel { width: 100vw; max-width: 100vw; }
             .panel-toggle {
@@ -1280,7 +1326,7 @@
     </style>
 </head>
 <body>
-    <!-- Полноэкранная заставка Загрузки -->
+    <!-- Полноэкранный Ретро Экран Загрузки -->
     <div class="retro-loader" id="retroLoader">
         <div class="loader-logo">SINGULARITY</div>
         <div class="loader-bar-container">
@@ -1335,7 +1381,7 @@
     <button class="panel-toggle right events reveal-item" onclick="togglePanel('events')">СОБЫТИЯ</button>
 
     <div class="container">
-        <!-- Панель выбора цвета темы -->
+        <!-- Расширенная панель выбора цвета темы с 14 ретро-цветами -->
         <div class="theme-switcher-container reveal-item">
             <span class="theme-switcher-label">ЦВЕТ:</span>
             <div class="theme-options">
@@ -1348,6 +1394,11 @@
                 <div class="theme-swatch" style="background-color: #ff55ff;" onclick="setThemeColor('#ff55ff', this)" title="Розовый"></div>
                 <div class="theme-swatch" style="background-color: #ffff55;" onclick="setThemeColor('#ffff55', this)" title="Золотой"></div>
                 <div class="theme-swatch" style="background-color: #ffaa00;" onclick="setThemeColor('#ffaa00', this)" title="Оранжевый"></div>
+                <div class="theme-swatch" style="background-color: #a3e635;" onclick="setThemeColor('#a3e635', this)" title="Лаймовый"></div>
+                <div class="theme-swatch" style="background-color: #e11d48;" onclick="setThemeColor('#e11d48', this)" title="Малиновый"></div>
+                <div class="theme-swatch" style="background-color: #14b8a6;" onclick="setThemeColor('#14b8a6', this)" title="Аквамарин"></div>
+                <div class="theme-swatch" style="background-color: #9ca3af;" onclick="setThemeColor('#9ca3af', this)" title="Серебряный"></div>
+                <div class="theme-swatch" style="background-color: #f97316;" onclick="setThemeColor('#f97316', this)" title="Коралл"></div>
             </div>
         </div>
 
