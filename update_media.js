@@ -91,7 +91,7 @@ function getYouTubeThumbnail(snippet, videoId) {
 }
 
 /**
- * Получение анимированного WebP превью при наведении для YouTube (6 секунд)
+ * Получение анимированного WebP превью для YouTube (6 секунд)
  */
 function getYouTubeAnimatedPreview(videoId) {
     return `https://i.ytimg.com/an_webp/${videoId}/mqdefault_6s.webp`;
@@ -314,7 +314,6 @@ async function fetchYouTubeMedia(channelId, authorName) {
             if (isStream) mediaType = 'stream';
             else if (isShort) mediaType = 'short';
 
-            const thumbnail = getYouTubeThumbnail(detailItem?.snippet || snippet, videoId);
             const animatedPreview = getYouTubeAnimatedPreview(videoId);
             const publishedAt = snippet.publishedAt || snippet.addedToPlaylist;
             const dateObj = new Date(publishedAt);
@@ -325,7 +324,7 @@ async function fetchYouTubeMedia(channelId, authorName) {
                 platform: 'youtube',
                 type: mediaType,
                 url: `https://www.youtube.com/watch?v=${videoId}`,
-                thumbnail: thumbnail,
+                thumbnail: animatedPreview, // Сохраняем анимированное WebP превью напрямую в thumbnail
                 preview: animatedPreview,
                 date: dateObj.toISOString().split('T')[0],
                 rawDate: dateObj.getTime(),
