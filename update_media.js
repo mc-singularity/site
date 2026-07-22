@@ -91,10 +91,10 @@ function getYouTubeThumbnail(snippet, videoId) {
 }
 
 /**
- * Получение анимированного превью при наведении для YouTube
+ * Получение анимированного WebP превью при наведении для YouTube (6 секунд)
  */
 function getYouTubeAnimatedPreview(videoId) {
-    return `https://i.ytimg.com/an_webp/${videoId}/mqdefault_60fps.webp`;
+    return `https://i.ytimg.com/an_webp/${videoId}/mqdefault_6s.webp`;
 }
 
 /**
@@ -162,7 +162,7 @@ async function resolveYouTubeChannelId(youtubeUrl, authorName) {
 }
 
 /**
- * Всеядная функция загрузки списков каналов из team.json
+ * Загрузка списка каналов из team.json
  */
 function loadChannelsFromTeamJson() {
     const youtubeChannels = [];
@@ -260,12 +260,11 @@ function loadChannelsFromTeamJson() {
 }
 
 /**
- * Запрос контента из YouTube API (используем playlistItems для 100x экономии квоты)
+ * Запрос контента из YouTube API
  */
 async function fetchYouTubeMedia(channelId, authorName) {
     if (!YOUTUBE_API_KEY) return [];
 
-    // Преобразуем Channel ID (UC...) в Uploads Playlist ID (UU...)
     const playlistId = channelId.startsWith('UC') ? 'UU' + channelId.slice(2) : channelId;
     const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=${MAX_RESULTS_PER_CHANNEL}&key=${YOUTUBE_API_KEY}`;
 
@@ -286,7 +285,6 @@ async function fetchYouTubeMedia(channelId, authorName) {
 
         if (videoIds.length === 0) return [];
 
-        // Запрос деталей для определения длительности и стримов
         const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet,liveStreamingDetails&id=${videoIds.join(',')}&key=${YOUTUBE_API_KEY}`;
         const detailsRes = await fetch(detailsUrl);
         const detailsData = detailsRes.ok ? await detailsRes.json() : { items: [] };
