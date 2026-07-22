@@ -6,7 +6,8 @@ const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || '';
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID || '';
 const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET || '';
 
-const MAX_RESULTS_PER_CHANNEL = 5;
+// Количество запрашиваемых видео с каждого канала за запуск
+const MAX_RESULTS_PER_CHANNEL = 15;
 
 // Кэш для логинов и ID каналов
 const channelIdCache = {};
@@ -64,7 +65,7 @@ function extractTwitchUsername(url) {
 }
 
 /**
- * Форматирование обложки Twitch (замена %{width}/%{height}, {width}/{height} и %width%/%height%)
+ * Форматирование обложки Twitch
  */
 function formatTwitchThumbnail(url) {
     if (!url || typeof url !== 'string' || url.trim() === '') {
@@ -80,6 +81,7 @@ function formatTwitchThumbnail(url) {
  */
 function getYouTubeThumbnail(snippet, videoId) {
     if (snippet && snippet.thumbnails) {
+        if (snippet.thumbnails.maxres?.url) return snippet.thumbnails.maxres.url;
         if (snippet.thumbnails.high?.url) return snippet.thumbnails.high.url;
         if (snippet.thumbnails.standard?.url) return snippet.thumbnails.standard.url;
         if (snippet.thumbnails.medium?.url) return snippet.thumbnails.medium.url;
@@ -89,7 +91,7 @@ function getYouTubeThumbnail(snippet, videoId) {
 }
 
 /**
- * Получение анимированного WebP-превью YouTube (анимация при наведении)
+ * Получение анимированного превью при наведении для YouTube
  */
 function getYouTubeAnimatedPreview(videoId) {
     return `https://i.ytimg.com/an_webp/${videoId}/mqdefault_60fps.webp`;
@@ -160,7 +162,7 @@ async function resolveYouTubeChannelId(youtubeUrl, authorName) {
 }
 
 /**
- * Загрузить список каналов YouTube и Twitch из team.json
+ * Всеядная функция загрузки списков каналов из team.json
  */
 function loadChannelsFromTeamJson() {
     const youtubeChannels = [];
@@ -194,23 +196,61 @@ function loadChannelsFromTeamJson() {
     const members = Array.isArray(teamData) ? teamData : (teamData.members || teamData.team || teamData.teamMembers || []);
 
     for (const member of members) {
-        const authorName = member.name || member.username || member.nickname || 'Участник';
+        const authorName = member.name || member.username || member.nickname || member.author || 'Участник';
         let ytUrl = null;
         let twitchUrl = null;
 
-        if (member.socials && Array.isArray(member.socials)) {
-            const ytSocial = member.socials.find(s => s.platform && (s.platform.toLowerCase() === 'youtube' || s.platform.toLowerCase() === 'yt'));
-            if (ytSocial) ytUrl = ytSocial.url;
+        const checkUrl = (urlStr) => {
+            if (!urlStr || typeof urlStr !== 'string') return;
+            const lower = urlStr.toLowerCase();
+            if (lower.includes('youtube.com') || lower.includes('youtu.be') || lower.startsWith('uc')) {
+                if (!ytUrl) ytUrl = urlStr;
+            } else if (lower.includes('twitch.tv')) {
+                if (!twitchUrl) twitchUrl = urlStr;
+            }
+        };
 
-            const twSocial = member.socials.find(s => s.platform && (s.platform.toLowerCase() === 'twitch' || s.platform.toLowerCase() === 'tw'));
-            if (twSocial) twitchUrl = twSocial.url;
-        } else if (member.socials) {
-            ytUrl = member.socials.youtube || member.socials.yt;
-            twitchUrl = member.socials.twitch || member.socials.tw;
+        // 1. Поиск в свойствах участника
+        for (const key of Object.keys(member)) {
+            const kLower = key.toLowerCase();
+            if (kLower === 'youtube' || kLower === 'yt') {
+                if (typeof member[key] === 'string') ytUrl = member[key];
+            }
+            if (kLower === 'twitch' || kLower === 'tw') {
+                if (typeof member[key] === 'string') twitchUrl = member[key];
+            }
         }
 
-        if (member.youtube) ytUrl = member.youtube;
-        if (member.twitch) twitchUrl = member.twitch;
+        // 2. Поиск в объекте или массиве socials
+        if (member.socials) {
+            if (Array.isArray(member.socials)) {
+                for (const item of member.socials) {
+                    if (typeof item === 'string') {
+                        checkUrl(item);
+                    } else if (item && typeof item === 'object') {
+                        const platform = (item.platform || item.type || item.name || item.service || '').toLowerCase();
+                        const url = item.url || item.link || item.href || '';
+                        if (platform === 'youtube' || platform === 'yt') {
+                            if (url) ytUrl = url;
+                        } else if (platform === 'twitch' || platform === 'tw') {
+                            if (url) twitchUrl = url;
+                        } else {
+                            checkUrl(url);
+                        }
+                    }
+                }
+            } else if (typeof member.socials === 'object') {
+                for (const key of Object.keys(member.socials)) {
+                    const kLower = key.toLowerCase();
+                    const val = member.socials[key];
+                    if (typeof val === 'string') {
+                        if (kLower === 'youtube' || kLower === 'yt') ytUrl = val;
+                        else if (kLower === 'twitch' || kLower === 'tw') twitchUrl = val;
+                        else checkUrl(val);
+                    }
+                }
+            }
+        }
 
         if (ytUrl) youtubeChannels.push({ channelUrl: ytUrl, authorName });
         if (twitchUrl) twitchChannels.push({ channelUrl: twitchUrl, authorName });
@@ -220,23 +260,33 @@ function loadChannelsFromTeamJson() {
 }
 
 /**
- * Запрос контента из YouTube API
+ * Запрос контента из YouTube API (используем playlistItems для 100x экономии квоты)
  */
 async function fetchYouTubeMedia(channelId, authorName) {
     if (!YOUTUBE_API_KEY) return [];
 
-    const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&maxResults=${MAX_RESULTS_PER_CHANNEL}&order=date&type=video&key=${YOUTUBE_API_KEY}`;
+    // Преобразуем Channel ID (UC...) в Uploads Playlist ID (UU...)
+    const playlistId = channelId.startsWith('UC') ? 'UU' + channelId.slice(2) : channelId;
+    const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=${MAX_RESULTS_PER_CHANNEL}&key=${YOUTUBE_API_KEY}`;
 
     try {
-        const response = await fetch(searchUrl);
-        if (!response.ok) return [];
+        const response = await fetch(playlistUrl);
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            console.error(`Ошибка YouTube API (${response.status}):`, errData.error?.message || response.statusText);
+            return [];
+        }
 
         const data = await response.json();
         if (!data.items || data.items.length === 0) return [];
 
-        const videoIds = data.items.map(item => item.id?.videoId).filter(Boolean);
+        const videoIds = data.items
+            .map(item => item.snippet?.resourceId?.videoId)
+            .filter(Boolean);
+
         if (videoIds.length === 0) return [];
 
+        // Запрос деталей для определения длительности и стримов
         const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet,liveStreamingDetails&id=${videoIds.join(',')}&key=${YOUTUBE_API_KEY}`;
         const detailsRes = await fetch(detailsUrl);
         const detailsData = detailsRes.ok ? await detailsRes.json() : { items: [] };
@@ -247,7 +297,7 @@ async function fetchYouTubeMedia(channelId, authorName) {
         }
 
         return data.items.map(item => {
-            const videoId = item.id?.videoId;
+            const videoId = item.snippet?.resourceId?.videoId;
             const snippet = item.snippet;
             if (!videoId || !snippet) return null;
 
@@ -266,9 +316,10 @@ async function fetchYouTubeMedia(channelId, authorName) {
             if (isStream) mediaType = 'stream';
             else if (isShort) mediaType = 'short';
 
-            const thumbnail = getYouTubeThumbnail(snippet, videoId);
+            const thumbnail = getYouTubeThumbnail(detailItem?.snippet || snippet, videoId);
             const animatedPreview = getYouTubeAnimatedPreview(videoId);
-            const dateObj = new Date(snippet.publishedAt);
+            const publishedAt = snippet.publishedAt || snippet.addedToPlaylist;
+            const dateObj = new Date(publishedAt);
 
             return {
                 title: snippet.title,
@@ -280,7 +331,7 @@ async function fetchYouTubeMedia(channelId, authorName) {
                 preview: animatedPreview,
                 date: dateObj.toISOString().split('T')[0],
                 rawDate: dateObj.getTime(),
-                uniqueId: `yt_${videoId}`
+                videoId: videoId
             };
         }).filter(Boolean);
     } catch (error) {
@@ -302,7 +353,6 @@ async function fetchTwitchMedia(username, authorName) {
     };
 
     try {
-        // 1. Получаем ID пользователя по юзернейму
         const userRes = await fetch(`https://api.twitch.tv/helix/users?login=${username}`, { headers });
         if (!userRes.ok) return [];
         const userData = await userRes.json();
@@ -311,7 +361,7 @@ async function fetchTwitchMedia(username, authorName) {
         const userId = userData.data[0].id;
         const mediaList = [];
 
-        // 2. Проверяем текущий онлайн-стрим
+        // 1. Онлайн-стрим
         const streamRes = await fetch(`https://api.twitch.tv/helix/streams?user_id=${userId}`, { headers });
         if (streamRes.ok) {
             const streamData = await streamRes.json();
@@ -330,12 +380,12 @@ async function fetchTwitchMedia(username, authorName) {
                     preview: thumb,
                     date: dateObj.toISOString().split('T')[0],
                     rawDate: dateObj.getTime(),
-                    uniqueId: `tw_live_${stream.id}`
+                    videoId: `stream_${stream.id}`
                 });
             }
         }
 
-        // 3. Получаем список сохраненных VOD (записей стримов/роликов)
+        // 2. VOD Записи
         const videosRes = await fetch(`https://api.twitch.tv/helix/videos?user_id=${userId}&first=${MAX_RESULTS_PER_CHANNEL}`, { headers });
         if (videosRes.ok) {
             const videosData = await videosRes.json();
@@ -354,7 +404,7 @@ async function fetchTwitchMedia(username, authorName) {
                         preview: thumb,
                         date: dateObj.toISOString().split('T')[0],
                         rawDate: dateObj.getTime(),
-                        uniqueId: `tw_vod_${v.id}`
+                        videoId: `vod_${v.id}`
                     });
                 }
             }
@@ -376,22 +426,22 @@ async function updateMediaJson() {
     console.log(`Найдено каналов: YouTube (${youtubeChannels.length}), Twitch (${twitchChannels.length})`);
 
     let allMedia = [];
-    const processedIds = new Set();
+    const processedVideoIds = new Set();
 
     // Обработка YouTube
     for (const ch of youtubeChannels) {
         const channelId = await resolveYouTubeChannelId(ch.channelUrl, ch.authorName);
         if (!channelId) {
-            console.log(`Не удалось определить YouTube Channel ID для: ${ch.channelUrl}`);
+            console.log(`Не удалось определить YouTube Channel ID для: ${ch.channelUrl} (${ch.authorName})`);
             continue;
         }
 
-        console.log(`Загрузка YouTube для ${ch.authorName}...`);
+        console.log(`Загрузка YouTube для ${ch.authorName} (ID: ${channelId})...`);
         const items = await fetchYouTubeMedia(channelId, ch.authorName);
 
         for (const item of items) {
-            if (!processedIds.has(item.uniqueId)) {
-                processedIds.add(item.uniqueId);
+            if (!processedVideoIds.has(item.videoId)) {
+                processedVideoIds.add(item.videoId);
                 allMedia.push(item);
             }
         }
@@ -401,7 +451,7 @@ async function updateMediaJson() {
     for (const ch of twitchChannels) {
         const username = extractTwitchUsername(ch.channelUrl);
         if (!username) {
-            console.log(`Не удалось распарсить Twitch никнейм из: ${ch.channelUrl}`);
+            console.log(`Не удалось распарсить Twitch никнейм из: ${ch.channelUrl} (${ch.authorName})`);
             continue;
         }
 
@@ -409,8 +459,8 @@ async function updateMediaJson() {
         const items = await fetchTwitchMedia(username, ch.authorName);
 
         for (const item of items) {
-            if (!processedIds.has(item.uniqueId)) {
-                processedIds.add(item.uniqueId);
+            if (!processedVideoIds.has(item.videoId)) {
+                processedVideoIds.add(item.videoId);
                 allMedia.push(item);
             }
         }
@@ -419,8 +469,8 @@ async function updateMediaJson() {
     // Сортировка материалов от самых новых к старым
     allMedia.sort((a, b) => b.rawDate - a.rawDate);
 
-    // Удаляем служебные поля перед сохранением
-    const cleanedMedia = allMedia.map(({ rawDate, uniqueId, ...item }) => item);
+    // Удаляем внутренние служебные поля
+    const cleanedMedia = allMedia.map(({ rawDate, videoId, ...item }) => item);
 
     const resultPayload = {
         media: cleanedMedia
