@@ -885,7 +885,7 @@
             display: none;
         }
 
-        /* Цвет обводки карточки динамически задается через JS/inline style */
+        /* Карточка доступна для всех развернутых карточек */
         .team-member.expanded {
             z-index: 100;
             background: rgba(0, 0, 0, 0.95);
@@ -926,7 +926,7 @@
             justify-content: center;
         }
 
-        /* Только если у игрока есть специальная коллекционная карточка, расширяем до 2 колонок */
+        /* Расширение до 2 колонок для всех карточек при разворачивании */
         .team-member.expanded.has-card-member {
             grid-column: span 2;
         }
@@ -1974,7 +1974,7 @@
             });
         }
 
-        // Загрузка участников с поддержкой цвета (decimal -> hex) и голов майнкрафта
+        // Загрузка участников: теперь карточки есть у каждого участника
         async function loadTeamMembers() {
             try {
                 const response = await fetch('team.json?v=' + Date.now(), { 
@@ -1986,7 +1986,8 @@
                 
                 (data.teamMembers || []).forEach(member => {
                     const memberDiv = document.createElement('div');
-                    memberDiv.className = 'team-member' + (member.hasCard ? ' has-card-member' : '');
+                    // Все карточки имеют класс has-card-member
+                    memberDiv.className = 'team-member has-card-member';
                     memberDiv.dataset.priority = member.priority || 0;
                     memberDiv.dataset.name = member.name;
 
@@ -2000,12 +2001,11 @@
                         `<a href="${social.url}" target="_blank" class="social-link">${social.platform}</a>`
                     ).join('');
                     
-                    // Выбор большой картинки карточки: imageUrl или запасной card.jpg
-                    const cardSrc = member.imageUrl ? member.imageUrl : 'card.jpg';
-                    const cardHTML = member.hasCard ? 
-                        `<div class="team-member-card"><img src="${cardSrc}" alt="Card" onerror="this.src='card.jpg'"></div>` : '';
+                    // Выбор большой картинки карточки: imageUrl или локальный card.jpg
+                    const cardSrc = (member.imageUrl && member.imageUrl.trim() !== '') ? member.imageUrl : 'card.jpg';
+                    const cardHTML = `<div class="team-member-card"><img src="${cardSrc}" alt="Card" onerror="this.src='card.jpg'"></div>`;
                     
-                    // Возвращены стандартные головы игроков
+                    // Стандартные головы игроков через Minotar
                     const avatarSrc = `https://minotar.net/helm/${member.name}/80`;
 
                     memberDiv.innerHTML = `
