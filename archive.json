@@ -13,6 +13,34 @@
 "seasonsPeriod": "0 Сезон — 1 Сезон",
 "leaveReason": "",
 "personalLore": ""
+},
+{
+"name": "erinaceus_",
+"role": "Игрок проекта",
+"realName": "Эрин",
+"color": 10066329,
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [],
+"history": "",
+"seasonsPeriod": "1 Сезон — 1 Сезон",
+"leaveReason": "",
+"personalLore": ""
+},
+{
+"name": "Werea25",
+"role": "Игрок проекта",
+"realName": "Алексей",
+"color": 10066329,
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [],
+"history": "Эх,делал классные модельки..",
+"seasonsPeriod": "0 Сезон — 1 Сезон",
+"leaveReason": "",
+"personalLore": ""
 }
 ]
 }
