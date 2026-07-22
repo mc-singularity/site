@@ -45,20 +45,36 @@
             position: relative;
         }
 
-        /* Панель переключения темы */
+        /* Выплывающая панель переключения темы под логотипом */
         .theme-switcher-container {
-            position: absolute;
-            top: 1rem;
-            right: 1.25rem;
-            z-index: 1000;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
-            background: rgba(0, 0, 0, 0.85);
-            border: 2px solid var(--accent-color);
-            padding: 0.3rem 0.6rem;
-            box-shadow: 2px 2px 0px #000000;
-            transition: border-color 0.3s ease;
+            background: rgba(0, 0, 0, 0.9);
+            border: 0px solid var(--accent-color);
+            padding: 0 0.8rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 0 auto;
+            width: max-content;
+            max-width: 90vw;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            max-height: 0;
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        .theme-switcher-container.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            max-height: 200px;
+            padding: 0.5rem 0.8rem;
+            border-width: 2px;
+            margin-top: 1rem;
         }
 
         .theme-switcher-label {
@@ -172,7 +188,6 @@
             transform: translateY(0) scale(1);
         }
 
-        body.loaded .theme-switcher-container.reveal-item { transition-delay: 0.1s; }
         body.loaded header.reveal-item                  { transition-delay: 0.2s; }
         body.loaded .section.server-status.reveal-item   { transition-delay: 0.35s; }
         body.loaded .section.social-links.reveal-item    { transition-delay: 0.5s; }
@@ -338,11 +353,52 @@
             position: relative;
         }
 
+        /* Кликабельный контейнер логотипа */
         .logo-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.8rem;
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        /* Подсказка ПК при наведении на логотип */
+        .logo-container .tooltip {
+            position: absolute;
+            top: -2.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.95);
+            color: #ffffff;
+            padding: 0.4rem 0.75rem;
+            border: 0.125rem solid var(--accent-color);
+            font-size: 0.85rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s ease;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .logo-container:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Неброская постоянная подсказка для телефона */
+        .mobile-logo-hint {
+            display: none;
+            font-size: 0.75rem;
+            color: #888888;
+            font-family: 'uvKits', sans-serif !important;
+            letter-spacing: 0.05rem;
+            margin-top: -0.2rem;
+            opacity: 0.75;
         }
 
         .logo-image {
@@ -356,7 +412,7 @@
             transition: transform 0.2s ease;
         }
 
-        .logo-image:hover {
+        .logo-container:hover .logo-image {
             transform: scale(1.03);
         }
 
@@ -488,8 +544,8 @@
             margin-top: 2.5rem;
             font-size: 1.5rem;
             text-align: center;
-            color: #888888;
-            border-top: 2px dashed #444444;
+            color: #aaaaaa;
+            border-top: 2px dashed var(--accent-color);
             padding-top: 1.5rem;
             font-family: 'uvKits', sans-serif !important;
             letter-spacing: 0.08rem;
@@ -784,7 +840,7 @@
             box-shadow: 0 0 10px var(--accent-shadow);
         }
 
-        /* --- Сломанный ретро-стиль для игроков Архива --- */
+        /* Сломанный ретро-стиль для игроков Архива */
         .archive-members .team-member {
             background: rgba(15, 15, 20, 0.85);
             border: 0.1875rem dashed #666666;
@@ -1226,23 +1282,20 @@
         @media (max-width: 48rem) {
             .container { padding: 0 0.9375rem; }
             header { padding: 1rem 0 1rem 0; }
-            .theme-switcher-container {
-                position: relative;
-                top: 0;
-                right: 0;
-                transform: none;
-                margin: 0.5rem auto 1rem auto;
-                padding: 0.35rem 0.6rem;
-                width: max-content;
-                max-width: 100%;
-                justify-content: center;
-            }
 
             /* На мобильных устройствах перенос цветов происходит строго после 7-го элемента */
             .theme-options {
                 flex-wrap: wrap;
                 max-width: calc(7 * 0.95rem + 6 * 0.35rem);
                 justify-content: center;
+            }
+
+            .logo-container .tooltip {
+                display: none !important;
+            }
+
+            .mobile-logo-hint {
+                display: block;
             }
 
             .section { padding: 1.25rem 0.9375rem; margin: 1.25rem 0; }
@@ -1381,36 +1434,39 @@
     <button class="panel-toggle right events reveal-item" onclick="togglePanel('events')">СОБЫТИЯ</button>
 
     <div class="container">
-        <!-- Расширенная панель выбора цвета темы с 14 ретро-цветами -->
-        <div class="theme-switcher-container reveal-item">
-            <span class="theme-switcher-label">ЦВЕТ:</span>
-            <div class="theme-options">
-                <div class="theme-swatch active" style="background-color: #ffffff;" onclick="setThemeColor('#ffffff', this)" title="Белый"></div>
-                <div class="theme-swatch" style="background-color: #ff5555;" onclick="setThemeColor('#ff5555', this)" title="Красный"></div>
-                <div class="theme-swatch" style="background-color: #55ff55;" onclick="setThemeColor('#55ff55', this)" title="Изумрудный"></div>
-                <div class="theme-swatch" style="background-color: #55ffff;" onclick="setThemeColor('#55ffff', this)" title="Бирюзовый"></div>
-                <div class="theme-swatch" style="background-color: #3b82f6;" onclick="setThemeColor('#3b82f6', this)" title="Лазурный"></div>
-                <div class="theme-swatch" style="background-color: #a855f7;" onclick="setThemeColor('#a855f7', this)" title="Пурпурный"></div>
-                <div class="theme-swatch" style="background-color: #ff55ff;" onclick="setThemeColor('#ff55ff', this)" title="Розовый"></div>
-                <div class="theme-swatch" style="background-color: #ffff55;" onclick="setThemeColor('#ffff55', this)" title="Золотой"></div>
-                <div class="theme-swatch" style="background-color: #ffaa00;" onclick="setThemeColor('#ffaa00', this)" title="Оранжевый"></div>
-                <div class="theme-swatch" style="background-color: #a3e635;" onclick="setThemeColor('#a3e635', this)" title="Лаймовый"></div>
-                <div class="theme-swatch" style="background-color: #e11d48;" onclick="setThemeColor('#e11d48', this)" title="Малиновый"></div>
-                <div class="theme-swatch" style="background-color: #14b8a6;" onclick="setThemeColor('#14b8a6', this)" title="Аквамарин"></div>
-                <div class="theme-swatch" style="background-color: #9ca3af;" onclick="setThemeColor('#9ca3af', this)" title="Серебряный"></div>
-                <div class="theme-swatch" style="background-color: #f97316;" onclick="setThemeColor('#f97316', this)" title="Коралл"></div>
-            </div>
-        </div>
-
         <header class="reveal-item">
-            <div class="logo-container">
+            <!-- Кликабельный блок логотипа с подсказками -->
+            <div class="logo-container" onclick="toggleThemeSwitcher(event)">
+                <span class="tooltip">Нажмите для смены цвета темы</span>
                 <img src="logo.png" alt="Singularity Logo" class="logo-image" onerror="this.style.display='none'">
                 <div class="logo-title-wrapper">
                     <h1 class="logo">SINGULARITY</h1>
                     <div class="splash-text" id="splashText"></div>
                 </div>
+                <span class="mobile-logo-hint">( нажми для смены цвета )</span>
             </div>
             <p class="tagline">Приватный сервер КМ(Контент Мэйкеров)</p>
+
+            <!-- Выплывающая панель выбора цвета темы с 14 ретро-цветами -->
+            <div class="theme-switcher-container" id="themeSwitcher">
+                <span class="theme-switcher-label">ЦВЕТ:</span>
+                <div class="theme-options">
+                    <div class="theme-swatch active" style="background-color: #ffffff;" onclick="setThemeColor('#ffffff', this, event)" title="Белый"></div>
+                    <div class="theme-swatch" style="background-color: #ff5555;" onclick="setThemeColor('#ff5555', this, event)" title="Красный"></div>
+                    <div class="theme-swatch" style="background-color: #55ff55;" onclick="setThemeColor('#55ff55', this, event)" title="Изумрудный"></div>
+                    <div class="theme-swatch" style="background-color: #55ffff;" onclick="setThemeColor('#55ffff', this, event)" title="Бирюзовый"></div>
+                    <div class="theme-swatch" style="background-color: #3b82f6;" onclick="setThemeColor('#3b82f6', this, event)" title="Лазурный"></div>
+                    <div class="theme-swatch" style="background-color: #a855f7;" onclick="setThemeColor('#a855f7', this, event)" title="Пурпурный"></div>
+                    <div class="theme-swatch" style="background-color: #ff55ff;" onclick="setThemeColor('#ff55ff', this, event)" title="Розовый"></div>
+                    <div class="theme-swatch" style="background-color: #ffff55;" onclick="setThemeColor('#ffff55', this, event)" title="Золотой"></div>
+                    <div class="theme-swatch" style="background-color: #ffaa00;" onclick="setThemeColor('#ffaa00', this, event)" title="Оранжевый"></div>
+                    <div class="theme-swatch" style="background-color: #a3e635;" onclick="setThemeColor('#a3e635', this, event)" title="Лаймовый"></div>
+                    <div class="theme-swatch" style="background-color: #e11d48;" onclick="setThemeColor('#e11d48', this, event)" title="Малиновый"></div>
+                    <div class="theme-swatch" style="background-color: #14b8a6;" onclick="setThemeColor('#14b8a6', this, event)" title="Аквамарин"></div>
+                    <div class="theme-swatch" style="background-color: #9ca3af;" onclick="setThemeColor('#9ca3af', this, event)" title="Серебряный"></div>
+                    <div class="theme-swatch" style="background-color: #f97316;" onclick="setThemeColor('#f97316', this, event)" title="Коралл"></div>
+                </div>
+            </div>
         </header>
 
         <div class="content">
@@ -1494,6 +1550,7 @@
         </div>
     </div>
 
+    <!-- Скрипт открытия и смены цветовой темы -->
     <script>
         function hexToRgba(hex, alpha) {
             if (!hex || !hex.startsWith('#')) return `rgba(255, 255, 255, ${alpha})`;
@@ -1503,7 +1560,17 @@
             return `rgba(${r}, ${g}, ${b}, ${alpha})`;
         }
 
-        function setThemeColor(colorHex, swatchElement) {
+        function toggleThemeSwitcher(event) {
+            if (event) event.stopPropagation();
+            const switcher = document.getElementById('themeSwitcher');
+            if (switcher) {
+                switcher.classList.toggle('show');
+            }
+        }
+
+        function setThemeColor(colorHex, swatchElement, event) {
+            if (event) event.stopPropagation();
+            
             document.documentElement.style.setProperty('--accent-color', colorHex);
             document.documentElement.style.setProperty('--accent-dim', hexToRgba(colorHex, 0.2));
             document.documentElement.style.setProperty('--accent-hover', hexToRgba(colorHex, 0.35));
@@ -1533,6 +1600,14 @@
                 if (savedColor) setThemeColor(savedColor);
             } catch (e) {}
         })();
+
+        // Закрываем плашку выбора темы при клике мимо нее
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.theme-switcher-container') && !e.target.closest('.logo-container')) {
+                const switcher = document.getElementById('themeSwitcher');
+                if (switcher) switcher.classList.remove('show');
+            }
+        });
     </script>
 
     <!-- Логика ретро-загрузчика -->
@@ -1671,7 +1746,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const cursor = document.querySelector('.cursor-logo');
-            const interactiveSelector = 'button, a, input, .team-member, .lore-season-header, .player-head, .panel-close, .social-button, .discord-gallery-item, .card-nav-btn, .theme-swatch, .more-info-btn, .refresh-btn';
+            const interactiveSelector = 'button, a, input, .team-member, .lore-season-header, .player-head, .panel-close, .social-button, .discord-gallery-item, .card-nav-btn, .theme-swatch, .more-info-btn, .refresh-btn, .logo-container';
 
             document.addEventListener('mouseover', (e) => {
                 if (e.target.closest(interactiveSelector)) cursor && cursor.classList.add('hovered');
