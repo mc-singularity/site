@@ -1,0 +1,20 @@
+{
+"media": [
+{
+"title": "Официальный трейлер Singularity",
+"author": "Singularity",
+"type": "video",
+"url": "https://www.youtube.com/@Singularity_Mine",
+"thumbnail": "card.jpg",
+"date": "2026-03-30"
+},
+{
+"title": "Прямой эфир: Открытие Сезона 1",
+"author": "Стример",
+"type": "stream",
+"url": "https://twitch.tv/",
+"thumbnail": "card.jpg",
+"date": "2026-04-01"
+}
+]
+}
