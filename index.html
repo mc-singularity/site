@@ -29,22 +29,21 @@
 
         /* Стилизация пиксельного скроллбара */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
         ::-webkit-scrollbar-track {
             background: #000000;
-            border-left: 2px solid #555555;
+            border-left: 1px solid #333333;
         }
         ::-webkit-scrollbar-thumb {
-            background: #aaaaaa;
-            border: 2px solid #ffffff;
-            box-shadow: inset -2px -2px 0px #555555;
+            background: #ffffff;
+            border-radius: 0px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #ffffff;
+            background: #cccccc;
         }
 
-        /* Ретро-эффект телевизора / сканлиний (CRT Scanlines) */
+        /* Ретро-эффект CRT сканлиний */
         .crt-overlay {
             position: fixed;
             top: 0;
@@ -58,7 +57,7 @@
                 rgba(0, 0, 0, 0.25) 50%
             );
             background-size: 100% 4px;
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         /* Холст пиксельного неба */
@@ -134,7 +133,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.9) 100%);
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.85) 100%);
         }
 
         .container {
@@ -154,7 +153,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1.25rem;
+            gap: 0.8rem;
         }
 
         .logo-image {
@@ -169,12 +168,14 @@
         }
 
         .logo-image:hover {
-            transform: scale(1.04);
+            transform: scale(1.03);
         }
 
         .logo-title-wrapper {
             position: relative;
-            display: inline-block;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-bottom: 0.625rem;
         }
 
@@ -182,25 +183,21 @@
             font-size: clamp(2.2rem, 8vw, 5rem);
             font-weight: normal;
             color: #ffffff;
-            text-shadow: 0.25rem 0.25rem 0 #000000, -2px -2px 0 #333333;
+            text-shadow: 0.25rem 0.25rem 0 #000000;
             letter-spacing: 0.3rem;
             font-family: 'uvKits', sans-serif;
             line-height: 1.1;
             margin: 0;
         }
 
-        /* Пиксельная Майнкрафт-сплеш надпись */
+        /* Прямой сплеш под логотипом */
         .splash-text {
-            position: absolute;
-            top: -0.2rem;
-            right: -1.5rem;
-            font-size: clamp(0.75rem, 2.2vw, 1.25rem);
+            font-size: clamp(0.85rem, 2.5vw, 1.35rem);
             font-family: 'uvKits', sans-serif;
             color: #ffff55;
             text-shadow: 0.125rem 0.125rem 0 #000000;
-            transform: rotate(-15deg);
-            transform-origin: center center;
-            animation: splashPulse 0.4s infinite alternate ease-in-out;
+            margin-top: 0.4rem;
+            animation: splashPulse 0.6s infinite alternate ease-in-out;
             white-space: nowrap;
             pointer-events: none;
             z-index: 10;
@@ -208,10 +205,10 @@
 
         @keyframes splashPulse {
             from {
-                transform: rotate(-15deg) scale(0.98);
+                transform: scale(0.98);
             }
             to {
-                transform: rotate(-15deg) scale(1.14);
+                transform: scale(1.08);
             }
         }
 
@@ -227,14 +224,14 @@
             padding: 1.5rem 0;
         }
 
-        /* Ретро-пиксельные рамки для секций */
+        /* Ретро секции */
         .section {
-            background: rgba(0, 0, 0, 0.9);
-            border: 4px solid #ffffff;
+            background: rgba(0, 0, 0, 0.85);
+            border: 0.25rem solid #ffffff;
             padding: 1.875rem;
             margin: 1.875rem 0;
             position: relative;
-            box-shadow: 6px 6px 0px #000000, inset 0 0 0 2px #555555;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9);
         }
 
         .section-title {
@@ -243,7 +240,7 @@
             text-shadow: 0.1875rem 0.1875rem 0 #000000;
             margin-bottom: 1.25rem;
             text-align: center;
-            border-bottom: 4px solid #ffffff;
+            border-bottom: 0.1875rem solid #ffffff;
             padding-bottom: 0.9375rem;
             font-family: 'uvKits', sans-serif;
             letter-spacing: 0.1rem;
@@ -275,8 +272,8 @@
         }
 
         .search-input {
-            background: #111111;
-            border: 3px solid #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            border: 0.1875rem solid #ffffff;
             color: #ffffff;
             padding: 0.625rem 1.25rem;
             font-size: 1.2rem;
@@ -284,16 +281,15 @@
             width: 100%;
             max-width: 18.75rem;
             outline: none;
-            box-shadow: inset 3px 3px 0px #000000;
+            transition: all 0.2s ease;
         }
 
         .search-input:focus {
-            background: #222222;
-            border-color: #ffff55;
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .search-input::placeholder {
-            color: #888888;
+            color: #aaaaaa;
         }
 
         /* Затемняющий фон при открытии панелей */
@@ -303,7 +299,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.75);
             z-index: 999;
             opacity: 0;
             visibility: hidden;
@@ -321,13 +317,12 @@
             width: 28.125rem;
             max-width: 88vw;
             height: 100vh;
-            background: #000000;
-            border: 4px solid #ffffff;
+            background: rgba(0, 0, 0, 0.95);
+            border: 0.1875rem solid #ffffff;
             padding: 1.25rem;
             overflow-y: auto;
-            transition: transform 0.25s steps(8, end);
+            transition: transform 0.3s ease;
             z-index: 1002;
-            box-shadow: 10px 0 0px #000000, inset 0 0 0 2px #444444;
         }
 
         .side-panel.left {
@@ -344,19 +339,18 @@
             transform: translateX(0);
         }
 
-        /* Пиксельные кнопки вызова панелей */
         .panel-toggle {
             position: fixed;
-            background: #000000;
-            border: 3px solid #ffffff;
+            background: rgba(0, 0, 0, 0.85);
+            border: 0.1875rem solid #ffffff;
             color: #ffffff;
             padding: 0.8rem 0.6rem;
             cursor: pointer;
             z-index: 1001;
             font-family: 'uvKits', sans-serif;
             font-size: 1.1rem;
-            box-shadow: 4px 4px 0px #000000;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 0.5rem rgba(0,0,0,0.8);
         }
 
         @media (min-width: 48.01rem) {
@@ -386,16 +380,14 @@
         }
 
         .panel-toggle:hover {
-            background: #ffffff;
-            color: #000000;
-            box-shadow: 2px 2px 0px #000000;
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid #ffffff;
+            border-bottom: 0.125rem solid #ffffff;
             padding-bottom: 0.625rem;
             margin-bottom: 0.9375rem;
         }
@@ -416,12 +408,6 @@
             font-size: 1.8rem;
             cursor: pointer;
             line-height: 1;
-            transition: transform 0.1s ease;
-        }
-
-        .panel-close:hover {
-            transform: scale(1.2);
-            color: #ff5555;
         }
 
         .panel-content p {
@@ -433,16 +419,16 @@
         }
 
         .panel-content .news-item, .event-item {
-            background: #111111;
-            border: 2px solid #ffffff;
+            background: rgba(255, 255, 255, 0.07);
+            border: 0.125rem solid #ffffff;
             padding: 0.9375rem;
             margin-bottom: 0.9375rem;
             position: relative;
-            box-shadow: 3px 3px 0px #000000;
+            transition: background 0.2s ease;
         }
 
         .panel-content .news-item:hover, .event-item:hover {
-            background: #222222;
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .news-date, .event-date {
@@ -461,14 +447,14 @@
         }
 
         .lore-season {
-            background: #111111;
-            border: 2px solid #ffffff;
+            background: rgba(255, 255, 255, 0.07);
+            border: 0.125rem solid #ffffff;
             margin-bottom: 0.9375rem;
-            box-shadow: 3px 3px 0px #000000;
+            transition: background 0.2s ease;
         }
 
         .lore-season:hover {
-            background: #222222;
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .lore-season-header {
@@ -490,8 +476,8 @@
         .lore-season-content {
             padding: 0.9375rem;
             display: none;
-            border-top: 2px solid #ffffff;
-            background: #050505;
+            border-top: 0.125rem solid #ffffff;
+            background: rgba(0, 0, 0, 0.4);
         }
 
         .lore-season-content.open {
@@ -501,7 +487,7 @@
         .lore-season-arrow {
             font-size: 1.3rem;
             color: #ffffff;
-            transition: transform 0.2s ease;
+            transition: transform 0.3s ease;
             font-weight: bold;
         }
 
@@ -531,18 +517,17 @@
             bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            background: #000000;
+            background: rgba(0, 0, 0, 0.95);
             color: #ffffff;
             padding: 0.5rem 0.75rem;
-            border: 2px solid #ffffff;
+            border: 0.125rem solid #ffffff;
             font-size: 0.9rem;
             white-space: nowrap;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             z-index: 1000;
             margin-bottom: 0.625rem;
-            box-shadow: 4px 4px 0px #000000;
         }
 
         .social-button:hover .tooltip {
@@ -560,11 +545,11 @@
             padding: 0;
             display: flex;
             align-items: center;
-            transition: color 0.15s ease;
+            transition: color 0.2s ease;
         }
 
         .toggle-btn:hover {
-            color: #ffff55;
+            color: #aaaaaa;
         }
 
         .toggle-container {
@@ -587,21 +572,19 @@
         }
 
         .refresh-btn {
-            background: #000000;
+            background: rgba(255, 255, 255, 0.1);
             color: #ffffff;
-            border: 2px solid #ffffff;
-            padding: 0.4125rem 0.8rem;
+            border: 0.125rem solid #ffffff;
+            padding: 0.3125rem 0.625rem;
             font-size: 0.9rem;
             cursor: pointer;
             font-family: 'uvKits', sans-serif;
+            transition: all 0.2s ease;
             margin-top: 0.3125rem;
-            box-shadow: 3px 3px 0px #000000;
         }
 
         .refresh-btn:hover {
-            background: #ffffff;
-            color: #000000;
-            box-shadow: 1px 1px 0px #000000;
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .status-indicator {
@@ -613,13 +596,11 @@
         }
 
         .status-indicator.online {
-            color: #55ff55;
-            text-shadow: 2px 2px 0px #000000;
+            color: #4ecdc4;
         }
 
         .status-indicator.offline {
-            color: #ff5555;
-            text-shadow: 2px 2px 0px #000000;
+            color: #ff6b6b;
         }
 
         .player-count {
@@ -652,7 +633,7 @@
             align-items: center;
             gap: 0.3125rem;
             position: relative;
-            transition: transform 0.15s ease;
+            transition: transform 0.2s ease;
         }
 
         .player-head:hover {
@@ -662,9 +643,8 @@
         .player-head img {
             width: 3rem;
             height: 3rem;
-            border: 2px solid #ffffff;
+            border: 0.125rem solid #ffffff;
             image-rendering: pixelated;
-            box-shadow: 3px 3px 0px #000000;
         }
 
         .player-name {
@@ -697,37 +677,34 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: #111111;
-            border: 3px solid #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            border: 0.1875rem solid #ffffff;
             padding: 1.25rem;
             gap: 0.5rem;
             justify-content: flex-start;
             position: relative;
             cursor: pointer;
+            transition: all 0.2s ease;
             z-index: 1;
             align-self: start;
             height: max-content;
-            box-shadow: 4px 4px 0px #000000;
-            transition: background 0.15s ease, transform 0.15s ease;
         }
 
         .team-member:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px #000000;
-            background: #222222;
+            transform: translateY(-0.25rem);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .team-member-avatar {
             width: 4.5rem;
             height: 4.5rem;
-            background: #000000;
-            border: 2px solid #ffffff;
+            background: #333333;
+            border: 0.1875rem solid #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             flex-shrink: 0;
-            box-shadow: 2px 2px 0px #000000;
         }
 
         .team-member-avatar img {
@@ -754,10 +731,8 @@
         /* Обычный развернутый игрок задействует 1 колонку */
         .team-member.expanded {
             z-index: 100;
-            background: #050505;
+            background: rgba(0, 0, 0, 0.95);
             grid-column: span 1;
-            border-color: #ffff55;
-            box-shadow: 6px 6px 0px #000000;
         }
 
         .team-member.expanded .team-member-name-preview {
@@ -773,7 +748,7 @@
             width: 100%;
             margin-top: 0.8rem;
             padding-top: 0.8rem;
-            border-top: 2px solid #ffffff;
+            border-top: 0.125rem solid #ffffff;
             animation: slideDown 0.2s ease-out forwards;
         }
 
@@ -849,9 +824,8 @@
         .team-member-card img {
             width: 100%;
             height: auto;
-            border: 2px solid #ffffff;
+            border: 0.125rem solid #ffffff;
             display: block;
-            box-shadow: 3px 3px 0px #000000;
             image-rendering: pixelated;
         }
 
@@ -900,45 +874,36 @@
             font-size: 0.85rem;
             color: #ffffff;
             text-decoration: none;
-            border: 2px solid #ffffff;
+            border: 0.125rem solid #ffffff;
             padding: 0.25rem 0.5rem;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
             font-family: 'uvKits', sans-serif;
-            background: #000000;
-            box-shadow: 2px 2px 0px #000000;
         }
 
         .social-link:hover {
             background: #ffffff;
             color: #000000;
-            box-shadow: 1px 1px 0px #000000;
         }
 
-        /* Кнопки в стиле Minecraft UI */
+        /* Исходные кнопки сайта */
         .button {
-            background: #555555;
-            color: #ffffff;
-            border: 3px solid #ffffff;
+            background: #ffffff;
+            color: #000000;
+            border: 0.25rem solid #000000;
             padding: 0.8rem 2rem;
             font-size: 1.5rem;
             font-family: 'uvKits', sans-serif;
             cursor: pointer;
             margin: 0.5rem;
-            transition: all 0.1s ease;
-            text-shadow: 2px 2px 0px #000000;
+            transition: all 0.2s ease;
+            text-shadow: none;
             display: inline-block;
-            box-shadow: inset -3px -3px 0px #222222, inset 3px 3px 0px #888888, 4px 4px 0px #000000;
         }
 
         .button:hover {
-            background: #777777;
-            color: #ffff55;
-            box-shadow: inset -3px -3px 0px #333333, inset 3px 3px 0px #aaaaaa, 4px 4px 0px #000000;
-        }
-
-        .button:active {
-            box-shadow: inset 3px 3px 0px #222222, inset -3px -3px 0px #888888, 2px 2px 0px #000000;
-            transform: translate(2px, 2px);
+            background: #000000;
+            color: #ffffff;
+            border-color: #ffffff;
         }
 
         footer {
@@ -1035,11 +1000,6 @@
             .social-button .tooltip {
                 display: none;
             }
-
-            .splash-text {
-                right: -0.5rem;
-                top: -0.5rem;
-            }
         }
 
         @media (max-width: 30rem) {
@@ -1079,7 +1039,7 @@
 
         .news-embed-image {
             max-width: 100%;
-            border: 2px solid #ffffff;
+            border: 0.125rem solid #ffffff;
             margin-top: 0.625rem;
             display: block;
             image-rendering: pixelated;
@@ -1226,14 +1186,14 @@
 
             // Статичные фоновые пиксельные звезды
             const stars = [];
-            const numStars = 100;
+            const numStars = 110;
             for (let i = 0; i < numStars; i++) {
                 stars.push({
                     x: Math.floor(Math.random() * width),
                     y: Math.floor(Math.random() * height),
-                    size: Math.random() < 0.2 ? 4 : 2,
+                    size: Math.random() < 0.25 ? 4 : 2,
                     alpha: Math.random(),
-                    speed: Math.random() * 0.02 + 0.005
+                    speed: (Math.random() * 0.02 + 0.008)
                 });
             }
 
@@ -1241,14 +1201,14 @@
             const shootingStars = [];
 
             function createShootingStar() {
-                if (Math.random() < 0.03 && shootingStars.length < 3) {
+                if (Math.random() < 0.035 && shootingStars.length < 3) {
                     shootingStars.push({
                         x: Math.floor(Math.random() * width * 0.85),
                         y: Math.floor(Math.random() * height * 0.4),
                         length: Math.floor(Math.random() * 8 + 6),
-                        speed: Math.floor(Math.random() * 6 + 6),
+                        speed: Math.floor(Math.random() * 5 + 6),
                         alpha: 1,
-                        decay: Math.random() * 0.02 + 0.015
+                        decay: Math.random() * 0.025 + 0.015
                     });
                 }
             }
@@ -1256,6 +1216,7 @@
             function animateStars() {
                 ctx.clearRect(0, 0, width, height);
 
+                // Отрисовка звезд
                 stars.forEach(star => {
                     star.alpha += star.speed;
                     if (star.alpha > 1 || star.alpha < 0.15) star.speed = -star.speed;
@@ -1264,6 +1225,7 @@
                     ctx.fillRect(star.x, star.y, star.size, star.size);
                 });
 
+                // Отрисовка падающих метеоров
                 createShootingStar();
                 for (let i = shootingStars.length - 1; i >= 0; i--) {
                     const s = shootingStars[i];
