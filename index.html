@@ -1647,25 +1647,6 @@
             user-select: text;
             animation: none;
         }
-
-        .media-video-preview {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            cursor: pointer;
-            background-color: #000;
-        }
-
-
-        .media-thumb-wrapper .media-video-preview {
-            transition: transform 0.3s ease;
-        }
-    
-        .media-card:hover .media-video-preview {
-            transform: scale(1.05);
-        }
-        
     </style>
 </head>
 <body>
@@ -1949,89 +1930,86 @@
             }).join('');
         }
 
-            function renderFilteredMedia() {
-                const container = document.getElementById('mediaCardsContainer');
-                if (!container) return;
-            
-                let filtered = mediaData;
-            
-                // Фильтрация по типу
-                if (currentMediaFilter !== 'all') {
-                    filtered = filtered.filter(item => item.type === currentMediaFilter);
-                }
-            
-                // Фильтрация по поиску
-                if (currentSearchQuery) {
-                    filtered = filtered.filter(item => {
-                        const titleMatch = item.title && item.title.toLowerCase().includes(currentSearchQuery);
-                        const authorMatch = item.author && item.author.toLowerCase().includes(currentSearchQuery);
-                        return titleMatch || authorMatch;
-                    });
-                }
-            
-                if (filtered.length === 0) {
-                    container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #8b8b8b; padding: 40px; font-family: 'Minecraft', sans-serif;">Ничего не найдено</div>`;
-                    return;
-                }
-            
-                container.innerHTML = filtered.map(item => {
-                    let badgeClass = 'media-badge-video';
-                    let badgeText = 'ВИДЕО';
-            
-                    if (item.type === 'stream') {
-                        badgeClass = 'media-badge-stream';
-                        badgeText = 'СТРИМ';
-                    } else if (item.type === 'short') {
-                        badgeClass = 'media-badge-short';
-                        badgeText = 'SHORT';
-                    }
-            
-                    const authorHeadSrc = item.author 
-                        ? `https://minotar.net/helm/${encodeURIComponent(item.author)}/24` 
-                        : 'https://minotar.net/helm/Steve/24';
-            
-                    // Проверяем, есть ли видео для превью, иначе рендерим обычное фото
-                    const previewContent = item.videoUrl ? `
-                        <video 
-                            src="${escapeHTML(item.videoUrl)}" 
-                            poster="${escapeHTML(item.thumbnail || 'card.jpg')}"
-                            class="media-thumbnail media-video-preview" 
-                            muted 
-                            loop 
-                            playsinline
-                            onmouseenter="this.play().catch(()=>{})" 
-                            onmouseleave="this.pause(); this.currentTime = 0;"
-                        ></video>
-                    ` : `
-                        <img 
-                            src="${escapeHTML(item.thumbnail || 'card.jpg')}" 
-                            class="media-thumbnail" 
-                            alt="${escapeHTML(item.title)}" 
-                            onerror="this.src='card.jpg'"
-                        >
-                    `;
-            
-                    return `
-                        <div class="media-card">
-                            <span class="media-type-badge ${badgeClass}">${badgeText}</span>
-                            <div class="media-thumb-wrapper">
-                                ${previewContent}
-                            </div>
-                            <div class="media-info">
-                                <div class="media-title">${escapeHTML(item.title)}</div>
-                                <div class="media-meta">
-                                    <div class="media-author-box">
-                                        <img src="${authorHeadSrc}" class="media-author-avatar" alt="${escapeHTML(item.author || '')}" onerror="this.src='https://minotar.net/helm/Steve/24'">
-                                        <span>${escapeHTML(item.author || '')}</span>
-                                    </div>
-                                    <span>${escapeHTML(item.date || '')}</span>
-                                </div>
-                            </div>
-                            <a href="${escapeHTML(item.url || '#')}" target="_blank" rel="noopener noreferrer" class="more-info-btn media-watch-btn">СМОТРЕТЬ</a>
-                        </div>
-                    `;
-                }).join('');
+        function renderFilteredMedia() {
+            const mediaGrid = document.getElementById('mediaGrid');
+            if (!mediaGrid) return;
+
+            let filtered = window.allMediaData;
+
+            // 1. Фильтр по типу (video, stream, short)
+            if (window.currentMediaTypeFilter !== 'all') {
+                filtered = filtered.filter(item => item.type === window.currentMediaTypeFilter);
             }
+
+            // 2. Фильтр по автору
+            if (window.selectedAuthorFilter) {
+                filtered = filtered.filter(item => item.author === window.selectedAuthorFilter);
+            }
+
+            if (filtered.length === 0) {
+                mediaGrid.innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Контент по выбранному фильтру не найден.</p>';
+                return;
+            }
+
+            mediaGrid.innerHTML = filtered.map(item => {
+                // Определение платформы (Твич / Ютуб) по ссылке или полю platform
+                let platform = (item.platform || '').toLowerCase();
+                if (!platform && item.url) {
+                    if (item.url.includes('twitch.tv')) {
+                        platform = 'twitch';
+                    } else if (item.url.includes('youtube.com') || item.url.includes('youtu.be')) {
+                        platform = 'youtube';
+                    }
+                }
+
+                let badgeText = 'ЮТУБ';
+                let badgeClass = 'video';
+
+                if (platform === 'twitch') {
+                    badgeText = 'ТВИЧ';
+                    badgeClass = 'twitch';
+                } else if (platform === 'youtube') {
+                    badgeClass = 'youtube';
+                    if (item.type === 'stream') {
+                        badgeText = 'ЮТУБ СТРИМ';
+                    } else if (item.type === 'short') {
+                        badgeText = 'ЮТУБ SHORTS';
+                    } else {
+                        badgeText = 'ЮТУБ';
+                    }
+                } else {
+                    if (item.type === 'stream') {
+                        badgeText = 'ТВИЧ';
+                        badgeClass = 'twitch';
+                    } else if (item.type === 'short') {
+                        badgeText = 'ЮТУБ SHORTS';
+                        badgeClass = 'youtube';
+                    }
+                }
+
+                const authorHeadSrc = `https://minotar.net/helm/${encodeURIComponent(item.author || 'Steve')}/24`;
+
+                return `
+                    <div class="media-card">
+                        <span class="media-type-badge ${badgeClass}">${badgeText}</span>
+                        <div class="media-thumb-wrapper">
+                            <img src="${escapeHTML(item.thumbnail || 'card.jpg')}" class="media-thumbnail" alt="${escapeHTML(item.title)}" onerror="this.src='card.jpg'">
+                        </div>
+                        <div class="media-info">
+                            <div class="media-title">${escapeHTML(item.title)}</div>
+                            <div class="media-meta">
+                                <div class="media-author-box">
+                                    <img src="${authorHeadSrc}" class="media-author-avatar" alt="${escapeHTML(item.author || '')}" onerror="this.src='https://minotar.net/helm/Steve/24'">
+                                    <span>${escapeHTML(item.author || '')}</span>
+                                </div>
+                                <span>${escapeHTML(item.date || '')}</span>
+                            </div>
+                        </div>
+                        <a href="${escapeHTML(item.url || '#')}" target="_blank" rel="noopener noreferrer" class="more-info-btn media-watch-btn">СМОТРЕТЬ</a>
+                    </div>
+                `;
+            }).join('');
+        }
 
         async function loadMedia() {
             try {
@@ -2177,15 +2155,15 @@
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
             ctx.imageSmoothingEnabled = false;
-    
+
             let width = canvas.width = window.innerWidth;
             let height = canvas.height = window.innerHeight;
-    
+
             window.addEventListener('resize', () => {
                 width = canvas.width = window.innerWidth;
                 height = canvas.height = window.innerHeight;
             });
-    
+
             const stars = [];
             for (let i = 0; i < 110; i++) {
                 stars.push({
@@ -2193,22 +2171,15 @@
                     y: Math.floor(Math.random() * height),
                     size: Math.random() < 0.25 ? 4 : 2,
                     alpha: Math.random(),
-                    // Увеличиваем шаг анимации, так как обновлений в секунду стало меньше
-                    speed: (Math.random() * 0.08 + 0.03)
+                    speed: (Math.random() * 0.02 + 0.008)
                 });
             }
-    
+
             const shootingStars = [];
-    
-            // Настройки низкого FPS (12 FPS задает идеальный ретро-стиль)
-            const TARGET_FPS = 12; 
-            const frameInterval = 1000 / TARGET_FPS;
-            let lastFrameTime = performance.now();
-    
-            function renderFrame() {
+
+            function animateStars() {
                 ctx.clearRect(0, 0, width, height);
-    
-                // Мерцание звезд
+
                 stars.forEach(star => {
                     star.alpha += star.speed;
                     if (star.alpha > 1 || star.alpha < 0.15) star.speed = -star.speed;
@@ -2216,19 +2187,18 @@
                     ctx.fillStyle = `rgba(255, 255, 255, ${steppedAlpha})`;
                     ctx.fillRect(star.x, star.y, star.size, star.size);
                 });
-    
-                // Падающие звезды
-                if (Math.random() < 0.08 && shootingStars.length < 3) {
+
+                if (Math.random() < 0.035 && shootingStars.length < 3) {
                     shootingStars.push({
                         x: Math.floor(Math.random() * width * 0.85),
                         y: Math.floor(Math.random() * height * 0.4),
                         length: Math.floor(Math.random() * 8 + 6),
-                        speed: Math.floor(Math.random() * 12 + 10),
+                        speed: Math.floor(Math.random() * 5 + 6),
                         alpha: 1,
-                        decay: Math.random() * 0.06 + 0.03
+                        decay: Math.random() * 0.025 + 0.015
                     });
                 }
-    
+
                 for (let i = shootingStars.length - 1; i >= 0; i--) {
                     const s = shootingStars[i];
                     for (let j = 0; j < s.length; j++) {
@@ -2240,29 +2210,16 @@
                             ctx.fillRect(pixelX, pixelY, 3, 3);
                         }
                     }
-                    s.x += s.speed; 
-                    s.y += s.speed; 
-                    s.alpha -= s.decay;
+                    s.x += s.speed; s.y += s.speed; s.alpha -= s.decay;
                     if (s.alpha <= 0 || s.x > width || s.y > height) shootingStars.splice(i, 1);
                 }
-            }
-    
-            // Зацикленный цикл рендеринга с ограничением по времени
-            function animateStars(currentTime) {
+
                 requestAnimationFrame(animateStars);
-    
-                const elapsed = currentTime - lastFrameTime;
-    
-                if (elapsed > frameInterval) {
-                    // Поправка на отставание времени
-                    lastFrameTime = currentTime - (elapsed % frameInterval);
-                    renderFrame();
-                }
             }
-    
-            requestAnimationFrame(animateStars);
+
+            animateStars();
         }
-    
+
         window.addEventListener('DOMContentLoaded', initStarsCanvas);
     </script>
 
