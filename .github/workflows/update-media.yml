@@ -2,28 +2,32 @@ name: Update YouTube Media JSON
 
 on:
   schedule:
-    # Запуск каждые 6 часов
+    # Автоматический запуск каждые 6 часов
     - cron: '0 */6 * * *'
-  workflow_dispatch: # Ручной запуск из вкладки Actions
+  workflow_dispatch: # Возможность запустить вручную через вкладку Actions
 
 jobs:
   update-media:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Скачиваем файлы репозитория
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2. Настраиваем окружение Node.js (актуальная версия 22)
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
+      # 3. Запускаем JS скрипт с передачей секретного ключа
       - name: Run media updater script
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: node update_media.js
 
+      # 4. Проверяем изменения, синхронизируем с веткой main и отправляем обновленный media.json
       - name: Commit and push updated media.json
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -33,18 +37,6 @@ jobs:
             echo "Изменений в media.json нет."
           else
             git commit -m "Auto-update media.json via YouTube API [skip ci]"
+            git pull --rebase origin main
             git push
           fi
-
----
-
-### 📄 Начальный файл `media.json`
-
-Положите этот файл в корень репозитория (скрипт будет перезаписывать его каждые 6 часов):
-
-```json
-{
-  "media": []
-}
-
----
