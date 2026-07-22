@@ -179,15 +179,45 @@
             margin-bottom: 0.625rem;
         }
 
+        /* Ретро-анимация логотипа с глитчем */
         .logo {
             font-size: clamp(2.2rem, 8vw, 5rem);
             font-weight: normal;
             color: #ffffff;
-            text-shadow: 0.25rem 0.25rem 0 #000000;
             letter-spacing: 0.3rem;
             font-family: 'uvKits', sans-serif;
             line-height: 1.1;
             margin: 0;
+            position: relative;
+            animation: retroGlitch 3s infinite alternate;
+        }
+
+        @keyframes retroGlitch {
+            0% {
+                text-shadow: 0.25rem 0.25rem 0 #000000;
+            }
+            85% {
+                text-shadow: 0.25rem 0.25rem 0 #000000;
+            }
+            88% {
+                text-shadow: -2px 0 #ff0055, 2px 0 #00ffff, 0.25rem 0.25rem 0 #000000;
+                transform: translate(-1px, 1px);
+            }
+            90% {
+                text-shadow: 2px 0 #ff0055, -2px 0 #00ffff, 0.25rem 0.25rem 0 #000000;
+                transform: translate(1px, -1px);
+            }
+            92% {
+                text-shadow: 0.25rem 0.25rem 0 #000000;
+                transform: translate(0, 0);
+            }
+            96% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 1;
+                text-shadow: 0.25rem 0.25rem 0 #000000;
+            }
         }
 
         /* Прямой сплеш под логотипом */
@@ -218,6 +248,15 @@
             text-shadow: 0.125rem 0.125rem 0 #000000;
             font-family: 'uvKits', sans-serif;
             letter-spacing: 0.05rem;
+            animation: retroFlicker 4s infinite ease-in-out;
+        }
+
+        @keyframes retroFlicker {
+            0%, 100% { opacity: 0.95; }
+            50% { opacity: 0.8; }
+            52% { opacity: 1; }
+            54% { opacity: 0.75; }
+            56% { opacity: 0.95; }
         }
 
         .content {
@@ -244,6 +283,11 @@
             padding-bottom: 0.9375rem;
             font-family: 'uvKits', sans-serif;
             letter-spacing: 0.1rem;
+            transition: text-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .section-title:hover {
+            text-shadow: -2px 0 #ff0055, 2px 0 #00ffff, 0.1875rem 0.1875rem 0 #000000;
         }
 
         .team-section {
@@ -286,6 +330,7 @@
 
         .search-input:focus {
             background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         .search-input::placeholder {
@@ -381,6 +426,7 @@
 
         .panel-toggle:hover {
             background: rgba(255, 255, 255, 0.2);
+            text-shadow: 0 0 8px #ffffff;
         }
 
         .panel-header {
@@ -545,11 +591,12 @@
             padding: 0;
             display: flex;
             align-items: center;
-            transition: color 0.2s ease;
+            transition: color 0.2s ease, text-shadow 0.2s ease;
         }
 
         .toggle-btn:hover {
-            color: #aaaaaa;
+            color: #ffffff;
+            text-shadow: -1px 0 #ff0055, 1px 0 #00ffff;
         }
 
         .toggle-container {
@@ -585,6 +632,7 @@
 
         .refresh-btn:hover {
             background: rgba(255, 255, 255, 0.2);
+            text-shadow: 0 0 5px #ffffff;
         }
 
         .status-indicator {
@@ -597,6 +645,12 @@
 
         .status-indicator.online {
             color: #4ecdc4;
+            animation: retroGlow 2s infinite alternate;
+        }
+
+        @keyframes retroGlow {
+            from { text-shadow: 0 0 2px #4ecdc4; }
+            to { text-shadow: 0 0 8px #4ecdc4; }
         }
 
         .status-indicator.offline {
@@ -693,6 +747,7 @@
         .team-member:hover {
             transform: translateY(-0.25rem);
             background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
 
         .team-member-avatar {
@@ -733,6 +788,8 @@
             z-index: 100;
             background: rgba(0, 0, 0, 0.95);
             grid-column: span 1;
+            border-color: #ffff55;
+            box-shadow: 0 0 15px rgba(255, 255, 85, 0.3);
         }
 
         .team-member.expanded .team-member-name-preview {
@@ -904,6 +961,7 @@
             background: #000000;
             color: #ffffff;
             border-color: #ffffff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
         }
 
         footer {
@@ -1103,7 +1161,7 @@
     <button class="panel-toggle right events" onclick="togglePanel('events')">СОБЫТИЯ</button>
 
     <div class="container">
-        <header>
+        header>
             <div class="logo-container">
                 <img src="logo.png" alt="Singularity Logo" class="logo-image" onerror="this.style.display='none'">
                 <div class="logo-title-wrapper">
@@ -1216,12 +1274,13 @@
             function animateStars() {
                 ctx.clearRect(0, 0, width, height);
 
-                // Отрисовка звезд
+                // Отрисовка звезд с пошаговой альфой
                 stars.forEach(star => {
                     star.alpha += star.speed;
                     if (star.alpha > 1 || star.alpha < 0.15) star.speed = -star.speed;
                     
-                    ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(star.alpha)})`;
+                    const steppedAlpha = Math.floor(Math.abs(star.alpha) * 5) / 5;
+                    ctx.fillStyle = `rgba(255, 255, 255, ${steppedAlpha})`;
                     ctx.fillRect(star.x, star.y, star.size, star.size);
                 });
 
@@ -1233,7 +1292,7 @@
                     for (let j = 0; j < s.length; j++) {
                         const pixelX = Math.floor(s.x - j * 3);
                         const pixelY = Math.floor(s.y - j * 3);
-                        const fade = (1 - j / s.length) * s.alpha;
+                        const fade = Math.floor(((1 - j / s.length) * s.alpha) * 4) / 4;
 
                         if (fade > 0) {
                             ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
@@ -1259,7 +1318,7 @@
         window.addEventListener('DOMContentLoaded', initStarsCanvas);
     </script>
 
-    <!-- Загрузка Сплешей (Minecraft Splashes) из splashes.json -->
+    <!-- Загрузка Сплешей из splashes.json -->
     <script>
         async function loadSplashes() {
             try {
