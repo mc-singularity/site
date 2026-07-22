@@ -85,6 +85,7 @@
             text-shadow: 1px 1px 0 #000000;
             min-height: 1.5rem;
             text-align: center;
+            padding: 0 1rem;
         }
 
         .loader-percent {
@@ -1223,7 +1224,7 @@
             <div class="loader-bar-fill" id="loaderBar"></div>
         </div>
         <div class="loader-percent" id="loaderPercent">0%</div>
-        <div class="loader-status" id="loaderStatus">ЗАГРУЗКА НАСТРОЕК...</div>
+        <div class="loader-status" id="loaderStatus">ИНИЦИАЛИЗАЦИЯ...</div>
     </div>
 
     <div class="crt-overlay"></div>
@@ -1337,7 +1338,7 @@
         </footer>
     </div>
 
-    <!-- Логика ретро заставки загрузки из loader.json -->
+    <!-- Ретро-загрузчик со случайной надписью из loader.json -->
     <script>
         async function runRetroLoader() {
             const loader = document.getElementById('retroLoader');
@@ -1347,31 +1348,27 @@
 
             if (!loader || !bar) return;
 
-            let statuses = [
-                'ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ...',
-                'ЗАГРУЗКА ЗВЁЗДНОГО НЕБА...',
-                'ПОДКЛЮЧЕНИЕ К БАЗЕ ДАННЫХ...',
-                'СИНХРОНИЗАЦИЯ ЛОРА И СОБЫТИЙ...',
-                'ПРОВЕРКА СТАТУСА СЕРВЕРА...',
-                'ГОТОВО!'
-            ];
+            let randomStatus = 'ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ...';
+            let finalStatus = 'ГОТОВО!';
 
             try {
                 const response = await fetch('loader.json?v=' + Date.now(), { cache: 'no-store' });
                 if (response.ok) {
                     const data = await response.json();
                     if (data.statuses && Array.isArray(data.statuses) && data.statuses.length > 0) {
-                        statuses = data.statuses;
+                        randomStatus = data.statuses[Math.floor(Math.random() * data.statuses.length)];
+                    }
+                    if (data.finalStatus) {
+                        finalStatus = data.finalStatus;
                     }
                 }
             } catch (e) {
-                console.warn('loader.json не найден, используются базовые статусы.');
+                console.warn('loader.json не найден, используется стандартный статус.');
             }
 
-            let progress = 0;
-            let statusIdx = 0;
-            statusText.textContent = statuses[0] || 'ЗАГРУЗКА...';
+            statusText.textContent = randomStatus;
 
+            let progress = 0;
             const interval = setInterval(() => {
                 progress += Math.floor(Math.random() * 12) + 5;
                 if (progress > 100) progress = 100;
@@ -1379,15 +1376,9 @@
                 bar.style.width = progress + '%';
                 percentText.textContent = progress + '%';
 
-                const nextIdx = Math.floor((progress / 100) * (statuses.length - 1));
-                if (nextIdx !== statusIdx && nextIdx < statuses.length) {
-                    statusIdx = nextIdx;
-                    statusText.textContent = statuses[statusIdx];
-                }
-
                 if (progress >= 100) {
                     clearInterval(interval);
-                    statusText.textContent = statuses[statuses.length - 1] || 'ГОТОВО!';
+                    statusText.textContent = finalStatus;
                     setTimeout(() => {
                         loader.classList.add('hidden');
                         document.body.classList.add('loaded');
