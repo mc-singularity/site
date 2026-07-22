@@ -192,7 +192,8 @@
         body.loaded .section.server-status.reveal-item   { transition-delay: 0.35s; }
         body.loaded .section.social-links.reveal-item    { transition-delay: 0.5s; }
         body.loaded .section.team-section.reveal-item    { transition-delay: 0.65s; }
-        body.loaded footer.reveal-item                   { transition-delay: 0.8s; }
+        body.loaded .section.media-section.reveal-item   { transition-delay: 0.75s; }
+        body.loaded footer.reveal-item                   { transition-delay: 0.9s; }
 
         .panel-toggle.reveal-item {
             opacity: 0;
@@ -514,6 +515,101 @@
 
         .section-title:hover {
             text-shadow: -2px 0 #ff0055, 2px 0 #00ffff, 0.1875rem 0.1875rem 0 #000000;
+        }
+
+        /* Стили плашки Медиа */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+            gap: 1.25rem;
+            padding: 0.5rem 0;
+        }
+
+        .media-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 0.1875rem solid var(--accent-color);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .media-card:hover {
+            transform: translateY(-0.25rem);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 12px var(--accent-shadow);
+        }
+
+        .media-type-badge {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            background: #000000;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            letter-spacing: 0.05rem;
+            z-index: 2;
+            font-family: 'uvKits', sans-serif !important;
+        }
+
+        .media-type-badge.stream {
+            border-color: #ff5555;
+            color: #ff5555;
+        }
+
+        .media-thumb-wrapper {
+            width: 100%;
+            height: 9rem;
+            overflow: hidden;
+            border: 0.125rem solid var(--accent-color);
+            position: relative;
+            background: #111111;
+        }
+
+        .media-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            image-rendering: pixelated;
+            transition: transform 0.2s ease;
+        }
+
+        .media-card:hover .media-thumbnail {
+            transform: scale(1.05);
+        }
+
+        .media-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex: 1;
+        }
+
+        .media-title {
+            font-size: 1.1rem;
+            color: #ffffff;
+            font-family: 'uvKits', sans-serif !important;
+            line-height: 1.3;
+            word-break: break-word;
+        }
+
+        .media-meta {
+            font-size: 0.85rem;
+            color: #aaaaaa;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'uvKits', sans-serif !important;
+            margin-top: auto;
+        }
+
+        .media-watch-btn {
+            width: 100%;
+            margin-top: 0.4rem;
+            text-decoration: none;
         }
 
         /* Строгое центрирование соц-кнопок */
@@ -1519,6 +1615,14 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Блок Медиа (Новые видео и стримы) -->
+            <div class="section media-section reveal-item">
+                <h2 class="section-title">МЕДИА</h2>
+                <div class="media-grid" id="mediaGrid">
+                    <!-- Загружается из media.json -->
+                </div>
+            </div>
         </div>
 
         <footer class="reveal-item">
@@ -1558,14 +1662,7 @@
             const splashElement = document.getElementById('splashText');
             if (!splashElement) return;
 
-            let splashes = [
-                { text: "Аметистовый дождь начинаеться..", color: "rgb(165, 113, 235)" },
-                { text: "В воздухе витает блеск аметиста", color: "rgb(174, 113, 235)" },
-                { text: "Не забудь надеть утяжеленный шлем!", color: "rgb(92, 91, 94)" },
-                { text: "Не летай на элитрах над аномальными зонами....", color: "rgb(89, 46, 53)" },
-                { text: "не взрывать суньхуньсяй....", color: "rgb(164, 166, 161)" },
-                { text: "Все очень любят* тц озди..", color: "rgb(172, 212, 112)" }
-            ];
+            let splashes = [];
 
             try {
                 const response = await fetch('splashes.json?v=' + Date.now(), { cache: 'no-store' });
@@ -1576,17 +1673,69 @@
                     }
                 }
             } catch (e) {
-                console.warn('Использование стандартных сплеш-фрагментов');
+                console.warn('Ошибка загрузки splashes.json');
             }
 
-            const randomSplash = splashes[Math.floor(Math.random() * splashes.length)];
-            splashElement.textContent = randomSplash.text;
-            if (randomSplash.color) {
-                splashElement.style.color = randomSplash.color;
+            if (splashes.length > 0) {
+                const randomSplash = splashes[Math.floor(Math.random() * splashes.length)];
+                splashElement.textContent = randomSplash.text;
+                if (randomSplash.color) {
+                    splashElement.style.color = randomSplash.color;
+                }
             }
         }
 
         window.addEventListener('DOMContentLoaded', loadSplashText);
+    </script>
+
+    <!-- Загрузка Медиа-материалов из media.json -->
+    <script>
+        async function loadMedia() {
+            const mediaGrid = document.getElementById('mediaGrid');
+            if (!mediaGrid) return;
+
+            try {
+                const response = await fetch('media.json?v=' + Date.now(), { cache: 'no-store' });
+                if (response.ok) {
+                    const data = await response.json();
+                    const mediaItems = data.media || [];
+
+                    if (mediaItems.length === 0) {
+                        mediaGrid.innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Медиа-контент пока отсутствует.</p>';
+                        return;
+                    }
+
+                    mediaGrid.innerHTML = mediaItems.map(item => {
+                        const isStream = item.type === 'stream';
+                        const badgeText = isStream ? 'СТРИМ' : 'ВИДЕО';
+                        const badgeClass = isStream ? 'stream' : 'video';
+                        return `
+                            <div class="media-card">
+                                <span class="media-type-badge ${badgeClass}">${badgeText}</span>
+                                <div class="media-thumb-wrapper">
+                                    <img src="${escapeHTML(item.thumbnail || 'card.jpg')}" class="media-thumbnail" alt="${escapeHTML(item.title)}" onerror="this.src='card.jpg'">
+                                </div>
+                                <div class="media-info">
+                                    <div class="media-title">${escapeHTML(item.title)}</div>
+                                    <div class="media-meta">
+                                        <span>${escapeHTML(item.author || '')}</span>
+                                        <span>${escapeHTML(item.date || '')}</span>
+                                    </div>
+                                </div>
+                                <a href="${escapeHTML(item.url || '#')}" target="_blank" rel="noopener noreferrer" class="more-info-btn media-watch-btn">СМОТРЕТЬ</a>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    mediaGrid.innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Медиа-контент пока отсутствует.</p>';
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки media.json:', e);
+                mediaGrid.innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Медиа-контент пока отсутствует.</p>';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadMedia);
     </script>
 
     <!-- Скрипт открытия и смены цветовой темы -->
