@@ -914,6 +914,16 @@
             font-family: 'uvKits', sans-serif !important;
         }
 
+        /* Централизованное окно онлайна */
+        .status-corner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+        }
+
         .status-indicator {
             font-size: 1.2rem;
             margin-bottom: 0.3125rem;
@@ -955,14 +965,18 @@
             color: #ffffff;
             text-shadow: 0.125rem 0.125rem 0 #000000;
             font-family: 'uvKits', sans-serif !important;
+            text-align: center;
         }
 
         .players-list {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             padding: 0.5rem;
             min-height: 5rem;
+            width: 100%;
+            text-align: center;
         }
 
         .players-content {
@@ -970,6 +984,7 @@
             flex-wrap: wrap;
             gap: 1rem;
             justify-content: center;
+            align-items: center;
             padding: 0.75rem 0;
             width: 100%;
         }
@@ -1267,6 +1282,16 @@
 
         .social-link:hover {
             background: var(--member-color, var(--accent-color));
+            color: #000000;
+        }
+
+        .modal-body .social-link {
+            border-color: var(--modal-accent-color, var(--accent-color));
+            color: var(--modal-accent-color, var(--accent-color));
+        }
+
+        .modal-body .social-link:hover {
+            background: var(--modal-accent-color, var(--accent-color));
             color: #000000;
         }
 
@@ -1767,6 +1792,11 @@
                 <div>
                     <div class="meta-label" style="margin-bottom:0.4rem;">ЛИЧНЫЙ ЛОР:</div>
                     <div class="lore-box" id="modalPersonalLore">Информация отсутствует.</div>
+                </div>
+                <!-- Блок ссылок снизу личного лора -->
+                <div id="modalSocialsContainer" style="display: none;">
+                    <div class="meta-label" style="margin-top:0.8rem; margin-bottom:0.4rem;">ССЫЛКИ:</div>
+                    <div class="team-member-socials" id="modalSocialsList"></div>
                 </div>
             </div>
         </div>
@@ -2576,6 +2606,21 @@
             }
 
             document.getElementById('modalPersonalLore').textContent = extra.personalLore || member.personalLore || 'Личный лор персонажа пока не зафиксирован.';
+
+            // Отрисовка ссылок под личным лором в поп-апе
+            const socials = member.socials || extra.socials || [];
+            const modalSocialsContainer = document.getElementById('modalSocialsContainer');
+            const modalSocialsList = document.getElementById('modalSocialsList');
+
+            if (socials && socials.length > 0) {
+                modalSocialsList.innerHTML = socials.map(s => 
+                    `<a href="${escapeHTML(s.url)}" target="_blank" class="social-link">${escapeHTML(s.platform)}</a>`
+                ).join('');
+                modalSocialsContainer.style.display = 'block';
+            } else {
+                modalSocialsList.innerHTML = '';
+                modalSocialsContainer.style.display = 'none';
+            }
 
             const skinImg = document.getElementById('modalSkinImg');
             const skinSrc = extra.skinUrl || member.skinUrl || `https://minotar.net/armor/bust/${member.name}/100`;
