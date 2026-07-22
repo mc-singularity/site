@@ -196,7 +196,7 @@
 
         .panel-toggle.reveal-item {
             opacity: 0;
-            transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s ease;
+            transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s ease, border-color 0.3s ease, color 0.3s ease;
         }
         .panel-toggle.left.reveal-item  { transform: translateX(-30px); }
         .panel-toggle.right.reveal-item { transform: translateX(30px); }
@@ -550,6 +550,7 @@
             font-family: 'uvKits', sans-serif !important;
             letter-spacing: 0.08rem;
             text-shadow: -1px 0 #ff0055, 1px 0 #00ffff;
+            transition: border-color 0.3s ease;
         }
 
         .toggle-container {
@@ -1205,9 +1206,9 @@
             font-family: 'uvKits', sans-serif !important;
         }
 
-        /* Возвращенные универсальные кнопки со строгой централизацией */
+        /* Универсальные кнопки, динамически меняющие цвет темы */
         .button {
-            background: #ffffff;
+            background: var(--accent-color);
             color: #000000;
             border: 0.25rem solid #000000;
             padding: 0.8rem 2rem;
@@ -1215,32 +1216,33 @@
             font-family: 'uvKits', sans-serif !important;
             cursor: pointer;
             margin: 0.5rem;
-            transition: all 0.2s ease;
+            transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
             text-shadow: none;
             display: inline-flex !important;
             justify-content: center;
             align-items: center;
             text-align: center;
             line-height: 1;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
         .button:hover {
             background: #000000;
-            color: #ffffff;
-            border-color: #ffffff;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px var(--accent-shadow);
         }
 
         /* Исправленная кнопка "Обновить" в блоке статуса сервера */
         .refresh-btn {
-            background: #ffffff;
+            background: var(--accent-color);
             color: #000000;
             border: 0.1875rem solid #000000;
             padding: 0.5rem 1.2rem;
             font-size: 1rem;
             cursor: pointer;
             font-family: 'uvKits', sans-serif !important;
-            transition: all 0.2s ease;
+            transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
             margin-top: 0.5rem;
             display: inline-flex !important;
             justify-content: center;
@@ -1549,6 +1551,43 @@
             </div>
         </div>
     </div>
+
+    <!-- Загрузка и отображение Сплешей из splashes.json -->
+    <script>
+        async function loadSplashText() {
+            const splashElement = document.getElementById('splashText');
+            if (!splashElement) return;
+
+            let splashes = [
+                { text: "Аметистовый дождь начинаеться..", color: "rgb(165, 113, 235)" },
+                { text: "В воздухе витает блеск аметиста", color: "rgb(174, 113, 235)" },
+                { text: "Не забудь надеть утяжеленный шлем!", color: "rgb(92, 91, 94)" },
+                { text: "Не летай на элитрах над аномальными зонами....", color: "rgb(89, 46, 53)" },
+                { text: "не взрывать суньхуньсяй....", color: "rgb(164, 166, 161)" },
+                { text: "Все очень любят* тц озди..", color: "rgb(172, 212, 112)" }
+            ];
+
+            try {
+                const response = await fetch('splashes.json?v=' + Date.now(), { cache: 'no-store' });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.splashes && data.splashes.length > 0) {
+                        splashes = data.splashes;
+                    }
+                }
+            } catch (e) {
+                console.warn('Использование стандартных сплеш-фрагментов');
+            }
+
+            const randomSplash = splashes[Math.floor(Math.random() * splashes.length)];
+            splashElement.textContent = randomSplash.text;
+            if (randomSplash.color) {
+                splashElement.style.color = randomSplash.color;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadSplashText);
+    </script>
 
     <!-- Скрипт открытия и смены цветовой темы -->
     <script>
