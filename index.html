@@ -1535,33 +1535,17 @@
             .button { padding: 0.625rem 1.25rem; font-size: 1.1rem; }
         }
 
-        .news-item {
-            position: relative;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--accent-dim);
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .news-date {
-            font-size: 0.9rem;
-            color: #888888;
-            line-height: 1;
-            margin-bottom: 0.6rem;
-            font-family: 'uvKits', sans-serif !important;
-        }
-
+        .news-item { position: relative; }
         .discord-badge {
             position: absolute;
-            top: 0.8rem;
-            right: 0.8rem;
-            height: 0.9rem;
-            width: auto;
+            top: 0.35rem;
+            right: 0.625rem;
+            width: 1.25rem;
+            height: 1.25rem;
             object-fit: contain;
             opacity: 0.9;
             image-rendering: pixelated;
         }
-
         .discord-gallery {
             display: flex !important;
             flex-direction: row !important;
@@ -1570,7 +1554,6 @@
             width: 100%;
             overflow: hidden;
         }
-
         .discord-gallery-item {
             flex: 1 1 0px;
             min-width: 0;
@@ -1580,7 +1563,6 @@
             border-radius: 4px;
             cursor: pointer;
         }
-
         .image-lightbox {
             position: fixed;
             top: 0;
@@ -1596,7 +1578,6 @@
             visibility: hidden;
             transition: opacity 0.25s ease;
         }
-
         .image-lightbox.show { opacity: 1; visibility: visible; }
         .image-lightbox img {
             max-width: 90vw;
@@ -1604,69 +1585,19 @@
             border: 2px solid var(--accent-color);
             object-fit: contain;
         }
-
-        /* Ретро Глитч-эффект для скрытых спойлеров */
         .discord-spoiler {
-            background-color: #0d0d0d;
+            background-color: #1a1a1a;
             color: transparent;
-            border: 1px dashed var(--accent-color);
             border-radius: 3px;
-            padding: 0 6px;
+            padding: 0 4px;
             cursor: pointer;
+            filter: blur(4px);
             display: inline-block;
-            position: relative;
-            user-select: none;
-            vertical-align: middle;
-            transition: all 0.2s ease;
         }
-
-        .discord-spoiler:not(.revealed) {
-            animation: spoilerShake 0.35s infinite alternate ease-in-out;
-        }
-
-        .discord-spoiler:not(.revealed)::before {
-            content: '█▓▒░ГЛИТЧ░▒▓█';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            color: var(--accent-color);
-            text-shadow: -1px 0 #ff0055, 1px 0 #00ffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            animation: glitchNoise 0.15s infinite;
-            overflow: hidden;
-        }
-
-        @keyframes spoilerShake {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(-1px, 1px); }
-            50% { transform: translate(1px, -1px); }
-            75% { transform: translate(-1px, -1px); }
-            100% { transform: translate(1px, 1px); }
-        }
-
-        @keyframes glitchNoise {
-            0% { text-shadow: -2px 0 #ff0055, 2px 0 #00ffff; opacity: 0.9; }
-            50% { text-shadow: 2px 0 #ff0055, -2px 0 #00ffff; opacity: 1; }
-            100% { text-shadow: -1px 0 #00ffff, 1px 0 #ff0055; opacity: 0.8; }
-        }
-
         .discord-spoiler.revealed {
             background-color: rgba(255, 255, 255, 0.12);
             color: #ffffff;
-            border-color: transparent;
-            animation: none;
-            filter: none;
-        }
-
-        .discord-spoiler.revealed::before {
-            display: none;
+            filter: blur(0);
         }
     </style>
 </head>
