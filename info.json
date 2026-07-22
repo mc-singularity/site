@@ -1,0 +1,40 @@
+{
+"playerInfos": [
+{
+"name": "CloverS_Kid",
+"status": "active",
+"history": "",
+"personalLore": "Тех админ и владелей сингурити.",
+"seasonsPeriod": "SL: Запуск — Настоящее время",
+"leaveReason": null,
+"skinUrl": null
+},
+{
+"name": "MR_0zdi",
+"status": "active",
+"history": "",
+"personalLore": "Билдер и лоровед.",
+"seasonsPeriod": "SL: Запуск — Настоящее время",
+"leaveReason": null,
+"skinUrl": null
+},
+{
+"name": "Yrk1z",
+"status": "active",
+"history": "",
+"personalLore": "",
+"seasonsPeriod": "SL: 1 Сезон — Настоящее время",
+"leaveReason": null,
+"skinUrl": null
+},
+{
+"name": "AshN1ght",
+"status": "retired",
+"history": "Был Тех.Админом на старте,и какое то время на первом сезоне.",
+"personalLore": "",
+"seasonsPeriod": "SL: Запуск — 1 Сезон",
+"leaveReason": "?",
+"skinUrl": null
+}
+]
+}
