@@ -1632,7 +1632,7 @@
         });
     </script>
 
-    <!-- Новости, Лор, События -->
+    <!-- Полный парсинг Новостей из news.json и discord_news.json -->
     <script>
         function escapeHTML(str) {
             return String(str || '').replace(/[&<>'"]/g, 
@@ -1653,36 +1653,136 @@
         async function loadNews() {
             const listContainer = document.getElementById('newsItemsList');
             listContainer.innerHTML = 'Загрузка новостей...';
+
+            const discordBadgeHTML = `<img src="discord-icon.png" class="discord-badge" title="Из Discord" alt="Discord">`;
             let html = '';
 
+            // 1. Загрузка стандартных новостей (news.json)
             try {
                 const resNews = await fetch('news.json?v=' + Date.now(), { cache: 'no-store' });
                 if (resNews.ok) {
                     const dataNews = await resNews.json();
-                    (dataNews.news || []).forEach(item => {
-                        html += `<div class="news-item"><div class="news-date">${escapeHTML(item.date || '')}</div><p>${parseMarkdownLinks(item.text || '')}</p></div>`;
+                    const news = dataNews.news || [];
+                    news.forEach(item => {
+                        let mediaHTML = '';
+                        let imgs = [];
+                        if (item.imageUrl) imgs.push(item.imageUrl);
+                        if (item.image) imgs.push(item.image);
+                        if (item.images && Array.isArray(item.images)) imgs = imgs.concat(item.images);
+
+                        if (imgs.length > 0) {
+                            mediaHTML = `<div class="discord-gallery">${imgs.map(u => `<img src="${escapeHTML(u)}" class="discord-gallery-item" onclick="openLightbox('${escapeHTML(u)}')">`).join('')}</div>`;
+                        }
+
+                        html += `
+                            <div class="news-item">
+                                <div class="news-date">${escapeHTML(item.date || '')}</div>
+                                <p>${parseMarkdownLinks(item.text || '')}</p>
+                                ${mediaHTML}
+                            </div>
+                        `;
                     });
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.error('news.json err:', e);
+            }
 
+            // 2. Загрузка новостей из Discord (discord_news.json)
             try {
                 const resDiscord = await fetch('discord_news.json?v=' + Date.now(), { cache: 'no-store' });
                 if (resDiscord.ok) {
                     const dataDiscord = await resDiscord.json();
                     const messages = Array.isArray(dataDiscord) ? dataDiscord : (dataDiscord.news ? dataDiscord.news : [dataDiscord]);
+
                     messages.forEach(msg => {
                         let dateStr = msg.date || (msg.timestamp ? new Date(msg.timestamp).toLocaleDateString('ru-RU') : 'Discord');
                         let mainContent = msg.content || msg.description || msg.text || '';
-                        let messageHTML = mainContent ? `<p style="margin-bottom: 0.8rem;">${parseMarkdownLinks(mainContent)}</p>` : '';
 
-                        if (msg.attachments && Array.isArray(msg.attachments)) {
-                            messageHTML += `<div class="discord-gallery">${msg.attachments.map(att => `<img src="${escapeHTML(att.url || att)}" class="discord-gallery-item" onclick="openLightbox('${escapeHTML(att.url || att)}')">`).join('')}</div>`;
+                        let messageHTML = '';
+
+                        if (mainContent) {
+                            messageHTML += `<p style="margin-bottom: 0.8rem;">${parseMarkdownLinks(mainContent)}</p>`;
                         }
 
-                        html += `<div class="news-item"><img src="discord-icon.png" class="discord-badge"><div class="news-date">${escapeHTML(dateStr)}</div>${messageHTML}</div>`;
+                        // Аттачменты
+                        if (msg.attachments && Array.isArray(msg.attachments) && msg.attachments.length > 0) {
+                            let attachGalleryHTML = `<div class="discord-gallery">`;
+                            msg.attachments.forEach(att => {
+                                const safeUrl = escapeHTML(att.url || att);
+                                attachGalleryHTML += `<img src="${safeUrl}" class="discord-gallery-item" onclick="openLightbox('${safeUrl}')" alt="attachment">`;
+                            });
+                            attachGalleryHTML += `</div>`;
+                            messageHTML += attachGalleryHTML;
+                        }
+
+                        // Эмбеды Discord
+                        if (msg.embeds && Array.isArray(msg.embeds)) {
+                            msg.embeds.forEach(embed => {
+                                let embedSection = '';
+
+                                if (embed.author && embed.author.name) {
+                                    embedSection += `<div class="event-title" style="margin-top: 0.6rem; color: var(--accent-color);">${parseMarkdownLinks(embed.author.name)}</div>`;
+                                }
+                                if (embed.title) {
+                                    embedSection += `<div class="event-title" style="margin-top: 0.4rem;">${parseMarkdownLinks(embed.title)}</div>`;
+                                }
+                                if (embed.description) {
+                                    embedSection += `<p style="margin-bottom: 0.6rem;">${parseMarkdownLinks(embed.description)}</p>`;
+                                }
+
+                                if (embed.fields && Array.isArray(embed.fields)) {
+                                    embed.fields.forEach(f => {
+                                        const fieldName = f.name || f.rawName || '';
+                                        const fieldValue = f.value || f.rawValue || '';
+                                        embedSection += `
+                                            <div class="news-field">
+                                                ${fieldName ? `<div class="news-field-title">${parseMarkdownLinks(fieldName)}</div>` : ''}
+                                                ${fieldValue ? `<div>${parseMarkdownLinks(fieldValue)}</div>` : ''}
+                                            </div>
+                                        `;
+                                    });
+                                }
+
+                                let images = [];
+                                if (embed.images && Array.isArray(embed.images)) {
+                                    images = embed.images.map(img => typeof img === 'object' ? img.url : img).filter(Boolean);
+                                } else if (embed.image && embed.image.url) {
+                                    images.push(embed.image.url);
+                                } else if (embed.thumbnail && embed.thumbnail.url) {
+                                    images.push(embed.thumbnail.url);
+                                }
+
+                                if (images.length > 0) {
+                                    let galleryHTML = `<div class="discord-gallery">`;
+                                    images.forEach(imgUrl => {
+                                        const safeUrl = escapeHTML(imgUrl);
+                                        galleryHTML += `<img src="${safeUrl}" class="discord-gallery-item" onclick="openLightbox('${safeUrl}')" alt="preview">`;
+                                    });
+                                    galleryHTML += `</div>`;
+                                    embedSection += galleryHTML;
+                                }
+
+                                if (embed.footer && (embed.footer.text || typeof embed.footer === 'string')) {
+                                    const footerText = embed.footer.text || embed.footer;
+                                    embedSection += `<div style="font-size: 0.85rem; color: #888888; margin-top: 0.4rem;">${parseMarkdownLinks(footerText)}</div>`;
+                                }
+
+                                messageHTML += embedSection;
+                            });
+                        }
+
+                        html += `
+                            <div class="news-item">
+                                ${discordBadgeHTML}
+                                <div class="news-date">${escapeHTML(dateStr)}</div>
+                                ${messageHTML}
+                            </div>
+                        `;
                     });
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.error('discord_news.json err:', e);
+            }
 
             listContainer.innerHTML = html || '<p style="color: #888;">Нет новостей.</p>';
         }
@@ -1690,14 +1790,20 @@
         function openLightbox(url) {
             const lightbox = document.getElementById('imageLightbox');
             const lightboxImg = document.getElementById('lightboxImage');
-            if (lightbox && lightboxImg) { lightboxImg.src = url; lightbox.classList.add('show'); }
+            if (lightbox && lightboxImg) {
+                lightboxImg.src = url;
+                lightbox.classList.add('show');
+            }
         }
 
         function closeLightbox() {
             const lightbox = document.getElementById('imageLightbox');
-            if (lightbox) lightbox.classList.remove('show');
+            if (lightbox) {
+                lightbox.classList.remove('show');
+            }
         }
 
+        // Загрузка Лора из lore.json
         async function loadLore() {
             const listContainer = document.getElementById('loreItemsList');
             try {
@@ -1717,6 +1823,7 @@
             } catch (error) { listContainer.innerHTML = '<p style="color: #ff6b6b;">Ошибка загрузки lore.json</p>'; }
         }
 
+        // Загрузка Событий из events.json
         async function loadEvents() {
             const listContainer = document.getElementById('eventsItemsList');
             try {
