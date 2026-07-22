@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -25,6 +26,24 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+        }
+
+        /* Анимация проявления сайта при входе */
+        .container, .panel-toggle {
+            animation: pageEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+                filter: blur(2px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
         }
 
         /* Стилизация пиксельного скроллбара */
@@ -337,7 +356,8 @@
 
         .search-input:focus {
             background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            border-color: #cccccc;
+            box-shadow: 0 0 10px rgba(204, 204, 204, 0.5);
         }
 
         .search-input::placeholder {
@@ -805,13 +825,13 @@
             display: none;
         }
 
-        /* Обычный развернутый игрок задействует 1 колонку */
+        /* Серый цвет рамки развернутой карточки вместо желтого */
         .team-member.expanded {
             z-index: 100;
             background: rgba(0, 0, 0, 0.95);
             grid-column: span 1;
-            border-color: #ffff55;
-            box-shadow: 0 0 15px rgba(255, 255, 85, 0.3);
+            border-color: #cccccc;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
         }
 
         .team-member.expanded .team-member-name-preview {
