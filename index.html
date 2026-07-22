@@ -1290,6 +1290,49 @@
             font-weight: bold;
             color: #ffffff;
         }
+
+.discord-spoiler {
+    background-color: #1a1a1a;
+    color: transparent;
+    border-radius: 3px;
+    padding: 0 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
+    filter: blur(4px);
+    position: relative;
+    display: inline-block;
+}
+
+.discord-spoiler:hover:not(.revealed) {
+    background-color: #2b2b2b;
+    filter: blur(2px);
+    animation: spoilerGlitch 0.2s infinite alternate;
+}
+
+@keyframes spoilerGlitch {
+    0% {
+        transform: translate(0, 0);
+        text-shadow: -1px 0 #ff0055, 1px 0 #00ffff;
+    }
+    50% {
+        transform: translate(-1px, 1px);
+    }
+    100% {
+        transform: translate(1px, -1px);
+        text-shadow: 1px 0 #ff0055, -1px 0 #00ffff;
+    }
+}
+
+.discord-spoiler.revealed {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    filter: blur(0);
+    cursor: text;
+    user-select: text;
+    animation: none;
+}
+        
     </style>
 </head>
 <body>
@@ -1646,12 +1689,19 @@
 
         // Загрузка новостей 
 function parseMarkdownLinks(text) {
-            if (!text) return '';
-            const escaped = escapeHTML(text);
-            return escaped
-                .replace(/\n/g, '<br>')
-                .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #4ecdc4; text-decoration: underline;">$1</a>');
-        }
+    if (!text) return '';
+    let escaped = escapeHTML(text);
+
+    escaped = escaped.replace(/\|\|([\s\S]+?)\|\|/g, function(match, content) {
+        return `<span class="discord-spoiler" onclick="this.classList.add('revealed')">${content}</span>`;
+    });
+
+    escaped = escaped.replace(/&lt;:([a-zA-Z0-9_]+):[0-9]+&gt;/g, ':$1:');
+
+    return escaped
+        .replace(/\n/g, '<br>')
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #4ecdc4; text-decoration: underline;">$1</a>');
+}
 
 async function loadNews() {
     const listContainer = document.getElementById('newsItemsList');
