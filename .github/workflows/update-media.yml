@@ -1,27 +1,23 @@
 name: Update YouTube & Twitch Media JSON
 
 on:
-  schedule:
-    # Автоматический запуск каждые 6 часов
-       - cron: '23 * * * *'
-  workflow_dispatch: # Возможность запустить вручную через вкладку Actions
+  repository_dispatch:
+    types: [update-media] # Внешний триггер (Cron-Job.org / UptimeRobot)
+  workflow_dispatch:      # Ручной запуск из интерфейса GitHub
 
 jobs:
   update-media:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Скачиваем файлы репозитория
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Настраиваем окружение Node.js (актуальная версия 22)
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      # 3. Запускаем JS скрипт с передачей секретных ключей
       - name: Run media updater script
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
@@ -29,7 +25,6 @@ jobs:
           TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
         run: node update_media.js
 
-      # 4. Проверяем изменения, синхронизируем с веткой main и отправляем обновленный media.json
       - name: Commit and push updated media.json
         run: |
           git config --global user.name 'github-actions[bot]'
