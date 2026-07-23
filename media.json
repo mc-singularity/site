@@ -1,6 +1,15 @@
 {
   "media": [
     {
+      "title": "тест х2",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=JIo9hmve7G0",
+      "thumbnail": "https://i.ytimg.com/vi/JIo9hmve7G0/maxresdefault.jpg",
+      "date": "2026-07-23"
+    },
+    {
       "title": "тест",
       "author": "Folksy13_dll",
       "platform": "youtube",
@@ -719,15 +728,6 @@
       "url": "https://www.youtube.com/watch?v=Rd4Oh3GAiOE",
       "thumbnail": "https://i.ytimg.com/vi/Rd4Oh3GAiOE/hqdefault.jpg",
       "date": "2025-05-30"
-    },
-    {
-      "title": "SOTAREKO MIX - 40+ min",
-      "author": "Folksy13_dll",
-      "platform": "youtube",
-      "type": "video",
-      "url": "https://www.youtube.com/watch?v=ejbh50fzZL4",
-      "thumbnail": "https://i.ytimg.com/vi/ejbh50fzZL4/maxresdefault.jpg",
-      "date": "2025-05-25"
     },
     {
       "title": "#minecraft #music #anime",
