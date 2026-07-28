@@ -1711,7 +1711,7 @@
                 <span class="tooltip">Нажмите для смены цвета темы</span>
                 <img src="logo.png" alt="Singularity Logo" class="logo-image" onerror="this.style.display='none'">
                 <div class="logo-title-wrapper">
-                    <h1 class="logo">SINGULARITY</h1>
+                    <h1 class="logo" id="mainLogoTitle">SINGULARITY</h1>
                     <div class="splash-text" id="splashText"></div>
                 </div>
                 <span class="mobile-logo-hint">( нажми для смены цвета )</span>
@@ -1849,6 +1849,79 @@
             </div>
         </div>
     </div>
+
+    <!-- Пасхалка с комбинацией клавиш и сохранением в localStorage -->
+    <script>
+        (function setupEasterEggSequence() {
+            const easterEggText = 'Контора пидорасов';
+            const STORAGE_KEY = 'singularity_easter_egg_unlocked';
+
+            function applyEasterEgg() {
+                const mainLogo = document.getElementById('mainLogoTitle');
+                if (mainLogo) mainLogo.textContent = easterEggText;
+                
+                const loaderLogo = document.querySelector('.loader-logo');
+                if (loaderLogo) loaderLogo.textContent = easterEggText;
+            }
+
+            function unlockEasterEgg() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, 'true');
+                } catch (e) {
+                    console.warn('LocalStorage недоступен');
+                }
+                applyEasterEgg();
+            }
+
+            // Если пасхалка уже была активирована ранее, сразу применить её
+            try {
+                if (localStorage.getItem(STORAGE_KEY) === 'true') {
+                    applyEasterEgg();
+                    return;
+                }
+            } catch (e) {}
+
+            // 1. Активация Конами-кодом: Up Up Down Down Left Right Left Right B A
+            const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
+            let konamiIndex = 0;
+
+            document.addEventListener('keydown', function(e) {
+                const key = e.code || e.key;
+                const expectedKey = konamiCode[konamiIndex];
+
+                if (key === expectedKey || e.key.toUpperCase() === expectedKey.replace('Key', '')) {
+                    konamiIndex++;
+                    if (konamiIndex === konamiCode.length) {
+                        unlockEasterEgg();
+                        konamiIndex = 0;
+                    }
+                } else {
+                    konamiIndex = 0;
+                }
+            });
+
+            // 2. Альтернатива (для мобильных): 7 быстро связанных кликов по логотипу
+            let logoClicks = 0;
+            let clickTimer = null;
+            const logoContainer = document.querySelector('.logo-container');
+
+            if (logoContainer) {
+                logoContainer.addEventListener('click', function() {
+                    logoClicks++;
+                    clearTimeout(clickTimer);
+
+                    if (logoClicks >= 7) {
+                        unlockEasterEgg();
+                        logoClicks = 0;
+                    } else {
+                        clickTimer = setTimeout(() => {
+                            logoClicks = 0;
+                        }, 500); // 500мс между кликами
+                    }
+                });
+            }
+        })();
+    </script>
 
     <!-- Загрузка и отображение Сплешей из splashes.json -->
     <script>
