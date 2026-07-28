@@ -1850,11 +1850,12 @@
         </div>
     </div>
 
-    <!-- Пасхалка с комбинацией клавиш и сохранением в localStorage -->
+    <!-- Пасхалка с комбинацией клавиш, таймером на 10 секунд и однократным использованием -->
     <script>
         (function setupEasterEggSequence() {
             const easterEggText = 'Контора пидорасов';
-            const STORAGE_KEY = 'singularity_easter_egg_unlocked';
+            const defaultText = 'SINGULARITY';
+            const STORAGE_KEY = 'singularity_easter_egg_used';
 
             function applyEasterEgg() {
                 const mainLogo = document.getElementById('mainLogoTitle');
@@ -1862,37 +1863,43 @@
                 
                 const loaderLogo = document.querySelector('.loader-logo');
                 if (loaderLogo) loaderLogo.textContent = easterEggText;
+
+                // Возвращаем исходный текст через 10 секунд
+                setTimeout(() => {
+                    if (mainLogo) mainLogo.textContent = defaultText;
+                    if (loaderLogo) loaderLogo.textContent = defaultText;
+                }, 10000);
             }
 
-            function unlockEasterEgg() {
+            function triggerEasterEgg() {
+                // Запоминаем в localStorage, что пасхалка уже была использована
                 try {
                     localStorage.setItem(STORAGE_KEY, 'true');
                 } catch (e) {
                     console.warn('LocalStorage недоступен');
                 }
+
+                // Показываем текст на 10 секунд
                 applyEasterEgg();
             }
-
-            // Если пасхалка уже была активирована ранее, сразу применить её
-            try {
-                if (localStorage.getItem(STORAGE_KEY) === 'true') {
-                    applyEasterEgg();
-                    return;
-                }
-            } catch (e) {}
 
             // 1. Активация Конами-кодом: Up Up Down Down Left Right Left Right B A
             const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
             let konamiIndex = 0;
 
             document.addEventListener('keydown', function(e) {
+                // Если пасхалка уже была использована ранее — ничего не делаем
+                try {
+                    if (localStorage.getItem(STORAGE_KEY) === 'true') return;
+                } catch (err) {}
+
                 const key = e.code || e.key;
                 const expectedKey = konamiCode[konamiIndex];
 
                 if (key === expectedKey || e.key.toUpperCase() === expectedKey.replace('Key', '')) {
                     konamiIndex++;
                     if (konamiIndex === konamiCode.length) {
-                        unlockEasterEgg();
+                        triggerEasterEgg();
                         konamiIndex = 0;
                     }
                 } else {
@@ -1907,11 +1914,16 @@
 
             if (logoContainer) {
                 logoContainer.addEventListener('click', function() {
+                    // Если пасхалка уже была использована ранее — выходим
+                    try {
+                        if (localStorage.getItem(STORAGE_KEY) === 'true') return;
+                    } catch (err) {}
+
                     logoClicks++;
                     clearTimeout(clickTimer);
 
                     if (logoClicks >= 7) {
-                        unlockEasterEgg();
+                        triggerEasterEgg();
                         logoClicks = 0;
                     } else {
                         clickTimer = setTimeout(() => {
