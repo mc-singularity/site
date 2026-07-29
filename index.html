@@ -914,6 +914,78 @@
             font-family: 'uvKits', sans-serif !important;
         }
 
+        /* --- Стили для раскрывающихся категорий сезона в боковой панели ЛОРА --- */
+        .lore-season {
+            background: rgba(255, 255, 255, 0.03);
+            border: 0.125rem solid var(--accent-color);
+            margin-bottom: 0.9rem;
+            transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 2px 2px 0px #000000;
+        }
+
+        .lore-season-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.6);
+            user-select: none;
+            transition: background 0.2s ease;
+        }
+
+        .lore-season-header:hover {
+            background: var(--accent-dim);
+        }
+
+        .lore-season-header h4 {
+            font-size: 1.25rem;
+            color: var(--accent-color);
+            margin: 0;
+            font-family: 'uvKits', sans-serif !important;
+            letter-spacing: 0.05rem;
+            transition: color 0.3s ease;
+        }
+
+        .lore-season-arrow {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s ease;
+            font-family: 'uvKits', sans-serif !important;
+            display: inline-block;
+        }
+
+        .lore-season.open .lore-season-arrow {
+            transform: rotate(90deg);
+        }
+
+        .lore-season-content {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            padding: 0 1rem;
+            transition: max-height 0.4s ease, opacity 0.35s ease, padding 0.3s ease;
+        }
+
+        .lore-season.open .lore-season-content {
+            max-height: 3000px;
+            opacity: 1;
+            padding: 0.8rem 1rem 1rem 1rem;
+            border-top: 1px dashed var(--accent-dim);
+        }
+
+        .lore-season-content p {
+            font-size: 1rem;
+            color: #dddddd;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+            font-family: 'uvKits', sans-serif !important;
+        }
+
+        .lore-season-content p:last-child {
+            margin-bottom: 0;
+        }
+
         /* Централизованное окно онлайна */
         .status-corner {
             display: flex;
@@ -2358,7 +2430,7 @@
                 .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')
                 .replace(/~~([\s\S]+?)~~/g, '<del>$1</del>')
                 .replace(/`([^`]+)`/g, '<code style="background: rgba(255,255,255,0.1); padding: 2px 4px;">$1</code>');
-}
+        }
 
         async function loadNews() {
             const listContainer = document.getElementById('newsItemsList');
@@ -2511,7 +2583,7 @@
             }
         }
 
-        // Загрузка Лора из lore.json
+        // Загрузка и отрисовка Лора с раскрывающимися категориями сезонов
         async function loadLore() {
             const listContainer = document.getElementById('loreItemsList');
             try {
@@ -2519,7 +2591,7 @@
                 const data = await response.json();
                 listContainer.innerHTML = (data.seasons || []).map(season => `
                     <div class="lore-season">
-                        <div class="lore-season-header" onclick="toggleLoreSeason(this.parentElement)">
+                        <div class="lore-season-header" onclick="toggleLoreSeason(this)">
                             <h4>${escapeHTML(season.title)}</h4>
                             <span class="lore-season-arrow">&gt;</span>
                         </div>
@@ -2898,10 +2970,11 @@
             document.getElementById('panelOverlay').classList.remove('show');
         }
 
-        function toggleLoreSeason(season) {
-            season.classList.toggle('open');
-            const content = season.querySelector('.lore-season-content');
-            if (content) content.classList.toggle('open');
+        function toggleLoreSeason(headerElement) {
+            const season = headerElement.closest('.lore-season');
+            if (season) {
+                season.classList.toggle('open');
+            }
         }
 
         window.checkServerStatus = async function() {
