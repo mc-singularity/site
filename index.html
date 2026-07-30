@@ -2034,6 +2034,131 @@
             box-shadow: 0 0 15px rgba(255, 0, 85, 0.5);
         }
 
+        /* Стили для взрыва от Азурпа */
+        .explosion-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 100, 0, 0.95);
+            z-index: 999999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .explosion-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dynamite-container {
+            text-align: center;
+            animation: dynamiteShake 0.5s ease-in-out infinite;
+        }
+
+        @keyframes dynamiteShake {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-10px) rotate(-5deg); }
+            75% { transform: translateX(10px) rotate(5deg); }
+        }
+
+        .dynamite {
+            font-size: 8rem;
+            animation: dynamitePulse 0.3s ease-in-out infinite;
+        }
+
+        @keyframes dynamitePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .explosion-text {
+            font-size: 4rem;
+            color: #ffffff;
+            font-family: 'uvKits', sans-serif !important;
+            text-shadow: 0 0 20px #ff0000, 4px 4px 0 #000000;
+            margin-top: 1rem;
+            opacity: 0;
+            animation: textAppear 0.5s ease-out 1s forwards;
+        }
+
+        @keyframes textAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Анимации разрушения интерфейса */
+        body.exploding .section {
+            animation: sectionExplode 1s ease-out forwards;
+        }
+
+        body.exploding header {
+            animation: headerExplode 1s ease-out forwards;
+        }
+
+        body.exploding footer {
+            animation: footerExplode 1s ease-out forwards;
+        }
+
+        body.exploding .team-member {
+            animation: memberExplode 1s ease-out forwards;
+        }
+
+        @keyframes sectionExplode {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--random-x, 100px), var(--random-y, -100px)) rotate(var(--random-rot, 45deg));
+                opacity: 0;
+            }
+        }
+
+        @keyframes headerExplode {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-200px) rotate(15deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes footerExplode {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(200px) rotate(-15deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes memberExplode {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--random-x, 50px), var(--random-y, -50px)) rotate(var(--random-rot, 30deg)) scale(0);
+                opacity: 0;
+            }
+        }
+
         .lore-box {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed var(--modal-accent-color, var(--accent-color));
@@ -2535,6 +2660,14 @@
                 </div>
                 <button class="reset-debt-btn" onclick="resetDebt()">СБРОСИТЬ ДОЛГ</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Пасхалка: Взрыв от Азурпа -->
+    <div class="explosion-overlay" id="explosionOverlay">
+        <div class="dynamite-container">
+            <div class="dynamite">💣</div>
+            <div class="explosion-text">BOOM!</div>
         </div>
     </div>
 
@@ -3337,6 +3470,20 @@
                 });
             }
 
+            // Easter egg: ArtAzurp explosion
+            if (member.name === 'ArtAzurp' || member.name === 'artAzurp') {
+                memberDiv.style.cursor = 'pointer';
+                let clickCount = 0;
+                memberDiv.addEventListener('click', (e) => {
+                    if (e.target.closest('button') || e.target.closest('a')) return;
+                    clickCount++;
+                    if (clickCount >= 4) {
+                        clickCount = 0;
+                        triggerExplosion();
+                    }
+                });
+            }
+
             const hexColor = decimalToHex(member.color);
             if (hexColor) {
                 memberDiv.dataset.color = hexColor;
@@ -3590,6 +3737,43 @@
             setTimeout(() => {
                 btn.style.transform = 'scale(1)';
             }, 100);
+        }
+
+        // Explosion easter egg for ArtAzurp
+        function triggerExplosion() {
+            const overlay = document.getElementById('explosionOverlay');
+            overlay.classList.add('show');
+
+            // Add random values for explosion animations
+            document.querySelectorAll('.section').forEach(el => {
+                el.style.setProperty('--random-x', (Math.random() * 400 - 200) + 'px');
+                el.style.setProperty('--random-y', (Math.random() * 400 - 200) + 'px');
+                el.style.setProperty('--random-rot', (Math.random() * 360 - 180) + 'deg');
+            });
+
+            document.querySelectorAll('.team-member').forEach(el => {
+                el.style.setProperty('--random-x', (Math.random() * 300 - 150) + 'px');
+                el.style.setProperty('--random-y', (Math.random() * 300 - 150) + 'px');
+                el.style.setProperty('--random-rot', (Math.random() * 720 - 360) + 'deg');
+            });
+
+            // Trigger explosion after a short delay
+            setTimeout(() => {
+                document.body.classList.add('exploding');
+            }, 500);
+
+            // Reset after 3 seconds
+            setTimeout(() => {
+                overlay.classList.remove('show');
+                document.body.classList.remove('exploding');
+
+                // Reset all animations
+                document.querySelectorAll('.section, .team-member').forEach(el => {
+                    el.style.removeProperty('--random-x');
+                    el.style.removeProperty('--random-y');
+                    el.style.removeProperty('--random-rot');
+                });
+            }, 3500);
         }
 
         loadTeamMembers();
