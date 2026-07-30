@@ -2176,6 +2176,30 @@
             transform: scale(1.05);
         }
 
+        /* Стили для кнопки восстановления итальянского */
+        .italian-restore-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #0099ff 0%, #0066cc 100%);
+            border: 3px solid #0099ff;
+            color: #ffffff;
+            padding: 1rem 2rem;
+            font-family: 'uvKits', sans-serif !important;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 20px rgba(0, 153, 255, 0.6);
+            z-index: 100000;
+            animation: rocking 2s ease-in-out infinite;
+        }
+
+        .italian-restore-btn:hover {
+            background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+            box-shadow: 0 0 30px rgba(0, 153, 255, 0.9);
+            transform: scale(1.05);
+        }
+
         /* Анимации разрушения интерфейса */
         body.exploding .section {
             animation: sectionExplode 1s ease-out forwards;
@@ -2749,6 +2773,9 @@
             <button class="restore-btn" onclick="restoreSite()">ВОССТАНОВИТЬ</button>
         </div>
     </div>
+
+    <!-- Пасхалка: Итальянский перевод -->
+    <button class="italian-restore-btn" id="italianRestoreBtn" onclick="restoreRussian()" style="display: none;">Torna al Russo</button>
 
     <!-- Пасхалка с комбинацией клавиш, таймером на 10 секунд и однократным использованием -->
     <script>
@@ -3563,6 +3590,20 @@
                 });
             }
 
+            // Easter egg: pitrmatti Italian translation
+            if (member.name === 'pitrmatti' || member.name === 'Pitrmatti') {
+                memberDiv.style.cursor = 'pointer';
+                let clickCount = 0;
+                memberDiv.addEventListener('click', (e) => {
+                    if (e.target.closest('button') || e.target.closest('a')) return;
+                    clickCount++;
+                    if (clickCount >= 4) {
+                        clickCount = 0;
+                        switchToItalian();
+                    }
+                });
+            }
+
             const hexColor = decimalToHex(member.color);
             if (hexColor) {
                 memberDiv.dataset.color = hexColor;
@@ -3916,6 +3957,87 @@
 
             // Remove any remaining particles
             document.querySelectorAll('.particle').forEach(p => p.remove());
+        }
+
+        // Italian translation easter egg for pitrmatti
+        const originalTexts = new Map();
+        const italianTranslations = {
+            'Приватный сервер КМ': 'Server Privato CM',
+            'Состав команды': 'Squadra',
+            'Показать состав': 'Mostra Squadra',
+            'Скрыть состав': 'Nascondi Squadra',
+            'Сортировка:': 'Ordinamento:',
+            'А-Я': 'A-Z',
+            'Поиск по имени:': 'Cerca per nome:',
+            'Игрок проекта': 'Giocatore del Progetto',
+            'Администратор': 'Amministratore',
+            'Модератор': 'Moderatore',
+            'Разработчик': 'Sviluppatore',
+            'Художник': 'Artista',
+            'Стример': 'Streamer',
+            'Видео': 'Video',
+            'Стримы': 'Stream',
+            'Shorts': 'Shorts',
+            'Все': 'Tutto',
+            'Новости': 'Notizie',
+            'Загрузка новостей...': 'Caricamento notizie...',
+            'Подробнее': 'Per saperne di più',
+            'Социальные сети': 'Social Network',
+            'УРОБОРОС БАНК': 'BANCO UROBOROS',
+            'Сумма кредита:': 'Importo del prestito:',
+            'Срок (дней):': 'Durata (giorni):',
+            'РАССЧИТАТЬ': 'CALCOLA',
+            'МИНИ-ИГРА: КЛИКЕР ДОЛГА ЛАЙНА': 'MINI-GIOCO: CLICKER DEL DEBITO DI LAIN',
+            'ТЕКУЩИЙ ДОЛГ:': 'DEBITO ATTUALE:',
+            'Каждый клик: +200% долга': 'Ogni clic: +200% debito',
+            'КЛИКНИ!': 'CLICCA!',
+            'Кликов:': 'Clic:',
+            'Множитель:': 'Moltiplicatore:',
+            'СБРОСИТЬ ДОЛГ': 'RESETTA DEBITO',
+            'Азурп опять все взорвал..': 'Azurp ha fatto esplodere tutto di nuovo..',
+            'ВОССТАНОВИТЬ': 'RIPRISTINA',
+            'Максим,скажи нахуй': 'Massimo,dì cazzo',
+            'Максим здесь!': 'Massimo è qui!',
+            'Сингулярность': 'Singolarità',
+            'Архив': 'Archivio'
+        };
+
+        function switchToItalian() {
+            // Store original texts
+            document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div, button, a, label, input::placeholder').forEach(el => {
+                const key = el.tagName + '-' + Array.from(el.parentElement.children).indexOf(el);
+                if (el.textContent && !el.textContent.includes('http')) {
+                    originalTexts.set(el, el.textContent);
+                }
+            });
+
+            // Translate all text elements
+            document.querySelectorAll('*').forEach(el => {
+                if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
+                    const text = el.textContent;
+                    for (const [russian, italian] of Object.entries(italianTranslations)) {
+                        if (text.includes(russian)) {
+                            el.textContent = text.replace(russian, italian);
+                        }
+                    }
+                }
+            });
+
+            // Show restore button
+            document.getElementById('italianRestoreBtn').style.display = 'block';
+        }
+
+        function restoreRussian() {
+            // Restore original texts
+            originalTexts.forEach((originalText, el) => {
+                el.textContent = originalText;
+            });
+
+            // Clear the map
+            originalTexts.clear();
+
+            // Hide restore button
+            document.getElementById('italianRestoreBtn').style.display = 'none';
         }
 
         loadTeamMembers();
