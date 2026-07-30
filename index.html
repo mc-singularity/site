@@ -2178,9 +2178,9 @@
 
         /* Стили для кнопки восстановления итальянского */
         .italian-restore-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
+            position: relative;
+            display: block;
+            margin: 2rem auto;
             background: linear-gradient(135deg, #0099ff 0%, #0066cc 100%);
             border: 3px solid #0099ff;
             color: #ffffff;
@@ -2190,7 +2190,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: 0 0 20px rgba(0, 153, 255, 0.6);
-            z-index: 100000;
             animation: rocking 2s ease-in-out infinite;
         }
 
@@ -2659,6 +2658,8 @@
 
         <footer class="reveal-item">
             <p>Singularity | Season 1 | 2026</p>
+            <!-- Пасхалка: Итальянский перевод -->
+            <button class="italian-restore-btn" id="italianRestoreBtn" onclick="restoreRussian()" style="display: none;">Torna al Russo</button>
         </footer>
     </div>
 
@@ -2773,9 +2774,6 @@
             <button class="restore-btn" onclick="restoreSite()">ВОССТАНОВИТЬ</button>
         </div>
     </div>
-
-    <!-- Пасхалка: Итальянский перевод -->
-    <button class="italian-restore-btn" id="italianRestoreBtn" onclick="restoreRussian()" style="display: none;">Torna al Russo</button>
 
     <!-- Пасхалка с комбинацией клавиш, таймером на 10 секунд и однократным использованием -->
     <script>
@@ -4003,24 +4001,28 @@
         };
 
         function switchToItalian() {
-            // Store original texts
-            document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div, button, a, label, input::placeholder').forEach(el => {
-                const key = el.tagName + '-' + Array.from(el.parentElement.children).indexOf(el);
-                if (el.textContent && !el.textContent.includes('http')) {
-                    originalTexts.set(el, el.textContent);
+            // Store original texts from all text nodes
+            const walker = document.createTreeWalker(
+                document.body,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+            
+            let node;
+            while (node = walker.nextNode()) {
+                if (node.textContent.trim() && !node.textContent.includes('http') && !node.textContent.includes('data:')) {
+                    originalTexts.set(node, node.textContent);
                 }
-            });
+            }
 
-            // Translate all text elements
-            document.querySelectorAll('*').forEach(el => {
-                if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
-                    const text = el.textContent;
-                    for (const [russian, italian] of Object.entries(italianTranslations)) {
-                        if (text.includes(russian)) {
-                            el.textContent = text.replace(russian, italian);
-                        }
-                    }
+            // Translate all text nodes
+            originalTexts.forEach((originalText, node) => {
+                let translatedText = originalText;
+                for (const [russian, italian] of Object.entries(italianTranslations)) {
+                    translatedText = translatedText.replace(new RegExp(russian, 'g'), italian);
                 }
+                node.textContent = translatedText;
             });
 
             // Show restore button
@@ -4029,8 +4031,8 @@
 
         function restoreRussian() {
             // Restore original texts
-            originalTexts.forEach((originalText, el) => {
-                el.textContent = originalText;
+            originalTexts.forEach((originalText, node) => {
+                node.textContent = originalText;
             });
 
             // Clear the map
