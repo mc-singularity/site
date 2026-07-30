@@ -325,7 +325,7 @@
             background-position: center;
             background-repeat: no-repeat;
             z-index: -1;
-            transition: transform 0.1s ease-out;
+            transition: transform 0.1s ease-out, background-image 0.5s ease;
             will-change: transform;
             image-rendering: pixelated;
         }
@@ -1993,7 +1993,7 @@
     <!-- Пасхалка с комбинацией клавиш, таймером на 10 секунд и однократным использованием -->
     <script>
         (function setupEasterEggSequence() {
-            const easterEggText = 'Контора пидорасов';
+            const easterEggText = 'SINGULARITY SECRET';
             const defaultText = 'SINGULARITY';
             const STORAGE_KEY = 'singularity_easter_egg_used';
 
@@ -2012,14 +2012,12 @@
             }
 
             function triggerEasterEgg() {
-                // Запоминаем в localStorage, что пасхалка уже была использована
                 try {
                     localStorage.setItem(STORAGE_KEY, 'true');
                 } catch (e) {
                     console.warn('LocalStorage недоступен');
                 }
 
-                // Показываем текст на 10 секунд
                 applyEasterEgg();
             }
 
@@ -2028,7 +2026,6 @@
             let konamiIndex = 0;
 
             document.addEventListener('keydown', function(e) {
-                // Если пасхалка уже была использована ранее — ничего не делаем
                 try {
                     if (localStorage.getItem(STORAGE_KEY) === 'true') return;
                 } catch (err) {}
@@ -2054,7 +2051,6 @@
 
             if (logoContainer) {
                 logoContainer.addEventListener('click', function() {
-                    // Если пасхалка уже была использована ранее — выходим
                     try {
                         if (localStorage.getItem(STORAGE_KEY) === 'true') return;
                     } catch (err) {}
@@ -2068,7 +2064,7 @@
                     } else {
                         clickTimer = setTimeout(() => {
                             logoClicks = 0;
-                        }, 500); // 500мс между кликами
+                        }, 500);
                     }
                 });
             }
@@ -2136,7 +2132,6 @@
             const container = document.getElementById('mediaAuthorFilters');
             if (!container) return;
 
-            // Собираем уникальных авторов
             const authorsSet = new Set();
             mediaItems.forEach(item => {
                 if (item.author) authorsSet.add(item.author);
@@ -2161,12 +2156,10 @@
 
             let filtered = window.allMediaData;
 
-            // 1. Фильтр по типу (video, stream, short)
             if (window.currentMediaTypeFilter !== 'all') {
                 filtered = filtered.filter(item => item.type === window.currentMediaTypeFilter);
             }
 
-            // 2. Фильтр по автору
             if (window.selectedAuthorFilter) {
                 filtered = filtered.filter(item => item.author === window.selectedAuthorFilter);
             }
@@ -2177,7 +2170,6 @@
             }
 
             mediaGrid.innerHTML = filtered.map(item => {
-                // Определение платформы (Твич / Ютуб) по ссылке или полю platform
                 let platform = (item.platform || '').toLowerCase();
                 if (!platform && item.url) {
                     if (item.url.includes('twitch.tv')) {
@@ -2307,7 +2299,6 @@
             } catch (e) {}
         })();
 
-        // Закрываем плашку выбора темы при клике мимо нее
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.theme-switcher-container') && !e.target.closest('.logo-container')) {
                 const switcher = document.getElementById('themeSwitcher');
@@ -2480,15 +2471,12 @@
             if (!text) return '';
             let escaped = escapeHTML(text);
         
-            // Спойлеры Discord ||текст||
             escaped = escaped.replace(/\|\|([\s\S]+?)\|\|/g, function(match, content) {
                 return `<span class="discord-spoiler" onclick="this.classList.add('revealed')">${content}</span>`;
             });
         
-            // Эмодзи Discord
             escaped = escaped.replace(/&lt;:([a-zA-Z0-9_]+):[0-9]+&gt;/g, ':$1:');
         
-            // Markdown ссылки и форматирование (включая __подчеркивания__)
             return escaped
                 .replace(/\n/g, '<br>')
                 .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #4ecdc4; text-decoration: underline;">$1</a>')
@@ -2507,7 +2495,6 @@
             const discordBadgeHTML = `<img src="discord-icon.png" class="discord-badge" title="Из Discord" alt="Discord">`;
             let html = '';
 
-            // 1. Загрузка стандартных новостей (news.json)
             try {
                 const resNews = await fetch('news.json?v=' + Date.now(), { cache: 'no-store' });
                 if (resNews.ok) {
@@ -2537,7 +2524,6 @@
                 console.error('news.json err:', e);
             }
 
-            // 2. Загрузка новостей из Discord (discord_news.json)
             try {
                 const resDiscord = await fetch('discord_news.json?v=' + Date.now(), { cache: 'no-store' });
                 if (resDiscord.ok) {
@@ -2651,7 +2637,6 @@
             }
         }
 
-        // Загрузка и отрисовка Лора с визуальным отличием текущего и завершенных сезонов
         async function loadLore() {
             const listContainer = document.getElementById('loreItemsList');
             try {
@@ -2664,21 +2649,18 @@
                     return;
                 }
 
-                // Проверяем, есть ли явные метки текущего сезона в JSON
                 const hasExplicitCurrent = seasons.some(s => 
                     s.status === 'current' || s.status === 'active' || s.isCurrent === true ||
                     (s.title && (s.title.includes('СЛЕДУЮЩИЙ') || s.title.includes('АКТИВЕН') || s.title.includes('ТЕКУЩИЙ')))
                 );
 
                 listContainer.innerHTML = seasons.map((season, index) => {
-                    // Определение, является ли сезон текущим/активным
                     let isCurrent = false;
                     if (season.status === 'current' || season.status === 'active' || season.isCurrent === true) {
                         isCurrent = true;
                     } else if (season.title && (season.title.includes('СЛЕДУЮЩИЙ') || season.title.includes('АКТИВЕН') || season.title.includes('ТЕКУЩИЙ'))) {
                         isCurrent = true;
                     } else if (!hasExplicitCurrent && index === seasons.length - 1) {
-                        // Если статус явно не прописан ни у одного сезона, по умолчанию последним идет текущий
                         isCurrent = true;
                     }
 
@@ -2708,7 +2690,6 @@
             }
         }
 
-        // Загрузка Событий из events.json
         async function loadEvents() {
             const listContainer = document.getElementById('eventsItemsList');
             try {
@@ -2787,7 +2768,6 @@
             }
         });
 
-        // Создание элементов карточек игроков
         function createMemberElement(member) {
             const extra = window.playerExtraInfos[member.name] || {};
             const memberDiv = document.createElement('div');
@@ -2935,7 +2915,6 @@
 
             document.getElementById('modalPersonalLore').textContent = extra.personalLore || member.personalLore || 'Личный лор персонажа пока не зафиксирован.';
 
-            // Отрисовка ссылок под личным лором в поп-апе
             const socials = member.socials || extra.socials || [];
             const modalSocialsContainer = document.getElementById('modalSocialsContainer');
             const modalSocialsList = document.getElementById('modalSocialsList');
@@ -3141,7 +3120,7 @@
         <img id="lightboxImage" src="" alt="Full view">
     </div>
 
-    <!-- Пасхалка EnderHack1 и Maksimm205 (4 клика -> замена всего текста и состава) -->
+    <!-- Пасхалка EnderHack1, Maksimm205 и CloverS_kid -->
     <script>
         (function setupPlayerEasterEggs() {
             let enderClickCount = 0;
@@ -3149,6 +3128,9 @@
 
             let maksimClickCount = 0;
             let maksimClickTimer = null;
+
+            let cloverClickCount = 0;
+            let cloverClickTimer = null;
 
             document.addEventListener('click', function(e) {
                 const targetCard = e.target.closest('.team-member, .author-chip, .player-head, [data-name]');
@@ -3189,13 +3171,33 @@
                         triggerPlayerTakeover({
                             name: "Maksimm205",
                             realName: "Максим",
-                            role: "Максим скажи нахуй",
+                            role: "Максим здесь!",
                             color: 15473
-                        }, "Максим скажи нахуй");
+                        }, "Максим здесь!");
                         maksimClickCount = 0;
                     }
                 } else {
                     maksimClickCount = 0;
+                }
+
+                // 3. Проверка на клики по Кловеру (CloverS_Kid / Clover / Кловер) -> Установка фона bambsb.jpg
+                if (/clovers_kid|clover|кловер/i.test(targetText)) {
+                    cloverClickCount++;
+                    clearTimeout(cloverClickTimer);
+
+                    cloverClickTimer = setTimeout(() => {
+                        cloverClickCount = 0;
+                    }, 1500);
+
+                    if (cloverClickCount >= 4) {
+                        const bg = document.querySelector('.background');
+                        if (bg) {
+                            bg.style.backgroundImage = "url('bambsb.jpg')";
+                        }
+                        cloverClickCount = 0;
+                    }
+                } else {
+                    cloverClickCount = 0;
                 }
             });
 
@@ -3212,7 +3214,6 @@
                     socials: []
                 };
 
-                // Заменяем массивы игроков на выбранного персонажа
                 if (window.fullTeamMembers) {
                     window.fullTeamMembers = window.fullTeamMembers.map(() => ({ ...memberData }));
                     const teamMembersContainer = document.getElementById('teamMembers');
@@ -3235,7 +3236,6 @@
                     resizeAllGridItems();
                 }
 
-                // Рекурсивная замена текстовых узлов во всем документе
                 function replaceAllTextNodes(element) {
                     if (element.nodeType === Node.TEXT_NODE) {
                         if (element.nodeValue && element.nodeValue.trim() !== '') {
@@ -3252,10 +3252,8 @@
 
                 replaceAllTextNodes(document.body);
 
-                // Меням тайтл вкладки
                 document.title = easterText;
 
-                // Заменяем плейсхолдеры и значения у инпутов/кнопок
                 document.querySelectorAll('input, textarea, button').forEach(el => {
                     if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                         el.value = easterText;
