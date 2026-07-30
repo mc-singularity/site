@@ -4201,7 +4201,9 @@
         };
 
         function switchToItalian() {
-            // Store original texts from all text nodes
+            console.log('Switching to Italian...');
+            
+            // Translate all text nodes directly without storing
             const walker = document.createTreeWalker(
                 document.body,
                 NodeFilter.SHOW_TEXT,
@@ -4210,21 +4212,36 @@
             );
             
             let node;
+            let translatedCount = 0;
+            
             while (node = walker.nextNode()) {
-                if (node.textContent.trim() && !node.textContent.includes('http') && !node.textContent.includes('data:')) {
-                    originalTexts.set(node, node.textContent);
+                const originalText = node.textContent;
+                if (originalText.trim() && !originalText.includes('http') && !originalText.includes('data:') && !originalText.includes('data:image')) {
+                    // Check if text contains Russian characters
+                    if (/[а-яА-ЯЁё]/.test(originalText)) {
+                        let translatedText = originalText;
+                        for (const [russian, italian] of Object.entries(italianTranslations)) {
+                            // Try exact match first
+                            if (translatedText === russian) {
+                                translatedText = italian;
+                                break;
+                            }
+                            // Then try case-insensitive replace
+                            translatedText = translatedText.replace(new RegExp(russian.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), italian);
+                        }
+                        
+                        if (translatedText !== originalText) {
+                            originalTexts.set(node, originalText);
+                            node.textContent = translatedText;
+                            translatedCount++;
+                        }
+                    }
                 }
             }
-
-            // Translate all text nodes
-            originalTexts.forEach((originalText, node) => {
-                let translatedText = originalText;
-                for (const [russian, italian] of Object.entries(italianTranslations)) {
-                    translatedText = translatedText.replace(new RegExp(russian, 'g'), italian);
-                }
-                node.textContent = translatedText;
-            });
-
+            
+            console.log(`Translated ${translatedCount} text nodes`);
+            alert(`Переведено ${translatedCount} элементов на итальянский!`);
+            
             // Show restore button
             document.getElementById('italianRestoreBtn').style.display = 'block';
         }
