@@ -2041,7 +2041,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(255, 100, 0, 0.95);
+            background: transparent;
             z-index: 999999;
             display: flex;
             justify-content: center;
@@ -2049,11 +2049,13 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
+            pointer-events: none;
         }
 
         .explosion-overlay.show {
             opacity: 1;
             visibility: visible;
+            pointer-events: auto;
         }
 
         .dynamite-container {
@@ -2074,9 +2076,28 @@
             animation: dynamitePulse 0.3s ease-in-out infinite;
         }
 
+        .dynamite-img.exploding {
+            animation: dynamiteExplode 0.3s ease-out forwards;
+        }
+
         @keyframes dynamitePulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
+        }
+
+        @keyframes dynamiteExplode {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(2);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(5);
+                opacity: 0;
+            }
         }
 
         .explosion-text {
@@ -2086,7 +2107,7 @@
             text-shadow: 0 0 20px #ff0000, 4px 4px 0 #000000;
             margin-top: 1rem;
             opacity: 0;
-            animation: textAppear 0.5s ease-out 1s forwards;
+            animation: textAppear 0.5s ease-out 0.5s forwards;
         }
 
         @keyframes textAppear {
@@ -2098,6 +2119,35 @@
                 opacity: 1;
                 transform: scale(1);
             }
+        }
+
+        /* Screen shake effect */
+        body.shaking {
+            animation: screenShake 0.5s ease-in-out;
+        }
+
+        @keyframes screenShake {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-10px, -10px); }
+            20% { transform: translate(10px, -10px); }
+            30% { transform: translate(-10px, 10px); }
+            40% { transform: translate(10px, 10px); }
+            50% { transform: translate(-5px, -5px); }
+            60% { transform: translate(5px, -5px); }
+            70% { transform: translate(-5px, 5px); }
+            80% { transform: translate(5px, 5px); }
+            90% { transform: translate(-2px, -2px); }
+        }
+
+        /* Explosion particles */
+        .particle {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff6600;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
         }
 
         .restore-btn {
@@ -3766,6 +3816,7 @@
         // Explosion easter egg for ArtAzurp
         function triggerExplosion() {
             const overlay = document.getElementById('explosionOverlay');
+            const dynamiteImg = document.querySelector('.dynamite-img');
             overlay.classList.add('show');
 
             // Add random values for explosion animations
@@ -3783,14 +3834,73 @@
 
             // Trigger explosion after a short delay
             setTimeout(() => {
+                // Make dynamite explode
+                dynamiteImg.classList.add('exploding');
+                
+                // Screen shake
+                document.body.classList.add('shaking');
+                
+                // Create explosion particles
+                createExplosionParticles();
+                
+                // Destroy interface
                 document.body.classList.add('exploding');
+                
+                // Remove shake after animation
+                setTimeout(() => {
+                    document.body.classList.remove('shaking');
+                }, 500);
             }, 500);
+        }
+
+        function createExplosionParticles() {
+            const colors = ['#ff6600', '#ff3300', '#ff9900', '#ffcc00', '#ffffff'];
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = centerX + 'px';
+                particle.style.top = centerY + 'px';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.width = (Math.random() * 15 + 5) + 'px';
+                particle.style.height = particle.style.width;
+                document.body.appendChild(particle);
+
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 500 + 200;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+
+                let x = 0, y = 0;
+                let opacity = 1;
+
+                function animateParticle() {
+                    x += vx * 0.016;
+                    y += vy * 0.016;
+                    opacity -= 0.02;
+
+                    particle.style.transform = `translate(${x}px, ${y}px)`;
+                    particle.style.opacity = opacity;
+
+                    if (opacity > 0) {
+                        requestAnimationFrame(animateParticle);
+                    } else {
+                        particle.remove();
+                    }
+                }
+
+                requestAnimationFrame(animateParticle);
+            }
         }
 
         function restoreSite() {
             const overlay = document.getElementById('explosionOverlay');
+            const dynamiteImg = document.querySelector('.dynamite-img');
             overlay.classList.remove('show');
             document.body.classList.remove('exploding');
+            dynamiteImg.classList.remove('exploding');
 
             // Reset all animations
             document.querySelectorAll('.section, .team-member').forEach(el => {
@@ -3798,6 +3908,9 @@
                 el.style.removeProperty('--random-y');
                 el.style.removeProperty('--random-rot');
             });
+
+            // Remove any remaining particles
+            document.querySelectorAll('.particle').forEach(p => p.remove());
         }
 
         loadTeamMembers();
