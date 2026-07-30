@@ -2067,8 +2067,10 @@
             75% { transform: translateX(10px) rotate(5deg); }
         }
 
-        .dynamite {
-            font-size: 8rem;
+        .dynamite-img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
             animation: dynamitePulse 0.3s ease-in-out infinite;
         }
 
@@ -2096,6 +2098,27 @@
                 opacity: 1;
                 transform: scale(1);
             }
+        }
+
+        .restore-btn {
+            background: linear-gradient(135deg, #00ff55 0%, #00cc44 100%);
+            border: 3px solid #00ff55;
+            color: #000000;
+            padding: 1rem 2rem;
+            font-family: 'uvKits', sans-serif !important;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 85, 0.6);
+            margin-top: 2rem;
+            opacity: 0;
+            animation: textAppear 0.5s ease-out 1.5s forwards;
+        }
+
+        .restore-btn:hover {
+            background: linear-gradient(135deg, #00cc44 0%, #00aa33 100%);
+            box-shadow: 0 0 30px rgba(0, 255, 85, 0.9);
+            transform: scale(1.05);
         }
 
         /* Анимации разрушения интерфейса */
@@ -2666,8 +2689,9 @@
     <!-- Пасхалка: Взрыв от Азурпа -->
     <div class="explosion-overlay" id="explosionOverlay">
         <div class="dynamite-container">
-            <div class="dynamite">💣</div>
+            <img src="ТНТ_JE3_BE2.webp" alt="TNT" class="dynamite-img">
             <div class="explosion-text">BOOM!</div>
+            <button class="restore-btn" onclick="restoreSite()">ВОССТАНОВИТЬ</button>
         </div>
     </div>
 
@@ -3761,19 +3785,19 @@
             setTimeout(() => {
                 document.body.classList.add('exploding');
             }, 500);
+        }
 
-            // Reset after 3 seconds
-            setTimeout(() => {
-                overlay.classList.remove('show');
-                document.body.classList.remove('exploding');
+        function restoreSite() {
+            const overlay = document.getElementById('explosionOverlay');
+            overlay.classList.remove('show');
+            document.body.classList.remove('exploding');
 
-                // Reset all animations
-                document.querySelectorAll('.section, .team-member').forEach(el => {
-                    el.style.removeProperty('--random-x');
-                    el.style.removeProperty('--random-y');
-                    el.style.removeProperty('--random-rot');
-                });
-            }, 3500);
+            // Reset all animations
+            document.querySelectorAll('.section, .team-member').forEach(el => {
+                el.style.removeProperty('--random-x');
+                el.style.removeProperty('--random-y');
+                el.style.removeProperty('--random-rot');
+            });
         }
 
         loadTeamMembers();
