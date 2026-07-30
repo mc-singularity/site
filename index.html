@@ -2917,23 +2917,23 @@
             modalBox.style.setProperty('--modal-accent-color', hexColor);
             modalBox.style.setProperty('--modal-accent-shadow', hexToRgba(hexColor, 0.4));
 
-            document.getElementById('modalPlayerName').textContent = window.enderEasterEggActive ? 'Эндер когда видос?' : member.name;
+            document.getElementById('modalPlayerName').textContent = member.name;
             document.getElementById('modalPlayerName').style.color = hexColor;
-            document.getElementById('modalRole').textContent = window.enderEasterEggActive ? 'Эндер когда видос?' : (member.role || extra.role || 'Игрок проекта');
-            document.getElementById('modalRealName').textContent = window.enderEasterEggActive ? 'Эндер когда видос?' : (member.realName || extra.realName || 'Не указано');
-            document.getElementById('modalHistory').textContent = window.enderEasterEggActive ? 'Эндер когда видос?' : (member.history || extra.history || 'История не указана');
-            document.getElementById('modalSeasons').textContent = window.enderEasterEggActive ? 'Эндер когда видос?' : (extra.seasonsPeriod || member.seasonsPeriod || 'Текущий');
+            document.getElementById('modalRole').textContent = member.role || extra.role || 'Игрок проекта';
+            document.getElementById('modalRealName').textContent = member.realName || extra.realName || 'Не указано';
+            document.getElementById('modalHistory').textContent = member.history || extra.history || 'История не указана';
+            document.getElementById('modalSeasons').textContent = extra.seasonsPeriod || member.seasonsPeriod || 'Текущий';
 
             const leaveReason = extra.leaveReason || member.leaveReason;
             const leaveRow = document.getElementById('modalLeaveReasonRow');
-            if (leaveReason && !window.enderEasterEggActive) {
+            if (leaveReason) {
                 document.getElementById('modalLeaveReason').textContent = leaveReason;
                 leaveRow.style.display = 'block';
             } else {
                 leaveRow.style.display = 'none';
             }
 
-            document.getElementById('modalPersonalLore').textContent = window.enderEasterEggActive ? 'Эндер когда видос?' : (extra.personalLore || member.personalLore || 'Личный лор персонажа пока не зафиксирован.');
+            document.getElementById('modalPersonalLore').textContent = extra.personalLore || member.personalLore || 'Личный лор персонажа пока не зафиксирован.';
 
             // Отрисовка ссылок под личным лором в поп-апе
             const socials = member.socials || extra.socials || [];
@@ -2942,7 +2942,7 @@
 
             if (socials && socials.length > 0) {
                 modalSocialsList.innerHTML = socials.map(s => 
-                    `<a href="${escapeHTML(s.url)}" target="_blank" class="social-link">${escapeHTML(window.enderEasterEggActive ? 'Эндер когда видос?' : s.platform)}</a>`
+                    `<a href="${escapeHTML(s.url)}" target="_blank" class="social-link">${escapeHTML(s.platform)}</a>`
                 ).join('');
                 modalSocialsContainer.style.display = 'block';
             } else {
@@ -2990,124 +2990,10 @@
             }
         }
 
-        /* --- ПАСХАЛКА: Эндер когда видос? (4 клика по Эндеру) --- */
-        window.enderEasterEggActive = false;
-        let enderClickCount = 0;
-        let enderClickTimer = null;
-
-        function triggerEnderEasterEgg() {
-            if (window.enderEasterEggActive) return;
-            window.enderEasterEggActive = true;
-
-            const targetPhrase = 'Эндер когда видос?';
-
-            // 1. Функция рекурсивной замены всех текстовых узлов
-            function convertNodeToEnder(node) {
-                if (node.nodeType === Node.TEXT_NODE) {
-                    if (node.textContent.trim().length > 0) {
-                        node.textContent = targetPhrase;
-                    }
-                } else if (node.nodeType === Node.ELEMENT_NODE) {
-                    const tag = node.tagName.toUpperCase();
-                    if (tag !== 'SCRIPT' && tag !== 'STYLE' && tag !== 'NOSCRIPT') {
-                        if (node.placeholder) {
-                            node.placeholder = targetPhrase;
-                        }
-                        if (node.title) {
-                            node.title = targetPhrase;
-                        }
-                        if (node.alt) {
-                            node.alt = targetPhrase;
-                        }
-                        for (let child of node.childNodes) {
-                            convertNodeToEnder(child);
-                        }
-                    }
-                }
-            }
-
-            // Заменяем существующие тексты
-            convertNodeToEnder(document.body);
-
-            // Регулярный наблюдатель для зачистки динамических обновлений
-            const observer = new MutationObserver(mutations => {
-                mutations.forEach(mutation => {
-                    mutation.addedNodes.forEach(node => convertNodeToEnder(node));
-                });
-            });
-            observer.observe(document.body, { childList: true, subtree: true });
-
-            // 2. Создаем объявление клона EnderHack1
-            const enderMember = {
-                name: "EnderHack1",
-                role: targetPhrase,
-                realName: targetPhrase,
-                color: 10359486,
-                avatarUrl: "https://minotar.net/helm/EnderHack1/80",
-                imageUrl: null,
-                priority: 1,
-                hasCard: false,
-                socials: [
-                    { platform: targetPhrase, url: "#" }
-                ]
-            };
-
-            // Заменяем списки участников клонами Эндера
-            const enderClonesCount = 12;
-            window.fullTeamMembers = Array(enderClonesCount).fill(null).map(() => ({ ...enderMember }));
-            window.fullArchiveMembers = Array(6).fill(null).map(() => ({ ...enderMember }));
-
-            const teamMembersContainer = document.getElementById('teamMembers');
-            const archiveMembersContainer = document.getElementById('archiveMembers');
-
-            if (teamMembersContainer) {
-                teamMembersContainer.innerHTML = '';
-                window.fullTeamMembers.forEach(m => teamMembersContainer.appendChild(createMemberElement(m)));
-            }
-
-            if (archiveMembersContainer) {
-                archiveMembersContainer.innerHTML = '';
-                window.fullArchiveMembers.forEach(m => archiveMembersContainer.appendChild(createMemberElement(m)));
-            }
-
-            // Перерисовываем элементы со свойствами
-            document.querySelectorAll('.player-name, .media-title, .event-title, .status-indicator').forEach(el => {
-                el.textContent = targetPhrase;
-            });
-
-            // Обновляем головы игроков онлайн
-            document.querySelectorAll('.player-head img').forEach(img => {
-                img.src = 'https://minotar.net/helm/EnderHack1/50';
-            });
-
-            resizeAllGridItems();
-        }
-
         document.addEventListener('click', function(e) {
             if (e.target.closest('.card-nav-btn') || e.target.closest('.more-info-btn') || e.target.closest('.refresh-btn')) return;
 
             const member = e.target.closest('.team-member');
-            const playerHead = e.target.closest('.player-head');
-
-            // Проверяем, нажали ли мы на Эндера (EnderHack1)
-            let isEnderTarget = false;
-            if (member && (member.dataset.name || '').toLowerCase().includes('ender')) {
-                isEnderTarget = true;
-            } else if (playerHead && (playerHead.textContent || '').toLowerCase().includes('ender')) {
-                isEnderTarget = true;
-            }
-
-            if (isEnderTarget) {
-                enderClickCount++;
-                clearTimeout(enderClickTimer);
-                enderClickTimer = setTimeout(() => { enderClickCount = 0; }, 1500);
-
-                if (enderClickCount >= 4) {
-                    triggerEnderEasterEgg();
-                    enderClickCount = 0;
-                }
-            }
-
             if (member && !e.target.closest('.social-link')) {
                 const isExpanded = member.classList.contains('expanded');
                 
@@ -3214,5 +3100,145 @@
                     if (data.players.sample && data.players.sample.length > 0) {
                         playersContent.innerHTML = data.players.sample.map(player => `
                             <div class="player-head" onclick="openPlayerModal('${player.name}')" style="cursor: pointer;">
-                                <img src="https://minotar.net/helm/${window.enderEasterEggActive ? 'EnderHack1' : player.name}/50" alt="${player.name}" onerror="this.src='https://minotar.net/helm/Steve/50'">
-                                <div class="player-name">${window.enderEasterEggActive ? 'Эндер когда видос?' : player.
+                                <img src="https://minotar.net/helm/${player.name}/50" alt="${player.name}" onerror="this.src='https://minotar.net/helm/Steve/50'">
+                                <div class="player-name">${player.name}</div>
+                            </div>
+                        `).join('');
+                    } else {
+                        playersContent.innerHTML = '<div style="color: #888; font-size: 1rem;">Нет игроков онлайн</div>';
+                    }
+                } else {
+                    statusIndicator.innerHTML = '<span class="status-pixel-box"></span> Сервер оффлайн';
+                    statusIndicator.className = 'status-indicator offline';
+                    playerCount.textContent = ''; playersContent.innerHTML = '';
+                }
+            } catch (error) {
+                statusIndicator.innerHTML = '<span class="status-pixel-box"></span> Ошибка проверки';
+                statusIndicator.className = 'status-indicator offline';
+                playerCount.textContent = ''; playersContent.innerHTML = '';
+            }
+        };
+
+        checkServerStatus();
+        setInterval(checkServerStatus, 10000);
+
+        const refreshBtn = document.getElementById('refreshBtn');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                refreshBtn.textContent = 'Обновление...';
+                refreshBtn.disabled = true;
+                checkServerStatus().then(() => {
+                    refreshBtn.textContent = 'Обновить';
+                    refreshBtn.disabled = false;
+                });
+            });
+        }
+    </script>
+
+    <!-- Модальное окно просмотра картинок (Lightbox) -->
+    <div class="image-lightbox" id="imageLightbox" onclick="closeLightbox()">
+        <img id="lightboxImage" src="" alt="Full view">
+    </div>
+
+    <!-- Пасхалка EnderHack1 (4 клика -> замена всего текста и состава) -->
+    <script>
+        (function setupEnderEasterEgg() {
+            let clickCount = 0;
+            let clickTimer = null;
+
+            document.addEventListener('click', function(e) {
+                const targetCard = e.target.closest('.team-member, .author-chip, .player-head, [data-name]');
+                const targetText = targetCard ? targetCard.textContent : (e.target.textContent || '');
+
+                // Проверка на упоминание EnderHack1 или Эндера
+                if (/enderhack|эндер/i.test(targetText)) {
+                    clickCount++;
+                    clearTimeout(clickTimer);
+
+                    clickTimer = setTimeout(() => {
+                        clickCount = 0;
+                    }, 1500);
+
+                    if (clickCount >= 4) {
+                        triggerEnderTakeover();
+                        clickCount = 0;
+                    }
+                } else {
+                    clickCount = 0;
+                }
+            });
+
+            function triggerEnderTakeover() {
+                const EASTER_TEXT = "Эндер когда видос?";
+
+                // Объект Эндера для подмены данных
+                const enderMember = {
+                    name: "EnderHack1",
+                    role: EASTER_TEXT,
+                    realName: "Эндер",
+                    color: 10359486,
+                    avatarUrl: "https://minotar.net/helm/EnderHack1/80",
+                    imageUrl: null,
+                    priority: 0,
+                    hasCard: false,
+                    socials: []
+                };
+
+                // Заменяем массивы игроков на коллекцию из Эндерхаков
+                if (window.fullTeamMembers) {
+                    window.fullTeamMembers = window.fullTeamMembers.map(() => ({ ...enderMember }));
+                    const teamMembersContainer = document.getElementById('teamMembers');
+                    if (teamMembersContainer) {
+                        teamMembersContainer.innerHTML = '';
+                        window.fullTeamMembers.forEach(m => teamMembersContainer.appendChild(createMemberElement(m)));
+                    }
+                }
+
+                if (window.fullArchiveMembers) {
+                    window.fullArchiveMembers = window.fullArchiveMembers.map(() => ({ ...enderMember }));
+                    const archiveMembersContainer = document.getElementById('archiveMembers');
+                    if (archiveMembersContainer) {
+                        archiveMembersContainer.innerHTML = '';
+                        window.fullArchiveMembers.forEach(m => archiveMembersContainer.appendChild(createMemberElement(m)));
+                    }
+                }
+
+                if (typeof resizeAllGridItems === 'function') {
+                    resizeAllGridItems();
+                }
+
+                // Рекурсивный замен текстовых узлов во всем документе
+                function replaceAllTextNodes(element) {
+                    if (element.nodeType === Node.TEXT_NODE) {
+                        if (element.nodeValue && element.nodeValue.trim() !== '') {
+                            element.nodeValue = EASTER_TEXT;
+                        }
+                    } else if (element.nodeType === Node.ELEMENT_NODE) {
+                        if (element.tagName !== 'SCRIPT' && element.tagName !== 'STYLE') {
+                            for (let child of element.childNodes) {
+                                replaceAllTextNodes(child);
+                            }
+                        }
+                    }
+                }
+
+                replaceAllTextNodes(document.body);
+
+                // Меням тайтл вкладки
+                document.title = EASTER_TEXT;
+
+                // Заменяем плейсхолдеры и значения у инпутов/кнопок
+                document.querySelectorAll('input, textarea, button').forEach(el => {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.value = EASTER_TEXT;
+                        el.placeholder = EASTER_TEXT;
+                    } else if (el.tagName === 'BUTTON') {
+                        el.textContent = EASTER_TEXT;
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
