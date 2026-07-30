@@ -1,354 +1,353 @@
 {
-  "teamMembers": [
-    {
-      "name": "horHyplace",
-      "role": "Игрок проекта",
-      "realName": "Марк",
-      "color": 16441964,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385487143113/image.png?ex=6a6795b6&is=6a664436&hm=a6916467abc1a8ca9531313b8de64e67ac4e828590de2e608efa5975dd9b2d5a&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": []
-    },
-    {
-      "name": "MrKhazinack",
-      "role": "Игрок проекта",
-      "realName": "Кази",
-      "color": 14322492,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385046872205/image.png?ex=6a6795b6&is=6a664436&hm=f7a5121e50b18cb6b08fe2348a9e3a700ce7c72dfbd01d6b9359d30ad8211f21&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@khazick-j9i"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/+iPP12-bLGDY1ZWQy"
-        }
-      ]
-    },
-    {
-      "name": "CHOMeQ418",
-      "role": "Игрок проекта",
-      "realName": "Хомяк",
-      "color": 15664903,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816384744620164/image.png?ex=6a6795b6&is=6a664436&hm=539f9ddaea58c48453c803c752199cb41ca0c756a6bb8ac8cbb3f9b0c703a23d&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://youtube.com/@respro_game_offical?si=JflhaKR3zoXpw3So"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/ResOfficalMine"
-        }
-      ]
-    },
-    {
-      "name": "Maksimm205",
-      "role": "Гандон проекта, Максим, Макс",
-      "realName": "Обрёл лицензию",
-      "color": 15473,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528818551790637146/image.png?ex=6a66eefa&is=6a659d7a&hm=24c21602bf164a7b80d552adbc083cd8b3945424b7ba15554c647c638a094944&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUXTmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA%3D"
-        },
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUXTmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA%3D"
-        }
-      ]
-    },
-    {
-      "name": "ArtAzurp",
-      "role": "Игрок проекта, Стример",
-      "realName": "Азурп",
-      "color": 16422717,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816384409342113/image.png?ex=6a6795b6&is=6a664436&hm=622a9b8133c21b36b4f0892d1dbda1b60971fda2532c8dd7ebaf10e012cfc7b0&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@zalurtcuka"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/+bjWbYsn4Ul0zMmQ6"
-        },
-        {
-          "platform": "TWITCH",
-          "url": "https://www.twitch.tv/azurpa12"
-        }
-      ]
-    },
-    {
-      "name": "lousamik",
-      "role": "Игрок проекта",
-      "realName": "Лусэм",
-      "color": 5123584,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528811024252272650/image.png?ex=6a6790b8&is=6a663f38&hm=f513505e140940afa8cdd8fa51cea0dc2b7cfd1fe2a05b82c7db0ee7e6386555&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@lousamik"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/lousamik"
-        }
-      ]
-    },
-    {
-      "name": "Yrk1z",
-      "role": "Игрок проекта",
-      "realName": "Яркиз",
-      "color": 12632256,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383092068614/image.png?ex=6a6795b5&is=6a664435&hm=24df687f22c075dd5e71a2ff3642709eb148486d7b195973a44f6918b9aa3628&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@Yrk1zzz"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/Yrk1z"
-        },
-        {
-          "platform": "TWITCH",
-          "url": "https://twitch.tv/yrk1z"
-        }
-      ]
-    },
-    {
-      "name": "pitrmatti",
-      "role": "Игрок проекта, Итальянец",
-      "realName": "ПиццаПаста",
-      "color": 6645093,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383956095126/image.png?ex=6a6795b5&is=6a664435&hm=130c3a0028cb065ea4ece727c101a9404b1081fc973df818184405a1c2ee1ec8&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/shadowloop1"
-        }
-      ]
-    },
-    {
-      "name": "maloi221",
-      "role": "Игрок проекта",
-      "realName": "Врай",
-      "color": 12491100,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383465623653/image.png?ex=6a6795b5&is=6a664435&hm=d6097e347d97c38d1c5df70f15582c771adec9f3bbdbc4c8c16dbd994b4ea5ab&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@VRAIHPP/videos"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/vraihhp"
-        }
-      ]
-    },
-    {
-      "name": "TheNDay",
-      "role": "Игрок проекта",
-      "realName": "Зендай",
-      "color": 14286848,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1529046125116395540/image.png?ex=6a671a2c&is=6a65c8ac&hm=0fa424811945af88e495916a9ca81f268965a2ae8e42696d5603dfc745cf1f0c&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@TheNDay"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/+3IacUpgJjCc3OThk"
-        }
-      ]
-    },
-    {
-      "name": "CloverS_Kid",
-      "role": "Основатель, Тех. админ, Игрок проекта",
-      "realName": "Кловер",
-      "color": 16719708,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693751578684/image.png?ex=6a6795ff&is=6a66447f&hm=1975a2950ea573631222b0a06ca4e06234942b1b06d0fc3c42eb61923f550189&",
-      "imageUrl": null,
-      "priority": 3,
-      "hasCard": true,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@realcloverskid"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/realcloverskid"
-        }
-      ]
-    },
-    {
-      "name": "MR_0zdi",
-      "role": "Билдер, Сценарист, Игрок проекта",
-      "realName": "Озди",
-      "color": 5848354,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693416300594/image.png?ex=6a6795ff&is=6a66447f&hm=ec64dcf1d2a99a680dd5f6e573a9007fa90bb6a7d0b8e66d814b02907a63814f&",
-      "imageUrl": null,
-      "priority": 1,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@mr_ozdi"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/ozdi_channel"
-        }
-      ]
-    },
-    {
-      "name": "LainBerg",
-      "role": "Игрок проекта",
-      "realName": "Лайн",
-      "color": null,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693122568345/image.png?ex=6a6795ff&is=6a66447f&hm=84a33f7f254d97debc833816445add8680038061364206c20473283b211a2cb2&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@Negor_ll"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/LainBerg777"
-        }
-      ]
-    },
-    {
-      "name": "Agata_friss",
-      "role": "Игрок проекта, Художник",
-      "realName": "Агата",
-      "color": 10165019,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692770111548/image.png?ex=6a6795ff&is=6a66447f&hm=aaeddcf8f18eaa7b229fe919629bf7abb05246902b7e8d50c81272c900edc9e1&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/agata_friss"
-        },
-        {
-          "platform": "TWITCH",
-          "url": "https://www.twitch.tv/agata_friss"
-        }
-      ]
-    },
-    {
-      "name": "EnderHack1",
-      "role": "Игрок проекта",
-      "realName": "Эндер",
-      "color": 10359486,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692409667755/image.png?ex=6a6795ff&is=6a66447f&hm=dbc5806941e0bfbac3f7814013845c5e7100896ae582437df021c2f7f5a2bf78&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials":
-      {
-      [
-          "platform": "СЕКРЕТНЫЙ ТГК",
-          "url": "https://t.me/enderhack_room"
-      ]
-      }
-    },
-    {
-      "name": "Folksy13_dll",
-      "role": "Игрок проекта",
-      "realName": "Фолкси",
-      "color": 7950079,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692107546805/image.png?ex=6a6795ff&is=6a66447f&hm=3183163d2bee240836ae0a8f91d749bfffc3891a2ed8e5d1e65630d35f513493&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@folksy13"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/Folksy13Family"
-        }
-      ]
-    },
-    {
-      "name": "g6thblood",
-      "role": "Игрок проекта",
-      "realName": "Егор",
-      "color": 13510924,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816386401374329/image.png?ex=6a6795b6&is=6a664436&hm=1a89097b4cb7e92a49aaaf6b27209d626dfab5b5ef3b351eba9d33721f23e8c4&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": []
-    },
-    {
-      "name": "impartialkus",
-      "role": "Игрок проекта",
-      "realName": "Кира",
-      "color": 16101094,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816386128740372/image.png?ex=6a6795b6&is=6a664436&hm=543162bdbd4141b18fc494dd26270a6a7ba0b08e0fddeafcdfa559357d06a2eb&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": []
-    },
-    {
-      "name": "ba1toss",
-      "role": "Игрок проекта",
-      "realName": "Балтос",
-      "color": 15704887,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385822560387/image.png?ex=6a6795b6&is=6a664436&hm=db1245b0f260bb118c80396b12ad775d330030b629c16b87a4f9ada95fb30f37&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@bal2oss"
-        }
-      ]
-    }
-  ]
+"teamMembers": [
+{
+"name": "horHyplace",
+"role": "Игрок проекта",
+"realName": "Марк",
+"color": 16441964,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385487143113/image.png?ex=6a6795b6&is=6a664436&hm=a6916467abc1a8ca9531313b8de64e67ac4e828590de2e608efa5975dd9b2d5a&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": []
+},
+{
+"name": "MrKhazinack",
+"role": "Игрок проекта",
+"realName": "Кази",
+"color": 14322492,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385046872205/image.png?ex=6a6795b6&is=6a664436&hm=f7a5121e50b18cb6b08fe2348a9e3a700ce7c72dfbd01d6b9359d30ad8211f21&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/@khazick-j9i"
+},
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/+iPP12-bLGDY1ZWQy"
+}
+]
+},
+{
+"name": "CHOMeQ418",
+"role": "Игрок проекта",
+"realName": "Хомяк",
+"color": 15664903,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816384744620164/image.png?ex=6a6795b6&is=6a664436&hm=539f9ddaea58c48453c803c752199cb41ca0c756a6bb8ac8cbb3f9b0c703a23d&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://youtube.com/@respro_game_offical?si=JflhaKR3zoXpw3So"
+},
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/ResOfficalMine"
+}
+]
+},
+{
+"name": "Maksimm205",
+"role": "Гандон проекта, Максим, Макс",
+"realName": "Обрёл лицензию",
+"color": 15473,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528818551790637146/image.png?ex=6a66eefa&is=6a659d7a&hm=24c21602bf164a7b80d552adbc083cd8b3945424b7ba15554c647c638a094944&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUXTmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA%3D"
+},
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUXTmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA%3D"
+}
+]
+},
+{
+"name": "ArtAzurp",
+"role": "Игрок проекта, Стример",
+"realName": "Азурп",
+"color": 16422717,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816384409342113/image.png?ex=6a6795b6&is=6a664436&hm=622a9b8133c21b36b4f0892d1dbda1b60971fda2532c8dd7ebaf10e012cfc7b0&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/@zalurtcuka"
+},
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/+bjWbYsn4Ul0zMmQ6"
+},
+{
+"platform": "TWITCH",
+"url": "https://www.twitch.tv/azurpa12"
+}
+]
+},
+{
+"name": "lousamik",
+"role": "Игрок проекта",
+"realName": "Лусэм",
+"color": 5123584,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528811024252272650/image.png?ex=6a6790b8&is=6a663f38&hm=f513505e140940afa8cdd8fa51cea0dc2b7cfd1fe2a05b82c7db0ee7e6386555&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/@lousamik"
+},
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/lousamik"
+}
+]
+},
+{
+"name": "Yrk1z",
+"role": "Игрок проекта",
+"realName": "Яркиз",
+"color": 12632256,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383092068614/image.png?ex=6a6795b5&is=6a664435&hm=24df687f22c075dd5e71a2ff3642709eb148486d7b195973a44f6918b9aa3628&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/@Yrk1zzz"
+},
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/Yrk1z"
+},
+{
+"platform": "TWITCH",
+"url": "https://twitch.tv/yrk1z"
+}
+]
+},
+{
+"name": "pitrmatti",
+"role": "Игрок проекта, Итальянец",
+"realName": "ПиццаПаста",
+"color": 6645093,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383956095126/image.png?ex=6a6795b5&is=6a664435&hm=130c3a0028cb065ea4ece727c101a9404b1081fc973df818184405a1c2ee1ec8&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/shadowloop1"
+}
+]
+},
+{
+"name": "maloi221",
+"role": "Игрок проекта",
+"realName": "Врай",
+"color": 12491100,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383465623653/image.png?ex=6a6795b5&is=6a664435&hm=d6097e347d97c38d1c5df70f15582c771adec9f3bbdbc4c8c16dbd994b4ea5ab&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/@VRAIHPP/videos"
+},
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/vraihhp"
+}
+]
+},
+{
+"name": "TheNDay",
+"role": "Игрок проекта",
+"realName": "Зендай",
+"color": 14286848,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1529046125116395540/image.png?ex=6a671a2c&is=6a65c8ac&hm=0fa424811945af88e495916a9ca81f268965a2ae8e42696d5603dfc745cf1f0c&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/@TheNDay"
+},
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/+3IacUpgJjCc3OThk"
+}
+]
+},
+{
+"name": "CloverS_Kid",
+"role": "Основатель, Тех. админ, Игрок проекта",
+"realName": "Кловер",
+"color": 16719708,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693751578684/image.png?ex=6a6795ff&is=6a66447f&hm=1975a2950ea573631222b0a06ca4e06234942b1b06d0fc3c42eb61923f550189&",
+"imageUrl": null,
+"priority": 3,
+"hasCard": true,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/@realcloverskid"
+},
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/realcloverskid"
+}
+]
+},
+{
+"name": "MR_0zdi",
+"role": "Билдер, Сценарист, Игрок проекта",
+"realName": "Озди",
+"color": 5848354,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693416300594/image.png?ex=6a6795ff&is=6a66447f&hm=ec64dcf1d2a99a680dd5f6e573a9007fa90bb6a7d0b8e66d814b02907a63814f&",
+"imageUrl": null,
+"priority": 1,
+"hasCard": false,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/@mr_ozdi"
+},
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/ozdi_channel"
+}
+]
+},
+{
+"name": "LainBerg",
+"role": "Игрок проекта",
+"realName": "Лайн",
+"color": null,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693122568345/image.png?ex=6a6795ff&is=6a66447f&hm=84a33f7f254d97debc833816445add8680038061364206c20473283b211a2cb2&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/@Negor_ll"
+},
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/LainBerg777"
+}
+]
+},
+{
+"name": "Agata_friss",
+"role": "Игрок проекта, Художник",
+"realName": "Агата",
+"color": 10165019,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692770111548/image.png?ex=6a6795ff&is=6a66447f&hm=aaeddcf8f18eaa7b229fe919629bf7abb05246902b7e8d50c81272c900edc9e1&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/agata_friss"
+},
+{
+"platform": "TWITCH",
+"url": "https://www.twitch.tv/agata_friss"
+}
+]
+},
+{
+"name": "EnderHack1",
+"role": "Игрок проекта",
+"realName": "Эндер",
+"color": 10359486,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692409667755/image.png?ex=6a6795ff&is=6a66447f&hm=dbc5806941e0bfbac3f7814013845c5e7100896ae582437df021c2f7f5a2bf78&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "СЕКРЕТНЫЙ ТГК",
+"url": "https://t.me/enderhack_room"
+}
+]
+},
+{
+"name": "Folksy13_dll",
+"role": "Игрок проекта",
+"realName": "Фолкси",
+"color": 7950079,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692107546805/image.png?ex=6a6795ff&is=6a66447f&hm=3183163d2bee240836ae0a8f91d749bfffc3891a2ed8e5d1e65630d35f513493&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/@folksy13"
+},
+{
+"platform": "TELEGRAM",
+"url": "https://t.me/Folksy13Family"
+}
+]
+},
+{
+"name": "g6thblood",
+"role": "Игрок проекта",
+"realName": "Егор",
+"color": 13510924,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816386401374329/image.png?ex=6a6795b6&is=6a664436&hm=1a89097b4cb7e92a49aaaf6b27209d626dfab5b5ef3b351eba9d33721f23e8c4&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": []
+},
+{
+"name": "impartialkus",
+"role": "Игрок проекта",
+"realName": "Кира",
+"color": 16101094,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816386128740372/image.png?ex=6a6795b6&is=6a664436&hm=543162bdbd4141b18fc494dd26270a6a7ba0b08e0fddeafcdfa559357d06a2eb&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": []
+},
+{
+"name": "ba1toss",
+"role": "Игрок проекта",
+"realName": "Балтос",
+"color": 15704887,
+"avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385822560387/image.png?ex=6a6795b6&is=6a664436&hm=db1245b0f260bb118c80396b12ad775d330030b629c16b87a4f9ada95fb30f37&",
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [
+{
+"platform": "YOUTUBE",
+"url": "https://www.youtube.com/@bal2oss"
+}
+]
+}
+]
 }
