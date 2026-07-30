@@ -1815,6 +1815,225 @@
             border: 1px dashed #ff0055;
         }
 
+        .uroboros-minigame-btn {
+            background: linear-gradient(135deg, #ff0055 0%, #ff3377 100%);
+            border: 2px solid #ff0055;
+            color: #ffffff;
+            padding: 0.75rem;
+            font-family: 'uvKits', sans-serif !important;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.6);
+            margin-top: 1rem;
+        }
+
+        .uroboros-minigame-btn:hover {
+            background: linear-gradient(135deg, #ff3377 0%, #ff5599 100%);
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.9);
+            transform: scale(1.02);
+        }
+
+        /* Стили для модального окна кликера долга */
+        .debt-clicker-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.92);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100002;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            padding: 1rem;
+        }
+
+        .debt-clicker-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .debt-clicker-box {
+            background: linear-gradient(135deg, #0a1a0a 0%, #050505 100%);
+            border: 4px solid #00ff55;
+            box-shadow: 0 0 30px rgba(0, 255, 85, 0.5), inset 0 0 20px rgba(0, 255, 85, 0.1);
+            width: 100%;
+            max-width: 32rem;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            animation: debtClickerSlide 0.4s ease-out;
+        }
+
+        @keyframes debtClickerSlide {
+            from {
+                transform: scale(0.8) translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .debt-clicker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #00ff55;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .debt-clicker-title {
+            font-size: 1.6rem;
+            color: #00ff55;
+            font-family: 'uvKits', sans-serif !important;
+            text-shadow: 0 0 10px rgba(0, 255, 85, 0.8), 2px 2px 0 #000000;
+            animation: debtPulse 1.5s infinite alternate;
+        }
+
+        @keyframes debtPulse {
+            from {
+                text-shadow: 0 0 10px rgba(0, 255, 85, 0.8), 2px 2px 0 #000000;
+            }
+            to {
+                text-shadow: 0 0 20px rgba(0, 255, 85, 1), 2px 2px 0 #000000, 0 0 30px rgba(0, 255, 85, 0.5);
+            }
+        }
+
+        .debt-clicker-body {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .debt-display {
+            background: rgba(0, 255, 85, 0.1);
+            border: 2px solid #00ff55;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .debt-label {
+            font-size: 0.9rem;
+            color: #00ff55;
+            font-family: 'uvKits', sans-serif !important;
+            margin-bottom: 0.5rem;
+        }
+
+        .debt-amount {
+            font-size: 2.5rem;
+            color: #ffffff;
+            font-family: 'uvKits', sans-serif !important;
+            text-shadow: 0 0 15px rgba(0, 255, 85, 0.8);
+            margin-bottom: 0.5rem;
+            animation: debtGlow 2s infinite alternate;
+        }
+
+        @keyframes debtGlow {
+            from {
+                text-shadow: 0 0 15px rgba(0, 255, 85, 0.8);
+            }
+            to {
+                text-shadow: 0 0 25px rgba(0, 255, 85, 1), 0 0 35px rgba(0, 255, 85, 0.5);
+            }
+        }
+
+        .debt-multiplier {
+            font-size: 0.85rem;
+            color: #ff0055;
+            font-family: 'uvKits', sans-serif !important;
+        }
+
+        .clicker-area {
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .debt-click-btn {
+            background: linear-gradient(135deg, #00ff55 0%, #00cc44 100%);
+            border: 3px solid #00ff55;
+            color: #000000;
+            padding: 2rem 3rem;
+            font-family: 'uvKits', sans-serif !important;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 85, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 12rem;
+        }
+
+        .debt-click-btn:hover {
+            background: linear-gradient(135deg, #00cc44 0%, #00aa33 100%);
+            box-shadow: 0 0 30px rgba(0, 255, 85, 0.9);
+            transform: scale(1.05);
+        }
+
+        .debt-click-btn:active {
+            transform: scale(0.95);
+        }
+
+        .click-icon {
+            font-size: 2.5rem;
+        }
+
+        .click-text {
+            font-size: 1.2rem;
+        }
+
+        .debt-stats {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #00ff55;
+            padding: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            font-family: 'uvKits', sans-serif !important;
+        }
+
+        .stat-item span:first-child {
+            color: #00ff55;
+            font-size: 0.85rem;
+        }
+
+        .stat-item span:last-child {
+            color: #ffffff;
+            font-size: 1.2rem;
+        }
+
+        .reset-debt-btn {
+            background: rgba(255, 0, 85, 0.2);
+            border: 2px solid #ff0055;
+            color: #ff0055;
+            padding: 0.75rem;
+            font-family: 'uvKits', sans-serif !important;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .reset-debt-btn:hover {
+            background: rgba(255, 0, 85, 0.4);
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.5);
+        }
+
         .lore-box {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed var(--modal-accent-color, var(--accent-color));
@@ -2251,7 +2470,7 @@
     <div class="uroboros-modal" id="uroborosModal" onclick="closeUroborosModal(event)">
         <div class="uroboros-box" onclick="event.stopPropagation()">
             <div class="uroboros-header">
-                <div class="uroboros-title">🐉 УРОБОРОС БАНК 🐉</div>
+                <div class="uroboros-title">УРОБОРОС БАНК</div>
                 <button class="modal-close-btn" onclick="closeUroborosModal()">&times;</button>
             </div>
             <div class="uroboros-body">
@@ -2278,6 +2497,7 @@
                     </div>
                     <button class="uroboros-calc-btn" onclick="calculateUroborosLoan()">РАССЧИТАТЬ</button>
                     <div class="uroboros-result" id="loanResult"></div>
+                    <button class="uroboros-minigame-btn" onclick="openDebtClicker()">МИНИ-ИГРА: КЛИКЕР ДОЛГА ЛАЙНА</button>
                 </div>
                 <div class="uroboros-fine-print">
                     * Процентная ставка: 666% годовых<br>
@@ -2286,6 +2506,34 @@
                     * Коллекторы: Агата и Кира лично<br>
                     * В случае неуплаты: ваша душа принадлежит Уроборосу
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Мини-игра: Кликер долга Лайна -->
+    <div class="debt-clicker-modal" id="debtClickerModal" onclick="closeDebtClicker(event)">
+        <div class="debt-clicker-box" onclick="event.stopPropagation()">
+            <div class="debt-clicker-header">
+                <div class="debt-clicker-title">КЛИКЕР ДОЛГА ЛАЙНА</div>
+                <button class="modal-close-btn" onclick="closeDebtClicker()">&times;</button>
+            </div>
+            <div class="debt-clicker-body">
+                <div class="debt-display">
+                    <div class="debt-label">ТЕКУЩИЙ ДОЛГ:</div>
+                    <div class="debt-amount" id="debtAmount">100</div>
+                    <div class="debt-multiplier">Каждый клик: +200% долга</div>
+                </div>
+                <div class="clicker-area">
+                    <button class="debt-click-btn" id="debtClickBtn" onclick="addDebt()">
+                        <span class="click-icon">$$$</span>
+                        <span class="click-text">КЛИКНИ!</span>
+                    </button>
+                </div>
+                <div class="debt-stats">
+                    <div class="stat-item"><span>Кликов:</span> <span id="clickCount">0</span></div>
+                    <div class="stat-item"><span>Множитель:</span> <span id="currentMultiplier">x3</span></div>
+                </div>
+                <button class="reset-debt-btn" onclick="resetDebt()">СБРОСИТЬ ДОЛГ</button>
             </div>
         </div>
     </div>
@@ -3289,15 +3537,59 @@
 
             const resultHTML = `
                 <div class="loan-success">
-                    <div class="loan-row"><span>Сумма кредита:</span> <span>${amount.toLocaleString()} 💎</span></div>
-                    <div class="loan-row"><span>Комиссия (13%):</span> <span>${commission.toLocaleString()} 💎</span></div>
-                    <div class="loan-row"><span>Проценты (${days} дней):</span> <span>${interest.toLocaleString()} 💎</span></div>
-                    <div class="loan-row loan-total"><span>ИТОГО К ОПЛАТЕ:</span> <span>${totalToPay.toLocaleString()} 💎</span></div>
-                    <div class="loan-row loan-warning"><span>Переплата:</span> <span>${(commission + interest).toLocaleString()} 💎 (${((commission + interest) / amount * 100).toFixed(1)}%)</span></div>
+                    <div class="loan-row"><span>Сумма кредита:</span> <span>${amount.toLocaleString()}</span></div>
+                    <div class="loan-row"><span>Комиссия (13%):</span> <span>${commission.toLocaleString()}</span></div>
+                    <div class="loan-row"><span>Проценты (${days} дней):</span> <span>${interest.toLocaleString()}</span></div>
+                    <div class="loan-row loan-total"><span>ИТОГО К ОПЛАТЕ:</span> <span>${totalToPay.toLocaleString()}</span></div>
+                    <div class="loan-row loan-warning"><span>Переплата:</span> <span>${(commission + interest).toLocaleString()} (${((commission + interest) / amount * 100).toFixed(1)}%)</span></div>
                 </div>
             `;
 
             document.getElementById('loanResult').innerHTML = resultHTML;
+        }
+
+        // Debt clicker mini-game logic
+        let currentDebt = 100;
+        let clickCount = 0;
+
+        function openDebtClicker() {
+            document.getElementById('debtClickerModal').classList.add('show');
+        }
+
+        function closeDebtClicker(e) {
+            if (!e || e.target.id === 'debtClickerModal' || e.target.classList.contains('modal-close-btn')) {
+                document.getElementById('debtClickerModal').classList.remove('show');
+            }
+        }
+
+        function addDebt() {
+            // Each click adds 200% of current debt (so debt becomes 300% of previous)
+            const debtIncrease = currentDebt * 2;
+            currentDebt += debtIncrease;
+            clickCount++;
+
+            updateDebtDisplay();
+            animateClick();
+        }
+
+        function resetDebt() {
+            currentDebt = 100;
+            clickCount = 0;
+            updateDebtDisplay();
+        }
+
+        function updateDebtDisplay() {
+            document.getElementById('debtAmount').textContent = Math.floor(currentDebt).toLocaleString();
+            document.getElementById('clickCount').textContent = clickCount;
+            document.getElementById('currentMultiplier').textContent = 'x3';
+        }
+
+        function animateClick() {
+            const btn = document.getElementById('debtClickBtn');
+            btn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                btn.style.transform = 'scale(1)';
+            }, 100);
         }
 
         loadTeamMembers();
