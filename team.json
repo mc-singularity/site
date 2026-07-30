@@ -284,7 +284,11 @@
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
-      "socials": []
+      "socials":
+      [
+          "platform": "СЕКРЕТНЫЙ ТГК",
+          "url": "https://t.me/enderhack_room"
+      ]
     },
     {
       "name": "Folksy13_dll",
