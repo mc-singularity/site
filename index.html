@@ -3141,53 +3141,80 @@
         <img id="lightboxImage" src="" alt="Full view">
     </div>
 
-    <!-- Пасхалка EnderHack1 (4 клика -> замена всего текста и состава) -->
+    <!-- Пасхалка EnderHack1 и Maksimm205 (4 клика -> замена всего текста и состава) -->
     <script>
-        (function setupEnderEasterEgg() {
-            let clickCount = 0;
-            let clickTimer = null;
+        (function setupPlayerEasterEggs() {
+            let enderClickCount = 0;
+            let enderClickTimer = null;
+
+            let maksimClickCount = 0;
+            let maksimClickTimer = null;
 
             document.addEventListener('click', function(e) {
                 const targetCard = e.target.closest('.team-member, .author-chip, .player-head, [data-name]');
                 const targetText = targetCard ? targetCard.textContent : (e.target.textContent || '');
 
-                // Проверка на упоминание EnderHack1 или Эндера
+                // 1. Проверка на клики по Эндеру (EnderHack1 / Эндер)
                 if (/enderhack|эндер/i.test(targetText)) {
-                    clickCount++;
-                    clearTimeout(clickTimer);
+                    enderClickCount++;
+                    clearTimeout(enderClickTimer);
 
-                    clickTimer = setTimeout(() => {
-                        clickCount = 0;
+                    enderClickTimer = setTimeout(() => {
+                        enderClickCount = 0;
                     }, 1500);
 
-                    if (clickCount >= 4) {
-                        triggerEnderTakeover();
-                        clickCount = 0;
+                    if (enderClickCount >= 4) {
+                        triggerPlayerTakeover({
+                            name: "EnderHack1",
+                            realName: "Эндер",
+                            role: "Эндер когда видос?",
+                            color: 10359486
+                        }, "Эндер когда видос?");
+                        enderClickCount = 0;
                     }
                 } else {
-                    clickCount = 0;
+                    enderClickCount = 0;
+                }
+
+                // 2. Проверка на клики по Максиму (Maksimm205 / Максим / Макс)
+                if (/maksimm205|максим|макс/i.test(targetText)) {
+                    maksimClickCount++;
+                    clearTimeout(maksimClickTimer);
+
+                    maksimClickTimer = setTimeout(() => {
+                        maksimClickCount = 0;
+                    }, 1500);
+
+                    if (maksimClickCount >= 4) {
+                        triggerPlayerTakeover({
+                            name: "Maksimm205",
+                            realName: "Максим",
+                            role: "Максим скажи нахуй",
+                            color: 15473
+                        }, "Максим скажи нахуй");
+                        maksimClickCount = 0;
+                    }
+                } else {
+                    maksimClickCount = 0;
                 }
             });
 
-            function triggerEnderTakeover() {
-                const EASTER_TEXT = "Эндер когда видос?";
-
-                // Объект Эндера для подмены данных
-                const enderMember = {
-                    name: "EnderHack1",
-                    role: EASTER_TEXT,
-                    realName: "Эндер",
-                    color: 10359486,
-                    avatarUrl: "https://minotar.net/helm/EnderHack1/80",
+            function triggerPlayerTakeover(playerObj, easterText) {
+                const memberData = {
+                    name: playerObj.name,
+                    role: easterText,
+                    realName: playerObj.realName,
+                    color: playerObj.color,
+                    avatarUrl: `https://minotar.net/helm/${playerObj.name}/80`,
                     imageUrl: null,
                     priority: 0,
                     hasCard: false,
                     socials: []
                 };
 
-                // Заменяем массивы игроков на коллекцию из Эндерхаков
+                // Заменяем массивы игроков на выбранного персонажа
                 if (window.fullTeamMembers) {
-                    window.fullTeamMembers = window.fullTeamMembers.map(() => ({ ...enderMember }));
+                    window.fullTeamMembers = window.fullTeamMembers.map(() => ({ ...memberData }));
                     const teamMembersContainer = document.getElementById('teamMembers');
                     if (teamMembersContainer) {
                         teamMembersContainer.innerHTML = '';
@@ -3196,7 +3223,7 @@
                 }
 
                 if (window.fullArchiveMembers) {
-                    window.fullArchiveMembers = window.fullArchiveMembers.map(() => ({ ...enderMember }));
+                    window.fullArchiveMembers = window.fullArchiveMembers.map(() => ({ ...memberData }));
                     const archiveMembersContainer = document.getElementById('archiveMembers');
                     if (archiveMembersContainer) {
                         archiveMembersContainer.innerHTML = '';
@@ -3208,11 +3235,11 @@
                     resizeAllGridItems();
                 }
 
-                // Рекурсивный замен текстовых узлов во всем документе
+                // Рекурсивная замена текстовых узлов во всем документе
                 function replaceAllTextNodes(element) {
                     if (element.nodeType === Node.TEXT_NODE) {
                         if (element.nodeValue && element.nodeValue.trim() !== '') {
-                            element.nodeValue = EASTER_TEXT;
+                            element.nodeValue = easterText;
                         }
                     } else if (element.nodeType === Node.ELEMENT_NODE) {
                         if (element.tagName !== 'SCRIPT' && element.tagName !== 'STYLE') {
@@ -3226,15 +3253,15 @@
                 replaceAllTextNodes(document.body);
 
                 // Меням тайтл вкладки
-                document.title = EASTER_TEXT;
+                document.title = easterText;
 
                 // Заменяем плейсхолдеры и значения у инпутов/кнопок
                 document.querySelectorAll('input, textarea, button').forEach(el => {
                     if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                        el.value = EASTER_TEXT;
-                        el.placeholder = EASTER_TEXT;
+                        el.value = easterText;
+                        el.placeholder = easterText;
                     } else if (el.tagName === 'BUTTON') {
-                        el.textContent = EASTER_TEXT;
+                        el.textContent = easterText;
                     }
                 });
             }
