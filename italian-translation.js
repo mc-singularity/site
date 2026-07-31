@@ -451,7 +451,6 @@ function switchToItalian() {
     }
     
     console.log(`Translated ${translatedCount} text nodes`);
-    alert(`Переведено ${translatedCount} элементов на итальянский!`);
     
     // Show restore button
     document.getElementById('italianRestoreBtn').style.display = 'block';
