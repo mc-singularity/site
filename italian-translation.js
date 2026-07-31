@@ -238,7 +238,170 @@ const italianTranslations = {
     'Titoli finali',
 
     'информация':
-    'informazioni'
+    'informazioni',
+
+        'Аметистовый дождь начинаеться..':
+        'La pioggia di ametiste sta iniziando..',
+
+    'Обновить':
+        'Aggiorna',
+
+    'Скрыть состав':
+        'Nascondi squadra',
+
+    'А-Я':
+        'A-Z',
+
+    'Я-А':
+        'Z-A',
+
+    'Информация':
+        'Informazioni',
+
+    'Ссылка на пост в тг':
+        'Link al post Telegram',
+
+    'VIDEO':
+        'VIDEO',
+
+
+    // Пропущенные события
+
+    'В мире начинают происходить первые аномалии: появляются странные столбы из красной магмы, а на спавн падает метеорит с непонятным сообщением. Вскоре игроки обнаруживают загадочный маленький росток, который абсолютно неуязвим к разрушению и иссушает всё вокруг себя, а рядом с ним также находят магмовые столбы.':
+        'Nel mondo iniziano a verificarsi le prime anomalie: compaiono strani pilastri di magma rosso e un meteorite cade allo spawn con un messaggio misterioso. Poco dopo i giocatori scoprono un misterioso piccolo germoglio completamente indistruttibile, che prosciuga tutto ciò che lo circonda, e vicino ad esso vengono trovati anche pilastri di magma.',
+
+    'Дальше события начинают развиваться стремительно: дерево, которое раньше было небольшим, теперь стало совсем огромным и превысило предел высоты самой игры. Вдобавок заражение теперь распространяется прямо на глазах и уже успело охватить все базы игроков, даже самые дальние.':
+        'Successivamente gli eventi iniziano ad accelerare: l’albero, che prima era piccolo, diventa enorme e supera il limite massimo di altezza del gioco. Inoltre l’infezione si diffonde davanti agli occhi dei giocatori e ha già raggiunto tutte le basi, anche quelle più lontane.',
+
+    'Из древа прямо на поверхности выбрались корни; один из таких корней разрушил одну из адских башен, на месте которой теперь образовалась часть адского измерения.':
+        'Dall’albero sono emerse radici direttamente sulla superficie; una di esse ha distrutto una torre del Nether, lasciando al suo posto una parte della dimensione infernale.',
+
+    'Сущности выбираются из этого измерения и сразу зомбифицируются.':
+        'Le entità escono da questa dimensione e vengono immediatamente zombificate.',
+
+
+    // Сезон 2
+
+    'Аметистовый дождь':
+        'Pioggia di ametiste',
+
+    'Аметистовый дождь начинаеться..':
+        'La pioggia di ametiste sta iniziando..',
+
+
+    // Медиа
+
+    'информация Singularity| что будет на новом сезоне сервера?':
+        'Informazioni Singularity | cosa ci sarà nella nuova stagione del server?',
+
+    'Финальные титры':
+        'Titoli finali',
+
+    'Смотреть':
+        'Guarda',
+
+    'СМОТРЕТЬ':
+        'GUARDA',
+
+    'ЮТУБ':
+        'YOUTUBE',
+
+    'ЮТУБ СТРИМ':
+        'YOUTUBE STREAM',
+
+    'ЮТУБ SHORTS':
+        'YOUTUBE SHORTS',
+
+
+    // Названия видео
+
+    'Смотрю в стену':
+        'Guardo il muro',
+
+    'Затроллил какого-то чувака Сервера SINGULARITY':
+        'Ho trollato un tizio del server SINGULARITY',
+
+    'SL 1 - ИГРАЕМ НА СИНГУЛЯРИТИ В ВР':
+        'SL 1 - GIOCHIAMO A SINGOLARITÀ IN VR',
+
+    'SL 1 - ИГРАЕМ НА СИНГУЛЯРИТИ В ВР - продолжение':
+        'SL 1 - GIOCHIAMO A SINGOLARITÀ IN VR - continuazione',
+
+    'УНГА БУНГА 🍌':
+        'UNGA BUNGA 🍌',
+
+    'Начало 2 сезона FineWorld|Minecraft':
+        'Inizio stagione 2 FineWorld | Minecraft',
+
+    'Набор на сервер FineWorld | Minecraft':
+        'Reclutamento per il server FineWorld | Minecraft',
+
+    'заявка на Singularity':
+        'Candidatura per Singularity',
+
+    'заявка на SINGULARITY':
+        'Candidatura per SINGULARITY',
+
+    'Тест':
+        'Test',
+
+    'test':
+        'test',
+
+    'Это изменит твой Minecraft навсегда #майнкрафт #моды':
+        'Questo cambierà Minecraft per sempre #minecraft #mod',
+
+    'Набор В Команду| Kappyr-team':
+        'Reclutamento nel team | Kappyr-team',
+
+    'КАК МЫ УЗНАЛИ О ВЕЛИКОМ ЗАРАЖЕНИИ ДЕРЕВА В МАЙНКРАФТЕ SINGULARITY':
+        'COME ABBIAMO SCOPERTO LA GRANDE INFEZIONE DELL’ALBERO IN MINECRAFT SINGULARITY',
+
+    'МОНСТР СРЕДИ НАС В МАЙНКРАФТЕ':
+        'UN MOSTRO TRA NOI IN MINECRAFT',
+
+    '2000 алмазов долга: не повторяйте моих ошибок':
+        '2000 diamanti di debito: non ripetete i miei errori',
+
+    'Я УМЕР и ПОТЕРЯЛ ВСЁ на сервере Minecraft! 😱':
+        'SONO MORTO e HO PERSO TUTTO sul server Minecraft! 😱',
+
+    'MINECRAFT ИНТЕРВЬЮ НА ПРИВАТНОМ СЕРВЕРЕ':
+        'INTERVISTA MINECRAFT SU UN SERVER PRIVATO',
+
+    'Месть за убийства | Minecraft':
+        'Vendetta per gli omicidi | Minecraft',
+
+    'КОГДА У ДРУГА БОЛЬШОЙ ПИНГ':
+        'QUANDO UN AMICO HA UN PING ALTO',
+
+    'МАЙНКРАФТ СКИНЫ':
+        'SKIN DI MINECRAFT',
+
+    'ГОЛОСОВАНИЕ':
+        'VOTAZIONE',
+
+    'Сингулярити старт первого сезона!':
+        'Inizio della prima stagione di Singolarità!',
+
+    'Minecraft Stream,но я просто выживаю...':
+        'Minecraft Stream, ma sto solo sopravvivendo...',
+
+    'Майкрафт стрим ,но я играю с версии с которой я начал играть в майкрафт!!!':
+        'Minecraft stream, ma gioco alla versione con cui ho iniziato a giocare a Minecraft!!!',
+
+    'Пишу головного ассистента - Целеста #jarvis #voiceassistant':
+        'Creo l’assistente principale - Celesta #jarvis #voiceassistant',
+
+    'Создаем магазин в supermarket togheter! -- ft Themday, Sanya':
+        'Creiamo un negozio in Supermarket Together! -- ft Themday, Sanya',
+
+    'Отрывок моей анимации':
+        'Estratto della mia animazione',
+
+    'Singularity новый сервере по ВАНИЛЕ':
+        'Singularity nuovo server vanilla',
+
 };
 
 function switchToItalian() {
