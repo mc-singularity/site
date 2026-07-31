@@ -1,81 +1,473 @@
 // Italian translation easter egg for pitrmatti
 const originalTexts = new Map();
-
-// Translation API configuration
-const TRANSLATION_API = {
-    // LibreTranslate API (free, open-source, no key required)
-    baseUrl: 'https://libretranslate.com/translate',
-    sourceLang: 'ru',
-    targetLang: 'it',
-    // Optional: Add your API key if using a paid instance
-    apiKey: null // Will be loaded from environment variable if available
+const italianTranslations = {
+    'Приватный сервер КМ': 'Server Privato CM',
+    'Состав команды': 'Squadra',
+    'Показать состав': 'Mostra Squadra',
+    'Скрыть состав': 'Nascondi Squadra',
+    'Сортировка:': 'Ordinamento:',
+    'А-Я': 'A-Z',
+    'Поиск по имени:': 'Cerca per nome:',
+    'Игрок проекта': 'Giocatore del Progetto',
+    'Администратор': 'Amministratore',
+    'Модератор': 'Moderatore',
+    'Разработчик': 'Sviluppatore',
+    'Художник': 'Artista',
+    'Стример': 'Streamer',
+    'Видео': 'Video',
+    'Стримы': 'Stream',
+    'Shorts': 'Shorts',
+    'Все': 'Tutto',
+    'Новости': 'Notizie',
+    'Загрузка новостей...': 'Caricamento notizie...',
+    'Подробнее': 'Per saperne di più',
+    'Социальные сети': 'Social Network',
+    'УРОБОРОС БАНК': 'BANCO UROBOROS',
+    'Сумма кредита:': 'Importo del prestito:',
+    'Срок (дней):': 'Durata (giorni):',
+    'РАССЧИТАТЬ': 'CALCOLA',
+    'МИНИ-ИГРА: КЛИКЕР ДОЛГА ЛАЙНА': 'MINI-GIOCO: CLICKER DEL DEBITO DI LAIN',
+    'ТЕКУЩИЙ ДОЛГ:': 'DEBITO ATTUALE:',
+    'Каждый клик: +200% долга': 'Ogni clic: +200% debito',
+    'КЛИКНИ!': 'CLICCA!',
+    'Кликов:': 'Clic:',
+    'Множитель:': 'Moltiplicatore:',
+    'СБРОСИТЬ ДОЛГ': 'RESETTA DEBITO',
+    'Азурп опять все взорвал..': 'Azurp ha fatto esplodere tutto di nuovo..',
+    'ВОССТАНОВИТЬ': 'RIPRISTINA',
+    'Максим,скажи нахуй': 'Massimo,dì cazzo',
+    'Максим здесь!': 'Massimo è qui!',
+    'Сингулярность': 'Singolarità',
+    'Архив': 'Archivio',
+    'Обновлено': 'Aggiornato',
+    'Автор': 'Autore',
+    'Комментарии': 'Commenti',
+    'Лайки': 'Mi piace',
+    'Просмотры': 'Visualizzazioni',
+    'Поделиться': 'Condividi',
+    'Скачать': 'Scarica',
+    'Ссылка': 'Link',
+    'Копировать': 'Copia',
+    'Год': 'Anno',
+    'Месяц': 'Mese',
+    'День': 'Giorno',
+    'Час': 'Ora',
+    'Минута': 'Minuto',
+    'Секунда': 'Secondo',
+    'Сегодня': 'Oggi',
+    'Вчера': 'Ieri',
+    'Завтра': 'Domani',
+    'Неделя': 'Settimana',
+    'Январь': 'Gennaio',
+    'Февраль': 'Febbraio',
+    'Март': 'Marzo',
+    'Апрель': 'Aprile',
+    'Май': 'Maggio',
+    'Июнь': 'Giugno',
+    'Июль': 'Luglio',
+    'Август': 'Agosto',
+    'Сентябрь': 'Settembre',
+    'Октябрь': 'Ottobre',
+    'Ноябрь': 'Novembre',
+    'Декабрь': 'Dicembre',
+    'Понедельник': 'Lunedì',
+    'Вторник': 'Martedì',
+    'Среда': 'Mercoledì',
+    'Четверг': 'Giovedì',
+    'Пятница': 'Venerdì',
+    'Суббота': 'Sabato',
+    'Воскресенье': 'Domenica',
+    'Игрок': 'Giocatore',
+    'Команда': 'Squadra',
+    'Проект': 'Progetto',
+    'Сервер': 'Server',
+    'Мир': 'Mondo',
+    'Карта': 'Mappa',
+    'Режим': 'Modalità',
+    'Настройки': 'Impostazioni',
+    'Профиль': 'Profilо',
+    'Аккаунт': 'Account',
+    'Войти': 'Accedi',
+    'Выйти': 'Esci',
+    'Регистрация': 'Registrazione',
+    'Пароль': 'Password',
+    'Email': 'Email',
+    'Имя': 'Nome',
+    'Фамилия': 'Cognome',
+    'Никнейм': 'Nickname',
+    'Аватар': 'Avatar',
+    'Статус': 'Stato',
+    'Онлайн': 'Online',
+    'Офлайн': 'Offline',
+    'В игре': 'In gioco',
+    'Загрузка': 'Caricamento',
+    'Ошибка': 'Errore',
+    'Успешно': 'Successo',
+    'Отмена': 'Annulla',
+    'Подтвердить': 'Conferma',
+    'Да': 'Sì',
+    'Нет': 'No',
+    'ОК': 'OK',
+    'Закрыть': 'Chiudi',
+    'Открыть': 'Apri',
+    'Сохранить': 'Salva',
+    'Удалить': 'Elimina',
+    'Редактировать': 'Modifica',
+    'Создать': 'Crea',
+    'Добавить': 'Aggiungi',
+    'Убрать': 'Rimuovi',
+    'Поиск': 'Cerca',
+    'Фильтр': 'Filtro',
+    'Страница': 'Pagina',
+    'из': 'di',
+    'Предыдущая': 'Precedente',
+    'Следующая': 'Successiva',
+    'Первая': 'Prima',
+    'Последняя': 'Ultima',
+    'Главная': 'Home',
+    'Контакты': 'Contatti',
+    'О нас': 'Chi siamo',
+    'Правила': 'Regole',
+    'FAQ': 'FAQ',
+    'Поддержка': 'Supporto',
+    'Донат': 'Donazione',
+    'Магазин': 'Negozio',
+    'Форум': 'Forum',
+    'Чат': 'Chat',
+    'Дискорд': 'Discord',
+    'Телеграм': 'Telegram',
+    'ВКонтакте': 'VK',
+    'YouTube': 'YouTube',
+    'Twitch': 'Twitch',
+    'Twitter': 'Twitter',
+    'Instagram': 'Instagram',
+    'TikTok': 'TikTok',
+    'Season': 'Stagione',
+    'Episode': 'Episodio',
+    'Chapter': 'Capitolo',
+    'Part': 'Parte',
+    'Volume': 'Volume',
+    'Series': 'Serie',
+    'Season 1': 'Stagione 1',
+    'Singularity': 'Singolarità',
+    'SINGULARITY': 'SINGOLARITÀ',
+    'Кредит': 'Credito',
+    'Долг': 'Debito',
+    'Процент': 'Percentuale',
+    'Комиссия': 'Commissione',
+    'Штраф': 'Multa',
+    'Пеня': 'Penale',
+    'Выплата': 'Pagamento',
+    'Срок': 'Termine',
+    'Сумма': 'Importo',
+    'Итого': 'Totale',
+    'Ежедневно': 'Giornaliero',
+    'Еженедельно': 'Settimanale',
+    'Ежемесячно': 'Mensile',
+    'Годовой': 'Annuale',
+    'Банк': 'Banca',
+    'Кредитор': 'Creditore',
+    'Заемщик': 'Debitore',
+    'Гарантия': 'Garanzia',
+    'Залог': 'Ipoteca',
+    'Ставка': 'Tasso',
+    'Лимит': 'Limite',
+    'Баланс': 'Saldo',
+    'Счёт': 'Conto',
+    'Карта': 'Carta',
+    'Перевод': 'Trasferimento',
+    'Платёж': 'Pagamento',
+    'Списание': 'Addebito',
+    'Пополнение': 'Ricarica',
+    'История': 'Storia',
+    'Операция': 'Operazione',
+    'Транзакция': 'Transazione',
+    'Валюта': 'Valuta',
+    'Рубль': 'Rublo',
+    'Доллар': 'Dollaro',
+    'Евро': 'Euro',
+    'Криптовалюта': 'Criptovaluta',
+    'Биткоин': 'Bitcoin',
+    'Эфириум': 'Ethereum',
+    'Кошелёк': 'Portafoglio',
+    'Адрес': 'Indirizzo',
+    'Ключ': 'Chiave',
+    'Семя': 'Seed',
+    'Фраза': 'Frase',
+    'Код': 'Codice',
+    'Пин': 'PIN',
+    'Логин': 'Login',
+    'Восстановление': 'Recupero',
+    'Сброс': 'Reset',
+    'Активация': 'Attivazione',
+    'Деактивация': 'Disattivazione',
+    'Блокировка': 'Blocco',
+    'Разблокировка': 'Sblocco',
+    'Подтверждение': 'Conferma',
+    'Верификация': 'Verifica',
+    'Аутентификация': 'Autenticazione',
+    'Авторизация': 'Autorizzazione',
+    'Доступ': 'Accesso',
+    'Права': 'Permessi',
+    'Роль': 'Ruolo',
+    'Группа': 'Gruppo',
+    'Категория': 'Categoria',
+    'Раздел': 'Sezione',
+    'Подраздел': 'Sottosezione',
+    'Тема': 'Tema',
+    'Сообщение': 'Messaggio',
+    'Уведомление': 'Notifica',
+    'Оповещение': 'Avviso',
+    'Предупреждение': 'Avvertimento',
+    'Критическая ошибка': 'Errore critico',
+    'Системная ошибка': 'Errore di sistema',
+    'Сетевая ошибка': 'Errore di rete',
+    'Ошибка сервера': 'Errore del server',
+    'Ошибка клиента': 'Errore del client',
+    'Ошибка базы данных': 'Errore del database',
+    'Ошибка валидации': 'Errore di convalida',
+    'Ошибка авторизации': 'Errore di autorizzazione',
+    'Ошибка аутентификации': 'Errore di autenticazione',
+    'Ошибка доступа': 'Errore di accesso',
+    'Ошибка прав': 'Errore di permessi',
+    'Ошибка роли': 'Errore di ruolo',
+    'Ошибка группы': 'Errore di gruppo',
+    'Ошибка категории': 'Errore di categoria',
+    'Ошибка раздела': 'Errore di sezione',
+    'Ошибка темы': 'Errore di tema',
+    'Ошибка сообщения': 'Errore di messaggio',
+    'Ошибка уведомления': 'Errore di notifica',
+    'Ошибка оповещения': 'Errore di avviso',
+    'Ошибка предупреждения': 'Errore di avvertimento',
+    // Team member roles
+    'Основатель': 'Fondatore',
+    'Тех. админ': 'Admin Tecnico',
+    'Билдер': 'Builder',
+    'Сценарист': 'Sceneggiatore',
+    'Итальянец': 'Italiano',
+    // Team member names
+    'Марк': 'Marco',
+    'Кази': 'Kazi',
+    'Хомяк': 'Criceto',
+    'Обрёл лицензию': 'Ha ottenuto la licenza',
+    'Азурп': 'Azurp',
+    'Лусэм': 'Lusem',
+    'Яркиз': 'Yarkiz',
+    'Врай': 'Vrai',
+    'Зендай': 'Zenday',
+    'Кловер': 'Clover',
+    'Озди': 'Ozdi',
+    'Лайн': 'Lain',
+    'Агата': 'Agata',
+    'Эндер': 'Ender',
+    'Фолкси': 'Folksy',
+    'Егор': 'Egor',
+    'Кира': 'Kira',
+    'Балтос': 'Baltos',
+    'ПиццаПаста': 'PizzaPasta',
+    // Common words
+    'и': 'e',
+    'в': 'in',
+    'на': 'su',
+    'с': 'con',
+    'для': 'per',
+    'что': 'che',
+    'как': 'come',
+    'когда': 'quando',
+    'где': 'dove',
+    'кто': 'chi',
+    'чего': 'di cosa',
+    'почему': 'perché',
+    'зачем': 'a cosa serve',
+    'можно': 'si può',
+    'нельзя': 'non si può',
+    'надо': 'bisogna',
+    'хочешь': 'vuoi',
+    'хотеть': 'volere',
+    'делать': 'fare',
+    'сделать': 'fare',
+    'быть': 'essere',
+    'иметь': 'avere',
+    'идти': 'andare',
+    'прийти': 'venire',
+    'сказать': 'dire',
+    'говорить': 'parlare',
+    'видеть': 'vedere',
+    'слышать': 'sentire',
+    'знать': 'sapere',
+    'понимать': 'capire',
+    'думать': 'pensare',
+    'хотеть': 'volere',
+    'любить': 'amare',
+    'ненавидеть': 'odiare',
+    'нравиться': 'piacere',
+    'работать': 'lavorare',
+    'играть': 'giocare',
+    'смотреть': 'guardare',
+    'слушать': 'ascoltare',
+    'читать': 'leggere',
+    'писать': 'scrivere',
+    'ждать': 'aspettare',
+    'помогать': 'aiutare',
+    'использовать': 'usare',
+    'нужен': 'necessario',
+    'нужна': 'necessaria',
+    'нужно': 'necessario',
+    'хорошо': 'bene',
+    'плохо': 'male',
+    'большой': 'grande',
+    'маленький': 'piccolo',
+    'новый': 'nuovo',
+    'старый': 'vecchio',
+    'длинный': 'lungo',
+    'короткий': 'corto',
+    'высокий': 'alto',
+    'низкий': 'basso',
+    'широкий': 'largo',
+    'узкий': 'stretto',
+    'тяжёлый': 'pesante',
+    'лёгкий': 'leggero',
+    'быстрый': 'veloce',
+    'медленный': 'lento',
+    'красивый': 'bello',
+    'уродливый': 'brutto',
+    'умный': 'intelligente',
+    'глупый': 'stupido',
+    'сильный': 'forte',
+    'слабый': 'debole',
+    'молодой': 'giovane',
+    'старый': 'vecchio',
+    'богатый': 'ricco',
+    'бедный': 'povero',
+    'добрый': 'buono',
+    'злой': 'cattivo',
+    'весёлый': 'allegro',
+    'грустный': 'triste',
+    'счастливый': 'felice',
+    'несчастный': 'infelice',
+    'здоровый': 'sano',
+    'больной': 'malato',
+    'живой': 'vivo',
+    'мёртвый': 'morto',
+    'правда': 'vero',
+    'ложь': 'falso',
+    'да': 'sì',
+    'нет': 'no',
+    'может': 'può',
+    'должен': 'deve',
+    'хочет': 'vuole',
+    'знает': 'sa',
+    'понимает': 'capisce',
+    'думает': 'pensa',
+    'говорит': 'parla',
+    'делает': 'fa',
+    'идёт': 'va',
+    'приходит': 'viene',
+    'видит': 'vede',
+    'слышит': 'sente',
+    'любит': 'ama',
+    'ненавидит': 'odia',
+    'работает': 'lavora',
+    'играет': 'gioca',
+    'смотрит': 'guarda',
+    'слушает': 'ascolta',
+    'читает': 'legge',
+    'пишет': 'scrive',
+    'ждёт': 'aspetta',
+    'помогает': 'aiuta',
+    'использует': 'usa',
+    'нужен': 'è necessario',
+    'хорошо': 'bene',
+    'плохо': 'male',
+    // UI elements
+    'Меню': 'Menu',
+    'Главная': 'Home',
+    'Профиль': 'Profilo',
+    'Настройки': 'Impostazioni',
+    'Выход': 'Esci',
+    'Вход': 'Accedi',
+    'Регистрация': 'Registrazione',
+    'Забыли пароль?': 'Password dimenticata?',
+    'Запомнить меня': 'Ricordami',
+    'Войти через': 'Accedi con',
+    'Или': 'Oppure',
+    'Уже есть аккаунт?': 'Hai già un account?',
+    'Нет аккаунта?': 'Non hai un account?',
+    'Создать аккаунт': 'Crea account',
+    'Войти в аккаунт': 'Accedi al account',
+    'Добро пожаловать': 'Benvenuto',
+    'Успешный вход': 'Accesso riuscito',
+    'Ошибка входа': 'Errore di accesso',
+    'Неверный логин или пароль': 'Login o password errati',
+    'Пользователь не найден': 'Utente non trovato',
+    'Пользователь уже существует': 'Utente già esistente',
+    'Email уже занята': 'Email già in uso',
+    'Неверный email': 'Email non valida',
+    'Слишком короткий пароль': 'Password troppo corta',
+    'Пароли не совпадают': 'Le password non corrispondono',
+    'Обязательное поле': 'Campo obbligatorio',
+    'Неверный формат': 'Formato non valido',
+    'Максимальная длина': 'Lunghezza massima',
+    'Минимальная длина': 'Lunghezza minima',
+    'Загрузить': 'Carica',
+    'Скачать': 'Scarica',
+    'Удалить': 'Elimina',
+    'Редактировать': 'Modifica',
+    'Сохранить': 'Salva',
+    'Отмена': 'Annulla',
+    'Подтвердить': 'Conferma',
+    'Да, удалить': 'Sì, elimina',
+    'Нет, отменить': 'No, annulla',
+    'Вы уверены?': 'Sei sicuro?',
+    'Это действие нельзя отменить': 'Questa azione non può essere annullata',
+    'Операция выполнена успешно': 'Operazione completata con successo',
+    'Произошла ошибка': 'Si è verificato un errore',
+    'Попробуйте снова': 'Riprova',
+    'Загрузка...': 'Caricamento...',
+    'Пожалуйста, подождите': 'Per favore, aspetta',
+    'Готово': 'Fatto',
+    'Успех': 'Successo',
+    'Ошибка': 'Errore',
+    'Предупреждение': 'Avvertimento',
+    'Информация': 'Informazione',
+    'Совет': 'Suggerimento',
+    'Помощь': 'Aiuto',
+    'Поддержка': 'Supporto',
+    'Контакты': 'Contatti',
+    'О проекте': 'Chi siamo',
+    'Правила': 'Regole',
+    'Условия использования': 'Termini di utilizzo',
+    'Политика конфиденциальности': 'Privacy policy',
+    'Версия': 'Versione',
+    'Обновить': 'Aggiorna',
+    'Обновления доступны': 'Aggiornamenti disponibili',
+    'Последняя версия': 'Ultima versione',
+    'Текущая версия': 'Versione attuale',
+    'Проверить обновления': 'Controlla aggiornamenti',
+    'Автоматические обновления': 'Aggiornamenti automatici',
+    'Уведомления': 'Notifiche',
+    'Звук': 'Suono',
+    'Вибрация': 'Vibrazione',
+    'Язык': 'Lingua',
+    'Тема': 'Tema',
+    'Светлая тема': 'Tema chiaro',
+    'Тёмная тема': 'Tema scuro',
+    'Автоматическая тема': 'Tema automatico',
+    'Размер шрифта': 'Dimensione carattere',
+    'Маленький': 'Piccolo',
+    'Средний': 'Medio',
+    'Большой': 'Grande',
+    'Огромный': 'Enorme'
 };
 
-// Load API key from environment variable (for GitHub Secrets)
-if (typeof process !== 'undefined' && process.env.TRANSLATION_API_KEY) {
-    TRANSLATION_API.apiKey = process.env.TRANSLATION_API_KEY;
-}
-
-// Cache for translations to avoid repeated API calls
-const translationCache = new Map();
-
-async function translateText(text) {
-    // Check cache first
-    if (translationCache.has(text)) {
-        return translationCache.get(text);
-    }
-    
-    // Skip if text doesn't contain Russian
-    if (!/[а-яА-ЯЁё]/.test(text)) {
-        return text;
-    }
-    
-    // Skip if text is too short or contains only special characters
-    if (text.trim().length < 2) {
-        return text;
-    }
-    
-    try {
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-        
-        // Add API key if available
-        if (TRANSLATION_API.apiKey) {
-            headers['Authorization'] = `Bearer ${TRANSLATION_API.apiKey}`;
-        }
-        
-        const response = await fetch(TRANSLATION_API.baseUrl, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify({
-                q: text,
-                source: TRANSLATION_API.sourceLang,
-                target: TRANSLATION_API.targetLang,
-                format: 'text'
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (data.translatedText) {
-            const translatedText = data.translatedText;
-            translationCache.set(text, translatedText);
-            return translatedText;
-        } else {
-            console.warn('Translation API error:', data);
-            return text; // Return original if translation fails
-        }
-    } catch (error) {
-        console.error('Translation API error:', error);
-        return text; // Return original if API call fails
-    }
-}
-
-async function switchToItalian() {
+function switchToItalian() {
     console.log('Switching to Italian...');
     
-    // Translate all text nodes
+    // Sort translations by length (longest first) to prevent partial replacements
+    const sortedTranslations = Object.entries(italianTranslations)
+        .sort((a, b) => b[0].length - a[0].length);
+    
+    // Translate all text nodes directly without storing
     const walker = document.createTreeWalker(
         document.body,
         NodeFilter.SHOW_TEXT,
@@ -85,38 +477,33 @@ async function switchToItalian() {
     
     let node;
     let translatedCount = 0;
-    const nodesToTranslate = [];
     
-    // First pass: collect all nodes that need translation
     while (node = walker.nextNode()) {
         const originalText = node.textContent;
-        if (originalText.trim() && 
-            !originalText.includes('http') && 
-            !originalText.includes('data:') && 
-            !originalText.includes('data:image') &&
-            /[а-яА-ЯЁё]/.test(originalText) &&
-            originalText.trim().length >= 2) {
-            nodesToTranslate.push({ node, originalText });
+        if (originalText.trim() && !originalText.includes('http') && !originalText.includes('data:') && !originalText.includes('data:image')) {
+            // Check if text contains Russian characters
+            if (/[а-яА-ЯЁё]/.test(originalText)) {
+                let translatedText = originalText;
+                
+                for (const [russian, italian] of sortedTranslations) {
+                    // Try exact match first
+                    if (translatedText === russian) {
+                        translatedText = italian;
+                        break;
+                    }
+                    // Then try word boundary replacement (whole words only)
+                    const escapedRussian = russian.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const wordBoundaryPattern = new RegExp(`\\b${escapedRussian}\\b`, 'gi');
+                    translatedText = translatedText.replace(wordBoundaryPattern, italian);
+                }
+                
+                if (translatedText !== originalText) {
+                    originalTexts.set(node, originalText);
+                    node.textContent = translatedText;
+                    translatedCount++;
+                }
+            }
         }
-    }
-    
-    console.log(`Found ${nodesToTranslate.length} nodes to translate`);
-    
-    // Show loading indicator
-    alert(`Перевод ${nodesToTranslate.length} элементов... Пожалуйста, подождите.`);
-    
-    // Second pass: translate nodes
-    for (const { node, originalText } of nodesToTranslate) {
-        const translatedText = await translateText(originalText);
-        
-        if (translatedText !== originalText) {
-            originalTexts.set(node, originalText);
-            node.textContent = translatedText;
-            translatedCount++;
-        }
-        
-        // Small delay to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 50));
     }
     
     console.log(`Translated ${translatedCount} text nodes`);
@@ -134,9 +521,6 @@ function restoreRussian() {
 
     // Clear the map
     originalTexts.clear();
-
-    // Clear cache
-    translationCache.clear();
 
     // Hide restore button
     document.getElementById('italianRestoreBtn').style.display = 'none';
