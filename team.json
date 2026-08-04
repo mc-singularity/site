@@ -5,7 +5,7 @@
       "role": "Игрок проекта",
       "realName": "Марк",
       "color": 16441964,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385487143113/image.png?ex=6a6ed5f6&is=6a6d8476&hm=b2d9ad9907b61fb9f426d7055abd3cdb964f47fc15b466f0f3122977bc458216&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385487143113/image.png?ex=6a737336&is=6a7221b6&hm=db2ab4dff820dab308142c290011f910d7f16ef6177f37e0997981e30d4701b2&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -16,7 +16,7 @@
       "role": "Игрок проекта",
       "realName": "Кази",
       "color": 14322492,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385046872205/image.png?ex=6a6ed5f6&is=6a6d8476&hm=58ff1bad9ccace34992ef97c9388549aecfebd0905ec15fa28e2cb7538e9fb8f&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385046872205/image.png?ex=6a737336&is=6a7221b6&hm=07df610b65947e370528eb8c81af42f8c309d108870bbf6686317efdd919fa8d&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -36,7 +36,7 @@
       "role": "Игрок проекта",
       "realName": "Хомяк",
       "color": 15664903,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816384744620164/image.png?ex=6a6ed5f6&is=6a6d8476&hm=b9137725df244e440c990cb0e0418c92e8b498ee9823c4020f751e928904ac5a&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816384744620164/image.png?ex=6a737336&is=6a7221b6&hm=07e6c9046726968294194881ab2133083eb4a310dc275b15be89935112093769&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -53,10 +53,10 @@
     },
     {
       "name": "Maksimm205",
-      "role": "Гандон проекта, Максим, Макс,сливщик информаций женщинам",
+      "role": "Игрок проекта, Максим, Макс",
       "realName": "Обрёл лицензию",
       "color": 15473,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528818551790637146/image.png?ex=6a6ed7fa&is=6a6d867a&hm=d9e940e9de326a385a62b35e0ed0d2d45e347ae15c7fc0e23af80cb36b8effd1&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528818551790637146/image.png?ex=6a73753a&is=6a7223ba&hm=adfbf8950eae924dabcbab6cee6e34b5570098f878846f95dbbca602876b1c59&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -68,30 +68,6 @@
         {
           "platform": "YOUTUBE",
           "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUXTmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA%3D"
-        }
-      ]
-    },
-    {
-      "name": "ArtAzurp",
-      "role": "Игрок проекта, Стример",
-      "realName": "Азурп",
-      "color": 16422717,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816384409342113/image.png?ex=6a6ed5f6&is=6a6d8476&hm=57c342db4a635dfdb147ef1a988e5f1a40bc3e8889ce5127306124a7c95a1674&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@zalurtcuka"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/+bjWbYsn4Ul0zMmQ6"
-        },
-        {
-          "platform": "TWITCH",
-          "url": "https://www.twitch.tv/azurpa12"
         }
       ]
     },
@@ -100,7 +76,7 @@
       "role": "Игрок проекта",
       "realName": "Лусэм",
       "color": 5123584,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528811024252272650/image.png?ex=6a6ed0f8&is=6a6d7f78&hm=76bc63837c378be9f9c4834ce79301e28175f375de6252a2e2dd81093bccb1f0&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528811024252272650/image.png?ex=6a736e38&is=6a721cb8&hm=8fd82af05c0b4e3a893608d05d129d21606fd80b49eeef22fb60280d4a83b67b&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -120,7 +96,7 @@
       "role": "Игрок проекта",
       "realName": "Яркиз",
       "color": 12632256,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383092068614/image.png?ex=6a6ed5f5&is=6a6d8475&hm=e1d6a28d0e5606bbe3157298d85af589abf2b5e20d09a38d799cf835fa9d8043&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383092068614/image.png?ex=6a737335&is=6a7221b5&hm=ff994ade21bc3605a143461e8aa814d94086bd57f41f50bb3aeffa2ca0debd2f&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -144,7 +120,7 @@
       "role": "Игрок проекта, Итальянец",
       "realName": "ПиццаПаста",
       "color": 6645093,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383956095126/image.png?ex=6a6ed5f5&is=6a6d8475&hm=3a92d1182f40c76d4aa9f0cc7f384ad7c67ddd42f7518873bcf60b5a1daf09aa&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383956095126/image.png?ex=6a737335&is=6a7221b5&hm=9ec2f72f4e9171c9b11b401e5a4d8aa35b8680a5314779b75d8d1fc5b71512d9&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -160,7 +136,7 @@
       "role": "Игрок проекта",
       "realName": "Врай",
       "color": 12491100,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383465623653/image.png?ex=6a6ed5f5&is=6a6d8475&hm=3fc31302cd16c97ab1b50dc66bd4c2e3112e3563c90f9c93d03b01ce9a4a26bf&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816383465623653/image.png?ex=6a737335&is=6a7221b5&hm=1f9a19ee8e1441ef9395c2ab38528a1a644f929333bc99d21c59130c1286dad3&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -180,7 +156,7 @@
       "role": "Игрок проекта",
       "realName": "Зендай",
       "color": 14286848,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1529046125116395540/image.png?ex=6a6f032c&is=6a6db1ac&hm=3f67a1251021323d6b1009e7dce2714a5f35dd05a8b836e4420f007a87662b15&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1529046125116395540/image.png?ex=6a73a06c&is=6a724eec&hm=5ce6cbe2aec099124028f25518c24470eb349dc4bfd17a6e4dc51c8c9ec415d2&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -200,7 +176,7 @@
       "role": "Основатель, Тех. админ, Игрок проекта",
       "realName": "Кловер",
       "color": 16719708,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693751578684/image.png?ex=6a6ed63f&is=6a6d84bf&hm=50f9b3e50f6462f80ef938785e309941ca506811fe967363dcbb6e4e59ca5cf2&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693751578684/image.png?ex=6a73737f&is=6a7221ff&hm=9222b8be0193f805df325d113f537923306df59960f791c0c3b38fe393b28131&",
       "imageUrl": null,
       "priority": 3,
       "hasCard": true,
@@ -220,7 +196,7 @@
       "role": "Билдер, Сценарист, Игрок проекта",
       "realName": "Озди",
       "color": 5848354,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693416300594/image.png?ex=6a6ed63f&is=6a6d84bf&hm=705945808dbd3c8cd4122811e0000cefeb4419b8a1d54f53ee2a726d140dbd89&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693416300594/image.png?ex=6a73737f&is=6a7221ff&hm=d871a8a551b5a49c9bdef02b9c928baca486288a5278b74c28968832bc5b9588&",
       "imageUrl": null,
       "priority": 1,
       "hasCard": false,
@@ -236,31 +212,11 @@
       ]
     },
     {
-      "name": "LainBerg",
-      "role": "Игрок проекта",
-      "realName": "Лайн",
-      "color": null,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816693122568345/image.png?ex=6a6ed63f&is=6a6d84bf&hm=e54318b24c808aabf857acf1c9a6ad61be6ec74b223f3adb4c6ff574d8cf3d23&",
-      "imageUrl": null,
-      "priority": 0,
-      "hasCard": false,
-      "socials": [
-        {
-          "platform": "YOUTUBE",
-          "url": "https://www.youtube.com/@Negor_ll"
-        },
-        {
-          "platform": "TELEGRAM",
-          "url": "https://t.me/LainBerg777"
-        }
-      ]
-    },
-    {
       "name": "Agata_friss",
       "role": "Игрок проекта, Художник",
       "realName": "Агата",
       "color": 10165019,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692770111548/image.png?ex=6a6ed63f&is=6a6d84bf&hm=838a1686d31a01a930b309f916721b39a32fc6d6ae99a382970a19df61075b06&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692770111548/image.png?ex=6a73737f&is=6a7221ff&hm=0a3603b3f7c9855fd07195ebdb02e994a825485eed13d4bd34f48329446fc8e8&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -280,7 +236,7 @@
       "role": "Игрок проекта",
       "realName": "Эндер",
       "color": 10359486,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692409667755/image.png?ex=6a6ed63f&is=6a6d84bf&hm=f63fc48b669ef85837335fc5020cf5e7955be43675d8416aca11e879efa7bcc7&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692409667755/image.png?ex=6a73737f&is=6a7221ff&hm=4e0cc66ceb9af70026697e377c01990c6ec035aa574e8747ffdec40c0b0f3c99&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -296,7 +252,7 @@
       "role": "Игрок проекта",
       "realName": "Фолкси",
       "color": 7950079,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692107546805/image.png?ex=6a6ed63f&is=6a6d84bf&hm=c299cff8460c13a7be3c4e1e0f5849fe755c43e4a329535ee774022f0a4e4aa8&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816692107546805/image.png?ex=6a73737f&is=6a7221ff&hm=20d66ea198463d7e0c33d0eb0b50d019e4fa147dd409c3511d70a48afc4c2e8e&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -316,7 +272,7 @@
       "role": "Игрок проекта",
       "realName": "Егор",
       "color": 13510924,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816386401374329/image.png?ex=6a6ed5f6&is=6a6d8476&hm=d99aba3edfd8de4e9c6ca5733e478993a32e52c50abda47cac75b3496cec51bd&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816386401374329/image.png?ex=6a737336&is=6a7221b6&hm=6d509e2e26803643af5406beea1f5ca58ad2fb11851f8fc1b0e4d176146923d7&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -327,7 +283,7 @@
       "role": "Игрок проекта",
       "realName": "Кира",
       "color": 16101094,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816386128740372/image.png?ex=6a6ed5f6&is=6a6d8476&hm=f23059c94df3fe6d8414d0069d88979be9288fa7930e49300eedaa2368fba271&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816386128740372/image.png?ex=6a737336&is=6a7221b6&hm=31f793e18c986f16a322e1282449def89ce6deba5fb2fe883de360db52c94f42&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
@@ -338,7 +294,7 @@
       "role": "Игрок проекта",
       "realName": "Балтос",
       "color": 15704887,
-      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385822560387/image.png?ex=6a6ed5f6&is=6a6d8476&hm=c80ee03a5b3281f096f9b3046ae3a0cfaf8c9fccfe857c1d342b6bf73b1764ce&",
+      "avatarUrl": "https://cdn.discordapp.com/attachments/1361060202761289768/1528816385822560387/image.png?ex=6a737336&is=6a7221b6&hm=e48f385eba0312f5a17c4b11dd31c2f9af7a6f79cbe9b7f45dbd915f1426bcd0&",
       "imageUrl": null,
       "priority": 0,
       "hasCard": false,
