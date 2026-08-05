@@ -10,13 +10,13 @@
       "bannerUrl": "images/organizations/ouroboros_banner.png",
       "roles": [
         {
-          "name": " Лидер",
+          "name": "Лидер",
           "members": [
             "impartialkus"
           ]
         },
         {
-          "name": " Участники",
+          "name": "Участники",
           "members": [
             "horHyplace",
             "CloverS_Kid",
@@ -43,13 +43,13 @@
       "bannerUrl": "images/organizations/griffin_banner.png",
       "roles": [
         {
-          "name": " Руководитель",
+          "name": "Руководитель",
           "members": [
             "MR_Ozdi"
           ]
         },
         {
-          "name": " Персонал",
+          "name": "Персонал",
           "members": [
             "Yrk1z",
             "ba1toss",
@@ -71,7 +71,7 @@
       "bannerUrl": "images/organizations/sunhunxiai_banner.png",
       "roles": [
         {
-          "name": " Ген. директор",
+          "name": "Ген. директор",
           "members": [
             "Folksy13_dll"
           ]
