@@ -11,6 +11,9 @@
       "members": [
         "horHyplace",
         "MrKhazinack"
+                 ],
+      "socials": [
+        { "platform": "Telegram", "url": "https://t.me/OuroborosSN" },
       ]
     },
     {
@@ -35,6 +38,9 @@
       "leader": "Folksy13",
       "members": [
         ""
+      ],
+      "socials": [
+        { "platform": "Telegram", "url": "https://t.me/CXCInc" }
       ]
     }
   ]
