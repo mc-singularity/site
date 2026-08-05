@@ -3793,7 +3793,7 @@
         </div>
     </footer>
     <script>
-        // 1. Нормализация цвета
+        // Нормализация цвета
         function normalizeColor(color) {
             if (color === undefined || color === null || color === '') return '#ffffff';
             if (typeof color === 'string') {
@@ -3809,285 +3809,76 @@
         }
         window.normalizeColor = normalizeColor;
 
-        // 2. Универсальный автоанализ и замена имён на головы-ссылки во ВСЕХ текстах и JSON
+        // Универсальная замена упоминаний (ищет и name, и realName) с защитой от двойной обработки
         function linkifyMemberNames(text) {
             if (!text || typeof text !== 'string') return text || '';
             
             const members = window.fullTeamMembers || [];
             if (members.length === 0) return text;
 
-            const sortedNames = members
-                .map(m => m.name)
-                .filter(Boolean)
-                .sort((a, b) => b.length - a.length);
+            // Собираем все варианты для поиска: никнейм (name) и реальное имя (realName)
+            let searchTokens = [];
+            members.forEach(m => {
+                if (m.name) searchTokens.push({ text: m.name, mainName: m.name });
+                if (m.realName) searchTokens.push({ text: m.realName, mainName: m.name });
+            });
 
-            if (sortedNames.length === 0) return text;
+            if (searchTokens.length === 0) return text;
 
-            const escapedNames = sortedNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-            const regex = new RegExp(`(?<![a-zA-Z0-9_>])(${escapedNames.join('|')})(?![a-zA-Z0-9_=<])`, 'gi');
+            // Сортируем от длинных к коротким, чтобы избежать пересечений
+            searchTokens.sort((a, b) => b.text.length - a.text.length);
 
-            return text.replace(regex, (matchedName) => {
-                const realMember = members.find(m => m.name.toLowerCase() === matchedName.toLowerCase());
-                const targetName = realMember ? realMember.name : matchedName;
+            // Удаляем дубликаты текстов поиска
+            const uniqueTokens = [];
+            const seen = new Set();
+            for (const token of searchTokens) {
+                const lower = token.text.toLowerCase();
+                if (!seen.has(lower)) {
+                    seen.add(lower);
+                    uniqueTokens.push(token);
+                }
+            }
+
+            const escapedPatterns = uniqueTokens.map(t => t.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+            
+            // Строгое регулярное выражение: не заменяет внутри уже созданных тегов .player-mention-link или атрибутов img
+            const regex = new RegExp(`(?<![a-zA-Z0-9_>])(${escapedPatterns.join('|')})(?![a-zA-Z0-9_=<])`, 'gi');
+
+            return text.replace(regex, (match) => {
+                // Находим соответствующего участника
+                const matchedToken = uniqueTokens.find(t => t.text.toLowerCase() === match.toLowerCase());
+                if (!matchedToken) return match;
+
+                const targetName = matchedToken.mainName;
                 const headUrl = `https://minotar.net/helm/${encodeURIComponent(targetName)}/16`;
 
+                // Возвращаем готовую плашку с головой
                 return `<span class="player-mention-link" onclick="openModalByName('${targetName}')">` +
-                       `<img src="${headUrl}" alt="${targetName}" onerror="this.style.display='none'">` +
-                       `<span>${targetName}</span></span>`;
+                       `<img src="${headUrl}" alt="${match}" onerror="this.style.display='none'">` +
+                       `<span>${match}</span></span>`;
             });
         }
         window.linkifyMemberNames = linkifyMemberNames;
 
-        // 3. Сканирование и обработка всего сайта для замены ников
-        function applyGlobalLinkification() {
-            const selectors = [
-                '.news-card', '.event-card', '.lore-card', '.discord-news-card',
-                '.news-description', '.event-description', '.lore-text', '.post-content',
-                '.org-description', 'p', 'span', 'div'
-            ];
-            
-            document.querySelectorAll(selectors.join(', ')).forEach(el => {
-                // Обрабатываем только текстовые узлы и элементы без дочерних контейнеров-карточек
-                if (el && el.children.length === 0 && el.textContent && !el.classList.contains('player-mention-link')) {
-                    const originalHTML = el.innerHTML;
-                    const processedHTML = linkifyMemberNames(originalHTML);
-                    if (originalHTML !== processedHTML) {
-                        el.innerHTML = processedHTML;
-                    }
-                }
-            });
-        }
-        window.applyGlobalLinkification = applyGlobalLinkification;
-
-        // 3.1. Сворачивание / Разворачивание блока организаций
-        function toggleOrganizations() {
-            const container = document.getElementById('organizations-container');
-            const arrow = document.getElementById('orgs-arrow');
-            if (!container) return;
-            
-            if (container.style.display === 'none' || !container.style.display) {
-                container.style.display = 'grid';
-                if (arrow) arrow.textContent = '^';
-            } else {
-                container.style.display = 'none';
-                if (arrow) arrow.textContent = 'v';
-            }
-        }
-        window.toggleOrganizations = toggleOrganizations;
-
-        // 3.2. Приоритет должности
-        function getRolePriority(roleName) {
-            if (!roleName) return 0;
-            const r = String(roleName).toLowerCase();
-            if (r.includes('лидер') || r.includes('глава') || r.includes('руководитель') || r.includes('основатель') || r.includes('президент')) return 100;
-            if (r.includes('зам') || r.includes('офицер') || r.includes('админ') || r.includes('совет')) return 50;
-            return 10;
-        }
-
-        // 3.3. Поиск организаций игрока
-        function getMemberOrganizationsInfo(memberNameParam) {
-            const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
-            if (!memberName || typeof memberName !== 'string' || !window.allOrganizations) return [];
-            
-            const cleanName = memberName.toLowerCase().trim();
-            const results = [];
-
-            for (const org of window.allOrganizations) {
-                if (!org) continue;
-
-                if (org.roles && Array.isArray(org.roles)) {
-                    for (const roleObj of org.roles) {
-                        if (roleObj && roleObj.members && roleObj.members.some(m => typeof m === 'string' && m.toLowerCase().trim() === cleanName)) {
-                            results.push({
-                                org: org,
-                                roleName: roleObj.name || 'Участник',
-                                priority: getRolePriority(roleObj.name)
-                            });
-                        }
-                    }
-                } else {
-                    const isLeader = org.leader && typeof org.leader === 'string' && org.leader.toLowerCase().trim() === cleanName;
-                    const isMember = org.members && org.members.some(m => typeof m === 'string' && m.toLowerCase().trim() === cleanName);
-                    if (isLeader || isMember) {
-                        results.push({
-                            org: org,
-                            roleName: isLeader ? 'Лидер' : 'Участник',
-                            priority: isLeader ? 100 : 10
-                        });
-                    }
-                }
-            }
-
-            results.sort((a, b) => b.priority - a.priority);
-            return results;
-        }
-        window.getMemberOrganizationsInfo = getMemberOrganizationsInfo;
-
-        window.getMemberOrganizationInfo = function(memberNameParam) {
-            const orgs = getMemberOrganizationsInfo(memberNameParam);
-            return orgs.length > 0 ? orgs[0] : null;
-        };
-
-        // 3.4. Отрисовка плашки организации в модалке игрока
-        function renderOrgBadgeInModal(memberNameParam, containerElement) {
-            if (!containerElement || !memberNameParam) return;
-
+        // Функция открытия профиля игрока
+        window.openModalByName = function(memberNameParam) {
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string') return;
 
-            const oldOrgBlock = containerElement.querySelector('.player-org-block');
-            if (oldOrgBlock) oldOrgBlock.remove();
-
-            const memberObj = (window.fullTeamMembers || []).find(m => m && m.name && typeof m.name === 'string' && m.name.toLowerCase().trim() === memberName.toLowerCase().trim());
-            const userOrgs = getMemberOrganizationsInfo(memberName);
-
-            let mainColor = '#ffffff';
-            if (userOrgs.length > 0 && userOrgs[0].org && userOrgs[0].org.color) {
-                mainColor = normalizeColor(userOrgs[0].org.color);
-            } else if (memberObj && memberObj.color) {
-                mainColor = normalizeColor(memberObj.color);
-            }
-
-            if (userOrgs && userOrgs.length > 0) {
-                const orgBlock = document.createElement('div');
-                orgBlock.className = 'player-org-block';
-                orgBlock.style.cssText = 'margin-top: 12px; display: flex; flex-direction: column; gap: 6px; width: 100%;';
-                
-                userOrgs.forEach(item => {
-                    if (!item || !item.org) return;
-                    const badgeColor = normalizeColor(item.org.color || mainColor);
-                    
-                    const orgBadge = document.createElement('div');
-                    orgBadge.style.cssText = `
-                        font-size: 0.85rem; 
-                        color: #ffffff; 
-                        background: rgba(0, 0, 0, 0.65); 
-                        border: 1px solid ${badgeColor}; 
-                        padding: 6px 10px; 
-                        display: flex; 
-                        align-items: center; 
-                        gap: 8px;
-                        box-shadow: 2px 2px 0px ${badgeColor}44;
-                    `;
-                    
-                    orgBadge.innerHTML = `
-                        <img src="${item.org.iconUrl || 'logo.png'}" style="width: 18px; height: 18px; object-fit: contain;">
-                        <span>Организация: <strong style="color: ${badgeColor};">${item.org.name || ''}</strong> (${item.roleName || 'Участник'})</span>
-                    `;
-                    orgBlock.appendChild(orgBadge);
-                });
-
-                containerElement.appendChild(orgBlock);
-            }
-
-            setTimeout(() => {
-                const modal = containerElement.closest('.modal') || document.querySelector('.modal.active') || document;
-                if (modal) {
-                    const titleEl = modal.querySelector('.modal-title') || modal.querySelector('h2') || modal.querySelector('h3');
-                    if (titleEl) titleEl.style.setProperty('color', mainColor, 'important');
+            const memberObj = (window.fullTeamMembers || []).find(m => 
+                m && m.name && typeof m.name === 'string' && m.name.toLowerCase().trim() === memberName.toLowerCase().trim()
+            );
+            
+            if (memberObj) {
+                if (typeof openPlayerModal === 'function') {
+                    openPlayerModal(memberObj.name);
+                } else if (typeof showMemberDetails === 'function') {
+                    showMemberDetails(memberObj);
                 }
-            }, 50);
-        }
-        window.renderOrgBadgeInModal = renderOrgBadgeInModal;
-
-        // 3.5. Загрузка организаций
-        async function loadOrganizationsData() {
-            try {
-                const res = await fetch(`organizations.json?_t=${Date.now()}`, { cache: 'no-store' });
-                if (!res.ok) return;
-                const data = await res.json();
-                window.allOrganizations = data.organizations || [];
-
-                const container = document.getElementById('organizations-container');
-                if (container) {
-                    container.innerHTML = window.allOrganizations.map(org => {
-                        if (!org) return '';
-                        const orgColor = normalizeColor(org.color);
-                        
-                        let roles = org.roles;
-                        if (!roles || !Array.isArray(roles)) {
-                            roles = [];
-                            if (org.leader) roles.push({ name: 'Лидер', members: [org.leader] });
-                            if (org.members) roles.push({ name: 'Участники', members: org.members.filter(m => m !== org.leader) });
-                        }
-
-                        const rolesHTML = roles.map(roleObj => {
-                            const membersList = (roleObj.members || []).map(memberName => {
-                                const headUrl = `https://minotar.net/helm/${encodeURIComponent(memberName)}/16`;
-
-                                return `
-                                    <span class="member-tag" 
-                                          onclick="openModalByName('${memberName}')" 
-                                          style="
-                                            cursor: pointer; 
-                                            border: 1px solid ${orgColor}; 
-                                            color: #ffffff;
-                                            display: inline-flex;
-                                            align-items: center;
-                                            gap: 5px;
-                                            padding: 2px 7px;
-                                            margin: 2px;
-                                            background: rgba(0,0,0,0.6);
-                                          ">
-                                        <img src="${headUrl}" alt="${memberName}" style="width: 14px; height: 14px; object-fit: cover; border-radius: 2px; image-rendering: pixelated;" onerror="this.style.display='none'">
-                                        <span>${memberName}</span>
-                                    </span>
-                                `;
-                            }).join(' ');
-
-                            return `
-                                <div class="org-role-group" style="margin-top: 6px;">
-                                    <strong style="color: ${orgColor}; font-size: 0.85rem;">${roleObj.name || 'Роль'}:</strong> 
-                                    <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px;">
-                                        ${membersList || '<span style="color:#777; font-size: 0.8rem;">Пусто</span>'}
-                                    </div>
-                                </div>
-                            `;
-                        }).join('');
-
-                        const socialsHTML = org.socials && org.socials.length > 0 ? `
-                            <div class="org-socials" style="margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap;">
-                                ${org.socials.map(s => `
-                                    <a href="${s.url}" target="_blank" rel="noopener" style="
-                                        font-size: 0.75rem; 
-                                        color: #ffffff; 
-                                        text-decoration: none; 
-                                        background: rgba(0,0,0,0.6); 
-                                        padding: 2px 8px; 
-                                        border: 1px solid ${orgColor};">
-                                        ${s.platform || 'Ссылка'}
-                                    </a>
-                                `).join('')}
-                            </div>
-                        ` : '';
-
-                        return `
-                            <div class="org-card" id="org-${org.id}" style="border-color: ${orgColor}; box-shadow: 3px 3px 0px ${orgColor}44;">
-                                <div class="org-header" style="border-bottom-color: ${orgColor}66;">
-                                    <img src="${org.iconUrl || 'logo.png'}" alt="${org.name}" class="org-icon" style="border-color: ${orgColor};">
-                                    <div class="org-title-block">
-                                        <h3 style="color: ${orgColor};">${org.name || ''}</h3>
-                                        <span class="org-tagline">${org.tagline || ''}</span>
-                                    </div>
-                                </div>
-                                <p class="org-description">${linkifyMemberNames(org.description || '')}</p>
-                                ${socialsHTML}
-                                <div class="org-members-list" style="border-top-color: ${orgColor}44; margin-top: 10px; padding-top: 6px;">
-                                    ${rolesHTML}
-                                </div>
-                                <button class="org-details-btn" onclick="openOrgModal('${org.id}')" style="border-color: ${orgColor}; color: ${orgColor};">
-                                    Подробнее об организации
-                                </button>
-                            </div>
-                        `;
-                    }).join('');
-                }
-            } catch (err) {
-                console.error('Ошибка загрузки organizations.json:', err);
             }
-        }
+        };
 
-        // 4. Открытие расширенного модального окна организации ("Подробнее") со всеми участниками
+        // Открытие модального окна организации ("Подробнее")
         function openOrgModal(orgId) {
             if (!window.allOrganizations) return;
             const org = window.allOrganizations.find(o => String(o.id).toLowerCase() === String(orgId).toLowerCase());
@@ -4116,7 +3907,6 @@
             const seasonsEl = document.getElementById('org-modal-seasons');
             if (seasonsEl) seasonsEl.textContent = org.seasonsPeriod || org.period || 'SL: 1 Сезон — Настоящее время';
 
-            // Прошлые названия
             const formerBlock = document.getElementById('org-former-names-block');
             const formerEl = document.getElementById('org-modal-former-names');
             if (org.formerNames && Array.isArray(org.formerNames) && org.formerNames.length > 0) {
@@ -4126,11 +3916,9 @@
                 formerBlock.style.display = 'none';
             }
 
-            // История и лор
             const historyEl = document.getElementById('org-modal-history');
             if (historyEl) historyEl.innerHTML = linkifyMemberNames(org.history || org.description || 'История данной организации ещё формируется.');
 
-            // Особые примечания
             const notesBlock = document.getElementById('org-notes-block');
             const notesEl = document.getElementById('org-modal-notes');
             if (org.specialNotes) {
@@ -4140,7 +3928,7 @@
                 notesBlock.style.display = 'none';
             }
 
-            // Полный состав участников (по ролям)
+            // Полный состав участников организации
             const membersListContainer = document.getElementById('org-modal-members-list');
             if (membersListContainer) {
                 let roles = org.roles;
@@ -4172,7 +3960,6 @@
                 }).join('');
             }
 
-            // Социальные сети
             const socialsBlock = document.getElementById('org-modal-socials-block');
             const socialsContainer = document.getElementById('org-modal-socials');
             if (org.socials && org.socials.length > 0) {
@@ -4211,43 +3998,26 @@
         }
         window.closeOrgModal = closeOrgModal;
 
-        // 5. Открытие профиля игрока по нику
-        window.openModalByName = function(memberNameParam) {
-            const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
-            if (!memberName || typeof memberName !== 'string') return;
+        // Функция безопасной загрузки JSON-файлов данных (events, news, lore, discord_news) с однократным применением линковщика
+        async function fetchAndLinkifyJson(url, renderCallback) {
+            try {
+                const res = await fetch(`${url}?_t=${Date.now()}`, { cache: 'no-store' });
+                if (!res.ok) return;
+                let data = await res.json();
+                
+                // Превращаем весь JSON в текст, пропускаем через замену упоминаний и парсим обратно
+                let rawString = JSON.stringify(data);
+                rawString = linkifyMemberNames(rawString);
+                data = JSON.parse(rawString);
 
-            const memberObj = (window.fullTeamMembers || []).find(m => 
-                m && m.name && typeof m.name === 'string' && m.name.toLowerCase().trim() === memberName.toLowerCase().trim()
-            );
-            
-            if (memberObj) {
-                if (typeof openPlayerModal === 'function') {
-                    openPlayerModal(memberObj.name);
-                } else if (typeof showMemberDetails === 'function') {
-                    showMemberDetails(memberObj);
+                if (typeof renderCallback === 'function') {
+                    renderCallback(data);
                 }
+            } catch (err) {
+                console.error(`Ошибка обработки ${url}:`, err);
             }
-        };
-
-        // 6. Инициализация при загрузке сайта (сбор состава, организаций и запуск автозамены везде)
-        document.addEventListener('DOMContentLoaded', async () => {
-            if (typeof loadOrganizationsData === 'function') {
-                await loadOrganizationsData();
-            }
-            if (typeof loadTeamMembers === 'function') {
-                await loadTeamMembers();
-            }
-
-            // Запускаем глобальную замену упоминаний после прогрузки контента страницы и внешних json (news, events, lore и т.д.)
-            setTimeout(() => {
-                applyGlobalLinkification();
-            }, 600);
-
-            // Повторный запуск на случай подгрузки контента по сети
-            setTimeout(() => {
-                applyGlobalLinkification();
-            }, 1500);
-        });
+        }
+        window.fetchAndLinkifyJson = fetchAndLinkifyJson;
     </script>
     <script src="italian-translation.js"></script>
 
