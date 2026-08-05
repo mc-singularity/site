@@ -2022,9 +2022,25 @@
                     </div>
                 </div>
 
-                <div class="orgs-subsection" style="margin-top: 2rem; border-top: 2px dashed var(--accent-color); padding-top: 1.5rem;">
-                    <h3 class="section-title" style="font-size: 1.5rem; margin-bottom: 1rem;">Организации</h3>
-                    <div id="organizations-container" class="team-grid"></div>
+                <div class="orgs-wrapper" style="margin-top: 2rem; border-top: 2px dashed var(--accent-color); padding-top: 1rem;">
+                    <button id="toggle-orgs-btn" onclick="toggleOrganizations()" style="
+                        background: rgba(0,0,0,0.8);
+                        border: 2px solid var(--accent-color);
+                        color: var(--accent-color);
+                        padding: 8px 16px;
+                        cursor: pointer;
+                        width: 100%;
+                        text-align: left;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        font-size: 1.1rem;
+                    ">
+                        <span>📂 Организации (нажмите, чтобы развернуть)</span>
+                        <span id="orgs-arrow">▼</span>
+                    </button>
+
+                    <div id="organizations-container" class="team-grid" style="display: none; margin-top: 1rem;"></div>
                 </div>
             </div>
 
@@ -3428,10 +3444,22 @@
         })();
     </script>
     <script>
-        // Глобальный массив организаций для быстрой проверки принадлежности участника
         window.allOrganizations = [];
 
-        // 1. Функция загрузки организаций и вывода блока с ними
+        // Переключатель видимости организаций (скрыты по умолчанию)
+        function toggleOrganizations() {
+            const container = document.getElementById('organizations-container');
+            const arrow = document.getElementById('orgs-arrow');
+            if (container.style.display === 'none') {
+                container.style.display = 'grid';
+                arrow.textContent = '▲';
+            } else {
+                container.style.display = 'none';
+                arrow.textContent = '▼';
+            }
+        }
+
+        // Загрузка организаций
         async function loadOrganizationsData() {
             try {
                 const res = await fetch('organizations.json');
@@ -3443,17 +3471,35 @@
                     container.innerHTML = window.allOrganizations.map(org => {
                         const leaderName = org.leader;
                         const otherMembers = org.members.filter(m => m.toLowerCase() !== (leaderName || '').toLowerCase());
+                        
+                        // Формирование ссылок на ТГК и другие платформы
+                        const socialsHTML = org.socials && org.socials.length > 0 ? `
+                            <div class="org-socials" style="margin-top: 6px; display: flex; gap: 8px; flex-wrap: wrap;">
+                                ${org.socials.map(s => `
+                                    <a href="${s.url}" target="_blank" rel="noopener" style="
+                                        font-size: 0.75rem; 
+                                        color: #ffffdd; 
+                                        text-decoration: underline; 
+                                        background: rgba(255,255,255,0.1); 
+                                        padding: 2px 6px; 
+                                        border: 1px solid #777;">
+                                        ${s.platform || 'Ссылка'}
+                                    </a>
+                                `).join('')}
+                            </div>
+                        ` : '';
 
                         return `
                             <div class="org-card" id="org-${org.id}">
                                 <div class="org-header">
-                                    <img src="${org.iconUrl}" alt="${org.name}" class="org-icon">
+                                    <img src="${org.iconUrl || 'logo.png'}" alt="${org.name}" class="org-icon">
                                     <div class="org-title-block">
                                         <h3>${org.name}</h3>
-                                        <span class="org-tagline">${org.tagline}</span>
+                                        <span class="org-tagline">${org.tagline || ''}</span>
                                     </div>
                                 </div>
-                                <p class="org-description">${org.description}</p>
+                                <p class="org-description">${org.description || ''}</p>
+                                ${socialsHTML}
                                 <div class="org-members-list">
                                     <div class="org-role-group">
                                         <strong>👑 Лидер:</strong> 
@@ -3473,7 +3519,7 @@
             }
         }
 
-        // Вспомогательная функция: по нику ищет, в какой организации состоит человек
+        // Вспомогательная функция поиска организации игрока
         function getMemberOrganization(memberName) {
             if (!memberName || !window.allOrganizations) return null;
             return window.allOrganizations.find(org => 
@@ -3481,7 +3527,37 @@
             );
         }
 
-        // Вызываем функции ПОСЛЕ их объявления
+        // Отображение плашки организации и ссылок ВНУТРИ карточки игрока / информации об игроке
+        function injectOrgAndSocialsToMember(m, containerElement) {
+            // 1. Поиск организации
+            const userOrg = getMemberOrganization(m.name);
+            if (userOrg) {
+                const isLeader = userOrg.leader && userOrg.leader.toLowerCase() === m.name.toLowerCase();
+                const orgBadge = document.createElement('div');
+                orgBadge.className = 'member-org-badge';
+                orgBadge.style.cssText = 'margin-top: 6px; padding: 4px 8px; background: rgba(0,0,0,0.6); border: 1px solid var(--accent-color); font-size: 0.8rem; display: flex; align-items: center; gap: 6px;';
+                
+                orgBadge.innerHTML = `
+                    <img src="${userOrg.iconUrl || 'logo.png'}" style="width: 16px; height: 16px; object-fit: contain;">
+                    <span>Организация: <strong>${userOrg.name}</strong> ${isLeader ? '👑' : ''}</span>
+                `;
+                containerElement.appendChild(orgBadge);
+            }
+
+            // 2. Отображение соцсетей игрока (ТГК и другие платформы из team.json)
+            if (m.socials && m.socials.length > 0) {
+                const socialsDiv = document.createElement('div');
+                socialsDiv.style.cssText = 'margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;';
+                socialsDiv.innerHTML = m.socials.map(s => `
+                    <a href="${s.url}" target="_blank" rel="noopener" style="font-size: 0.75rem; color: #55ffff; border: 1px solid #55ffff; padding: 2px 5px; text-decoration: none;">
+                        ${s.platform}
+                    </a>
+                `).join('');
+                containerElement.appendChild(socialsDiv);
+            }
+        }
+
+        // Автозапуск
         document.addEventListener('DOMContentLoaded', async () => {
             await loadOrganizationsData();
             if (typeof loadTeamMembers === 'function') {
