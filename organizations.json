@@ -11,7 +11,7 @@
       "members": [
         "horHyplace",
         "MrKhazinack"
-                 ],
+      ],
       "socials": [
         { "platform": "Telegram", "url": "https://t.me/OuroborosSN" }
       ]
@@ -36,9 +36,7 @@
       "iconUrl": "images/organizations/sunhunxiai.png",
       "bannerUrl": "images/organizations/sunhunxiai_banner.png",
       "leader": "Folksy13",
-      "members": [
-        ""
-      ],
+      "members": [],
       "socials": [
         { "platform": "Telegram", "url": "https://t.me/CXCInc" }
       ]
