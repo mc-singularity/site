@@ -3021,10 +3021,7 @@
             }
         }
 
-        // Сначала загружаем организации, потом участников
-        loadOrganizationsData().then(() => {
-            loadTeamMembers();
-        });
+        loadTeamMembers();
 
         function toggleTeam() {
             const teamMembers = document.getElementById('teamMembers');
@@ -3403,6 +3400,14 @@
                 org.members && org.members.some(m => m.toLowerCase() === memberName.toLowerCase())
             );
         }
+
+        // Вызываем функции ПОСЛЕ их объявления
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadOrganizationsData();
+            if (typeof loadTeamMembers === 'function') {
+                await loadTeamMembers();
+            }
+        });
     </script>
     <script src="italian-translation.js"></script>
 </body>
