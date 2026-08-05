@@ -2072,6 +2072,35 @@
         .org-details-btn:hover {
             background: rgba(255, 255, 255, 0.2);
         }
+
+        /* Ссылка-ник с головой игрока в тексте */
+        .player-mention-link {
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #ffffff;
+            padding: 2px 7px;
+            margin: 0 2px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            vertical-align: middle;
+            transition: all 0.2s ease;
+        }
+
+        .player-mention-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+        }
+
+        .player-mention-link img {
+            width: 14px;
+            height: 14px;
+            object-fit: cover;
+            border-radius: 2px;
+            image-rendering: pixelated;
+        }
     </style>
 </head>
 <body>
@@ -3658,7 +3687,7 @@
         </div>
     </footer>
     <script>
-        // 1. Универсальная нормализация цвета (Hex & Decimal)
+        // 1. Нормализация цвета (Hex и Decimal)
         function normalizeColor(color) {
             if (color === undefined || color === null || color === '') return '#ffffff';
             if (typeof color === 'string') {
@@ -3690,7 +3719,36 @@
         }
         window.toggleOrganizations = toggleOrganizations;
 
-        // 3. Вычисление приоритета должности (Лидер > Офицер > Участник)
+        // 3. Автоматическая замена никнеймов на ссылки с ГОЛОВОЙ (как в списках ролей)
+        function linkifyMemberNames(text) {
+            if (!text || typeof text !== 'string') return text || '';
+            
+            const members = window.fullTeamMembers || [];
+            if (members.length === 0) return text;
+
+            const sortedNames = members
+                .map(m => m.name)
+                .filter(Boolean)
+                .sort((a, b) => b.length - a.length);
+
+            if (sortedNames.length === 0) return text;
+
+            const escapedNames = sortedNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+            const regex = new RegExp(`(?<![a-zA-Z0-9_])(${escapedNames.join('|')})(?![a-zA-Z0-9_])`, 'gi');
+
+            return text.replace(regex, (matchedName) => {
+                const realMember = members.find(m => m.name.toLowerCase() === matchedName.toLowerCase());
+                const targetName = realMember ? realMember.name : matchedName;
+                const headUrl = `https://minotar.net/helm/${encodeURIComponent(targetName)}/16`;
+
+                return `<span class="player-mention-link" onclick="openModalByName('${targetName}')">` +
+                       `<img src="${headUrl}" alt="${targetName}" onerror="this.style.display='none'">` +
+                       `<span>${targetName}</span></span>`;
+            });
+        }
+        window.linkifyMemberNames = linkifyMemberNames;
+
+        // 4. Приоритет должности
         function getRolePriority(roleName) {
             if (!roleName) return 0;
             const r = String(roleName).toLowerCase();
@@ -3699,7 +3757,7 @@
             return 10;
         }
 
-        // 4. Поиск ВСЕХ организаций игрока с отбором высшей должности
+        // 5. Поиск организаций игрока
         function getMemberOrganizationsInfo(memberNameParam) {
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string' || !window.allOrganizations) return [];
@@ -3733,7 +3791,6 @@
                 }
             }
 
-            // Сортировка по авторитету/должности (первой станет та, где должность выше)
             results.sort((a, b) => b.priority - a.priority);
             return results;
         }
@@ -3744,7 +3801,7 @@
             return orgs.length > 0 ? orgs[0] : null;
         };
 
-        // 5. Отрисовка плашек всех организаций в модалке и покраска под наивысшую
+        // 6. Отрисовка плашки организации в модалке игрока
         function renderOrgBadgeInModal(memberNameParam, containerElement) {
             if (!containerElement || !memberNameParam) return;
 
@@ -3757,7 +3814,6 @@
             const memberObj = (window.fullTeamMembers || []).find(m => m && m.name && typeof m.name === 'string' && m.name.toLowerCase().trim() === memberName.toLowerCase().trim());
             const userOrgs = getMemberOrganizationsInfo(memberName);
 
-            // Главный цвет (высшая организация -> личный цвет -> белый)
             let mainColor = '#ffffff';
             if (userOrgs.length > 0 && userOrgs[0].org && userOrgs[0].org.color) {
                 mainColor = normalizeColor(userOrgs[0].org.color);
@@ -3765,7 +3821,6 @@
                 mainColor = normalizeColor(memberObj.color);
             }
 
-            // Выводим ОБЕ / ВСЕ организации по рангу
             if (userOrgs && userOrgs.length > 0) {
                 const orgBlock = document.createElement('div');
                 orgBlock.className = 'player-org-block';
@@ -3798,25 +3853,99 @@
                 containerElement.appendChild(orgBlock);
             }
 
-            // Перекрашиваем модалку
             setTimeout(() => {
                 const modal = containerElement.closest('.modal') || document.querySelector('.modal.active') || document;
                 if (modal) {
                     const titleEl = modal.querySelector('.modal-title') || modal.querySelector('h2') || modal.querySelector('h3');
-                    if (titleEl) {
-                        titleEl.style.setProperty('color', mainColor, 'important');
-                    }
-                    const avatar = modal.querySelector('.modal-avatar') || modal.querySelector('img');
-                    if (avatar) {
-                        avatar.style.setProperty('border-color', mainColor, 'important');
-                    }
+                    if (titleEl) titleEl.style.setProperty('color', mainColor, 'important');
                 }
             }, 50);
         }
         window.renderOrgBadgeInModal = renderOrgBadgeInModal;
-        window.updatePlayerModalOrgInfo = renderOrgBadgeInModal;
 
-        // 6. Загрузка организаций
+        // 7. Функция открытия модального окна организации ("ПОДРОБНЕЕ")
+        function openOrgModal(orgId) {
+            if (!window.allOrganizations) return;
+            const org = window.allOrganizations.find(o => String(o.id).toLowerCase() === String(orgId).toLowerCase());
+            if (!org) return;
+
+            const modal = document.getElementById('org-details-modal');
+            const card = document.getElementById('org-modal-card');
+            if (!modal || !card) return;
+
+            const orgColor = normalizeColor(org.color);
+            card.style.borderColor = orgColor;
+            card.style.boxShadow = `6px 6px 0px ${orgColor}44`;
+
+            document.getElementById('org-modal-icon').src = org.iconUrl || 'logo.png';
+            
+            const titleEl = document.getElementById('org-modal-title');
+            titleEl.textContent = org.name || 'Организация';
+            titleEl.style.color = orgColor;
+
+            document.getElementById('org-modal-tagline').textContent = org.tagline || '';
+            document.getElementById('org-modal-seasons').textContent = org.seasonsPeriod || org.period || 'SL: 1 Сезон — Настоящее время';
+
+            // Прошлые названия
+            const formerBlock = document.getElementById('org-former-names-block');
+            const formerEl = document.getElementById('org-modal-former-names');
+            if (org.formerNames && Array.isArray(org.formerNames) && org.formerNames.length > 0) {
+                formerBlock.style.display = 'block';
+                formerEl.innerHTML = org.formerNames.map(name => `<span class="org-former-tag" style="border-color: ${orgColor}66;">${linkifyMemberNames(name)}</span>`).join('');
+            } else {
+                formerBlock.style.display = 'none';
+            }
+
+            // История с авто-заменой имён участников на кликабельные головки
+            document.getElementById('org-modal-history').innerHTML = linkifyMemberNames(org.history || org.description || 'История данной организации ещё формируется.');
+
+            // Заметки
+            const notesBlock = document.getElementById('org-notes-block');
+            if (org.specialNotes) {
+                notesBlock.style.display = 'block';
+                document.getElementById('org-modal-notes').innerHTML = linkifyMemberNames(org.specialNotes);
+            } else {
+                notesBlock.style.display = 'none';
+            }
+
+            // Соцсети
+            const socialsBlock = document.getElementById('org-modal-socials-block');
+            const socialsContainer = document.getElementById('org-modal-socials');
+            if (org.socials && org.socials.length > 0) {
+                socialsBlock.style.display = 'block';
+                socialsContainer.innerHTML = org.socials.map(s => `
+                    <a href="${s.url}" target="_blank" rel="noopener" style="
+                        font-size: 0.8rem; 
+                        color: #ffffff; 
+                        text-decoration: none; 
+                        background: rgba(0,0,0,0.6); 
+                        padding: 4px 10px; 
+                        border: 1px solid ${orgColor};
+                        display: inline-block;
+                        margin-right: 6px;
+                        margin-top: 4px;">
+                        ${s.platform || 'Ссылка'}
+                    </a>
+                `).join('');
+            } else {
+                socialsBlock.style.display = 'none';
+            }
+
+            modal.classList.add('active');
+            modal.style.display = 'flex';
+        }
+        window.openOrgModal = openOrgModal;
+
+        function closeOrgModal() {
+            const modal = document.getElementById('org-details-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            }
+        }
+        window.closeOrgModal = closeOrgModal;
+
+        // 8. Загрузка организаций
         async function loadOrganizationsData() {
             try {
                 const res = await fetch(`organizations.json?_t=${Date.now()}`, { cache: 'no-store' });
@@ -3896,7 +4025,7 @@
                                         <span class="org-tagline">${org.tagline || ''}</span>
                                     </div>
                                 </div>
-                                <p class="org-description">${org.description || ''}</p>
+                                <p class="org-description">${linkifyMemberNames(org.description || '')}</p>
                                 ${socialsHTML}
                                 <div class="org-members-list" style="border-top-color: ${orgColor}44; margin-top: 10px; padding-top: 6px;">
                                     ${rolesHTML}
@@ -3913,93 +4042,7 @@
             }
         }
 
-        // Открытие подробной модалки организации
-        function openOrgModal(orgId) {
-            if (!window.allOrganizations) return;
-            const org = window.allOrganizations.find(o => o.id === orgId || String(o.id) === String(orgId));
-            if (!org) return;
-
-            const modal = document.getElementById('org-details-modal');
-            const card = document.getElementById('org-modal-card');
-            if (!modal || !card) return;
-
-            const orgColor = normalizeColor(org.color);
-
-            // Стилизация модального окна под цвет организации
-            card.style.borderColor = orgColor;
-            card.style.boxShadow = `6px 6px 0px ${orgColor}44`;
-
-            document.getElementById('org-modal-icon').src = org.iconUrl || 'logo.png';
-            
-            const titleEl = document.getElementById('org-modal-title');
-            titleEl.textContent = org.name || 'Организация';
-            titleEl.style.color = orgColor;
-
-            document.getElementById('org-modal-tagline').textContent = org.tagline || '';
-
-            // Сезоны
-            document.getElementById('org-modal-seasons').textContent = org.seasonsPeriod || org.period || 'SL: 1 Сезон — Настоящее время';
-
-            // Прошлые названия
-            const formerBlock = document.getElementById('org-former-names-block');
-            const formerEl = document.getElementById('org-modal-former-names');
-            if (org.formerNames && Array.isArray(org.formerNames) && org.formerNames.length > 0) {
-                formerBlock.style.display = 'block';
-                formerEl.innerHTML = org.formerNames.map(name => `<span class="org-former-tag" style="border-color: ${orgColor}66;">${name}</span>`).join('');
-            } else {
-                formerBlock.style.display = 'none';
-            }
-
-            // История и описание
-            document.getElementById('org-modal-history').textContent = org.history || org.description || 'История данной организации ещё формируется.';
-
-            // Особые примечания
-            const notesBlock = document.getElementById('org-notes-block');
-            if (org.specialNotes) {
-                notesBlock.style.display = 'block';
-                document.getElementById('org-modal-notes').textContent = org.specialNotes;
-            } else {
-                notesBlock.style.display = 'none';
-            }
-
-            // Соцсети
-            const socialsBlock = document.getElementById('org-modal-socials-block');
-            const socialsContainer = document.getElementById('org-modal-socials');
-            if (org.socials && org.socials.length > 0) {
-                socialsBlock.style.display = 'block';
-                socialsContainer.innerHTML = org.socials.map(s => `
-                    <a href="${s.url}" target="_blank" rel="noopener" style="
-                        font-size: 0.8rem; 
-                        color: #ffffff; 
-                        text-decoration: none; 
-                        background: rgba(0,0,0,0.6); 
-                        padding: 4px 10px; 
-                        border: 1px solid ${orgColor};
-                        display: inline-block;
-                        margin-right: 6px;
-                        margin-top: 4px;">
-                        ${s.platform || 'Ссылка'}
-                    </a>
-                `).join('');
-            } else {
-                socialsBlock.style.display = 'none';
-            }
-
-            modal.classList.add('active');
-            modal.style.display = 'flex';
-        }
-        window.openOrgModal = openOrgModal;
-
-        function closeOrgModal() {
-            const modal = document.getElementById('org-details-modal');
-            if (modal) {
-                modal.classList.remove('active');
-                modal.style.display = 'none';
-            }
-        }
-        window.closeOrgModal = closeOrgModal;
-
-        // 7. Открытие модалки игрока
+        // 9. Открытие модалки игрока по нику
         window.openModalByName = function(memberNameParam) {
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string') return;
@@ -4017,7 +4060,7 @@
             }
         };
 
-        // Сначала грузим организации, потом карточки участников!
+        // Старт загрузки
         document.addEventListener('DOMContentLoaded', async () => {
             await loadOrganizationsData();
             if (typeof loadTeamMembers === 'function') {
