@@ -3436,7 +3436,7 @@
         })();
     </script>
     <script>
-        // Вспомогательная функция перевода цвета (decimal -> hex) из team.json
+        // 1. Вспомогательная функция перевода цвета (decimal -> hex)
         function decimalToHexColor(decimalColor) {
             if (!decimalColor && decimalColor !== 0) return null;
             let hex = Number(decimalColor).toString(16);
@@ -3446,33 +3446,29 @@
             return '#' + hex;
         }
 
-        // Поиск ВСЕХ организаций, в которых состоит игрок (для Folksy13_dll и других)
-        function getMemberAllOrganizations(memberName) {
+        // 2. Поиск ВСЕХ организаций игрока (возвращает массив для Folksy13_dll и остальных)
+        // Объявляем ОБА варианта имени (с "s" и без "s"), чтобы не было ReferenceError!
+        function getMemberOrganizationsInfo(memberName) {
             if (!memberName || !window.allOrganizations) return [];
             
             const results = [];
             for (const org of window.allOrganizations) {
-                // Поддержка новой структуры с массивом roles
                 if (org.roles && Array.isArray(org.roles)) {
                     for (const roleObj of org.roles) {
                         if (roleObj.members && roleObj.members.some(m => m.toLowerCase() === memberName.toLowerCase())) {
                             results.push({
                                 org: org,
-                                roleName: roleObj.name,
-                                isLeader: roleObj.name.toLowerCase().includes('лидер') || roleObj.name.toLowerCase().includes('руководител')
+                                roleName: roleObj.name
                             });
                         }
                     }
-                } 
-                // Поддержка старой структуры (leader/members)
-                else {
+                } else {
                     const isLeader = org.leader && org.leader.toLowerCase() === memberName.toLowerCase();
                     const isMember = org.members && org.members.some(m => m.toLowerCase() === memberName.toLowerCase());
                     if (isLeader || isMember) {
                         results.push({
                             org: org,
-                            roleName: isLeader ? 'Лидер' : 'Участник',
-                            isLeader: isLeader
+                            roleName: isLeader ? 'Лидер' : 'Участник'
                         });
                     }
                 }
@@ -3480,7 +3476,11 @@
             return results;
         }
 
-        // Загрузка организаций
+        // Синоним функции без буквы "s", чтобы предотвратить упавшую ошибку ReferenceError
+        window.getMemberOrganizationInfo = getMemberOrganizationsInfo;
+        window.getMemberOrganizationsInfo = getMemberOrganizationsInfo;
+
+        // 3. Загрузка организаций
         async function loadOrganizationsData() {
             try {
                 const res = await fetch(`organizations.json?_t=${Date.now()}`, { cache: 'no-store' });
@@ -3493,7 +3493,6 @@
                     container.innerHTML = window.allOrganizations.map(org => {
                         const orgColor = org.color || 'var(--accent-color)';
                         
-                        // Обработка ролей
                         let roles = org.roles;
                         if (!roles || !Array.isArray(roles)) {
                             roles = [];
@@ -3574,20 +3573,17 @@
             }
         }
 
-        // Обновление информации о модальном окне (с акцентными цветами игрока)
+        // 4. Расширение информации о модальном окне (вывод всех организаций + подкраска под цвет игрока)
         function updatePlayerModalOrgInfo(memberName, containerElement) {
             if (!containerElement) return;
 
-            // Удаляем старый блок орги если был
             const oldOrgBlock = containerElement.querySelector('.player-org-block');
             if (oldOrgBlock) oldOrgBlock.remove();
 
-            // Ищем данные игрока из team.json для получения цвета
             const memberObj = (window.fullTeamMembers || []).find(m => m.name && m.name.toLowerCase() === memberName.toLowerCase());
             const playerColor = memberObj ? (decimalToHexColor(memberObj.color) || '#ffffff') : '#ffffff';
 
-            // Находим ВСЕ организации игрока
-            const userOrgs = getMemberAllOrganizations(memberName);
+            const userOrgs = getMemberOrganizationsInfo(memberName);
             
             if (userOrgs.length > 0) {
                 const orgBlock = document.createElement('div');
@@ -3617,10 +3613,9 @@
                 containerElement.appendChild(orgBlock);
             }
 
-            // Настройка текста и бордеров модалки под цвет игрока
+            // Перекрашивание заголовков модалки под цвет игрока
             const modalContent = containerElement.closest('.modal-content') || containerElement;
             if (modalContent) {
-                // Принудительно окрашиваем подписи и границы
                 modalContent.querySelectorAll('h2, h3, .modal-title, strong, label').forEach(el => {
                     if (!el.closest('.player-org-block')) {
                         el.style.color = playerColor;
@@ -3629,7 +3624,7 @@
             }
         }
 
-        // Функция открытия карточки игрока по его никнейму
+        // 5. Открытие модалки по нику
         window.openModalByName = function(memberName) {
             if (!memberName) return;
             
@@ -3643,12 +3638,10 @@
                 } else if (typeof showMemberDetails === 'function') {
                     showMemberDetails(memberObj);
                 }
-            } else {
-                console.warn('Участник не найден в списке:', memberName);
             }
         };
 
-        // Автозапуск
+        // Запуск автозагрузки
         document.addEventListener('DOMContentLoaded', async () => {
             await loadOrganizationsData();
             if (typeof loadTeamMembers === 'function') {
