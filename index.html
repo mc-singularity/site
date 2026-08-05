@@ -1820,6 +1820,67 @@
             user-select: text;
             animation: none;
         }
+
+        /* Карточки организаций в стиле карточек игроков */
+        .org-card {
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid var(--accent-color);
+            box-shadow: 4px 4px 0px #000000;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            transition: transform 0.15s ease, background-color 0.15s ease;
+        }
+
+        .org-card:hover {
+            transform: translateY(-3px);
+            background: rgba(20, 20, 20, 0.95);
+        }
+
+        .org-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 0.5rem;
+        }
+
+        .org-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            object-fit: contain;
+            border: 2px solid var(--accent-color);
+            background: #000000;
+            image-rendering: pixelated;
+        }
+
+        .org-description {
+            font-size: 0.85rem;
+            color: #cccccc;
+            line-height: 1.3;
+        }
+
+        .org-members-list {
+            margin-top: auto;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 0.8rem;
+        }
+
+        .member-tag {
+            display: inline-block;
+            padding: 2px 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #555555;
+            margin: 2px;
+        }
+
+        .member-tag.leader {
+            border-color: #ffff55;
+            color: #ffff55;
+        }
     </style>
 </head>
 <body>
@@ -1960,12 +2021,12 @@
                         <!-- Загружается из archive.json -->
                     </div>
                 </div>
-            </div>
 
-            <section class="organizations-section" style="margin-top: 40px;">
-                <h2 class="section-title">Организации</h2>
-                <div id="organizations-container" class="team-grid"></div>
-            </section>
+                <div class="orgs-subsection" style="margin-top: 2rem; border-top: 2px dashed var(--accent-color); padding-top: 1.5rem;">
+                    <h3 class="section-title" style="font-size: 1.5rem; margin-bottom: 1rem;">Организации</h3>
+                    <div id="organizations-container" class="team-grid"></div>
+                </div>
+            </div>
 
             <!-- Блок Медиа с фильтрацией (Видео, Стримы, Shorts, Авторы) -->
             <div class="section media-section reveal-item">
@@ -2021,6 +2082,8 @@
                     <div class="meta-label" style="margin-bottom:0.4rem;">ЛИЧНЫЙ ЛОР:</div>
                     <div class="lore-box" id="modalPersonalLore">Информация отсутствует.</div>
                 </div>
+                <!-- Блок организации -->
+                <div id="modal-member-org"></div>
                 <!-- Блок ссылок снизу личного лора -->
                 <div id="modalSocialsContainer" style="display: none;">
                     <div class="meta-label" style="margin-top:0.8rem; margin-bottom:0.4rem;">ССЫЛКИ:</div>
@@ -2993,6 +3056,23 @@
             }
 
             document.getElementById('modalPersonalLore').textContent = extra.personalLore || member.personalLore || 'Личный лор персонажа пока не зафиксирован.';
+
+            // Вывод организации в модальное окно
+            const userOrg = getMemberOrganization(member.name);
+            const modalOrgContainer = document.getElementById('modal-member-org');
+            if (modalOrgContainer) {
+                if (userOrg) {
+                    const isLeader = userOrg.leader && userOrg.leader.toLowerCase() === member.name.toLowerCase();
+                    modalOrgContainer.innerHTML = `
+                        <div class="modal-org-badge" style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--accent-color); padding: 6px 12px; margin-top: 10px; cursor: pointer;">
+                            <img src="${userOrg.iconUrl || 'logo.png'}" style="width: 20px; height: 20px; object-fit: contain;">
+                            <span>Организация: <strong>${userOrg.name}</strong> ${isLeader ? '👑 (Лидер)' : ''}</span>
+                        </div>
+                    `;
+                } else {
+                    modalOrgContainer.innerHTML = '';
+                }
+            }
 
             const socials = member.socials || extra.socials || [];
             const modalSocialsContainer = document.getElementById('modalSocialsContainer');
