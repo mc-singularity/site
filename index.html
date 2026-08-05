@@ -3435,7 +3435,7 @@
             }
         })();
     </script>
-    <script>
+   <script>
         // 1. Конвертация цвета decimal -> hex
         function decimalToHexColor(decimalColor) {
             if (decimalColor === undefined || decimalColor === null) return null;
@@ -3462,16 +3462,18 @@
         }
         window.toggleOrganizations = toggleOrganizations;
 
-        // 3. Поиск ВСЕХ организаций игрока (поддержка Folksy13_dll и остальных)
-        function getMemberOrganizationsInfo(memberName) {
-            if (!memberName || !window.allOrganizations) return [];
+        // 3. Поиск ВСЕХ организаций игрока (возвращает массив для Folksy13_dll и остальных)
+        function getMemberOrganizationsInfo(memberNameParam) {
+            // Защита: если передали объект вместо строки
+            const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
+            if (!memberName || typeof memberName !== 'string' || !window.allOrganizations) return [];
             
             const results = [];
             for (const org of window.allOrganizations) {
                 if (!org) continue;
                 if (org.roles && Array.isArray(org.roles)) {
                     for (const roleObj of org.roles) {
-                        if (roleObj && roleObj.members && roleObj.members.some(m => m && m.toLowerCase() === memberName.toLowerCase())) {
+                        if (roleObj && roleObj.members && roleObj.members.some(m => typeof m === 'string' && m.toLowerCase() === memberName.toLowerCase())) {
                             results.push({
                                 org: org,
                                 roleName: roleObj.name || 'Участник'
@@ -3479,8 +3481,8 @@
                         }
                     }
                 } else {
-                    const isLeader = org.leader && org.leader.toLowerCase() === memberName.toLowerCase();
-                    const isMember = org.members && org.members.some(m => m && m.toLowerCase() === memberName.toLowerCase());
+                    const isLeader = org.leader && typeof org.leader === 'string' && org.leader.toLowerCase() === memberName.toLowerCase();
+                    const isMember = org.members && org.members.some(m => typeof m === 'string' && m.toLowerCase() === memberName.toLowerCase());
                     if (isLeader || isMember) {
                         results.push({
                             org: org,
@@ -3492,20 +3494,24 @@
             return results;
         }
         window.getMemberOrganizationsInfo = getMemberOrganizationsInfo;
-        window.getMemberOrganizationInfo = function(memberName) {
-            const orgs = getMemberOrganizationsInfo(memberName);
+        window.getMemberOrganizationInfo = function(memberNameParam) {
+            const orgs = getMemberOrganizationsInfo(memberNameParam);
             return orgs.length > 0 ? orgs[0] : null;
         };
 
-        // 4. Отрисовка плашек организаций внутри Модалки «Подробнее»
-        function renderOrgBadgeInModal(memberName, containerElement) {
-            if (!containerElement || !memberName) return;
+        // 4. Отрисовка плашек организаций внутри Модалки «Подробнее» (с защитой от типов)
+        function renderOrgBadgeInModal(memberNameParam, containerElement) {
+            if (!containerElement || !memberNameParam) return;
+
+            // Защита: извлекаем строку-имя, если был передан объект
+            const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
+            if (!memberName || typeof memberName !== 'string') return;
 
             // Удаляем прошлые плашки если были
             const oldOrgBlock = containerElement.querySelector('.player-org-block');
             if (oldOrgBlock) oldOrgBlock.remove();
 
-            const memberObj = (window.fullTeamMembers || []).find(m => m && m.name && m.name.toLowerCase() === memberName.toLowerCase());
+            const memberObj = (window.fullTeamMembers || []).find(m => m && m.name && typeof m.name === 'string' && m.name.toLowerCase() === memberName.toLowerCase());
             const playerColor = memberObj ? (decimalToHexColor(memberObj.color) || '#ffffff') : '#ffffff';
 
             const userOrgs = getMemberOrganizationsInfo(memberName);
@@ -3647,10 +3653,12 @@
         }
 
         // 6. Открытие модалки по имени участника
-        window.openModalByName = function(memberName) {
-            if (!memberName) return;
+        window.openModalByName = function(memberNameParam) {
+            const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
+            if (!memberName || typeof memberName !== 'string') return;
+
             const memberObj = (window.fullTeamMembers || []).find(m => 
-                m && m.name && m.name.toLowerCase() === memberName.toLowerCase()
+                m && m.name && typeof m.name === 'string' && m.name.toLowerCase() === memberName.toLowerCase()
             );
             
             if (memberObj) {
