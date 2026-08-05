@@ -2036,8 +2036,8 @@
                         align-items: center;
                         font-size: 1.1rem;
                     ">
-                        <span>📂 Организации (нажмите, чтобы развернуть)</span>
-                        <span id="orgs-arrow">▼</span>
+                        <span>Организации (нажмите, чтобы развернуть)</span>
+                        <span id="orgs-arrow">v</span>
                     </button>
 
                     <div id="organizations-container" class="team-grid" style="display: none; margin-top: 1rem;"></div>
@@ -2989,7 +2989,7 @@
                     const isLeader = userOrg.leader && userOrg.leader.toLowerCase() === member.name.toLowerCase();
                     orgBadge.innerHTML = `
                         <img src="${userOrg.iconUrl}" style="width:16px; height:16px; object-fit:contain;">
-                        <span>${userOrg.name} ${isLeader ? '👑' : ''}</span>
+                        <span>${userOrg.name} ${isLeader ? '(Лидер)' : ''}</span>
                     `;
                     infoDiv.appendChild(orgBadge); // добавляем плашку в блок с информацией
                 }
@@ -3013,6 +3013,7 @@
                 const response = await fetch('team.json?v=' + Date.now(), { cache: 'no-store' });
                 const data = await response.json();
                 window.fullTeamMembers = data.teamMembers || [];
+                window.currentTeamMembers = data.teamMembers || [];
 
                 const teamMembersContainer = document.getElementById('teamMembers');
                 teamMembersContainer.innerHTML = '';
@@ -3082,7 +3083,7 @@
                     modalOrgContainer.innerHTML = `
                         <div class="modal-org-badge" style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--accent-color); padding: 6px 12px; margin-top: 10px; cursor: pointer;">
                             <img src="${userOrg.iconUrl || 'logo.png'}" style="width: 20px; height: 20px; object-fit: contain;">
-                            <span>Организация: <strong>${userOrg.name}</strong> ${isLeader ? '👑 (Лидер)' : ''}</span>
+                            <span>Организация: <strong>${userOrg.name}</strong> ${isLeader ? '(Лидер)' : ''}</span>
                         </div>
                     `;
                 } else {
@@ -3452,10 +3453,10 @@
             const arrow = document.getElementById('orgs-arrow');
             if (container.style.display === 'none') {
                 container.style.display = 'grid';
-                arrow.textContent = '▲';
+                arrow.textContent = '^';
             } else {
                 container.style.display = 'none';
-                arrow.textContent = '▼';
+                arrow.textContent = 'v';
             }
         }
 
@@ -3502,12 +3503,12 @@
                                 ${socialsHTML}
                                 <div class="org-members-list">
                                     <div class="org-role-group">
-                                        <strong>👑 Лидер:</strong> 
-                                        <span class="member-tag leader">${leaderName || 'Не указан'}</span>
+                                        <strong>Лидер:</strong> 
+                                        ${leaderName ? `<span class="member-tag leader" onclick="openMemberModalByName('${leaderName}')" style="cursor: pointer; text-decoration: underline;">${leaderName}</span>` : 'Не указан'}
                                     </div>
                                     <div class="org-role-group">
-                                        <strong>👥 Участники:</strong> 
-                                        ${otherMembers.length > 0 ? otherMembers.map(m => `<span class="member-tag">${m}</span>`).join(', ') : 'Нет других участников'}
+                                        <strong>Участники:</strong> 
+                                        ${otherMembers.length > 0 ? otherMembers.map(m => `<span class="member-tag" onclick="openMemberModalByName('${m}')" style="cursor: pointer; text-decoration: underline;">${m}</span>`).join(' ') : 'Нет других участников'}
                                     </div>
                                 </div>
                             </div>
@@ -3527,6 +3528,15 @@
             );
         }
 
+        // Функция для открытия модального окна по нику игрока
+        window.openMemberModalByName = function(memberName) {
+            if (!window.currentTeamMembers) return;
+            const member = window.currentTeamMembers.find(m => m.name.toLowerCase() === memberName.toLowerCase());
+            if (member && typeof openPlayerModal === 'function') {
+                openPlayerModal(member);
+            }
+        };
+
         // Отображение плашки организации и ссылок ВНУТРИ карточки игрока / информации об игроке
         function injectOrgAndSocialsToMember(m, containerElement) {
             // 1. Поиск организации
@@ -3539,7 +3549,7 @@
                 
                 orgBadge.innerHTML = `
                     <img src="${userOrg.iconUrl || 'logo.png'}" style="width: 16px; height: 16px; object-fit: contain;">
-                    <span>Организация: <strong>${userOrg.name}</strong> ${isLeader ? '👑' : ''}</span>
+                    <span>Организация: <strong>${userOrg.name}</strong> ${isLeader ? '(Лидер)' : ''}</span>
                 `;
                 containerElement.appendChild(orgBadge);
             }
