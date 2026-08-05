@@ -3451,10 +3451,11 @@
             }
         }
 
-        // Загрузка организаций
+        // Загрузка и рендер организаций (поддержка структуры с массивом roles)
         async function loadOrganizationsData() {
             try {
-                const res = await fetch('organizations.json');
+                const res = await fetch(`organizations.json?_t=${Date.now()}`, { cache: 'no-store' });
+                if (!res.ok) return;
                 const data = await res.json();
                 window.allOrganizations = data.organizations || [];
 
@@ -3463,17 +3464,40 @@
                     container.innerHTML = window.allOrganizations.map(org => {
                         const orgColor = org.color || 'var(--accent-color)';
                         
-                        // Генерируем блоки под КАЖДУЮ кастомную роль из JSON
-                        const rolesHTML = (org.roles || []).map(r => `
-                            <div class="org-role-group" style="margin-top: 4px;">
-                                <strong style="color: ${orgColor};">${r.name}:</strong> 
-                                ${r.members && r.members.length > 0 
-                                    ? r.members.map(m => `<span class="member-tag" onclick="openModalByName('${m}')" style="cursor: pointer; text-decoration: underline; border-color: ${orgColor};">${m}</span>`).join(' ') 
-                                    : '<span style="color:#777;">Пусто</span>'}
-                            </div>
-                        `).join('');
+                        const rolesHTML = (org.roles || []).map(roleObj => {
+                            const membersList = (roleObj.members || []).map(memberName => {
+                                const headUrl = `https://minotar.net/helm/${encodeURIComponent(memberName)}/16`;
 
-                        // Соцсети организации
+                                return `
+                                    <span class="member-tag" 
+                                          onclick="openModalByName('${memberName}')" 
+                                          style="
+                                            cursor: pointer; 
+                                            border: 1px solid ${orgColor}; 
+                                            color: #ffffff;
+                                            display: inline-flex;
+                                            align-items: center;
+                                            gap: 5px;
+                                            padding: 2px 7px;
+                                            margin: 2px;
+                                            background: rgba(0,0,0,0.6);
+                                          ">
+                                        <img src="${headUrl}" alt="${memberName}" style="width: 14px; height: 14px; object-fit: cover; border-radius: 2px; image-rendering: pixelated;" onerror="this.style.display='none'">
+                                        <span>${memberName}</span>
+                                    </span>
+                                `;
+                            }).join(' ');
+
+                            return `
+                                <div class="org-role-group" style="margin-top: 6px;">
+                                    <strong style="color: ${orgColor}; font-size: 0.85rem;">${roleObj.name}:</strong> 
+                                    <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px;">
+                                        ${membersList || '<span style="color:#777; font-size: 0.8rem;">Пусто</span>'}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+
                         const socialsHTML = org.socials && org.socials.length > 0 ? `
                             <div class="org-socials" style="margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap;">
                                 ${org.socials.map(s => `
@@ -3481,8 +3505,8 @@
                                         font-size: 0.75rem; 
                                         color: #ffffff; 
                                         text-decoration: none; 
-                                        background: rgba(0,0,0,0.5); 
-                                        padding: 2px 6px; 
+                                        background: rgba(0,0,0,0.6); 
+                                        padding: 2px 8px; 
                                         border: 1px solid ${orgColor};">
                                         ${s.platform || 'Ссылка'}
                                     </a>
@@ -3501,7 +3525,7 @@
                                 </div>
                                 <p class="org-description">${org.description || ''}</p>
                                 ${socialsHTML}
-                                <div class="org-members-list" style="border-top-color: ${orgColor}44;">
+                                <div class="org-members-list" style="border-top-color: ${orgColor}44; margin-top: 10px; padding-top: 6px;">
                                     ${rolesHTML}
                                 </div>
                             </div>
@@ -3511,6 +3535,25 @@
             } catch (err) {
                 console.error('Ошибка загрузки organizations.json:', err);
             }
+        }
+
+        // Функция поиска всех организаций игрока (поддержка 2+ организаций на человека)
+        function getMemberOrganizationsInfo(memberName) {
+            if (!memberName || !window.allOrganizations) return [];
+            
+            const results = [];
+            for (const org of window.allOrganizations) {
+                if (!org.roles) continue;
+                for (const roleObj of org.roles) {
+                    if (roleObj.members && roleObj.members.some(m => m.toLowerCase() === memberName.toLowerCase())) {
+                        results.push({
+                            org: org,
+                            roleName: roleObj.name
+                        });
+                    }
+                }
+            }
+            return results;
         }
 
         // Поиск организации И конкретной роли игрока
