@@ -3435,15 +3435,23 @@
             }
         })();
     </script>
-   <script>
-        // 1. Конвертация цвета decimal -> hex
-        function decimalToHexColor(decimalColor) {
-            if (decimalColor === undefined || decimalColor === null) return null;
-            let hex = Number(decimalColor).toString(16);
-            while (hex.length < 6) {
-                hex = '0' + hex;
+   
+<script>
+        // 1. Универсальная нормализация цвета (работает и с #HEX, и с численной decimal кодировкой Discord)
+        function normalizeColor(color) {
+            if (color === undefined || color === null || color === '') return '#ffffff';
+            if (typeof color === 'string') {
+                if (color.startsWith('#')) return color;
+                if (!isNaN(color)) color = Number(color);
             }
-            return '#' + hex;
+            if (typeof color === 'number') {
+                let hex = color.toString(16);
+                while (hex.length < 6) {
+                    hex = '0' + hex;
+                }
+                return '#' + hex;
+            }
+            return '#ffffff';
         }
 
         // 2. Кнопка свернуть/развернуть организации
@@ -3462,35 +3470,57 @@
         }
         window.toggleOrganizations = toggleOrganizations;
 
-        // 3. Поиск ВСЕХ организаций игрока (возвращает массив для Folksy13_dll и остальных)
+        // 3. Приоритет роли для сортировки (высшее положение выводится выше)
+        function getRolePriority(roleName) {
+            if (!roleName) return 0;
+            const lower = roleName.toLowerCase();
+            if (lower.includes('лидер') || lower.includes('глава') || lower.includes('руководитель') || lower.includes('основатель') || lower.includes('президент')) {
+                return 100;
+            }
+            if (lower.includes('зам') || lower.includes('офицер') || lower.includes('админ')) {
+                return 50;
+            }
+            return 10;
+        }
+
+        // 4. Поиск ВСЕХ организаций игрока с сортировкой по положению
         function getMemberOrganizationsInfo(memberNameParam) {
-            // Защита: если передали объект вместо строки
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string' || !window.allOrganizations) return [];
             
             const results = [];
             for (const org of window.allOrganizations) {
                 if (!org) continue;
+                
+                // Нормализация имени для сравнения
+                const cleanName = memberName.toLowerCase().trim();
+
                 if (org.roles && Array.isArray(org.roles)) {
                     for (const roleObj of org.roles) {
-                        if (roleObj && roleObj.members && roleObj.members.some(m => typeof m === 'string' && m.toLowerCase() === memberName.toLowerCase())) {
+                        if (roleObj && roleObj.members && roleObj.members.some(m => typeof m === 'string' && m.toLowerCase().trim() === cleanName)) {
                             results.push({
                                 org: org,
-                                roleName: roleObj.name || 'Участник'
+                                roleName: roleObj.name || 'Участник',
+                                priority: getRolePriority(roleObj.name)
                             });
                         }
                     }
                 } else {
-                    const isLeader = org.leader && typeof org.leader === 'string' && org.leader.toLowerCase() === memberName.toLowerCase();
-                    const isMember = org.members && org.members.some(m => typeof m === 'string' && m.toLowerCase() === memberName.toLowerCase());
+                    const isLeader = org.leader && typeof org.leader === 'string' && org.leader.toLowerCase().trim() === cleanName;
+                    const isMember = org.members && org.members.some(m => typeof m === 'string' && m.toLowerCase().trim() === cleanName);
                     if (isLeader || isMember) {
                         results.push({
                             org: org,
-                            roleName: isLeader ? 'Лидер' : 'Участник'
+                            roleName: isLeader ? 'Лидер' : 'Участник',
+                            priority: isLeader ? 100 : 10
                         });
                     }
                 }
             }
+
+            // Сортируем: сначала те организации, где игрок выше по должности
+            results.sort((a, b) => b.priority - a.priority);
+
             return results;
         }
         window.getMemberOrganizationsInfo = getMemberOrganizationsInfo;
@@ -3499,45 +3529,49 @@
             return orgs.length > 0 ? orgs[0] : null;
         };
 
-        // 4. Отрисовка плашек организаций внутри Модалки «Подробнее» (с защитой от типов)
+        // 5. Отрисовка ОБЕИХ/ВСЕХ плашек организаций в модальном окне + точная покраска
         function renderOrgBadgeInModal(memberNameParam, containerElement) {
             if (!containerElement || !memberNameParam) return;
 
-            // Защита: извлекаем строку-имя, если был передан объект
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string') return;
 
-            // Удаляем прошлые плашки если были
+            // Удаляем старые плашки организаций если они были
             const oldOrgBlock = containerElement.querySelector('.player-org-block');
             if (oldOrgBlock) oldOrgBlock.remove();
 
-            const memberObj = (window.fullTeamMembers || []).find(m => m && m.name && typeof m.name === 'string' && m.name.toLowerCase() === memberName.toLowerCase());
-            const playerColor = memberObj ? (decimalToHexColor(memberObj.color) || '#ffffff') : '#ffffff';
+            // Ищем игрока в team.json и достаем его персональный цвет
+            const memberObj = (window.fullTeamMembers || []).find(m => m && m.name && typeof m.name === 'string' && m.name.toLowerCase().trim() === memberName.toLowerCase().trim());
+            const playerColor = normalizeColor(memberObj?.color);
 
+            // Получаем список организаций (отсортированный по важности роли)
             const userOrgs = getMemberOrganizationsInfo(memberName);
             
             if (userOrgs && userOrgs.length > 0) {
                 const orgBlock = document.createElement('div');
                 orgBlock.className = 'player-org-block';
-                orgBlock.style.cssText = 'margin-top: 10px; display: flex; flex-direction: column; gap: 6px; width: 100%;';
+                orgBlock.style.cssText = 'margin-top: 12px; display: flex; flex-direction: column; gap: 6px; width: 100%;';
                 
                 userOrgs.forEach(item => {
                     if (!item || !item.org) return;
+                    const orgColor = normalizeColor(item.org.color || playerColor);
+                    
                     const orgBadge = document.createElement('div');
                     orgBadge.style.cssText = `
                         font-size: 0.85rem; 
                         color: #ffffff; 
                         background: rgba(0, 0, 0, 0.6); 
-                        border: 1px solid ${item.org.color || playerColor}; 
-                        padding: 4px 8px; 
+                        border: 1px solid ${orgColor}; 
+                        padding: 6px 10px; 
                         display: flex; 
                         align-items: center; 
-                        gap: 6px;
+                        gap: 8px;
+                        box-shadow: 2px 2px 0px ${orgColor}44;
                     `;
                     
                     orgBadge.innerHTML = `
-                        <img src="${item.org.iconUrl || 'logo.png'}" style="width: 16px; height: 16px; object-fit: contain;">
-                        <span>Организация: <strong style="color: ${item.org.color || '#ffffff'};">${item.org.name || ''}</strong> (${item.roleName || 'Участник'})</span>
+                        <img src="${item.org.iconUrl || 'logo.png'}" style="width: 18px; height: 18px; object-fit: contain;">
+                        <span>Организация: <strong style="color: ${orgColor};">${item.org.name || ''}</strong> (${item.roleName || 'Участник'})</span>
                     `;
                     orgBlock.appendChild(orgBadge);
                 });
@@ -3545,10 +3579,10 @@
                 containerElement.appendChild(orgBlock);
             }
 
-            // Подкрашивание элементов модального окна в цвет игрока
+            // Применяем уникальный цвет игрока к основным заголовкам модалки
             const modalContent = containerElement.closest('.modal-content') || containerElement;
             if (modalContent) {
-                modalContent.querySelectorAll('h2, h3, .modal-title, strong, label').forEach(el => {
+                modalContent.querySelectorAll('h2, h3, .modal-title').forEach(el => {
                     if (!el.closest('.player-org-block')) {
                         el.style.color = playerColor;
                     }
@@ -3558,7 +3592,7 @@
         window.renderOrgBadgeInModal = renderOrgBadgeInModal;
         window.updatePlayerModalOrgInfo = renderOrgBadgeInModal;
 
-        // 5. Загрузка данных организаций
+        // 6. Загрузка списка организаций
         async function loadOrganizationsData() {
             try {
                 const res = await fetch(`organizations.json?_t=${Date.now()}`, { cache: 'no-store' });
@@ -3570,7 +3604,7 @@
                 if (container) {
                     container.innerHTML = window.allOrganizations.map(org => {
                         if (!org) return '';
-                        const orgColor = org.color || 'var(--accent-color)';
+                        const orgColor = normalizeColor(org.color);
                         
                         let roles = org.roles;
                         if (!roles || !Array.isArray(roles)) {
@@ -3652,13 +3686,13 @@
             }
         }
 
-        // 6. Открытие модалки по имени участника
+        // 7. Открытие модалки участника
         window.openModalByName = function(memberNameParam) {
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string') return;
 
             const memberObj = (window.fullTeamMembers || []).find(m => 
-                m && m.name && typeof m.name === 'string' && m.name.toLowerCase() === memberName.toLowerCase()
+                m && m.name && typeof m.name === 'string' && m.name.toLowerCase().trim() === memberName.toLowerCase().trim()
             );
             
             if (memberObj) {
@@ -3670,7 +3704,7 @@
             }
         };
 
-        // Запуск при старте страницы
+        // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', async () => {
             await loadOrganizationsData();
             if (typeof loadTeamMembers === 'function') {
