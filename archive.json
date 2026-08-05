@@ -29,6 +29,34 @@
 "personalLore": ""
 },
 {
+"name": "ArtAzurp",
+"role": "Игрок проекта",
+"realName": "Азурп",
+"color": 10066329,
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [],
+"history": "",
+"seasonsPeriod": "0 Сезон — 1 Сезон",
+"leaveReason": "",
+"personalLore": ""
+},
+{
+"name": "Lainberg",
+"role": "Игрок проекта,Медия",
+"realName": "Лайн/Негор/Черный",
+"color": 10066329,
+"imageUrl": null,
+"priority": 0,
+"hasCard": false,
+"socials": [],
+"history": "",
+"seasonsPeriod": "0 Сезон — 1 Сезон",
+"leaveReason": "",
+"personalLore": ""
+},
+{
 "name": "Werea25",
 "role": "Игрок проекта",
 "realName": "Алексей",
@@ -42,7 +70,6 @@
 "leaveReason": "",
 "personalLore": ""
 },
-{
 "name": "7dney",
 "role": "Игрок проекта",
 "realName": "Асти",
