@@ -3083,7 +3083,7 @@
                     modalOrgContainer.innerHTML = `
                         <div class="modal-org-badge" style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--accent-color); padding: 6px 12px; margin-top: 10px; cursor: pointer;">
                             <img src="${userOrg.iconUrl || 'logo.png'}" style="width: 20px; height: 20px; object-fit: contain;">
-                            <span>Организация: <strong>${userOrg.name}</strong> ${isLeader ? '(Лидер)' : ''}</span>
+                            <span>Организация: <strong>${userOrg.name}</strong> ${isLeader ? '👑 (Лидер)' : ''}</span>
                         </div>
                     `;
                 } else {
@@ -3503,12 +3503,12 @@
                                 ${socialsHTML}
                                 <div class="org-members-list">
                                     <div class="org-role-group">
-                                        <strong>Лидер:</strong> 
-                                        ${leaderName ? `<span class="member-tag leader" onclick="openMemberModalByName('${leaderName}')" style="cursor: pointer; text-decoration: underline;">${leaderName}</span>` : 'Не указан'}
+                                        <strong>👑 Лидер:</strong> 
+                                        ${leaderName ? `<span class="member-tag leader" onclick="openModalByName('${leaderName}')" style="cursor: pointer; text-decoration: underline;">${leaderName}</span>` : 'Не указан'}
                                     </div>
                                     <div class="org-role-group">
-                                        <strong>Участники:</strong> 
-                                        ${otherMembers.length > 0 ? otherMembers.map(m => `<span class="member-tag" onclick="openMemberModalByName('${m}')" style="cursor: pointer; text-decoration: underline;">${m}</span>`).join(' ') : 'Нет других участников'}
+                                        <strong>👥 Участники:</strong> 
+                                        ${otherMembers.length > 0 ? otherMembers.map(m => `<span class="member-tag" onclick="openModalByName('${m}')" style="cursor: pointer; text-decoration: underline;">${m}</span>`).join(' ') : 'Нет других участников'}
                                     </div>
                                 </div>
                             </div>
@@ -3566,6 +3566,27 @@
                 containerElement.appendChild(socialsDiv);
             }
         }
+
+        // Функция открытия карточки игрока по его никнейму
+        window.openModalByName = function(memberName) {
+            if (!memberName) return;
+            
+            // Ищем участника в загруженном массиве
+            const memberObj = (window.fullTeamMembers || []).find(m => 
+                m.name && m.name.toLowerCase() === memberName.toLowerCase()
+            );
+            
+            if (memberObj) {
+                // Вызываем имеющуюся на сайте функцию открытия модального окна
+                if (typeof openPlayerModal === 'function') {
+                    openPlayerModal(memberObj.name);
+                } else if (typeof showMemberDetails === 'function') {
+                    showMemberDetails(memberObj);
+                }
+            } else {
+                console.warn('Участник не найден в списке:', memberName);
+            }
+        };
 
         // Автозапуск
         document.addEventListener('DOMContentLoaded', async () => {
