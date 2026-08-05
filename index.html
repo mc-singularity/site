@@ -1881,6 +1881,102 @@
             border-color: #ffff55;
             color: #ffff55;
         }
+
+        /* Стили для футера */
+        .site-footer {
+            width: 100%;
+            background: rgba(10, 10, 14, 0.95);
+            border-top: 2px solid rgba(158, 96, 96, 0.5); /* Акцентный цвет Суньхуньсяй (#9e6060) */
+            padding: 30px 20px;
+            margin-top: 60px;
+            position: relative;
+            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.8);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-main-text {
+            font-size: 1.05rem;
+            color: #e0e0e0;
+            line-height: 1.5;
+            letter-spacing: 0.5px;
+        }
+
+        .cxc-highlight {
+            color: #9e6060;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(158, 96, 96, 0.4);
+        }
+
+        .clover-highlight {
+            color: #55ff55;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(85, 255, 85, 0.3);
+        }
+
+        .singularity-highlight {
+            color: #ffffff;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-divider {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #9e6060, transparent);
+            margin: 4px 0;
+        }
+
+        .footer-sub-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #aaa;
+            flex-wrap: wrap;
+        }
+
+        .dot-separator {
+            color: #9e6060;
+        }
+
+        .footer-note {
+            font-size: 0.78rem;
+            color: #777;
+            margin-top: 4px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        @media (max-width: 600px) {
+            .footer-main-text {
+                font-size: 0.9rem;
+            }
+            .footer-sub-text {
+                font-size: 0.8rem;
+                flex-direction: column;
+                gap: 4px;
+            }
+            .dot-separator {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -3448,6 +3544,24 @@
             }
         })();
     </script>
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <p class="footer-main-text">
+                    Данный сайт создан и поддерживается <span class="cxc-highlight">Суньхуньсяй Inc</span> в коллаборации с <span class="clover-highlight">CloverS_Kid</span>
+                </p>
+                <div class="footer-divider"></div>
+                <div class="footer-sub-text">
+                    <span>Суньхуньсяй Inc 2026</span>
+                    <span class="dot-separator">•</span>
+                    <span class="singularity-highlight">SINGULARITY Minecraft</span>
+                </div>
+                <p class="footer-note">
+                    🤖 Автоматическое обновление новостей из Discord и поддержка актуального состава игроков
+                </p>
+            </div>
+        </div>
+    </footer>
     <script>
         // 1. Универсальная нормализация цвета (Hex & Decimal)
         function normalizeColor(color) {
