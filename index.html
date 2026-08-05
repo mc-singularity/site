@@ -2872,7 +2872,14 @@
                     ${navControlsHTML}
                 </div>
             `;
-
+            // Получаем информацию об организации по нику
+const userOrg = getMemberOrganization(member.name);
+const orgBadgeHTML = userOrg ? `
+    <div class="member-org-badge" style="margin-top: 4px; font-size: 0.8rem; color: #ffffaa;">
+        <img src="${userOrg.iconUrl}" style="width:14px; height:14px; vertical-align:middle; margin-right:4px;">
+        <span>${userOrg.name} ${userOrg.leader && userOrg.leader.toLowerCase() === member.name.toLowerCase() ? '👑' : ''}</span>
+    </div>
+` : '';
             const avatarSrc = `https://minotar.net/helm/${member.name}/80`;
 
             memberDiv.innerHTML = `
