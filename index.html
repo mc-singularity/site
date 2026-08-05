@@ -3436,9 +3436,9 @@
         })();
     </script>
     <script>
-        // 1. Вспомогательная функция перевода цвета (decimal -> hex)
+        // 1. Вспомогательная функция конвертации цвета decimal -> hex
         function decimalToHexColor(decimalColor) {
-            if (!decimalColor && decimalColor !== 0) return null;
+            if (decimalColor === undefined || decimalColor === null) return null;
             let hex = Number(decimalColor).toString(16);
             while (hex.length < 6) {
                 hex = '0' + hex;
@@ -3446,25 +3446,29 @@
             return '#' + hex;
         }
 
-        // 2. Поиск ВСЕХ организаций игрока (возвращает массив для Folksy13_dll и остальных)
-        // Объявляем ОБА варианта имени (с "s" и без "s"), чтобы не было ReferenceError!
+        // 2. Поиск ВСЕХ организаций игрока (безопасный поиск)
         function getMemberOrganizationsInfo(memberName) {
             if (!memberName || !window.allOrganizations) return [];
             
             const results = [];
             for (const org of window.allOrganizations) {
+                if (!org) continue;
+                
+                // Проверка структуры с roles
                 if (org.roles && Array.isArray(org.roles)) {
                     for (const roleObj of org.roles) {
-                        if (roleObj.members && roleObj.members.some(m => m.toLowerCase() === memberName.toLowerCase())) {
+                        if (roleObj && roleObj.members && roleObj.members.some(m => m && m.toLowerCase() === memberName.toLowerCase())) {
                             results.push({
                                 org: org,
-                                roleName: roleObj.name
+                                roleName: roleObj.name || 'Участник'
                             });
                         }
                     }
-                } else {
+                } 
+                // Проверка старой структуры
+                else {
                     const isLeader = org.leader && org.leader.toLowerCase() === memberName.toLowerCase();
-                    const isMember = org.members && org.members.some(m => m.toLowerCase() === memberName.toLowerCase());
+                    const isMember = org.members && org.members.some(m => m && m.toLowerCase() === memberName.toLowerCase());
                     if (isLeader || isMember) {
                         results.push({
                             org: org,
@@ -3476,8 +3480,11 @@
             return results;
         }
 
-        // Синоним функции без буквы "s", чтобы предотвратить упавшую ошибку ReferenceError
-        window.getMemberOrganizationInfo = getMemberOrganizationsInfo;
+        // Безопасный дубликат для старых вызовов
+        window.getMemberOrganizationInfo = function(memberName) {
+            const orgs = getMemberOrganizationsInfo(memberName);
+            return orgs.length > 0 ? orgs[0] : null;
+        };
         window.getMemberOrganizationsInfo = getMemberOrganizationsInfo;
 
         // 3. Загрузка организаций
@@ -3491,6 +3498,7 @@
                 const container = document.getElementById('organizations-container');
                 if (container) {
                     container.innerHTML = window.allOrganizations.map(org => {
+                        if (!org) return '';
                         const orgColor = org.color || 'var(--accent-color)';
                         
                         let roles = org.roles;
@@ -3526,7 +3534,7 @@
 
                             return `
                                 <div class="org-role-group" style="margin-top: 6px;">
-                                    <strong style="color: ${orgColor}; font-size: 0.85rem;">${roleObj.name}:</strong> 
+                                    <strong style="color: ${orgColor}; font-size: 0.85rem;">${roleObj.name || 'Роль'}:</strong> 
                                     <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px;">
                                         ${membersList || '<span style="color:#777; font-size: 0.8rem;">Пусто</span>'}
                                     </div>
@@ -3555,7 +3563,7 @@
                                 <div class="org-header" style="border-bottom-color: ${orgColor}66;">
                                     <img src="${org.iconUrl || 'logo.png'}" alt="${org.name}" class="org-icon" style="border-color: ${orgColor};">
                                     <div class="org-title-block">
-                                        <h3 style="color: ${orgColor};">${org.name}</h3>
+                                        <h3 style="color: ${orgColor};">${org.name || ''}</h3>
                                         <span class="org-tagline">${org.tagline || ''}</span>
                                     </div>
                                 </div>
@@ -3573,24 +3581,25 @@
             }
         }
 
-        // 4. Расширение информации о модальном окне (вывод всех организаций + подкраска под цвет игрока)
+        // 4. Безопасный вывод модалки с цветом участника
         function updatePlayerModalOrgInfo(memberName, containerElement) {
             if (!containerElement) return;
 
             const oldOrgBlock = containerElement.querySelector('.player-org-block');
             if (oldOrgBlock) oldOrgBlock.remove();
 
-            const memberObj = (window.fullTeamMembers || []).find(m => m.name && m.name.toLowerCase() === memberName.toLowerCase());
+            const memberObj = (window.fullTeamMembers || []).find(m => m && m.name && m.name.toLowerCase() === memberName.toLowerCase());
             const playerColor = memberObj ? (decimalToHexColor(memberObj.color) || '#ffffff') : '#ffffff';
 
             const userOrgs = getMemberOrganizationsInfo(memberName);
             
-            if (userOrgs.length > 0) {
+            if (userOrgs && userOrgs.length > 0) {
                 const orgBlock = document.createElement('div');
                 orgBlock.className = 'player-org-block';
                 orgBlock.style.cssText = 'margin-top: 10px; display: flex; flex-direction: column; gap: 6px; width: 100%;';
                 
                 userOrgs.forEach(item => {
+                    if (!item || !item.org) return;
                     const orgBadge = document.createElement('div');
                     orgBadge.style.cssText = `
                         font-size: 0.85rem; 
@@ -3605,7 +3614,7 @@
                     
                     orgBadge.innerHTML = `
                         <img src="${item.org.iconUrl || 'logo.png'}" style="width: 16px; height: 16px; object-fit: contain;">
-                        <span>Организация: <strong style="color: ${item.org.color || '#ffffff'};">${item.org.name}</strong> (${item.roleName})</span>
+                        <span>Организация: <strong style="color: ${item.org.color || '#ffffff'};">${item.org.name || ''}</strong> (${item.roleName || 'Участник'})</span>
                     `;
                     orgBlock.appendChild(orgBadge);
                 });
@@ -3613,7 +3622,6 @@
                 containerElement.appendChild(orgBlock);
             }
 
-            // Перекрашивание заголовков модалки под цвет игрока
             const modalContent = containerElement.closest('.modal-content') || containerElement;
             if (modalContent) {
                 modalContent.querySelectorAll('h2, h3, .modal-title, strong, label').forEach(el => {
@@ -3629,7 +3637,7 @@
             if (!memberName) return;
             
             const memberObj = (window.fullTeamMembers || []).find(m => 
-                m.name && m.name.toLowerCase() === memberName.toLowerCase()
+                m && m.name && m.name.toLowerCase() === memberName.toLowerCase()
             );
             
             if (memberObj) {
@@ -3641,7 +3649,7 @@
             }
         };
 
-        // Запуск автозагрузки
+        // Запуск
         document.addEventListener('DOMContentLoaded', async () => {
             await loadOrganizationsData();
             if (typeof loadTeamMembers === 'function') {
