@@ -3001,12 +3001,21 @@
             return memberDiv;
         }
 
-        // 6. Загрузка участников БЕЗ кеширования
+        // 4. Загрузка участников состава (без кеша) + запуск рендера сетки состава
         async function loadTeamMembers() {
             try {
                 const res = await fetch(`team.json?_t=${Date.now()}`, { cache: 'no-store' });
                 const data = await res.json();
                 window.allTeamMembers = data.teamMembers || [];
+                
+                // Отрисовываем сетку участников состава
+                if (typeof renderTeamMembersGrid === 'function') {
+                    renderTeamMembersGrid(window.allTeamMembers);
+                } else if (typeof renderTeam === 'function') {
+                    renderTeam(window.allTeamMembers);
+                }
+                
+                // Загружаем и обновляем организации с цветами из team.json
                 await loadOrganizationsData();
             } catch (err) {
                 console.error('Ошибка загрузки team.json:', err);
