@@ -2978,20 +2978,21 @@
             `;
 
             // Вывод плашки организации
-            const userOrg = getMemberOrganization(member.name);
-            if (userOrg) {
+            const orgInfo = getMemberOrganizationInfo(member.name);
+            if (orgInfo) {
                 const infoDiv = memberDiv.querySelector('.team-member-details');
                 if (infoDiv) {
+                    const { org, roleName } = orgInfo;
+                    const orgColor = org.color || 'var(--accent-color)';
                     const orgBadge = document.createElement('div');
                     orgBadge.className = 'member-org-badge';
-                    orgBadge.style.cssText = 'margin-top: 6px; font-size: 0.85rem; color: #ffd700; display: flex; align-items: center; gap: 6px;';
+                    orgBadge.style.cssText = 'margin-top: 6px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;';
                     
-                    const isLeader = userOrg.leader && userOrg.leader.toLowerCase() === member.name.toLowerCase();
                     orgBadge.innerHTML = `
-                        <img src="${userOrg.iconUrl}" style="width:16px; height:16px; object-fit:contain;">
-                        <span>${userOrg.name} ${isLeader ? '(Лидер)' : ''}</span>
+                        <img src="${org.iconUrl}" style="width:16px; height:16px; object-fit:contain;">
+                        <span style="color: ${orgColor};">${org.name} (${roleName})</span>
                     `;
-                    infoDiv.appendChild(orgBadge); // добавляем плашку в блок с информацией
+                    infoDiv.appendChild(orgBadge);
                 }
             }
 
@@ -3075,20 +3076,10 @@
             document.getElementById('modalPersonalLore').textContent = extra.personalLore || member.personalLore || 'Личный лор персонажа пока не зафиксирован.';
 
             // Вывод организации в модальное окно
-            const userOrg = getMemberOrganization(member.name);
             const modalOrgContainer = document.getElementById('modal-member-org');
             if (modalOrgContainer) {
-                if (userOrg) {
-                    const isLeader = userOrg.leader && userOrg.leader.toLowerCase() === member.name.toLowerCase();
-                    modalOrgContainer.innerHTML = `
-                        <div class="modal-org-badge" style="display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--accent-color); padding: 6px 12px; margin-top: 10px; cursor: pointer;">
-                            <img src="${userOrg.iconUrl || 'logo.png'}" style="width: 20px; height: 20px; object-fit: contain;">
-                            <span>Организация: <strong>${userOrg.name}</strong> ${isLeader ? '👑 (Лидер)' : ''}</span>
-                        </div>
-                    `;
-                } else {
-                    modalOrgContainer.innerHTML = '';
-                }
+                modalOrgContainer.innerHTML = '';
+                renderOrgBadgeInModal(member, modalOrgContainer);
             }
 
             const socials = member.socials || extra.socials || [];
@@ -3470,20 +3461,29 @@
                 const container = document.getElementById('organizations-container');
                 if (container) {
                     container.innerHTML = window.allOrganizations.map(org => {
-                        const leaderName = org.leader;
-                        const otherMembers = org.members.filter(m => m.toLowerCase() !== (leaderName || '').toLowerCase());
+                        const orgColor = org.color || 'var(--accent-color)';
                         
-                        // Формирование ссылок на ТГК и другие платформы
+                        // Генерируем блоки под КАЖДУЮ кастомную роль из JSON
+                        const rolesHTML = (org.roles || []).map(r => `
+                            <div class="org-role-group" style="margin-top: 4px;">
+                                <strong style="color: ${orgColor};">${r.name}:</strong> 
+                                ${r.members && r.members.length > 0 
+                                    ? r.members.map(m => `<span class="member-tag" onclick="openModalByName('${m}')" style="cursor: pointer; text-decoration: underline; border-color: ${orgColor};">${m}</span>`).join(' ') 
+                                    : '<span style="color:#777;">Пусто</span>'}
+                            </div>
+                        `).join('');
+
+                        // Соцсети организации
                         const socialsHTML = org.socials && org.socials.length > 0 ? `
-                            <div class="org-socials" style="margin-top: 6px; display: flex; gap: 8px; flex-wrap: wrap;">
+                            <div class="org-socials" style="margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap;">
                                 ${org.socials.map(s => `
                                     <a href="${s.url}" target="_blank" rel="noopener" style="
                                         font-size: 0.75rem; 
-                                        color: #ffffdd; 
-                                        text-decoration: underline; 
-                                        background: rgba(255,255,255,0.1); 
+                                        color: #ffffff; 
+                                        text-decoration: none; 
+                                        background: rgba(0,0,0,0.5); 
                                         padding: 2px 6px; 
-                                        border: 1px solid #777;">
+                                        border: 1px solid ${orgColor};">
                                         ${s.platform || 'Ссылка'}
                                     </a>
                                 `).join('')}
@@ -3491,25 +3491,18 @@
                         ` : '';
 
                         return `
-                            <div class="org-card" id="org-${org.id}">
-                                <div class="org-header">
-                                    <img src="${org.iconUrl || 'logo.png'}" alt="${org.name}" class="org-icon">
+                            <div class="org-card" id="org-${org.id}" style="border-color: ${orgColor}; box-shadow: 3px 3px 0px ${orgColor}44;">
+                                <div class="org-header" style="border-bottom-color: ${orgColor}66;">
+                                    <img src="${org.iconUrl || 'logo.png'}" alt="${org.name}" class="org-icon" style="border-color: ${orgColor};">
                                     <div class="org-title-block">
-                                        <h3>${org.name}</h3>
+                                        <h3 style="color: ${orgColor};">${org.name}</h3>
                                         <span class="org-tagline">${org.tagline || ''}</span>
                                     </div>
                                 </div>
                                 <p class="org-description">${org.description || ''}</p>
                                 ${socialsHTML}
-                                <div class="org-members-list">
-                                    <div class="org-role-group">
-                                        <strong>👑 Лидер:</strong> 
-                                        ${leaderName ? `<span class="member-tag leader" onclick="openModalByName('${leaderName}')" style="cursor: pointer; text-decoration: underline;">${leaderName}</span>` : 'Не указан'}
-                                    </div>
-                                    <div class="org-role-group">
-                                        <strong>👥 Участники:</strong> 
-                                        ${otherMembers.length > 0 ? otherMembers.map(m => `<span class="member-tag" onclick="openModalByName('${m}')" style="cursor: pointer; text-decoration: underline;">${m}</span>`).join(' ') : 'Нет других участников'}
-                                    </div>
+                                <div class="org-members-list" style="border-top-color: ${orgColor}44;">
+                                    ${rolesHTML}
                                 </div>
                             </div>
                         `;
@@ -3520,12 +3513,59 @@
             }
         }
 
-        // Вспомогательная функция поиска организации игрока
-        function getMemberOrganization(memberName) {
+        // Поиск организации И конкретной роли игрока
+        function getMemberOrganizationInfo(memberName) {
             if (!memberName || !window.allOrganizations) return null;
-            return window.allOrganizations.find(org => 
-                org.members && org.members.some(m => m.toLowerCase() === memberName.toLowerCase())
-            );
+            
+            for (const org of window.allOrganizations) {
+                if (!org.roles) continue;
+                for (const roleObj of org.roles) {
+                    if (roleObj.members && roleObj.members.some(m => m.toLowerCase() === memberName.toLowerCase())) {
+                        return {
+                            org: org,
+                            roleName: roleObj.name
+                        };
+                    }
+                }
+            }
+            return null;
+        }
+
+        // Отображение плашки организации ВНУТРИ Модального окна игрока
+        function renderOrgBadgeInModal(member, targetContainer) {
+            const orgInfo = getMemberOrganizationInfo(member.name);
+            if (!orgInfo) return;
+
+            const { org, roleName } = orgInfo;
+            const orgColor = org.color || 'var(--accent-color)';
+
+            const orgBadge = document.createElement('div');
+            orgBadge.className = 'modal-org-badge';
+            orgBadge.style.cssText = `
+                margin: 10px 0;
+                padding: 8px 12px;
+                background: rgba(0, 0, 0, 0.85);
+                border: 2px solid ${orgColor};
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                box-shadow: 3px 3px 0px #000;
+            `;
+            
+            orgBadge.innerHTML = `
+                <img src="${org.iconUrl || 'logo.png'}" style="width: 26px; height: 26px; object-fit: contain;">
+                <div>
+                    <div style="font-size: 0.7rem; color: #aaaaaa; text-transform: uppercase;">Организация</div>
+                    <div style="font-size: 0.95rem; color: ${orgColor}; font-weight: bold;">
+                        ${org.name}
+                    </div>
+                    <div style="font-size: 0.8rem; color: #ffffff;">
+                        Должность: <strong>${roleName}</strong>
+                    </div>
+                </div>
+            `;
+
+            targetContainer.appendChild(orgBadge);
         }
 
         // Функция для открытия модального окна по нику игрока
@@ -3540,16 +3580,17 @@
         // Отображение плашки организации и ссылок ВНУТРИ карточки игрока / информации об игроке
         function injectOrgAndSocialsToMember(m, containerElement) {
             // 1. Поиск организации
-            const userOrg = getMemberOrganization(m.name);
-            if (userOrg) {
-                const isLeader = userOrg.leader && userOrg.leader.toLowerCase() === m.name.toLowerCase();
+            const orgInfo = getMemberOrganizationInfo(m.name);
+            if (orgInfo) {
+                const { org, roleName } = orgInfo;
+                const orgColor = org.color || 'var(--accent-color)';
                 const orgBadge = document.createElement('div');
                 orgBadge.className = 'member-org-badge';
                 orgBadge.style.cssText = 'margin-top: 6px; padding: 4px 8px; background: rgba(0,0,0,0.6); border: 1px solid var(--accent-color); font-size: 0.8rem; display: flex; align-items: center; gap: 6px;';
                 
                 orgBadge.innerHTML = `
-                    <img src="${userOrg.iconUrl || 'logo.png'}" style="width: 16px; height: 16px; object-fit: contain;">
-                    <span>Организация: <strong>${userOrg.name}</strong> ${isLeader ? '(Лидер)' : ''}</span>
+                    <img src="${org.iconUrl || 'logo.png'}" style="width: 16px; height: 16px; object-fit: contain;">
+                    <span>Организация: <strong style="color: ${orgColor};">${org.name}</strong> (${roleName})</span>
                 `;
                 containerElement.appendChild(orgBadge);
             }
