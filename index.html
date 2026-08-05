@@ -1962,6 +1962,11 @@
                 </div>
             </div>
 
+            <section class="organizations-section" style="margin-top: 40px;">
+                <h2 class="section-title">Организации</h2>
+                <div id="organizations-container" class="team-grid"></div>
+            </section>
+
             <!-- Блок Медиа с фильтрацией (Видео, Стримы, Shorts, Авторы) -->
             <div class="section media-section reveal-item">
                 <h2 class="section-title">МЕДИА</h2>
@@ -2872,14 +2877,6 @@
                     ${navControlsHTML}
                 </div>
             `;
-            // Получаем информацию об организации по нику
-const userOrg = getMemberOrganization(member.name);
-const orgBadgeHTML = userOrg ? `
-    <div class="member-org-badge" style="margin-top: 4px; font-size: 0.8rem; color: #ffffaa;">
-        <img src="${userOrg.iconUrl}" style="width:14px; height:14px; vertical-align:middle; margin-right:4px;">
-        <span>${userOrg.name} ${userOrg.leader && userOrg.leader.toLowerCase() === member.name.toLowerCase() ? '👑' : ''}</span>
-    </div>
-` : '';
             const avatarSrc = `https://minotar.net/helm/${member.name}/80`;
 
             memberDiv.innerHTML = `
@@ -2900,6 +2897,24 @@ const orgBadgeHTML = userOrg ? `
                     </div>
                 </div>
             `;
+
+            // Вывод плашки организации
+            const userOrg = getMemberOrganization(member.name);
+            if (userOrg) {
+                const infoDiv = memberDiv.querySelector('.team-member-details');
+                if (infoDiv) {
+                    const orgBadge = document.createElement('div');
+                    orgBadge.className = 'member-org-badge';
+                    orgBadge.style.cssText = 'margin-top: 6px; font-size: 0.85rem; color: #ffd700; display: flex; align-items: center; gap: 6px;';
+                    
+                    const isLeader = userOrg.leader && userOrg.leader.toLowerCase() === member.name.toLowerCase();
+                    orgBadge.innerHTML = `
+                        <img src="${userOrg.iconUrl}" style="width:16px; height:16px; object-fit:contain;">
+                        <span>${userOrg.name} ${isLeader ? '👑' : ''}</span>
+                    `;
+                    infoDiv.appendChild(orgBadge); // добавляем плашку в блок с информацией
+                }
+            }
 
             return memberDiv;
         }
@@ -3006,7 +3021,10 @@ const orgBadgeHTML = userOrg ? `
             }
         }
 
-        loadTeamMembers();
+        // Сначала загружаем организации, потом участников
+        loadOrganizationsData().then(() => {
+            loadTeamMembers();
+        });
 
         function toggleTeam() {
             const teamMembers = document.getElementById('teamMembers');
@@ -3385,9 +3403,6 @@ const orgBadgeHTML = userOrg ? `
                 org.members && org.members.some(m => m.toLowerCase() === memberName.toLowerCase())
             );
         }
-
-        // Автозапуск загрузки организаций при открытии страницы
-        document.addEventListener('DOMContentLoaded', loadOrganizationsData);
     </script>
     <script src="italian-translation.js"></script>
 </body>
