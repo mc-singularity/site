@@ -18,10 +18,10 @@
     },
     {
       "id": "griffin_corp",
-      "name": "gf.jpg",
+      "name": "Гриффин corp,
       "tagline": "Технологии, безопасность и снабжение",
       "description": "Описание корпорации Griffin Corp: их проекты, инфраструктура и услуги.",
-      "iconUrl": "images/organizations/griffin.png",
+      "iconUrl": "gf.jpg",
       "bannerUrl": "images/organizations/griffin_banner.png",
       "leader": "MR_Ozdi",
       "members": [
