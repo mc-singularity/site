@@ -38,8 +38,8 @@
 "hasCard": false,
 "socials": [],
 "history": "",
-"seasonsPeriod": "0 Сезон — 1 Сезон",
-"leaveReason": "",
+"seasonsPeriod": "0 Сезон — 2 Сезон",
+"leaveReason": "Был кикнут",
 "personalLore": ""
 },
 {
@@ -52,7 +52,7 @@
 "hasCard": false,
 "socials": [],
 "history": "",
-"seasonsPeriod": "0 Сезон — 1 Сезон",
+"seasonsPeriod": "0 Сезон — 2 Сезон",
 "leaveReason": "",
 "personalLore": ""
 },
@@ -70,6 +70,7 @@
 "leaveReason": "",
 "personalLore": ""
 },
+{
 "name": "7dney",
 "role": "Игрок проекта",
 "realName": "Асти",
