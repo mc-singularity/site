@@ -2892,111 +2892,48 @@
         });
 
         function createMemberElement(member) {
-            const extra = window.playerExtraInfos[member.name] || {};
-            const memberDiv = document.createElement('div');
-            memberDiv.className = 'team-member has-card-member';
-            memberDiv.dataset.priority = member.priority || 0;
-            memberDiv.dataset.name = member.name;
+            const div = document.createElement('div');
+            div.className = 'team-card';
+            
+            // Получаем ВСЕ организации игрока (отсортированные по наивысшей роли)
+            const userOrgs = typeof getMemberOrganizationsInfo === 'function' ? getMemberOrganizationsInfo(member.name) : [];
+            const primaryOrg = userOrgs.length > 0 ? userOrgs[0] : null;
 
-            // ============================================================
-            // ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
-            // ============================================================
-
-            // Easter egg: pitrmatti Italian translation
-            if (member.name === 'pitrmatti' || member.name === 'Pitrmatti') {
-                memberDiv.style.cursor = 'pointer';
-                let clickCount = 0;
-                memberDiv.addEventListener('click', (e) => {
-                    if (e.target.closest('button') || e.target.closest('a')) return;
-                    clickCount++;
-                    if (clickCount >= 4) {
-                        clickCount = 0;
-                        switchToItalian();
-                    }
-                });
+            // Определяем главный цвет:
+            // 1. Цвет организации высшего ранга (если есть)
+            // 2. Личный цвет из team.json (HEX или Decimal)
+            let mainColor = '#ffffff';
+            if (primaryOrg && primaryOrg.org && primaryOrg.org.color) {
+                mainColor = normalizeColor(primaryOrg.org.color);
+            } else if (member.color) {
+                mainColor = normalizeColor(member.color);
             }
 
-            const hexColor = decimalToHex(member.color);
-            if (hexColor) {
-                memberDiv.dataset.color = hexColor;
-                memberDiv.style.setProperty('--member-color', hexColor);
-                memberDiv.style.setProperty('--member-shadow', hexToRgba(hexColor, 0.4));
-                memberDiv.style.setProperty('--member-color-dim', hexToRgba(hexColor, 0.8));
+            // Устанавливаем цвета карточки
+            div.style.borderColor = mainColor;
+            div.style.boxShadow = `3px 3px 0px ${mainColor}44`;
+
+            const avatarUrl = member.avatarUrl || `https://minotar.net/helm/${encodeURIComponent(member.name)}/100`;
+
+            // Текст о главной организации под именем
+            let orgSubtext = '';
+            if (primaryOrg && primaryOrg.org) {
+                orgSubtext = `<div style="font-size: 0.75rem; color: ${normalizeColor(primaryOrg.org.color)}; margin-top: 2px; font-weight: bold;">
+                    ${primaryOrg.org.name} (${primaryOrg.roleName})
+                </div>`;
             }
 
-            const socialLinksHTML = (member.socials || []).map(social => 
-                `<a href="${social.url}" target="_blank" class="social-link">${social.platform}</a>`
-            ).join('');
-
-            let images = [];
-            if (member.imageUrls && Array.isArray(member.imageUrls) && member.imageUrls.length > 0) {
-                images = member.imageUrls.map(u => String(u).trim().replace(/,$/, '')).filter(Boolean);
-            } else if (member.imageUrl && String(member.imageUrl).trim() !== '' && String(member.imageUrl) !== 'null') {
-                images = [String(member.imageUrl).trim().replace(/,$/, '')];
-            }
-            if (images.length === 0) images = ['card.jpg'];
-
-            window.playerCardImages[member.name] = images;
-            window.playerCardIndices[member.name] = 0;
-
-            const hasMultipleImages = images.length > 1;
-            const navControlsHTML = hasMultipleImages ? `
-                <div class="card-nav-controls">
-                    <button class="card-nav-btn" onclick="switchCard('${member.name}', -1, event)">&lt;</button>
-                    <span class="card-counter" id="card-counter-${member.name}">1/${images.length}</span>
-                    <button class="card-nav-btn" onclick="switchCard('${member.name}', 1, event)">&gt;</button>
-                </div>
-            ` : '';
-
-            const cardHTML = `
-                <div class="team-member-card">
-                    <div class="card-img-wrapper">
-                        <img id="card-img-${member.name}" src="${images[0]}" alt="Card" onerror="this.src='card.jpg'">
-                    </div>
-                    ${navControlsHTML}
-                </div>
-            `;
-            const avatarSrc = `https://minotar.net/helm/${member.name}/80`;
-
-            memberDiv.innerHTML = `
-                <div class="team-member-avatar">
-                    <img src="${avatarSrc}" alt="${member.name}" onerror="this.src='https://minotar.net/helm/Steve/80'">
-                </div>
-                <div class="team-member-name-preview">${member.name}</div>
-                <div class="team-member-info">
-                    ${cardHTML}
-                    <div class="team-member-details">
-                        <div class="team-member-name">${member.name}</div>
-                        <div class="team-member-role">${member.role || extra.role || ''}</div>
-                        ${(member.realName || extra.realName) ? `<div class="team-member-realname">${member.realName || extra.realName}</div>` : ''}
-                        <div class="team-member-socials">
-                            ${socialLinksHTML}
-                        </div>
-                        <button class="more-info-btn" onclick="openPlayerModal('${member.name}', event)">ПОДРОБНЕЕ</button>
-                    </div>
-                </div>
+            div.innerHTML = `
+                <img src="${avatarUrl}" alt="${member.name}" class="team-avatar" style="border-color: ${mainColor};" onerror="this.src='logo.png'">
+                <h3 style="color: ${mainColor};">${member.name}</h3>
+                <span class="team-role" style="color: #aaa;">${member.role || 'Участник'}</span>
+                ${orgSubtext}
+                <button class="details-btn" onclick="openPlayerModal('${member.name}')" style="border-color: ${mainColor}; color: ${mainColor}; margin-top: 8px;">
+                    Подробнее
+                </button>
             `;
 
-            // Вывод плашки организации
-            const orgInfo = getMemberOrganizationInfo(member.name);
-            if (orgInfo) {
-                const infoDiv = memberDiv.querySelector('.team-member-details');
-                if (infoDiv) {
-                    const { org, roleName } = orgInfo;
-                    const orgColor = org.color || 'var(--accent-color)';
-                    const orgBadge = document.createElement('div');
-                    orgBadge.className = 'member-org-badge';
-                    orgBadge.style.cssText = 'margin-top: 6px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;';
-                    
-                    orgBadge.innerHTML = `
-                        <img src="${org.iconUrl}" style="width:16px; height:16px; object-fit:contain;">
-                        <span style="color: ${orgColor};">${org.name} (${roleName})</span>
-                    `;
-                    infoDiv.appendChild(orgBadge);
-                }
-            }
-
-            return memberDiv;
+            return div;
         }
 
         async function loadTeamMembers() {
@@ -3435,8 +3372,8 @@
             }
         })();
     </script>
-   <script>
-        // 1. Конвертация цвета (Decimal или HEX в стандартный #HEX)
+    <script>
+        // 1. Универсальная нормализация цвета (Hex & Decimal)
         function normalizeColor(color) {
             if (color === undefined || color === null || color === '') return '#ffffff';
             if (typeof color === 'string') {
@@ -3450,6 +3387,7 @@
             }
             return '#ffffff';
         }
+        window.normalizeColor = normalizeColor;
 
         // 2. Сворачивание / Разворачивание блока организаций
         function toggleOrganizations() {
@@ -3467,7 +3405,7 @@
         }
         window.toggleOrganizations = toggleOrganizations;
 
-        // 3. Расчёт иерархии (Лидер > Офицер > Участник)
+        // 3. Вычисление приоритета должности (Лидер > Офицер > Участник)
         function getRolePriority(roleName) {
             if (!roleName) return 0;
             const r = String(roleName).toLowerCase();
@@ -3476,7 +3414,7 @@
             return 10;
         }
 
-        // 4. Поиск ВСЕХ организаций игрока с сортировкой по положению (роли)
+        // 4. Поиск ВСЕХ организаций игрока с отбором высшей должности
         function getMemberOrganizationsInfo(memberNameParam) {
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string' || !window.allOrganizations) return [];
@@ -3510,34 +3448,31 @@
                 }
             }
 
-            // Сортировка: сверху будет организация с наивысшим положением/ролью
+            // Сортировка по авторитету/должности (первой станет та, где должность выше)
             results.sort((a, b) => b.priority - a.priority);
             return results;
         }
         window.getMemberOrganizationsInfo = getMemberOrganizationsInfo;
 
-        // Возвращает основную (высшую) организацию игрока для обратной совместимости
         window.getMemberOrganizationInfo = function(memberNameParam) {
             const orgs = getMemberOrganizationsInfo(memberNameParam);
             return orgs.length > 0 ? orgs[0] : null;
         };
 
-        // 5. Отрисовка плашек в модалке + перекраска модалки в цвет высшей организации / игрока
+        // 5. Отрисовка плашек всех организаций в модалке и покраска под наивысшую
         function renderOrgBadgeInModal(memberNameParam, containerElement) {
             if (!containerElement || !memberNameParam) return;
 
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string') return;
 
-            // Удаляем прошлые плашки
             const oldOrgBlock = containerElement.querySelector('.player-org-block');
             if (oldOrgBlock) oldOrgBlock.remove();
 
-            // Ищем игрока в team.json
             const memberObj = (window.fullTeamMembers || []).find(m => m && m.name && typeof m.name === 'string' && m.name.toLowerCase().trim() === memberName.toLowerCase().trim());
             const userOrgs = getMemberOrganizationsInfo(memberName);
 
-            // Определяем главный цвет: цвет организации высшего ранга, иначе личный цвет игрока из team.json
+            // Главный цвет (высшая организация -> личный цвет -> белый)
             let mainColor = '#ffffff';
             if (userOrgs.length > 0 && userOrgs[0].org && userOrgs[0].org.color) {
                 mainColor = normalizeColor(userOrgs[0].org.color);
@@ -3545,7 +3480,7 @@
                 mainColor = normalizeColor(memberObj.color);
             }
 
-            // Если есть организации — генерируем блоки (в порядке высшей должности)
+            // Выводим ОБЕ / ВСЕ организации по рангу
             if (userOrgs && userOrgs.length > 0) {
                 const orgBlock = document.createElement('div');
                 orgBlock.className = 'player-org-block';
@@ -3578,7 +3513,7 @@
                 containerElement.appendChild(orgBlock);
             }
 
-            // Принудительно окрашиваем имя игрока и заголовок модалки в главный цвет
+            // Перекрашиваем модалку
             setTimeout(() => {
                 const modal = containerElement.closest('.modal') || document.querySelector('.modal.active') || document;
                 if (modal) {
@@ -3586,13 +3521,17 @@
                     if (titleEl) {
                         titleEl.style.setProperty('color', mainColor, 'important');
                     }
+                    const avatar = modal.querySelector('.modal-avatar') || modal.querySelector('img');
+                    if (avatar) {
+                        avatar.style.setProperty('border-color', mainColor, 'important');
+                    }
                 }
             }, 50);
         }
         window.renderOrgBadgeInModal = renderOrgBadgeInModal;
         window.updatePlayerModalOrgInfo = renderOrgBadgeInModal;
 
-        // 6. Загрузка данных организаций
+        // 6. Загрузка организаций
         async function loadOrganizationsData() {
             try {
                 const res = await fetch(`organizations.json?_t=${Date.now()}`, { cache: 'no-store' });
@@ -3686,7 +3625,7 @@
             }
         }
 
-        // 7. Открытие карточки игрока по его имени
+        // 7. Открытие модалки игрока
         window.openModalByName = function(memberNameParam) {
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string') return;
@@ -3704,7 +3643,7 @@
             }
         };
 
-        // Запуск последовательной загрузки
+        // Сначала грузим организации, потом карточки участников!
         document.addEventListener('DOMContentLoaded', async () => {
             await loadOrganizationsData();
             if (typeof loadTeamMembers === 'function') {
