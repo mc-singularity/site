@@ -2892,9 +2892,30 @@
         });
 
         function createMemberElement(member) {
-            const div = document.createElement('div');
-            div.className = 'team-card';
-            
+            const extra = window.playerExtraInfos[member.name] || {};
+            const memberDiv = document.createElement('div');
+            memberDiv.className = 'team-member has-card-member';
+            memberDiv.dataset.priority = member.priority || 0;
+            memberDiv.dataset.name = member.name;
+
+            // ============================================================
+            // ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
+            // ============================================================
+
+            // Easter egg: pitrmatti Italian translation
+            if (member.name === 'pitrmatti' || member.name === 'Pitrmatti') {
+                memberDiv.style.cursor = 'pointer';
+                let clickCount = 0;
+                memberDiv.addEventListener('click', (e) => {
+                    if (e.target.closest('button') || e.target.closest('a')) return;
+                    clickCount++;
+                    if (clickCount >= 4) {
+                        clickCount = 0;
+                        switchToItalian();
+                    }
+                });
+            }
+
             // Получаем ВСЕ организации игрока (отсортированные по наивысшей роли)
             const userOrgs = typeof getMemberOrganizationsInfo === 'function' ? getMemberOrganizationsInfo(member.name) : [];
             const primaryOrg = userOrgs.length > 0 ? userOrgs[0] : null;
@@ -2904,36 +2925,91 @@
             // 2. Личный цвет из team.json (HEX или Decimal)
             let mainColor = '#ffffff';
             if (primaryOrg && primaryOrg.org && primaryOrg.org.color) {
-                mainColor = normalizeColor(primaryOrg.org.color);
+                mainColor = typeof normalizeColor === 'function' ? normalizeColor(primaryOrg.org.color) : primaryOrg.org.color;
             } else if (member.color) {
-                mainColor = normalizeColor(member.color);
+                mainColor = typeof normalizeColor === 'function' ? normalizeColor(member.color) : member.color;
             }
 
-            // Устанавливаем цвета карточки
-            div.style.borderColor = mainColor;
-            div.style.boxShadow = `3px 3px 0px ${mainColor}44`;
-
-            const avatarUrl = member.avatarUrl || `https://minotar.net/helm/${encodeURIComponent(member.name)}/100`;
-
-            // Текст о главной организации под именем
-            let orgSubtext = '';
-            if (primaryOrg && primaryOrg.org) {
-                orgSubtext = `<div style="font-size: 0.75rem; color: ${normalizeColor(primaryOrg.org.color)}; margin-top: 2px; font-weight: bold;">
-                    ${primaryOrg.org.name} (${primaryOrg.roleName})
-                </div>`;
+            const hexColor = decimalToHex(member.color);
+            if (hexColor) {
+                memberDiv.dataset.color = hexColor;
+                memberDiv.style.setProperty('--member-color', hexColor);
+                memberDiv.style.setProperty('--member-shadow', hexToRgba(hexColor, 0.4));
+                memberDiv.style.setProperty('--member-color-dim', hexToRgba(hexColor, 0.8));
             }
 
-            div.innerHTML = `
-                <img src="${avatarUrl}" alt="${member.name}" class="team-avatar" style="border-color: ${mainColor};" onerror="this.src='logo.png'">
-                <h3 style="color: ${mainColor};">${member.name}</h3>
-                <span class="team-role" style="color: #aaa;">${member.role || 'Участник'}</span>
-                ${orgSubtext}
-                <button class="details-btn" onclick="openPlayerModal('${member.name}')" style="border-color: ${mainColor}; color: ${mainColor}; margin-top: 8px;">
-                    Подробнее
-                </button>
+            const socialLinksHTML = (member.socials || []).map(social => 
+                `<a href="${social.url}" target="_blank" class="social-link">${social.platform}</a>`
+            ).join('');
+
+            let images = [];
+            if (member.imageUrls && Array.isArray(member.imageUrls) && member.imageUrls.length > 0) {
+                images = member.imageUrls.map(u => String(u).trim().replace(/,$/, '')).filter(Boolean);
+            } else if (member.imageUrl && String(member.imageUrl).trim() !== '' && String(member.imageUrl) !== 'null') {
+                images = [String(member.imageUrl).trim().replace(/,$/, '')];
+            }
+            if (images.length === 0) images = ['card.jpg'];
+
+            window.playerCardImages[member.name] = images;
+            window.playerCardIndices[member.name] = 0;
+
+            const hasMultipleImages = images.length > 1;
+            const navControlsHTML = hasMultipleImages ? `
+                <div class="card-nav-controls">
+                    <button class="card-nav-btn" onclick="switchCard('${member.name}', -1, event)">&lt;</button>
+                    <span class="card-counter" id="card-counter-${member.name}">1/${images.length}</span>
+                    <button class="card-nav-btn" onclick="switchCard('${member.name}', 1, event)">&gt;</button>
+                </div>
+            ` : '';
+
+            const cardHTML = `
+                <div class="team-member-card">
+                    <div class="card-img-wrapper">
+                        <img id="card-img-${member.name}" src="${images[0]}" alt="Card" onerror="this.src='card.jpg'">
+                    </div>
+                    ${navControlsHTML}
+                </div>
+            `;
+            const avatarSrc = `https://minotar.net/helm/${member.name}/80`;
+
+            memberDiv.innerHTML = `
+                <div class="team-member-avatar">
+                    <img src="${avatarSrc}" alt="${member.name}" onerror="this.src='https://minotar.net/helm/Steve/80'">
+                </div>
+                <div class="team-member-name-preview">${member.name}</div>
+                <div class="team-member-info">
+                    ${cardHTML}
+                    <div class="team-member-details">
+                        <div class="team-member-name">${member.name}</div>
+                        <div class="team-member-role">${member.role || extra.role || ''}</div>
+                        ${(member.realName || extra.realName) ? `<div class="team-member-realname">${member.realName || extra.realName}</div>` : ''}
+                        <div class="team-member-socials">
+                            ${socialLinksHTML}
+                        </div>
+                        <button class="more-info-btn" onclick="openPlayerModal('${member.name}', event)">ПОДРОБНЕЕ</button>
+                    </div>
+                </div>
             `;
 
-            return div;
+            // Вывод плашки организации
+            if (primaryOrg && primaryOrg.org) {
+                const infoDiv = memberDiv.querySelector('.team-member-details');
+                if (infoDiv) {
+                    const { org, roleName } = primaryOrg;
+                    const orgColor = typeof normalizeColor === 'function' ? normalizeColor(org.color || mainColor) : (org.color || mainColor);
+                    const orgBadge = document.createElement('div');
+                    orgBadge.className = 'member-org-badge';
+                    orgBadge.style.cssText = 'margin-top: 6px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;';
+                    
+                    orgBadge.innerHTML = `
+                        <img src="${org.iconUrl}" style="width:16px; height:16px; object-fit:contain;">
+                        <span style="color: ${orgColor};">${org.name} (${roleName})</span>
+                    `;
+                    infoDiv.appendChild(orgBadge);
+                }
+            }
+
+            return memberDiv;
         }
 
         async function loadTeamMembers() {
