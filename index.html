@@ -4095,5 +4095,173 @@
         </div>
     </div>
 </div>
+<script>
+        // 1. Объявляем функцию сворачивания/разворачивания организаций в глобальной области видимости
+        function toggleOrganizations() {
+            const container = document.getElementById('organizations-container');
+            const arrow = document.getElementById('orgs-arrow');
+            if (!container) return;
+            
+            if (container.style.display === 'none' || !container.style.display) {
+                container.style.display = 'grid';
+                if (arrow) arrow.textContent = '^';
+            } else {
+                container.style.display = 'none';
+                if (arrow) arrow.textContent = 'v';
+            }
+        }
+        window.toggleOrganizations = toggleOrganizations;
+
+        // 2. Функция полного открытия модального окна организации (ВСЯ информация + участники, БЕЗ смайликов)
+        function openOrgModal(orgId) {
+            if (!window.allOrganizations) return;
+            const org = window.allOrganizations.find(o => String(o.id).toLowerCase() === String(orgId).toLowerCase());
+            if (!org) return;
+
+            const modal = document.getElementById('org-details-modal');
+            const card = document.getElementById('org-modal-card');
+            if (!modal || !card) return;
+
+            // Нормализация цвета
+            const colorVal = org.color || '#ffffff';
+            const orgColor = typeof colorVal === 'number' ? '#' + colorVal.toString(16).padStart(6, '0') : colorVal;
+
+            card.style.borderColor = orgColor;
+            card.style.boxShadow = `6px 6px 0px ${orgColor}44`;
+
+            const iconEl = document.getElementById('org-modal-icon');
+            if (iconEl) iconEl.src = org.iconUrl || 'logo.png';
+            
+            const titleEl = document.getElementById('org-modal-title');
+            if (titleEl) {
+                titleEl.textContent = org.name || 'Организация';
+                titleEl.style.color = orgColor;
+            }
+
+            const taglineEl = document.getElementById('org-modal-tagline');
+            if (taglineEl) taglineEl.textContent = org.tagline || '';
+
+            // Период активности
+            const seasonsEl = document.getElementById('org-modal-seasons');
+            if (seasonsEl) seasonsEl.textContent = org.seasonsPeriod || org.period || 'SL: 1 Сезон — Настоящее время';
+
+            // Прошлые названия
+            const formerBlock = document.getElementById('org-former-names-block');
+            const formerEl = document.getElementById('org-modal-former-names');
+            if (org.formerNames && Array.isArray(org.formerNames) && org.formerNames.length > 0) {
+                if (formerBlock) formerBlock.style.display = 'block';
+                if (formerEl) {
+                    formerEl.innerHTML = org.formerNames.map(name => `
+                        <span class="org-former-tag" style="display: inline-block; background: rgba(255, 255, 255, 0.1); border: 1px solid ${orgColor}66; padding: 2px 8px; font-size: 0.8rem; margin-right: 6px; margin-top: 4px;">
+                            ${name}
+                        </span>
+                    `).join('');
+                }
+            } else if (formerBlock) {
+                formerBlock.style.display = 'none';
+            }
+
+            // История и лор
+            const historyEl = document.getElementById('org-modal-history');
+            if (historyEl) historyEl.innerHTML = org.history || org.description || 'История данной организации ещё формируется.';
+
+            // Особые примечания
+            const notesBlock = document.getElementById('org-notes-block');
+            const notesEl = document.getElementById('org-modal-notes');
+            if (org.specialNotes) {
+                if (notesBlock) notesBlock.style.display = 'block';
+                if (notesEl) notesEl.innerHTML = org.specialNotes;
+            } else if (notesBlock) {
+                notesBlock.style.display = 'none';
+            }
+
+            // Состав участников по ролям
+            const membersBlock = document.getElementById('org-modal-members-block');
+            const membersListContainer = document.getElementById('org-modal-members-list');
+            if (membersListContainer) {
+                let roles = org.roles;
+                if (!roles || !Array.isArray(roles)) {
+                    roles = [];
+                    if (org.leader) roles.push({ name: 'Лидер', members: [org.leader] });
+                    if (org.members) roles.push({ name: 'Участники', members: org.members.filter(m => m !== org.leader) });
+                }
+
+                if (roles.length > 0) {
+                    if (membersBlock) membersBlock.style.display = 'block';
+                    membersListContainer.innerHTML = roles.map(roleObj => {
+                        const membersHtml = (roleObj.members || []).map(memberName => {
+                            const headUrl = `https://minotar.net/helm/${encodeURIComponent(memberName)}/16`;
+                            return `
+                                <span class="member-tag" onclick="openModalByName('${memberName}')" style="
+                                    cursor: pointer; 
+                                    border: 1px solid ${orgColor}; 
+                                    color: #ffffff;
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 5px;
+                                    padding: 2px 7px;
+                                    margin: 2px;
+                                    background: rgba(0,0,0,0.6);
+                                    font-size: 0.85rem;
+                                ">
+                                    <img src="${headUrl}" alt="${memberName}" style="width: 14px; height: 14px; object-fit: cover; border-radius: 2px; image-rendering: pixelated;" onerror="this.style.display='none'">
+                                    <span>${memberName}</span>
+                                </span>
+                            `;
+                        }).join(' ');
+
+                        return `
+                            <div style="background: rgba(0,0,0,0.3); border: 1px solid ${orgColor}44; padding: 6px 10px; margin-top: 4px;">
+                                <strong style="color: ${orgColor}; font-size: 0.85rem;">${roleObj.name || 'Роль'}:</strong>
+                                <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;">
+                                    ${membersHtml || '<span style="color:#777; font-size:0.8rem;">Нет участников</span>'}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else if (membersBlock) {
+                    membersBlock.style.display = 'none';
+                }
+            }
+
+            // Ссылки и ресурсы
+            const socialsBlock = document.getElementById('org-modal-socials-block');
+            const socialsContainer = document.getElementById('org-modal-socials');
+            if (org.socials && org.socials.length > 0) {
+                if (socialsBlock) socialsBlock.style.display = 'block';
+                if (socialsContainer) {
+                    socialsContainer.innerHTML = org.socials.map(s => `
+                        <a href="${s.url}" target="_blank" rel="noopener" style="
+                            font-size: 0.8rem; 
+                            color: #ffffff; 
+                            text-decoration: none; 
+                            background: rgba(0,0,0,0.6); 
+                            padding: 4px 10px; 
+                            border: 1px solid ${orgColor};
+                            display: inline-block;
+                            margin-right: 6px;
+                            margin-top: 4px;">
+                            ${s.platform || 'Ссылка'}
+                        </a>
+                    `).join('');
+                }
+            } else if (socialsBlock) {
+                socialsBlock.style.display = 'none';
+            }
+
+            modal.classList.add('active');
+            modal.style.display = 'flex';
+        }
+        window.openOrgModal = openOrgModal;
+
+        function closeOrgModal() {
+            const modal = document.getElementById('org-details-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            }
+        }
+        window.closeOrgModal = closeOrgModal;
+    </script>
 </body>
 </html>
