@@ -3436,7 +3436,7 @@
         })();
     </script>
    <script>
-        // 1. Универсальная нормализация цвета (работает и с #HEX, и с численной decimal кодировкой Discord)
+        // 1. Конвертация цвета (Decimal или HEX в стандартный #HEX)
         function normalizeColor(color) {
             if (color === undefined || color === null || color === '') return '#ffffff';
             if (typeof color === 'string') {
@@ -3445,9 +3445,7 @@
             }
             if (typeof color === 'number') {
                 let hex = color.toString(16);
-                while (hex.length < 6) {
-                    hex = '0' + hex;
-                }
+                while (hex.length < 6) hex = '0' + hex;
                 return '#' + hex;
             }
             return '#ffffff';
@@ -3469,16 +3467,16 @@
         }
         window.toggleOrganizations = toggleOrganizations;
 
-        // 3. Вычисление приоритета должности (высокие роли выводится ВЫШЕ)
+        // 3. Расчёт иерархии (Лидер > Офицер > Участник)
         function getRolePriority(roleName) {
             if (!roleName) return 0;
-            const r = roleName.toLowerCase();
+            const r = String(roleName).toLowerCase();
             if (r.includes('лидер') || r.includes('глава') || r.includes('руководитель') || r.includes('основатель') || r.includes('президент')) return 100;
             if (r.includes('зам') || r.includes('офицер') || r.includes('админ') || r.includes('совет')) return 50;
             return 10;
         }
 
-        // 4. Поиск ВСЕХ организаций игрока с сортировкой по статусу/положению
+        // 4. Поиск ВСЕХ организаций игрока с сортировкой по положению (роли)
         function getMemberOrganizationsInfo(memberNameParam) {
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string' || !window.allOrganizations) return [];
@@ -3512,30 +3510,42 @@
                 }
             }
 
-            // Сортируем: сначала выводится та организация, где игрок выше по положению!
+            // Сортировка: сверху будет организация с наивысшим положением/ролью
             results.sort((a, b) => b.priority - a.priority);
             return results;
         }
         window.getMemberOrganizationsInfo = getMemberOrganizationsInfo;
 
-        // 5. Отрисовка плашек организаций И покраска модального окна в цвет игрока
+        // Возвращает основную (высшую) организацию игрока для обратной совместимости
+        window.getMemberOrganizationInfo = function(memberNameParam) {
+            const orgs = getMemberOrganizationsInfo(memberNameParam);
+            return orgs.length > 0 ? orgs[0] : null;
+        };
+
+        // 5. Отрисовка плашек в модалке + перекраска модалки в цвет высшей организации / игрока
         function renderOrgBadgeInModal(memberNameParam, containerElement) {
             if (!containerElement || !memberNameParam) return;
 
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string') return;
 
-            // Удаляем старые плашки
+            // Удаляем прошлые плашки
             const oldOrgBlock = containerElement.querySelector('.player-org-block');
             if (oldOrgBlock) oldOrgBlock.remove();
 
-            // Поиск игрока в team.json и определение его ЦВЕТА
+            // Ищем игрока в team.json
             const memberObj = (window.fullTeamMembers || []).find(m => m && m.name && typeof m.name === 'string' && m.name.toLowerCase().trim() === memberName.toLowerCase().trim());
-            const playerColor = normalizeColor(memberObj?.color);
-
-            // Получаем ВСЕ организации игрока (отсортированные по важности должности)
             const userOrgs = getMemberOrganizationsInfo(memberName);
-            
+
+            // Определяем главный цвет: цвет организации высшего ранга, иначе личный цвет игрока из team.json
+            let mainColor = '#ffffff';
+            if (userOrgs.length > 0 && userOrgs[0].org && userOrgs[0].org.color) {
+                mainColor = normalizeColor(userOrgs[0].org.color);
+            } else if (memberObj && memberObj.color) {
+                mainColor = normalizeColor(memberObj.color);
+            }
+
+            // Если есть организации — генерируем блоки (в порядке высшей должности)
             if (userOrgs && userOrgs.length > 0) {
                 const orgBlock = document.createElement('div');
                 orgBlock.className = 'player-org-block';
@@ -3543,24 +3553,24 @@
                 
                 userOrgs.forEach(item => {
                     if (!item || !item.org) return;
-                    const orgColor = normalizeColor(item.org.color || playerColor);
+                    const badgeColor = normalizeColor(item.org.color || mainColor);
                     
                     const orgBadge = document.createElement('div');
                     orgBadge.style.cssText = `
                         font-size: 0.85rem; 
                         color: #ffffff; 
-                        background: rgba(0, 0, 0, 0.6); 
-                        border: 1px solid ${orgColor}; 
+                        background: rgba(0, 0, 0, 0.65); 
+                        border: 1px solid ${badgeColor}; 
                         padding: 6px 10px; 
                         display: flex; 
                         align-items: center; 
                         gap: 8px;
-                        box-shadow: 2px 2px 0px ${orgColor}44;
+                        box-shadow: 2px 2px 0px ${badgeColor}44;
                     `;
                     
                     orgBadge.innerHTML = `
                         <img src="${item.org.iconUrl || 'logo.png'}" style="width: 18px; height: 18px; object-fit: contain;">
-                        <span>Организация: <strong style="color: ${orgColor};">${item.org.name || ''}</strong> (${item.roleName || 'Участник'})</span>
+                        <span>Организация: <strong style="color: ${badgeColor};">${item.org.name || ''}</strong> (${item.roleName || 'Участник'})</span>
                     `;
                     orgBlock.appendChild(orgBadge);
                 });
@@ -3568,13 +3578,13 @@
                 containerElement.appendChild(orgBlock);
             }
 
-            // ПРИНУДИТЕЛЬНАЯ покраска заголовка и деталей модалки в цвет игрока
+            // Принудительно окрашиваем имя игрока и заголовок модалки в главный цвет
             setTimeout(() => {
                 const modal = containerElement.closest('.modal') || document.querySelector('.modal.active') || document;
                 if (modal) {
                     const titleEl = modal.querySelector('.modal-title') || modal.querySelector('h2') || modal.querySelector('h3');
                     if (titleEl) {
-                        titleEl.style.setProperty('color', playerColor, 'important');
+                        titleEl.style.setProperty('color', mainColor, 'important');
                     }
                 }
             }, 50);
@@ -3676,7 +3686,7 @@
             }
         }
 
-        // 7. Открытие модалки по имени
+        // 7. Открытие карточки игрока по его имени
         window.openModalByName = function(memberNameParam) {
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string') return;
@@ -3694,7 +3704,7 @@
             }
         };
 
-        // Запуск
+        // Запуск последовательной загрузки
         document.addEventListener('DOMContentLoaded', async () => {
             await loadOrganizationsData();
             if (typeof loadTeamMembers === 'function') {
