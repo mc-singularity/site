@@ -2034,149 +2034,11 @@
             box-shadow: 0 0 15px rgba(255, 0, 85, 0.5);
         }
 
-        /* Стили для взрыва от Азурпа */
-        .explosion-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: transparent;
-            z-index: 999999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            pointer-events: none;
-        }
+        /* ============================================================
+           ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
+           ============================================================ */
 
-        .explosion-overlay.show {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
-
-        .dynamite-container {
-            text-align: center;
-            animation: dynamiteShake 0.5s ease-in-out infinite;
-        }
-
-        @keyframes dynamiteShake {
-            0%, 100% { transform: translateX(0) rotate(0deg); }
-            25% { transform: translateX(-10px) rotate(-5deg); }
-            75% { transform: translateX(10px) rotate(5deg); }
-        }
-
-        .dynamite-img {
-            width: 200px;
-            height: 200px;
-            object-fit: contain;
-            animation: dynamitePulse 0.3s ease-in-out infinite;
-        }
-
-        .dynamite-img.exploding {
-            animation: dynamiteExplode 0.3s ease-out forwards;
-        }
-
-        @keyframes dynamitePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        @keyframes dynamiteExplode {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(2);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(5);
-                opacity: 0;
-            }
-        }
-
-        .explosion-text {
-            font-size: 4rem;
-            color: #ffffff;
-            font-family: 'uvKits', sans-serif !important;
-            text-shadow: 0 0 20px #ff0000, 4px 4px 0 #000000;
-            margin-top: 1rem;
-            opacity: 1;
-            animation: rocking 2s ease-in-out infinite;
-        }
-
-        @keyframes textAppear {
-            from {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes rocking {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
-        }
-
-        /* Screen shake effect */
-        body.shaking {
-            animation: screenShake 0.5s ease-in-out;
-        }
-
-        @keyframes screenShake {
-            0%, 100% { transform: translate(0, 0); }
-            10% { transform: translate(-10px, -10px); }
-            20% { transform: translate(10px, -10px); }
-            30% { transform: translate(-10px, 10px); }
-            40% { transform: translate(10px, 10px); }
-            50% { transform: translate(-5px, -5px); }
-            60% { transform: translate(5px, -5px); }
-            70% { transform: translate(-5px, 5px); }
-            80% { transform: translate(5px, 5px); }
-            90% { transform: translate(-2px, -2px); }
-        }
-
-        /* Explosion particles */
-        .particle {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #ff6600;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 999998;
-        }
-
-        .restore-btn {
-            background: linear-gradient(135deg, #00ff55 0%, #00cc44 100%);
-            border: 3px solid #00ff55;
-            color: #000000;
-            padding: 1rem 2rem;
-            font-family: 'uvKits', sans-serif !important;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 0 20px rgba(0, 255, 85, 0.6);
-            margin-top: 2rem;
-            opacity: 0;
-            animation: textAppear 0.5s ease-out 1.5s forwards, rocking 2s ease-in-out infinite 2s;
-        }
-
-        .restore-btn:hover {
-            background: linear-gradient(135deg, #00cc44 0%, #00aa33 100%);
-            box-shadow: 0 0 30px rgba(0, 255, 85, 0.9);
-            transform: scale(1.05);
-        }
-
-        /* Стили для кнопки восстановления итальянского */
+        /* Стили для итальянской кнопки восстановления */
         .italian-restore-btn {
             position: relative;
             display: block;
@@ -2199,65 +2061,9 @@
             transform: scale(1.05);
         }
 
-        /* Анимации разрушения интерфейса */
-        body.exploding .section {
-            animation: sectionExplode 1s ease-out forwards;
-        }
-
-        body.exploding header {
-            animation: headerExplode 1s ease-out forwards;
-        }
-
-        body.exploding footer {
-            animation: footerExplode 1s ease-out forwards;
-        }
-
-        body.exploding .team-member {
-            animation: memberExplode 1s ease-out forwards;
-        }
-
-        @keyframes sectionExplode {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--random-x, 100px), var(--random-y, -100px)) rotate(var(--random-rot, 45deg));
-                opacity: 0;
-            }
-        }
-
-        @keyframes headerExplode {
-            0% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-200px) rotate(15deg);
-                opacity: 0;
-            }
-        }
-
-        @keyframes footerExplode {
-            0% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(200px) rotate(-15deg);
-                opacity: 0;
-            }
-        }
-
-        @keyframes memberExplode {
-            0% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--random-x, 50px), var(--random-y, -50px)) rotate(var(--random-rot, 30deg)) scale(0);
-                opacity: 0;
-            }
+        @keyframes rocking {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
         }
 
         .lore-box {
@@ -2738,42 +2544,9 @@
         </div>
     </div>
 
-    <!-- Мини-игра: Кликер долга Лайна -->
-    <div class="debt-clicker-modal" id="debtClickerModal" onclick="closeDebtClicker(event)">
-        <div class="debt-clicker-box" onclick="event.stopPropagation()">
-            <div class="debt-clicker-header">
-                <div class="debt-clicker-title">КЛИКЕР ДОЛГА ЛАЙНА</div>
-                <button class="modal-close-btn" onclick="closeDebtClicker()">&times;</button>
-            </div>
-            <div class="debt-clicker-body">
-                <div class="debt-display">
-                    <div class="debt-label">ТЕКУЩИЙ ДОЛГ:</div>
-                    <div class="debt-amount" id="debtAmount">100</div>
-                    <div class="debt-multiplier">Каждый клик: +200% долга</div>
-                </div>
-                <div class="clicker-area">
-                    <button class="debt-click-btn" id="debtClickBtn" onclick="addDebt()">
-                        <span class="click-icon">$$$</span>
-                        <span class="click-text">КЛИКНИ!</span>
-                    </button>
-                </div>
-                <div class="debt-stats">
-                    <div class="stat-item"><span>Кликов:</span> <span id="clickCount">0</span></div>
-                    <div class="stat-item"><span>Множитель:</span> <span id="currentMultiplier">x3</span></div>
-                </div>
-                <button class="reset-debt-btn" onclick="resetDebt()">СБРОСИТЬ ДОЛГ</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Пасхалка: Взрыв от Азурпа -->
-    <div class="explosion-overlay" id="explosionOverlay">
-        <div class="dynamite-container">
-            <img src="ТНТ_JE3_BE2.webp" alt="TNT" class="dynamite-img">
-            <div class="explosion-text">Азурп опять все взорвал..</div>
-            <button class="restore-btn" onclick="restoreSite()">ВОССТАНОВИТЬ</button>
-        </div>
-    </div>
+    <!-- ============================================================
+         ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
+         ============================================================ -->
 
     <!-- Пасхалка с комбинацией клавиш, таймером на 10 секунд и однократным использованием -->
     <script>
@@ -3560,33 +3333,9 @@
             memberDiv.dataset.priority = member.priority || 0;
             memberDiv.dataset.name = member.name;
 
-            // Easter egg: LainBerg click counter
-            if (member.name === 'LainBerg' || member.name === 'lainBerg') {
-                memberDiv.style.cursor = 'pointer';
-                let clickCount = 0;
-                memberDiv.addEventListener('click', (e) => {
-                    if (e.target.closest('button') || e.target.closest('a')) return;
-                    clickCount++;
-                    if (clickCount >= 4) {
-                        clickCount = 0;
-                        openUroborosModal();
-                    }
-                });
-            }
-
-            // Easter egg: ArtAzurp explosion
-            if (member.name === 'ArtAzurp' || member.name === 'artAzurp') {
-                memberDiv.style.cursor = 'pointer';
-                let clickCount = 0;
-                memberDiv.addEventListener('click', (e) => {
-                    if (e.target.closest('button') || e.target.closest('a')) return;
-                    clickCount++;
-                    if (clickCount >= 4) {
-                        clickCount = 0;
-                        triggerExplosion();
-                    }
-                });
-            }
+            // ============================================================
+            // ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
+            // ============================================================
 
             // Easter egg: pitrmatti Italian translation
             if (member.name === 'pitrmatti' || member.name === 'Pitrmatti') {
@@ -3857,106 +3606,6 @@
             }, 100);
         }
 
-        // Explosion easter egg for ArtAzurp
-        function triggerExplosion() {
-            const overlay = document.getElementById('explosionOverlay');
-            const dynamiteImg = document.querySelector('.dynamite-img');
-            overlay.classList.add('show');
-
-            // Add random values for explosion animations
-            document.querySelectorAll('.section').forEach(el => {
-                el.style.setProperty('--random-x', (Math.random() * 400 - 200) + 'px');
-                el.style.setProperty('--random-y', (Math.random() * 400 - 200) + 'px');
-                el.style.setProperty('--random-rot', (Math.random() * 360 - 180) + 'deg');
-            });
-
-            document.querySelectorAll('.team-member').forEach(el => {
-                el.style.setProperty('--random-x', (Math.random() * 300 - 150) + 'px');
-                el.style.setProperty('--random-y', (Math.random() * 300 - 150) + 'px');
-                el.style.setProperty('--random-rot', (Math.random() * 720 - 360) + 'deg');
-            });
-
-            // Trigger explosion after a short delay
-            setTimeout(() => {
-                // Make dynamite explode
-                dynamiteImg.classList.add('exploding');
-                
-                // Screen shake
-                document.body.classList.add('shaking');
-                
-                // Create explosion particles
-                createExplosionParticles();
-                
-                // Destroy interface
-                document.body.classList.add('exploding');
-                
-                // Remove shake after animation
-                setTimeout(() => {
-                    document.body.classList.remove('shaking');
-                }, 500);
-            }, 500);
-        }
-
-        function createExplosionParticles() {
-            const colors = ['#ff6600', '#ff3300', '#ff9900', '#ffcc00', '#ffffff'];
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = centerX + 'px';
-                particle.style.top = centerY + 'px';
-                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-                particle.style.width = (Math.random() * 15 + 5) + 'px';
-                particle.style.height = particle.style.width;
-                document.body.appendChild(particle);
-
-                const angle = Math.random() * Math.PI * 2;
-                const velocity = Math.random() * 500 + 200;
-                const vx = Math.cos(angle) * velocity;
-                const vy = Math.sin(angle) * velocity;
-
-                let x = 0, y = 0;
-                let opacity = 1;
-
-                function animateParticle() {
-                    x += vx * 0.016;
-                    y += vy * 0.016;
-                    opacity -= 0.02;
-
-                    particle.style.transform = `translate(${x}px, ${y}px)`;
-                    particle.style.opacity = opacity;
-
-                    if (opacity > 0) {
-                        requestAnimationFrame(animateParticle);
-                    } else {
-                        particle.remove();
-                    }
-                }
-
-                requestAnimationFrame(animateParticle);
-            }
-        }
-
-        function restoreSite() {
-            const overlay = document.getElementById('explosionOverlay');
-            const dynamiteImg = document.querySelector('.dynamite-img');
-            overlay.classList.remove('show');
-            document.body.classList.remove('exploding');
-            dynamiteImg.classList.remove('exploding');
-
-            // Reset all animations
-            document.querySelectorAll('.section, .team-member').forEach(el => {
-                el.style.removeProperty('--random-x');
-                el.style.removeProperty('--random-y');
-                el.style.removeProperty('--random-rot');
-            });
-
-            // Remove any remaining particles
-            document.querySelectorAll('.particle').forEach(p => p.remove());
-        }
-
         loadTeamMembers();
 
         function toggleTeam() {
@@ -4135,6 +3784,9 @@
         <img id="lightboxImage" src="" alt="Full view">
     </div>
 
+    <!-- ============================================================
+         ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
+         ============================================================ -->
     <!-- Пасхалка EnderHack1, Maksimm205 и CloverS_kid -->
     <script>
         (function setupPlayerEasterEggs() {
