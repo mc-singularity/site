@@ -3001,21 +3001,14 @@
             return memberDiv;
         }
 
-        // 4. Загрузка участников состава (без кеша) + запуск рендера сетки состава
+        // 8. Загрузка team.json БЕЗ кеширования
         async function loadTeamMembers() {
             try {
                 const res = await fetch(`team.json?_t=${Date.now()}`, { cache: 'no-store' });
                 const data = await res.json();
                 window.allTeamMembers = data.teamMembers || [];
                 
-                // Отрисовываем сетку участников состава
-                if (typeof renderTeamMembersGrid === 'function') {
-                    renderTeamMembersGrid(window.allTeamMembers);
-                } else if (typeof renderTeam === 'function') {
-                    renderTeam(window.allTeamMembers);
-                }
-                
-                // Загружаем и обновляем организации с цветами из team.json
+                // Перерисовываем организации с учтенными цветами участников из team.json
                 await loadOrganizationsData();
             } catch (err) {
                 console.error('Ошибка загрузки team.json:', err);
@@ -3435,11 +3428,10 @@
             );
         }
 
-        // 2. Получение ссылки на голову Minecraft автоматически по нику (БЕЗ использования avatarUrl)
+        // 4. Генерация головы Minecraft (используется Minotar, как и на всем вашем сайте!)
         function getPlayerHeadUrl(memberName) {
             if (!memberName) return 'logo.png';
-            // Используется стандартная генерация голов по нику Minecraft (как на сайте)
-            return `https://mc-heads.net/avatar/${memberName}/16`;
+            return `https://minotar.net/helm/${memberName}/16`;
         }
 
         // Переключатель видимости организаций (скрыты по умолчанию)
