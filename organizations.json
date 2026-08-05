@@ -7,9 +7,16 @@
       "description": "Описание организации Уроборос: чем занимаются, их главная цель на сервере и особенности.",
       "iconUrl": "ub.jpg",
       "bannerUrl": "images/organizations/ouroboros_banner.png",
-      "leader": "Agata_Friss",
+      "leader": "impartialkus",
       "members": [
         "horHyplace",
+        "CloverS_Kid",
+        "Agata_friss",
+        "EnderHack1",
+        "g6thblood",
+        "MrKhazinack",
+        "CHOMeQ418",
+        "Maksimm205",
         "MrKhazinack"
       ],
       "socials": [
@@ -25,7 +32,11 @@
       "bannerUrl": "images/organizations/griffin_banner.png",
       "leader": "MR_Ozdi",
       "members": [
-        "g6thblood"
+        "Yrk1z",
+        "ba1toss",
+        "maloi221",
+        "lousamik",
+        "Folksy13_dll"
       ]
     },
     {
@@ -35,7 +46,7 @@
       "description": "Описание организации Суньхуньсяй: история, учения и направления деятельности.",
       "iconUrl": "CXC.jpg",
       "bannerUrl": "images/organizations/sunhunxiai_banner.png",
-      "leader": "Folksy13",
+      "leader": "Folksy13_dll",
       "members": [],
       "socials": [
         { "platform": "Telegram", "url": "https://t.me/CXCInc" }
