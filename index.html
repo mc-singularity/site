@@ -3325,6 +3325,63 @@
             }
         })();
     </script>
+    <script>
+        // Глобальный массив организаций для быстрой проверки принадлежности участника
+        window.allOrganizations = [];
+
+        // 1. Функция загрузки организаций и вывода блока с ними
+        async function loadOrganizationsData() {
+            try {
+                const res = await fetch('organizations.json');
+                const data = await res.json();
+                window.allOrganizations = data.organizations || [];
+
+                const container = document.getElementById('organizations-container');
+                if (container) {
+                    container.innerHTML = window.allOrganizations.map(org => {
+                        const leaderName = org.leader;
+                        const otherMembers = org.members.filter(m => m.toLowerCase() !== (leaderName || '').toLowerCase());
+
+                        return `
+                            <div class="org-card" id="org-${org.id}">
+                                <div class="org-header">
+                                    <img src="${org.iconUrl}" alt="${org.name}" class="org-icon">
+                                    <div class="org-title-block">
+                                        <h3>${org.name}</h3>
+                                        <span class="org-tagline">${org.tagline}</span>
+                                    </div>
+                                </div>
+                                <p class="org-description">${org.description}</p>
+                                <div class="org-members-list">
+                                    <div class="org-role-group">
+                                        <strong>👑 Лидер:</strong> 
+                                        <span class="member-tag leader">${leaderName || 'Не указан'}</span>
+                                    </div>
+                                    <div class="org-role-group">
+                                        <strong>👥 Участники:</strong> 
+                                        ${otherMembers.length > 0 ? otherMembers.map(m => `<span class="member-tag">${m}</span>`).join(', ') : 'Нет других участников'}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            } catch (err) {
+                console.error('Ошибка загрузки organizations.json:', err);
+            }
+        }
+
+        // Вспомогательная функция: по нику ищет, в какой организации состоит человек
+        function getMemberOrganization(memberName) {
+            if (!memberName || !window.allOrganizations) return null;
+            return window.allOrganizations.find(org => 
+                org.members && org.members.some(m => m.toLowerCase() === memberName.toLowerCase())
+            );
+        }
+
+        // Автозапуск загрузки организаций при открытии страницы
+        document.addEventListener('DOMContentLoaded', loadOrganizationsData);
+    </script>
     <script src="italian-translation.js"></script>
 </body>
 </html>
