@@ -2040,7 +2040,7 @@
         .org-modal-content {
             position: relative !important;
             z-index: 2 !important;
-            max-width: 650px;
+            max-width: 700px;
             width: 100%;
             max-height: 85vh;
             background: #0f0f14;
@@ -2051,6 +2051,36 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            font-family: 'uvKits', sans-serif !important;
+        }
+
+        /* Исправление крестика закрытия (наследование шрифта и абсолютное позиционирование) */
+        .modal-close, #org-details-modal .modal-close {
+            position: absolute !important;
+            top: 12px !important;
+            right: 12px !important;
+            width: 32px !important;
+            height: 32px !important;
+            background: rgba(0, 0, 0, 0.8) !important;
+            border: 1px solid #ffffff !important;
+            color: #ffffff !important;
+            font-family: 'uvKits', sans-serif !important;
+            font-size: 1.1rem !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            z-index: 10 !important;
+            transition: all 0.2s ease !important;
+            line-height: 1 !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        .modal-close:hover {
+            background: #ff4444 !important;
+            border-color: #ff4444 !important;
+            transform: scale(1.05);
         }
 
         .org-modal-header {
@@ -2137,7 +2167,7 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Ссылка-никнейм с головой игрока */
+        /* Клиентские упоминания ников с головой внутри текстов (включая JSON файлы) */
         .player-mention-link {
             color: #ffffff;
             background: rgba(0, 0, 0, 0.6);
@@ -2152,6 +2182,7 @@
             vertical-align: middle;
             transition: all 0.2s ease;
             font-size: 0.9em;
+            font-family: 'uvKits', sans-serif !important;
         }
 
         .player-mention-link:hover {
@@ -2165,6 +2196,16 @@
             object-fit: cover;
             border-radius: 2px;
             image-rendering: pixelated;
+        }
+
+        .org-former-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            margin-right: 6px;
+            margin-top: 4px;
         }
     </style>
 </head>
@@ -3768,14 +3809,13 @@
         }
         window.normalizeColor = normalizeColor;
 
-        // 2. Универсальный автоанализ и замена имён на голова-ссылку во всех текстах (lore, news, events, discord_news)
+        // 2. Универсальный автоанализ и замена имён на головы-ссылки во ВСЕХ текстах и JSON
         function linkifyMemberNames(text) {
             if (!text || typeof text !== 'string') return text || '';
             
             const members = window.fullTeamMembers || [];
             if (members.length === 0) return text;
 
-            // Сортировка имён по длине (чтобы короткие имена не перебивали составные)
             const sortedNames = members
                 .map(m => m.name)
                 .filter(Boolean)
@@ -3784,7 +3824,6 @@
             if (sortedNames.length === 0) return text;
 
             const escapedNames = sortedNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-            // Ищем точные совпадения имён без захвата внутри тегов HTML
             const regex = new RegExp(`(?<![a-zA-Z0-9_>])(${escapedNames.join('|')})(?![a-zA-Z0-9_=<])`, 'gi');
 
             return text.replace(regex, (matchedName) => {
@@ -3799,7 +3838,28 @@
         }
         window.linkifyMemberNames = linkifyMemberNames;
 
-        // 2.1. Сворачивание / Разворачивание блока организаций
+        // 3. Сканирование и обработка всего сайта для замены ников
+        function applyGlobalLinkification() {
+            const selectors = [
+                '.news-card', '.event-card', '.lore-card', '.discord-news-card',
+                '.news-description', '.event-description', '.lore-text', '.post-content',
+                '.org-description', 'p', 'span', 'div'
+            ];
+            
+            document.querySelectorAll(selectors.join(', ')).forEach(el => {
+                // Обрабатываем только текстовые узлы и элементы без дочерних контейнеров-карточек
+                if (el && el.children.length === 0 && el.textContent && !el.classList.contains('player-mention-link')) {
+                    const originalHTML = el.innerHTML;
+                    const processedHTML = linkifyMemberNames(originalHTML);
+                    if (originalHTML !== processedHTML) {
+                        el.innerHTML = processedHTML;
+                    }
+                }
+            });
+        }
+        window.applyGlobalLinkification = applyGlobalLinkification;
+
+        // 3.1. Сворачивание / Разворачивание блока организаций
         function toggleOrganizations() {
             const container = document.getElementById('organizations-container');
             const arrow = document.getElementById('orgs-arrow');
@@ -3815,7 +3875,7 @@
         }
         window.toggleOrganizations = toggleOrganizations;
 
-        // 2.2. Приоритет должности
+        // 3.2. Приоритет должности
         function getRolePriority(roleName) {
             if (!roleName) return 0;
             const r = String(roleName).toLowerCase();
@@ -3824,7 +3884,7 @@
             return 10;
         }
 
-        // 2.3. Поиск организаций игрока
+        // 3.3. Поиск организаций игрока
         function getMemberOrganizationsInfo(memberNameParam) {
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string' || !window.allOrganizations) return [];
@@ -3868,7 +3928,7 @@
             return orgs.length > 0 ? orgs[0] : null;
         };
 
-        // 2.4. Отрисовка плашки организации в модалке игрока
+        // 3.4. Отрисовка плашки организации в модалке игрока
         function renderOrgBadgeInModal(memberNameParam, containerElement) {
             if (!containerElement || !memberNameParam) return;
 
@@ -3930,7 +3990,7 @@
         }
         window.renderOrgBadgeInModal = renderOrgBadgeInModal;
 
-        // 2.5. Загрузка организаций
+        // 3.5. Загрузка организаций
         async function loadOrganizationsData() {
             try {
                 const res = await fetch(`organizations.json?_t=${Date.now()}`, { cache: 'no-store' });
@@ -3947,8 +4007,8 @@
                         let roles = org.roles;
                         if (!roles || !Array.isArray(roles)) {
                             roles = [];
-                            if (org.leader) roles.push({ name: '👑 Лидер', members: [org.leader] });
-                            if (org.members) roles.push({ name: '👥 Участники', members: org.members.filter(m => m !== org.leader) });
+                            if (org.leader) roles.push({ name: 'Лидер', members: [org.leader] });
+                            if (org.members) roles.push({ name: 'Участники', members: org.members.filter(m => m !== org.leader) });
                         }
 
                         const rolesHTML = roles.map(roleObj => {
@@ -4016,7 +4076,7 @@
                                     ${rolesHTML}
                                 </div>
                                 <button class="org-details-btn" onclick="openOrgModal('${org.id}')" style="border-color: ${orgColor}; color: ${orgColor};">
-                                    📖 Подробнее об организации
+                                    Подробнее об организации
                                 </button>
                             </div>
                         `;
@@ -4027,7 +4087,7 @@
             }
         }
 
-        // 3. Открытие модального окна организации ("Подробнее")
+        // 4. Открытие расширенного модального окна организации ("Подробнее") со всеми участниками
         function openOrgModal(orgId) {
             if (!window.allOrganizations) return;
             const org = window.allOrganizations.find(o => String(o.id).toLowerCase() === String(orgId).toLowerCase());
@@ -4066,10 +4126,11 @@
                 formerBlock.style.display = 'none';
             }
 
-            // История и примечания с авто-ссылками имён
+            // История и лор
             const historyEl = document.getElementById('org-modal-history');
             if (historyEl) historyEl.innerHTML = linkifyMemberNames(org.history || org.description || 'История данной организации ещё формируется.');
 
+            // Особые примечания
             const notesBlock = document.getElementById('org-notes-block');
             const notesEl = document.getElementById('org-modal-notes');
             if (org.specialNotes) {
@@ -4079,7 +4140,39 @@
                 notesBlock.style.display = 'none';
             }
 
-            // Ссылки
+            // Полный состав участников (по ролям)
+            const membersListContainer = document.getElementById('org-modal-members-list');
+            if (membersListContainer) {
+                let roles = org.roles;
+                if (!roles || !Array.isArray(roles)) {
+                    roles = [];
+                    if (org.leader) roles.push({ name: 'Лидер', members: [org.leader] });
+                    if (org.members) roles.push({ name: 'Участники', members: org.members.filter(m => m !== org.leader) });
+                }
+
+                membersListContainer.innerHTML = roles.map(roleObj => {
+                    const membersHtml = (roleObj.members || []).map(memberName => {
+                        const headUrl = `https://minotar.net/helm/${encodeURIComponent(memberName)}/16`;
+                        return `
+                            <span class="player-mention-link" onclick="openModalByName('${memberName}')">
+                                <img src="${headUrl}" alt="${memberName}" onerror="this.style.display='none'">
+                                <span>${memberName}</span>
+                            </span>
+                        `;
+                    }).join(' ');
+
+                    return `
+                        <div style="background: rgba(0,0,0,0.3); border: 1px solid ${orgColor}44; padding: 6px 10px;">
+                            <strong style="color: ${orgColor}; font-size: 0.85rem;">${roleObj.name || 'Роль'}:</strong>
+                            <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px;">
+                                ${membersHtml || '<span style="color:#777; font-size:0.8rem;">Нет участников</span>'}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Социальные сети
             const socialsBlock = document.getElementById('org-modal-socials-block');
             const socialsContainer = document.getElementById('org-modal-socials');
             if (org.socials && org.socials.length > 0) {
@@ -4118,7 +4211,7 @@
         }
         window.closeOrgModal = closeOrgModal;
 
-        // 4. Открытие модального окна игрока по никнейму
+        // 5. Открытие профиля игрока по нику
         window.openModalByName = function(memberNameParam) {
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string') return;
@@ -4136,7 +4229,7 @@
             }
         };
 
-        // 5. Автозагрузка и обработка упоминаний во всех разделах сайта
+        // 6. Инициализация при загрузке сайта (сбор состава, организаций и запуск автозамены везде)
         document.addEventListener('DOMContentLoaded', async () => {
             if (typeof loadOrganizationsData === 'function') {
                 await loadOrganizationsData();
@@ -4145,17 +4238,15 @@
                 await loadTeamMembers();
             }
 
-            // Автозамена упоминаний во всём контенте (новости, ивенты, лор, дискорд)
+            // Запускаем глобальную замену упоминаний после прогрузки контента страницы и внешних json (news, events, lore и т.д.)
             setTimeout(() => {
-                const containersToScan = document.querySelectorAll(
-                    '.news-card, .event-card, .lore-card, .discord-news-card, .news-description, .event-description, .lore-text, .post-content'
-                );
-                containersToScan.forEach(el => {
-                    if (el && el.innerHTML) {
-                        el.innerHTML = linkifyMemberNames(el.innerHTML);
-                    }
-                });
-            }, 500);
+                applyGlobalLinkification();
+            }, 600);
+
+            // Повторный запуск на случай подгрузки контента по сети
+            setTimeout(() => {
+                applyGlobalLinkification();
+            }, 1500);
         });
     </script>
     <script src="italian-translation.js"></script>
@@ -4163,7 +4254,7 @@
 <div id="org-details-modal" class="modal">
     <div class="modal-overlay" onclick="closeOrgModal()"></div>
     <div class="modal-content org-modal-content" id="org-modal-card">
-        <button class="modal-close" onclick="closeOrgModal()">✕</button>
+        <button class="modal-close" onclick="closeOrgModal()">X</button>
         
         <div class="org-modal-header">
             <img id="org-modal-icon" src="logo.png" alt="Logo" class="org-modal-logo">
@@ -4175,27 +4266,32 @@
 
         <div class="org-modal-body">
             <div class="org-info-block">
-                <div class="org-info-label">⏳ Период активности:</div>
+                <div class="org-info-label">Период активности:</div>
                 <div id="org-modal-seasons" class="org-info-value">—</div>
             </div>
 
             <div class="org-info-block" id="org-former-names-block">
-                <div class="org-info-label">📜 Прошлые названия:</div>
+                <div class="org-info-label">Прошлые названия:</div>
                 <div id="org-modal-former-names" class="org-info-value">—</div>
             </div>
 
             <div class="org-info-block">
-                <div class="org-info-label">📖 История и лор:</div>
+                <div class="org-info-label">История и лор:</div>
                 <div id="org-modal-history" class="org-info-text">Описание истории отсутствует.</div>
             </div>
 
             <div class="org-info-block" id="org-notes-block">
-                <div class="org-info-label">💡 Особые примечания:</div>
+                <div class="org-info-label">Особые примечания:</div>
                 <div id="org-modal-notes" class="org-info-text">—</div>
             </div>
 
+            <div class="org-info-block" id="org-modal-members-block">
+                <div class="org-info-label">Состав участников:</div>
+                <div id="org-modal-members-list" class="org-members-container" style="display: flex; flex-direction: column; gap: 8px; margin-top: 6px;"></div>
+            </div>
+
             <div class="org-info-block" id="org-modal-socials-block">
-                <div class="org-info-label">🔗 Ссылки и ресурсы:</div>
+                <div class="org-info-label">Ссылки и ресурсы:</div>
                 <div id="org-modal-socials" class="org-socials-list"></div>
             </div>
         </div>
