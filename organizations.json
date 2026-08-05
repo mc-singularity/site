@@ -34,6 +34,26 @@
       ]
     },
     {
+      "id": "CXC",
+      "name": "Суньхуньсяй",
+      "tagline": "Торово-исследовательская компания.",
+      "color": "#9e6060",
+      "description": "Описание организации Суньхуньсяй: история, учения и направления деятельности.",
+      "iconUrl": "CXC.jpg",
+      "bannerUrl": "images/organizations/sunhunxiai_banner.png",
+      "roles": [
+        {
+          "name": "Ген. директор",
+          "members": [
+            "Folksy13_dll"
+          ]
+        }
+      ],
+      "socials": [
+        { "platform": "Telegram", "url": "https://t.me/CXCInc" }
+      ]
+    },
+    {
       "id": "griffin_corp",
       "name": "Гриффин corp",
       "color": "#d9d4d4",
@@ -60,26 +80,6 @@
         }
       ],
       "socials": []
-    },
-    {
-      "id": "CXC",
-      "name": "Суньхуньсяй",
-      "tagline": "Торово-исследовательская компания.",
-      "color": "#9e6060",
-      "description": "Описание организации Суньхуньсяй: история, учения и направления деятельности.",
-      "iconUrl": "CXC.jpg",
-      "bannerUrl": "images/organizations/sunhunxiai_banner.png",
-      "roles": [
-        {
-          "name": "Ген. директор",
-          "members": [
-            "Folksy13_dll"
-          ]
-        }
-      ],
-      "socials": [
-        { "platform": "Telegram", "url": "https://t.me/CXCInc" }
-      ]
     }
   ]
 }
