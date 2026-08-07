@@ -11,6 +11,16 @@
             --accent-dim: rgba(255, 255, 255, 0.1);
             --accent-hover: rgba(255, 255, 255, 0.2);
             --accent-shadow: rgba(255, 255, 255, 0.3);
+
+            /* ===== Унифицированная система кнопок (design tokens) ===== */
+            --btn-border-w: 0.1875rem;
+            --btn-border-w-sm: 0.125rem;
+            --btn-radius: 0px;
+            --btn-shadow: 0.1875rem 0.1875rem 0 rgba(0, 0, 0, 0.6);
+            --btn-shadow-sm: 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.6);
+            --btn-transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+            --btn-letter-spacing: 0.03em;
+            --btn-bg: rgba(0, 0, 0, 0.75);
         }
 
         * {
@@ -535,15 +545,12 @@
         }
 
         .filter-btn {
-            background: rgba(0, 0, 0, 0.8);
-            border: 0.125rem solid var(--accent-color);
+            background: var(--btn-bg);
+            border: var(--btn-border-w-sm) solid var(--accent-color);
             color: var(--accent-color);
             padding: 0.4rem 0.9rem;
             font-size: 0.95rem;
-            font-family: 'uvKits', sans-serif !important;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 2px 2px 0 #000000;
+            box-shadow: var(--btn-shadow-sm);
         }
 
         .filter-btn:hover, .filter-btn.active {
@@ -726,12 +733,7 @@
         }
 
         .social-button {
-            text-decoration: none;
             position: relative;
-            display: inline-flex !important;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
         }
 
         .team-section {
@@ -846,16 +848,17 @@
 
         .panel-toggle {
             position: fixed;
-            background: rgba(0, 0, 0, 0.85);
-            border: 0.1875rem solid var(--accent-color);
+            background: var(--btn-bg);
+            border: var(--btn-border-w) solid var(--accent-color);
             color: var(--accent-color);
             padding: 0.8rem 0.6rem;
             cursor: pointer;
             z-index: 1001;
             font-family: 'uvKits', sans-serif !important;
             font-size: 1.1rem;
-            transition: all 0.2s ease;
-            box-shadow: 0 0 0.5rem rgba(0,0,0,0.8);
+            letter-spacing: var(--btn-letter-spacing);
+            transition: var(--btn-transition);
+            box-shadow: var(--btn-shadow);
         }
 
         @media (min-width: 48.01rem) {
@@ -898,13 +901,19 @@
         }
 
         .panel-close {
-            background: none;
-            border: none;
+            background: var(--btn-bg);
+            border: var(--btn-border-w-sm) solid var(--accent-color);
             color: var(--accent-color);
-            font-size: 1.8rem;
-            cursor: pointer;
-            line-height: 1;
-            transition: color 0.3s ease;
+            font-size: 1.3rem;
+            width: 2rem;
+            height: 2rem;
+            padding: 0;
+            box-shadow: var(--btn-shadow-sm);
+        }
+
+        .panel-close:hover {
+            background: var(--accent-color);
+            color: #000000;
         }
 
         .panel-content p {
@@ -1342,14 +1351,12 @@
         }
 
         .card-nav-btn {
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid var(--member-color, var(--accent-color));
+            background: var(--btn-bg);
+            border: var(--btn-border-w-sm) solid var(--member-color, var(--accent-color));
             color: var(--member-color, var(--accent-color));
-            font-family: 'uvKits', sans-serif !important;
             font-size: 0.75rem;
             padding: 0.1rem 0.35rem;
-            cursor: pointer;
-            transition: all 0.15s ease;
+            box-shadow: var(--btn-shadow-sm);
         }
 
         .card-nav-btn:hover {
@@ -1437,20 +1444,13 @@
         }
 
         .more-info-btn {
-            background: rgba(0, 0, 0, 0.8);
-            border: 0.125rem solid var(--member-color, var(--accent-color));
+            background: var(--btn-bg);
+            border: var(--btn-border-w-sm) solid var(--member-color, var(--accent-color));
             color: var(--member-color, var(--accent-color));
             padding: 0.3rem 0.8rem;
             font-size: 0.9rem;
-            font-family: 'uvKits', sans-serif !important;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 2px 2px 0 #000000;
+            box-shadow: var(--btn-shadow-sm);
             margin-top: 0.3rem;
-            text-align: center;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .more-info-btn:hover {
@@ -1540,12 +1540,19 @@
         }
 
         .modal-close-btn {
-            background: none;
-            border: none;
+            background: var(--btn-bg);
+            border: var(--btn-border-w-sm) solid #ffffff;
             color: #ffffff;
-            font-size: 2rem;
-            cursor: pointer;
-            line-height: 1;
+            font-size: 1.4rem;
+            width: 2.25rem;
+            height: 2.25rem;
+            padding: 0;
+            box-shadow: var(--btn-shadow-sm);
+        }
+
+        .modal-close-btn:hover {
+            background: #ffffff;
+            color: #000000;
         }
 
         .modal-close, #org-details-modal .modal-close {
@@ -1649,6 +1656,95 @@
             50% { transform: rotate(5deg); }
         }
 
+        /* Пасхалка: Уроборос → Змейка, поедающая сайт */
+        @keyframes ouroborosShake {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            20% { transform: translateX(-0.2rem) rotate(-2deg); }
+            40% { transform: translateX(0.2rem) rotate(2deg); }
+            60% { transform: translateX(-0.15rem) rotate(-1deg); }
+            80% { transform: translateX(0.15rem) rotate(1deg); }
+        }
+
+        .ouroboros-shake {
+            animation: ouroborosShake 0.3s ease;
+        }
+
+        #ouroboros-snake-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: none;
+        }
+
+        #ouroboros-snake-canvas {
+            background: rgba(0, 0, 0, 0.25);
+            border: var(--btn-border-w) solid var(--accent-color);
+            box-shadow: var(--btn-shadow), 0 0 2rem rgba(0, 0, 0, 0.8);
+            max-width: 96vw;
+            max-height: 78vh;
+        }
+
+        .ouroboros-hud {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            text-shadow: 0.125rem 0.125rem 0 #000000;
+            font-size: 1.2rem;
+            letter-spacing: 0.05rem;
+            text-align: center;
+            z-index: 100000;
+            font-family: 'uvKits', sans-serif !important;
+            pointer-events: none;
+            width: 100%;
+            padding: 0 1rem;
+        }
+
+        .ouroboros-hud small {
+            display: block;
+            font-size: 0.75rem;
+            color: #aaaaaa;
+            margin-top: 0.25rem;
+        }
+
+        .ouroboros-endscreen {
+            position: fixed;
+            inset: 0;
+            z-index: 100001;
+            background: rgba(0, 0, 0, 0.88);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            text-align: center;
+            color: #ffffff;
+            padding: 1rem;
+            font-family: 'uvKits', sans-serif !important;
+        }
+
+        .ouroboros-endscreen h2 {
+            font-size: 2rem;
+            text-shadow: 0.125rem 0.125rem 0 #000000;
+            color: var(--accent-color);
+        }
+
+        .eaten-bite {
+            animation: eatenBite 0.45s ease forwards;
+            pointer-events: none;
+        }
+
+        @keyframes eatenBite {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; filter: saturate(1) brightness(1); }
+            50% { transform: scale(0.82) rotate(-5deg); filter: saturate(0.3) brightness(1.6); }
+            100% { transform: scale(0) rotate(10deg); opacity: 0; filter: saturate(0) brightness(2); }
+        }
+
         .lore-box {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed var(--accent-color);
@@ -1659,24 +1755,50 @@
             font-family: 'uvKits', sans-serif !important;
         }
 
-        /* Универсальные кнопки, динамически меняющие цвет темы */
-        .button {
-            background: var(--accent-color);
-            color: #000000;
-            border: 0.25rem solid #000000;
-            padding: 0.8rem 2rem;
-            font-size: 1.5rem;
+        /* ============================================================
+           УНИФИЦИРОВАННАЯ СИСТЕМА КНОПОК
+           Все кнопки сайта (.button, .refresh-btn, .sort-btn, .filter-btn,
+           .card-nav-btn, .more-info-btn, .org-details-btn, .social-button,
+           .modal-close-btn, .panel-close) используют общие правила:
+           одинаковые border-radius, тени, transition и паттерн hover-инверсии
+           (заливка становится текстом и наоборот). Различаются только
+           размерами (padding/font-size), т.к. это кнопки разного уровня
+           важности (главные / второстепенные / компактные).
+           ============================================================ */
+        .button,
+        .refresh-btn,
+        .sort-btn,
+        .filter-btn,
+        .card-nav-btn,
+        .more-info-btn,
+        .org-details-btn,
+        .social-button,
+        .modal-close-btn,
+        .panel-close,
+        .italian-restore-btn {
             font-family: 'uvKits', sans-serif !important;
             cursor: pointer;
-            margin: 0.5rem;
-            transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-            text-shadow: none;
+            border-radius: var(--btn-radius);
+            letter-spacing: var(--btn-letter-spacing);
+            transition: var(--btn-transition);
             display: inline-flex !important;
             justify-content: center;
             align-items: center;
             text-align: center;
+            text-decoration: none;
             line-height: 1;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Универсальные кнопки, динамически меняющие цвет темы (главный уровень) */
+        .button {
+            background: var(--accent-color);
+            color: #000000;
+            border: var(--btn-border-w) solid #000000;
+            padding: 0.8rem 2rem;
+            font-size: 1.5rem;
+            margin: 0.5rem;
+            text-shadow: none;
+            box-shadow: var(--btn-shadow);
         }
 
         .button:hover {
@@ -1690,18 +1812,11 @@
         .refresh-btn {
             background: var(--accent-color);
             color: #000000;
-            border: 0.1875rem solid #000000;
+            border: var(--btn-border-w) solid #000000;
             padding: 0.5rem 1.2rem;
             font-size: 1rem;
-            cursor: pointer;
-            font-family: 'uvKits', sans-serif !important;
-            transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
             margin-top: 0.5rem;
-            display: inline-flex !important;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            line-height: 1;
+            box-shadow: var(--btn-shadow);
         }
 
         .refresh-btn:hover {
@@ -1719,10 +1834,6 @@
         .sort-btn {
             padding: 0.625rem 1.25rem;
             font-size: 1.2rem;
-            font-family: 'uvKits', sans-serif !important;
-            display: inline-flex !important;
-            justify-content: center;
-            align-items: center;
         }
 
         footer {
@@ -2123,18 +2234,17 @@
         .org-details-btn {
             margin-top: 10px;
             padding: 6px 12px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #ffffff;
-            color: #ffffff;
-            cursor: pointer;
+            background: var(--btn-bg);
+            border: var(--btn-border-w-sm) solid var(--org-color, #ffffff);
+            color: var(--org-color, #ffffff);
             font-size: 0.8rem;
-            transition: all 0.2s ease;
+            box-shadow: var(--btn-shadow-sm);
             width: 100%;
-            text-align: center;
         }
 
         .org-details-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--org-color, #ffffff);
+            color: #000000;
         }
 
         /* Ссылка-никнейм с головой игрока */
@@ -3998,9 +4108,14 @@
                             </div>
                         ` : '';
 
+                        const isOuroboros = String(org.id).toLowerCase() === 'ouroboros';
+                        const ouroborosAttrs = isOuroboros
+                            ? `onclick="handleOuroborosClick(event)" style="border-bottom-color: ${orgColor}66; cursor: pointer;" title="???"`
+                            : `style="border-bottom-color: ${orgColor}66;"`;
+
                         return `
                             <div class="org-card" id="org-${org.id}" style="border-color: ${orgColor}; box-shadow: 3px 3px 0px ${orgColor}44;">
-                                <div class="org-header" style="border-bottom-color: ${orgColor}66;">
+                                <div class="org-header" ${ouroborosAttrs}>
                                     <img src="${org.iconUrl || 'logo.png'}" alt="${org.name}" class="org-icon" style="border-color: ${orgColor};">
                                     <div class="org-title-block">
                                         <h3 style="color: ${orgColor};">${org.name || ''}</h3>
@@ -4012,7 +4127,7 @@
                                 <div class="org-members-list" style="border-top-color: ${orgColor}44; margin-top: 10px; padding-top: 6px;">
                                     ${rolesHTML}
                                 </div>
-                                <button class="org-details-btn" onclick="openOrgModal('${org.id}')" style="border-color: ${orgColor}; color: ${orgColor};">
+                                <button class="org-details-btn" onclick="openOrgModal('${org.id}')" style="--org-color: ${orgColor};">
                                     📖 Подробнее об организации
                                 </button>
                             </div>
@@ -4154,6 +4269,260 @@
                 });
             }, 500);
         });
+
+        /* ============================================================
+           ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
+           Пасхалка «Уроборос»: если много раз кликнуть по шапке организации
+           «Уроборос» в списке организаций, запускается змейка, которая
+           буквально «поедает» элементы сайта.
+           ============================================================ */
+        (function setupOuroborosSnakeEasterEgg() {
+            const CLICKS_NEEDED = 7;
+            const RESET_DELAY_MS = 2200;
+            let clickCount = 0;
+            let resetTimer = null;
+
+            window.handleOuroborosClick = function(event) {
+                if (event) event.stopPropagation();
+
+                clickCount++;
+                const header = event && event.currentTarget;
+                if (header) {
+                    header.classList.remove('ouroboros-shake');
+                    void header.offsetWidth; // форсируем reflow, чтобы анимация перезапускалась
+                    header.classList.add('ouroboros-shake');
+                }
+
+                clearTimeout(resetTimer);
+                resetTimer = setTimeout(() => { clickCount = 0; }, RESET_DELAY_MS);
+
+                if (clickCount >= CLICKS_NEEDED) {
+                    clickCount = 0;
+                    clearTimeout(resetTimer);
+                    launchOuroborosSnake();
+                }
+            };
+
+            function launchOuroborosSnake() {
+                if (document.getElementById('ouroboros-snake-overlay')) return;
+
+                const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#ffffff';
+
+                // Элементы сайта, которые змейка может "съесть" при поедании еды
+                const EATABLE_SELECTOR = '.org-card, .team-member, .news-item, .discord-news-card, .lore-season, .event-card, .social-buttons > a, .archive-card';
+                let eatenElements = [];
+
+                function getEatableCandidates() {
+                    const all = Array.from(document.querySelectorAll(EATABLE_SELECTOR));
+                    return all.filter(el => {
+                        if (el.dataset.ouroborosEaten === '1') return false;
+                        const rect = el.getBoundingClientRect();
+                        return rect.width > 0 && rect.height > 0 &&
+                               rect.bottom > 0 && rect.top < window.innerHeight;
+                    });
+                }
+
+                function eatRandomElement() {
+                    const candidates = getEatableCandidates();
+                    if (candidates.length === 0) return;
+                    const target = candidates[Math.floor(Math.random() * candidates.length)];
+                    target.dataset.ouroborosEaten = '1';
+                    target.classList.add('eaten-bite');
+                    eatenElements.push(target);
+                    setTimeout(() => {
+                        target.style.display = 'none';
+                    }, 430);
+                }
+
+                function restoreEatenElements() {
+                    eatenElements.forEach(el => {
+                        el.classList.remove('eaten-bite');
+                        el.style.display = '';
+                        delete el.dataset.ouroborosEaten;
+                    });
+                    eatenElements = [];
+                }
+
+                // ---- Настройка холста ----
+                const overlay = document.createElement('div');
+                overlay.id = 'ouroboros-snake-overlay';
+
+                const hud = document.createElement('div');
+                hud.className = 'ouroboros-hud';
+                hud.innerHTML = `🐍 УРОБОРОС ПРОБУДИЛСЯ. Счёт: <span id="ouroboros-score">0</span><small>Стрелки / WASD / свайп — управление. Esc — выход. Змейка не должна укусить себя за хвост.</small>`;
+
+                const canvas = document.createElement('canvas');
+                canvas.id = 'ouroboros-snake-canvas';
+                overlay.appendChild(canvas);
+                document.body.appendChild(overlay);
+                document.body.appendChild(hud);
+                document.body.style.overflow = 'hidden';
+
+                const ctx = canvas.getContext('2d');
+                const CELL = 22;
+                const cols = Math.max(12, Math.floor(Math.min(window.innerWidth * 0.9, 640) / CELL));
+                const rows = Math.max(12, Math.floor(Math.min(window.innerHeight * 0.72, 480) / CELL));
+                canvas.width = cols * CELL;
+                canvas.height = rows * CELL;
+
+                let snake = [{ x: Math.floor(cols / 2), y: Math.floor(rows / 2) }];
+                let dir = { x: 1, y: 0 };
+                let nextDir = { x: 1, y: 0 };
+                let food = spawnFood();
+                let score = 0;
+                let tickMs = 140;
+                let lastTick = 0;
+                let running = true;
+                let rafId = null;
+
+                function spawnFood() {
+                    let pos;
+                    do {
+                        pos = { x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows) };
+                    } while (snake.some(s => s.x === pos.x && s.y === pos.y));
+                    return pos;
+                }
+
+                function draw() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    // еда
+                    ctx.fillStyle = accentColor;
+                    ctx.shadowColor = accentColor;
+                    ctx.shadowBlur = 8;
+                    ctx.fillRect(food.x * CELL + 3, food.y * CELL + 3, CELL - 6, CELL - 6);
+                    ctx.shadowBlur = 0;
+
+                    // змейка
+                    snake.forEach((seg, i) => {
+                        ctx.fillStyle = i === 0 ? accentColor : 'rgba(255,255,255,0.75)';
+                        ctx.strokeStyle = '#000000';
+                        ctx.lineWidth = 2;
+                        ctx.fillRect(seg.x * CELL + 1, seg.y * CELL + 1, CELL - 2, CELL - 2);
+                        ctx.strokeRect(seg.x * CELL + 1, seg.y * CELL + 1, CELL - 2, CELL - 2);
+                    });
+                }
+
+                function step(timestamp) {
+                    if (!running) return;
+                    if (timestamp - lastTick >= tickMs) {
+                        lastTick = timestamp;
+                        dir = nextDir;
+
+                        const head = {
+                            x: (snake[0].x + dir.x + cols) % cols,
+                            y: (snake[0].y + dir.y + rows) % rows
+                        };
+
+                        // Уроборос кусает себя за хвост — конец игры
+                        if (snake.some(s => s.x === head.x && s.y === head.y)) {
+                            return gameOver();
+                        }
+
+                        snake.unshift(head);
+
+                        if (head.x === food.x && head.y === food.y) {
+                            score++;
+                            document.getElementById('ouroboros-score').textContent = String(score);
+                            tickMs = Math.max(70, 140 - score * 4);
+                            food = spawnFood();
+                            eatRandomElement();
+                        } else {
+                            snake.pop();
+                        }
+
+                        draw();
+                    }
+                    rafId = requestAnimationFrame(step);
+                }
+
+                function gameOver() {
+                    running = false;
+                    if (rafId) cancelAnimationFrame(rafId);
+
+                    const endScreen = document.createElement('div');
+                    endScreen.className = 'ouroboros-endscreen';
+                    endScreen.innerHTML = `
+                        <h2>ЦИКЛ ЗАМКНУЛСЯ</h2>
+                        <p>Уроборос укусил себя за хвост. Съедено элементов сайта: ${eatenElements.length}. Счёт: ${score}.</p>
+                        <div>
+                            <button class="button" id="ouroboros-restart-btn">🔁 ЕЩЁ РАЗ</button>
+                            <button class="button" id="ouroboros-close-btn">✕ ЗАКРЫТЬ</button>
+                        </div>
+                    `;
+                    overlay.appendChild(endScreen);
+
+                    document.getElementById('ouroboros-restart-btn').onclick = () => {
+                        endScreen.remove();
+                        restoreEatenElements();
+                        snake = [{ x: Math.floor(cols / 2), y: Math.floor(rows / 2) }];
+                        dir = { x: 1, y: 0 };
+                        nextDir = { x: 1, y: 0 };
+                        food = spawnFood();
+                        score = 0;
+                        tickMs = 140;
+                        lastTick = 0;
+                        running = true;
+                        document.getElementById('ouroboros-score').textContent = '0';
+                        rafId = requestAnimationFrame(step);
+                    };
+                    document.getElementById('ouroboros-close-btn').onclick = closeGame;
+                }
+
+                function closeGame() {
+                    running = false;
+                    if (rafId) cancelAnimationFrame(rafId);
+                    restoreEatenElements();
+                    document.removeEventListener('keydown', onKeyDown);
+                    overlay.removeEventListener('touchstart', onTouchStart);
+                    overlay.removeEventListener('touchend', onTouchEnd);
+                    overlay.remove();
+                    hud.remove();
+                    document.body.style.overflow = '';
+                }
+
+                function onKeyDown(e) {
+                    const key = e.key.toLowerCase();
+                    if (key === 'escape') return closeGame();
+                    if ((key === 'arrowup' || key === 'w') && dir.y === 0) nextDir = { x: 0, y: -1 };
+                    else if ((key === 'arrowdown' || key === 's') && dir.y === 0) nextDir = { x: 0, y: 1 };
+                    else if ((key === 'arrowleft' || key === 'a') && dir.x === 0) nextDir = { x: -1, y: 0 };
+                    else if ((key === 'arrowright' || key === 'd') && dir.x === 0) nextDir = { x: 1, y: 0 };
+                    else return;
+                    e.preventDefault();
+                }
+
+                let touchStartXY = null;
+                function onTouchStart(e) {
+                    const t = e.touches[0];
+                    touchStartXY = { x: t.clientX, y: t.clientY };
+                }
+                function onTouchEnd(e) {
+                    if (!touchStartXY) return;
+                    const t = e.changedTouches[0];
+                    const dx = t.clientX - touchStartXY.x;
+                    const dy = t.clientY - touchStartXY.y;
+                    if (Math.max(Math.abs(dx), Math.abs(dy)) < 20) return;
+                    if (Math.abs(dx) > Math.abs(dy)) {
+                        if (dx > 0 && dir.x === 0) nextDir = { x: 1, y: 0 };
+                        else if (dx < 0 && dir.x === 0) nextDir = { x: -1, y: 0 };
+                    } else {
+                        if (dy > 0 && dir.y === 0) nextDir = { x: 0, y: 1 };
+                        else if (dy < 0 && dir.y === 0) nextDir = { x: 0, y: -1 };
+                    }
+                    touchStartXY = null;
+                }
+
+                document.addEventListener('keydown', onKeyDown);
+                overlay.addEventListener('touchstart', onTouchStart, { passive: true });
+                overlay.addEventListener('touchend', onTouchEnd, { passive: true });
+
+                draw();
+                rafId = requestAnimationFrame(step);
+            }
+
+            window.launchOuroborosSnake = launchOuroborosSnake;
+        })();
     </script>
     <script src="italian-translation.js"></script>
 
