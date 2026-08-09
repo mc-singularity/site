@@ -2270,6 +2270,12 @@
             color: #9e6060;
             font-weight: bold;
             text-shadow: 0 0 8px rgba(158, 96, 96, 0.4);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .cxc-highlight:hover {
+            text-shadow: 0 0 20px rgba(158, 96, 96, 0.8);
+            transform: scale(1.02);
         }
 
         .clover-highlight {
@@ -2526,6 +2532,64 @@
             background: var(--accent-color);
             image-rendering: pixelated;
         }
+
+        /* ============================================================
+           ПАСХАЛКА ДЛЯ СУНЬХУНЬСЯЯ (CXC)
+           ============================================================ */
+        .cxc-easter-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .cxc-easter-modal.show {
+            display: flex;
+        }
+        .cxc-easter-content {
+            background: #111;
+            border: 4px solid #ff4444;
+            padding: 1.5rem 2rem 2rem;
+            text-align: center;
+            max-width: 90vw;
+            position: relative;
+            animation: cxcShake 0.5s ease-in-out;
+            box-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
+        }
+        @keyframes cxcShake {
+            0%, 100% { transform: translate(0); }
+            25% { transform: translate(-5px, 5px); }
+            50% { transform: translate(5px, -5px); }
+            75% { transform: translate(-5px, -5px); }
+        }
+        .cxc-meme-image {
+            max-width: 100%;
+            max-height: 60vh;
+            object-fit: contain;
+            border: 2px solid #55ff55;
+            margin: 1rem 0;
+            image-rendering: pixelated;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cxc-easter-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            font-family: 'uvKits', sans-serif !important;
+        }
+        .cxc-easter-close:hover {
+            color: #ff4444;
+            transform: scale(1.2);
+        }
     </style>
 </head>
 <body>
@@ -2745,6 +2809,18 @@
                     <div class="team-member-socials" id="modalSocialsList"></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Аудио для пасхалки Суньхуньсяй -->
+    <audio id="cxc-audio" src="cxcscl.mp3" preload="auto"></audio>
+
+    <!-- Модальное окно пасхалки для Суньхуньсяй -->
+    <div id="cxcEasterEgg" class="cxc-easter-modal">
+        <div class="cxc-easter-content">
+            <button class="cxc-easter-close" onclick="closeCXCEasterEgg()">&times;</button>
+            <h2 style="color: #ff4444; text-shadow: 2px 2px 0 #000; font-size: clamp(1.5rem, 4vw, 3rem);">ПАРТИЯ ГОРДИТСЯ ТОБОЙ!</h2>
+            <img id="cxc-random-meme" src="cxcscl.jpg" alt="Social Credit" class="cxc-meme-image" onerror="this.src='logo.png'">
         </div>
     </div>
 
@@ -4301,6 +4377,56 @@
                 });
             });
         }
+
+        // ============================================================
+        // ПАСХАЛКА ДЛЯ СУНЬХУНЬСЯЯ (CXC) - СКРИПТ
+        // ============================================================
+        window.triggerCXCEasterEgg = function() {
+            const audio = document.getElementById('cxc-audio');
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(() => console.warn('Аудио не найдено или заблокировано браузером'));
+            }
+
+            const memeImages = ['cxcscl.jpg', 'cxcscl1.jpg', 'cxcscl2.jpg', 'cxcscl3.jpg'];
+            const randomMeme = memeImages[Math.floor(Math.random() * memeImages.length)];
+            
+            const imgElement = document.getElementById('cxc-random-meme');
+            if (imgElement) {
+                imgElement.src = randomMeme;
+                imgElement.onerror = function() { this.src = 'logo.png'; };
+            }
+
+            document.getElementById('cxcEasterEgg').classList.add('show');
+        }
+
+        window.closeCXCEasterEgg = function() {
+            const audio = document.getElementById('cxc-audio');
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+            document.getElementById('cxcEasterEgg').classList.remove('show');
+        }
+
+        // Повесим обработчики на клик по футеру и двойной клик по карточке Суньхуньсяй
+        document.addEventListener('DOMContentLoaded', function() {
+            const cxcHighlight = document.querySelector('.cxc-highlight');
+            if (cxcHighlight) {
+                cxcHighlight.addEventListener('click', triggerCXCEasterEgg);
+            }
+
+            // Двойной клик по карточке "Суньхуньсяй"
+            document.addEventListener('dblclick', function(e) {
+                const card = e.target.closest('.org-card');
+                if (card) {
+                    const titleBlock = card.querySelector('.org-title-block h3');
+                    if (titleBlock && titleBlock.textContent.trim() === 'Суньхуньсяй') {
+                        triggerCXCEasterEgg();
+                    }
+                }
+            });
+        });
     </script>
 
     <!-- Модальное окно просмотра картинок (Lightbox) -->
