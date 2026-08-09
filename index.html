@@ -3673,24 +3673,45 @@
                 </div>
             `;
 
-            // Вывод плашки организации и привязка клика к открытию модалки организации
+            // ИСПРАВЛЕНИЕ: Вывод плашки организации ПРЯМО ПОД ИМЕНЕМ, вне скрытого блока
             if (primaryOrg && primaryOrg.org) {
-                const infoDiv = memberDiv.querySelector('.team-member-details');
-                if (infoDiv) {
-                    const { org, roleName } = primaryOrg;
-                    const orgColor = typeof normalizeColor === 'function' ? normalizeColor(org.color || mainColor) : (org.color || mainColor);
-                    const orgBadge = document.createElement('div');
-                    orgBadge.className = 'member-org-badge';
-                    orgBadge.style.cssText = 'margin-top: 6px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.2s ease;';
-                    orgBadge.onclick = (e) => { e.stopPropagation(); openOrgModal(org.id); };
-                    orgBadge.onmouseover = () => { orgBadge.style.transform = 'scale(1.05)'; };
-                    orgBadge.onmouseout = () => { orgBadge.style.transform = 'scale(1)'; };
-                    
-                    orgBadge.innerHTML = `
-                        <img src="${org.iconUrl}" style="width:16px; height:16px; object-fit:contain;">
-                        <span style="color: ${orgColor};">${org.name} (${roleName})</span>
-                    `;
-                    infoDiv.appendChild(orgBadge);
+                // Убедимся, что нет дубликата от предыдущего вызова, если пересоздавали элемент
+                const existingBadge = memberDiv.querySelector('.member-org-badge');
+                if (existingBadge) existingBadge.remove();
+
+                const { org, roleName } = primaryOrg;
+                const orgColor = typeof normalizeColor === 'function' ? normalizeColor(org.color || mainColor) : (org.color || mainColor);
+                
+                // Создаем плашку организации в самом верху карточки, сразу под превью имени
+                const orgBadge = document.createElement('div');
+                orgBadge.className = 'member-org-badge';
+                orgBadge.style.cssText = `
+                    margin-top: -0.3rem; 
+                    margin-bottom: 0.3rem; 
+                    font-size: 0.8rem; 
+                    display: flex; 
+                    align-items: center; 
+                    gap: 6px; 
+                    cursor: pointer; 
+                    transition: transform 0.2s ease;
+                    background: rgba(0,0,0,0.4);
+                    padding: 2px 8px;
+                    border: 1px solid ${orgColor};
+                    border-radius: 0px;
+                `;
+                orgBadge.onclick = (e) => { e.stopPropagation(); openOrgModal(org.id); };
+                orgBadge.onmouseover = () => { orgBadge.style.transform = 'scale(1.02)'; };
+                orgBadge.onmouseout = () => { orgBadge.style.transform = 'scale(1)'; };
+                
+                orgBadge.innerHTML = `
+                    <img src="${org.iconUrl}" style="width:14px; height:14px; object-fit:contain;">
+                    <span style="color: ${orgColor};">${org.name}</span>
+                `;
+                
+                // Вставляем прямо после .team-member-name-preview
+                const previewDiv = memberDiv.querySelector('.team-member-name-preview');
+                if (previewDiv) {
+                    previewDiv.insertAdjacentElement('afterend', orgBadge);
                 }
             }
 
