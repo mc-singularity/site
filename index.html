@@ -354,7 +354,7 @@
             width: 100vw;
             height: 100vh;
             pointer-events: none !important;
-            z-index: 0;
+            z-index: 50 !important; /* Поверх контента, но под панелями */
             image-rendering: pixelated;
         }
 
@@ -426,7 +426,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            z-index: -1;
+            z-index: -2; /* Самый нижний слой */
             transition: transform 0.1s ease-out, background-image 0.5s ease;
             will-change: transform;
             image-rendering: pixelated;
