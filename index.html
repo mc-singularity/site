@@ -4169,7 +4169,7 @@
         }
         window.normalizeColor = normalizeColor;
 
-        // 2. Автоматическая замена названий организаций на кликабельные ссылки
+        // 2. Автоматическая замена названий организаций на кликабельные ссылки (с поддержкой отдельных алиасов)
         window.linkifyOrganizationNames = function(text) {
             if (!text || typeof text !== 'string') return text || '';
             
@@ -4179,6 +4179,13 @@
             const allOrgVariants = [];
             orgs.forEach(o => {
                 if (o.name && typeof o.name === 'string' && o.name.length > 1) allOrgVariants.push(o.name);
+                // Добавляем отдельные алиасы (не путать с formerNames)
+                if (o.aliases && Array.isArray(o.aliases)) {
+                    o.aliases.forEach(alias => {
+                        if (alias && typeof alias === 'string' && alias.length > 0) allOrgVariants.push(alias);
+                    });
+                }
+                // Прошлые названия также ищем, но в тексте они не должны мешать
                 if (o.formerNames && Array.isArray(o.formerNames)) {
                     o.formerNames.forEach(fn => {
                         if (fn && typeof fn === 'string' && fn.length > 1) allOrgVariants.push(fn);
@@ -4194,6 +4201,7 @@
             return text.replace(regex, (matchedName) => {
                 const realOrg = orgs.find(o => 
                     (o.name && o.name.toLowerCase() === matchedName.toLowerCase()) ||
+                    (o.aliases && o.aliases.some(a => a.toLowerCase() === matchedName.toLowerCase())) ||
                     (o.formerNames && o.formerNames.some(fn => fn.toLowerCase() === matchedName.toLowerCase()))
                 );
                 const targetName = realOrg ? realOrg.name : matchedName;
