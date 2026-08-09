@@ -303,7 +303,7 @@
             width: 2rem;
             height: 2rem;
             pointer-events: none !important;
-            z-index: 999999 !important;
+            z-index: 9999999 !important; /* Подняли слой курсора */
             animation: spin 0.5s linear infinite;
             display: none;
             image-rendering: pixelated;
@@ -2304,57 +2304,25 @@
             color: #000000;
         }
 
-        /* Кнопка-заголовок раскрывающейся секции (например "Организации") —
-           тот же унифицированный язык кнопок, что и остальные элементы сайта */
-        .section-toggle-btn {
-            background: var(--btn-bg);
-            border: var(--btn-border-w-sm) solid var(--accent-color);
-            color: var(--accent-color);
-            padding: 0.6rem 1rem;
-            width: 100%;
-            font-size: 1.05rem;
-            display: flex !important;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--btn-shadow-sm);
-            text-align: left;
-        }
-
-        .section-toggle-btn:hover {
-            background: var(--accent-color);
-            color: #000000;
-        }
-
-        .section-toggle-arrow {
-            font-size: 1.1rem;
-            transition: transform 0.3s ease;
-            flex-shrink: 0;
-            margin-left: 0.75rem;
-        }
-
-        .section-toggle-btn.expanded .section-toggle-arrow {
-            transform: rotate(180deg);
-        }
-
-        /* Ссылка-никнейм с головой игрока */
-        /* Цвет задаётся через инлайн-стили в JS, отсюда убираем жесткие цвета */
+        /* Ссылка-никнейм с головой игрока - БЕЗ ОБВОДКИ */
         .player-mention-link {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid; 
-            padding: 2px 7px;
-            margin: 0 2px;
+            background: transparent;
+            border: none; 
+            padding: 0 2px;
+            margin: 0;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 3px;
             text-decoration: none;
             vertical-align: middle;
             transition: all 0.2s ease;
-            font-size: 0.9em;
+            font-size: 0.95em;
+            text-shadow: 0 0 4px rgba(0,0,0,0.8);
         }
         .player-mention-link:hover {
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 8px;
+            background: rgba(255, 255, 255, 0.15);
+            text-decoration: underline;
         }
         .player-mention-link img {
             width: 14px;
@@ -2505,7 +2473,8 @@
                 </div>
 
                 <div class="orgs-wrapper" style="margin-top: 2rem; border-top: 2px dashed var(--accent-color); padding-top: 1rem;">
-                    <button id="toggle-orgs-btn" class="section-toggle-btn" onclick="toggleOrganizations()">
+                    <!-- УНИФИЦИРОВАННАЯ КНОПКА (используем класс .button) -->
+                    <button id="toggle-orgs-btn" class="button" onclick="toggleOrganizations()" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.5rem; margin: 0 auto;">
                         <span>Организации (нажмите, чтобы развернуть)</span>
                         <span id="orgs-arrow" class="section-toggle-arrow">v</span>
                     </button>
@@ -3978,6 +3947,14 @@
             members.forEach(m => {
                 if (m.name && typeof m.name === 'string') allNameVariants.push(m.name);
                 if (m.realName && typeof m.realName === 'string' && m.realName.length > 1) allNameVariants.push(m.realName);
+                // ДОБАВЛЕНО: Поддержка скрытых алиасов (псевдонимов) из team.json
+                if (m.aliases && Array.isArray(m.aliases)) {
+                    m.aliases.forEach(alias => {
+                        if (alias && typeof alias === 'string' && alias.length > 0) {
+                            allNameVariants.push(alias);
+                        }
+                    });
+                }
             });
             const uniqueNames = [...new Set(allNameVariants)].sort((a, b) => b.length - a.length);
             const escapedNames = uniqueNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
@@ -3988,8 +3965,10 @@
             return text.replace(regex, (matchedName) => {
                 const realMember = members.find(m => 
                     (m.name && m.name.toLowerCase() === matchedName.toLowerCase()) ||
-                    (m.realName && m.realName.toLowerCase() === matchedName.toLowerCase())
+                    (m.realName && m.realName.toLowerCase() === matchedName.toLowerCase()) ||
+                    (m.aliases && m.aliases.some(a => a.toLowerCase() === matchedName.toLowerCase()))
                 );
+                // Если нашли через алиас, используем основной никнейм
                 const targetName = realMember ? realMember.name : matchedName;
                 const headUrl = `https://minotar.net/helm/${encodeURIComponent(targetName)}/16`;
                 
@@ -4002,7 +3981,8 @@
                     playerColor = 'var(--accent-color)';
                 }
 
-                return `<span class="player-mention-link" onclick="openModalByName('${targetName}')" style="border-color: ${playerColor}; color: ${playerColor};">` +
+                /* Убрали border, оставили цветной текст */
+                return `<span class="player-mention-link" onclick="openModalByName('${targetName}')" style="color: ${playerColor};">` +
                        `<img src="${headUrl}" alt="${targetName}" onerror="this.style.display='none'">` +
                        `<span>${matchedName}</span></span>`;
             });
@@ -4013,14 +3993,17 @@
         function toggleOrganizations() {
             const container = document.getElementById('organizations-container');
             const toggleBtn = document.getElementById('toggle-orgs-btn');
+            const arrow = document.getElementById('orgs-arrow');
             if (!container) return;
 
             if (container.style.display === 'none' || !container.style.display) {
                 container.style.display = 'grid';
                 if (toggleBtn) toggleBtn.classList.add('expanded');
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
             } else {
                 container.style.display = 'none';
                 if (toggleBtn) toggleBtn.classList.remove('expanded');
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
             }
         }
         window.toggleOrganizations = toggleOrganizations;
@@ -4163,6 +4146,9 @@
 
                         const rolesHTML = roles.map(roleObj => {
                             const membersList = (roleObj.members || []).map(memberName => {
+                                // Ищем игрока в общем списке, чтобы взять его личный цвет
+                                const player = window.allMembersList.find(m => m.name.toLowerCase() === memberName.toLowerCase());
+                                const playerColor = player ? normalizeColor(player.color) : orgColor;
                                 const headUrl = `https://minotar.net/helm/${encodeURIComponent(memberName)}/16`;
 
                                 return `
@@ -4170,8 +4156,8 @@
                                           onclick="openModalByName('${memberName}')" 
                                           style="
                                             cursor: pointer; 
-                                            border: 1px solid ${orgColor}; 
-                                            color: #ffffff;
+                                            border: 1px solid ${playerColor}; 
+                                            color: ${playerColor};
                                             display: inline-flex;
                                             align-items: center;
                                             gap: 5px;
@@ -4334,6 +4320,51 @@
                 }
             } else if (socialsBlock) {
                 socialsBlock.style.display = 'none';
+            }
+
+            // ДОБАВЛЕНО: Рендер состава организации (всех ролей и участников) внутри модалки с личными цветами
+            let rolesHTML = '';
+            if (org.roles && org.roles.length > 0) {
+                rolesHTML = org.roles.map(roleObj => {
+                    const membersList = (roleObj.members || []).map(memberName => {
+                        const player = window.allMembersList.find(m => m.name.toLowerCase() === memberName.toLowerCase());
+                        const playerColor = player ? normalizeColor(player.color) : orgColor;
+                        return `<span class="member-tag" style="cursor: pointer; border: 1px solid ${playerColor}; color: ${playerColor}; margin: 2px; background: rgba(0,0,0,0.6); display: inline-block; padding: 2px 6px;" onclick="openModalByName('${memberName}')">${memberName}</span>`;
+                    }).join(' ');
+                    return `
+                        <div style="margin-bottom: 6px;">
+                            <strong style="color: ${orgColor};">${roleObj.name || 'Роль'}:</strong>
+                            <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px;">
+                                ${membersList || '<span style="color:#777;">Нет участников</span>'}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Вставляем блок состав в тело модалки перед ссылками
+            const socialsBlockElement = document.getElementById('org-modal-socials-block');
+            if (rolesHTML) {
+                // Создаем новый блок, если его нет, или вставляем перед социальными сетями
+                const membersContainer = document.getElementById('org-modal-members-block') || (() => {
+                    const newBlock = document.createElement('div');
+                    newBlock.id = 'org-modal-members-block';
+                    newBlock.className = 'org-info-block';
+                    newBlock.innerHTML = `<div class="org-info-label">Состав организации:</div><div class="org-info-value" id="org-modal-members-list"></div>`;
+                    // Вставляем перед социальными сетями
+                    if (socialsBlockElement && socialsBlockElement.parentNode) {
+                        socialsBlockElement.parentNode.insertBefore(newBlock, socialsBlockElement);
+                    } else {
+                        document.querySelector('.org-modal-body').appendChild(newBlock);
+                    }
+                    return newBlock;
+                })();
+                
+                const listContainer = membersContainer.querySelector('#org-modal-members-list');
+                if (listContainer) listContainer.innerHTML = rolesHTML;
+            } else {
+                const oldBlock = document.getElementById('org-modal-members-block');
+                if (oldBlock) oldBlock.remove();
             }
 
             modal.classList.add('active');
