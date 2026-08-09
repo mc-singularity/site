@@ -176,7 +176,7 @@ const italianTranslations = {
     'Inoltre, l’infezione ora si diffonde davanti agli occhi dei giocatori e ha già raggiunto tutte le basi, anche quelle più lontane.',
 
     'Из древа прямо на поверхности выбрались корни; один из таких корней разрушил одну из адских башен, на месте которой теперь образовалась часть адского измерения.':
-    'Dall’albero sono emerse radici direttamente sulla superficie; una di queste ha distrutto una delle torri infernali, lasciando al suo posto una parte della dimensione infernale.',
+    'Dall’albero sono emerse radici direttamente sulla superficie; una di esse ha distrutto una torre del Nether, lasciando al suo posto una parte della dimensione infernale.',
 
     'Сущности выбираются из этого измерения и сразу зомбифицируются.':
     'Le entità escono da questa dimensione e vengono immediatamente zombificate.',
@@ -452,27 +452,32 @@ function switchToItalian() {
     
     console.log(`Translated ${translatedCount} text nodes`);
     
-    // Show restore button
+    // Show restore button via class
     const btn = document.getElementById('italianRestoreBtn');
-    if (btn) btn.style.display = 'block';
+    if (btn) {
+        btn.classList.add('show');
+        console.log('Italian button shown.');
+    }
 }
 
 function restoreRussian() {
+    console.log('Restoring Russian...');
     try {
-        // Проходим по сохраненным нодам и безопасно возвращаем текст
+        // Walk through saved nodes and safely restore text
         originalTexts.forEach((originalText, node) => {
-            // Проверяем, существует ли еще нода в DOM
+            // Check if node still exists in DOM
             if (node && node.parentNode) {
                 node.textContent = originalText;
             }
         });
         originalTexts.clear();
         
-        // Скрываем кнопку
+        // Hide restore button via class
         const btn = document.getElementById('italianRestoreBtn');
-        if (btn) btn.style.display = 'none';
-        
-        console.log('Restored Russian text.');
+        if (btn) {
+            btn.classList.remove('show');
+            console.log('Italian button hidden.');
+        }
     } catch (e) {
         console.error('Error restoring Russian:', e);
     }
