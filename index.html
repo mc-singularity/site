@@ -4446,19 +4446,6 @@
                 }
             };
 
-            function loadHtml2Canvas() {
-                if (window.html2canvas) return Promise.resolve(window.html2canvas);
-                if (window.__html2canvasLoading) return window.__html2canvasLoading;
-                window.__html2canvasLoading = new Promise((resolve, reject) => {
-                    const script = document.createElement('script');
-                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-                    script.onload = () => resolve(window.html2canvas);
-                    script.onerror = reject;
-                    document.head.appendChild(script);
-                });
-                return window.__html2canvasLoading;
-            }
-
             async function launchOuroborosSnake() {
                 if (document.getElementById('ouroboros-snake-overlay')) return;
 
@@ -4499,35 +4486,12 @@
                     eatenElements = [];
                 }
 
-                // ---- HUD с индикатором загрузки, пока делаем "слепок" сайта ----
+                // ---- HUD с индикатором загрузки ----
                 const hud = document.createElement('div');
                 hud.className = 'ouroboros-hud';
-                hud.innerHTML = `УРОБОРОС ПРОБУЖДАЕТСЯ...<small>Заглатывает слепок страницы</small>`;
+                hud.innerHTML = `УРОБОРОС ПРОБУЖДАЕТСЯ...<small>Поедает реальный сайт.</small>`;
                 document.body.appendChild(hud);
                 document.body.style.overflow = 'hidden';
-
-                // ---- Делаем снимок текущего видимого экрана, чтобы змейка прогрызала настоящий сайт ----
-                let siteSnapshot = null;
-                try {
-                    const html2canvas = await loadHtml2Canvas();
-                    siteSnapshot = await html2canvas(document.documentElement, {
-                        x: window.scrollX,
-                        y: window.scrollY,
-                        width: window.innerWidth,
-                        height: window.innerHeight,
-                        windowWidth: document.documentElement.scrollWidth,
-                        windowHeight: document.documentElement.scrollHeight,
-                        backgroundColor: '#020202',
-                        useCORS: true,
-                        allowTaint: true,
-                        logging: false,
-                        ignoreElements: (el) => el.classList && el.classList.contains('ouroboros-hud'),
-                        scale: Math.min(window.devicePixelRatio || 1, 1.25)
-                    });
-                } catch (err) {
-                    console.warn('Не удалось сделать слепок сайта для пасхалки, использую упрощённый режим:', err);
-                    siteSnapshot = null;
-                }
 
                 // ---- Настройка холста ----
                 const overlay = document.createElement('div');
@@ -4565,7 +4529,7 @@
                     return pos;
                 }
 
-                // Прогрызает дыру нужного размера в "слепке" сайта на текущем холсте
+                // Выгрызает дыру в тёмном оверлее
                 function biteHole(cx, cy, radius) {
                     ctx.save();
                     ctx.globalCompositeOperation = 'destination-out';
@@ -4577,36 +4541,32 @@
 
                 function draw() {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                    // 1. Рисуем реальный слепок сайта (то, что ещё предстоит съесть)
                     ctx.globalCompositeOperation = 'source-over';
-                    if (siteSnapshot) {
-                        ctx.drawImage(siteSnapshot, 0, 0, siteSnapshot.width, siteSnapshot.height, 0, 0, canvas.width, canvas.height);
-                    } else {
-                        ctx.fillStyle = 'rgba(255,255,255,0.05)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    }
+                    
+                    // 1. Рисуем полупрозрачный оверлей на холсте, скрывая реальный сайт под ним
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                    // 2. Змейка прогрызает слепок насквозь по всей своей длине —
-                    //    видно, как сайт буквально съедается
+                    // 2. Змейка прогрызает оверлей насквозь по всей своей длине —
+                    //    открывая реальный сайт в месте, где она проползла
                     snake.forEach(seg => {
-                        biteHole(seg.x * CELL + CELL / 2, seg.y * CELL + CELL / 2, CELL * 0.62);
+                        biteHole(seg.x * CELL + CELL / 2, seg.y * CELL + CELL / 2, CELL * 0.65);
                     });
 
-                    // 3. Голова змейки — светящийся контур поверх дыры, чтобы читалось как существо
+                    // 3. Голова змейки — светящийся контур
                     ctx.globalCompositeOperation = 'source-over';
                     const head = snake[0];
                     ctx.strokeStyle = accentColor;
                     ctx.lineWidth = 2;
                     ctx.shadowColor = accentColor;
-                    ctx.shadowBlur = 10;
+                    ctx.shadowBlur = 12;
                     ctx.beginPath();
                     ctx.arc(head.x * CELL + CELL / 2, head.y * CELL + CELL / 2, CELL * 0.46, 0, Math.PI * 2);
                     ctx.stroke();
                     ctx.shadowBlur = 0;
 
                     // тело — тонкий пунктирный контур по сегментам
-                    ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+                    ctx.strokeStyle = 'rgba(255,255,255,0.6)';
                     ctx.lineWidth = 1.5;
                     snake.slice(1).forEach(seg => {
                         ctx.beginPath();
@@ -4614,10 +4574,10 @@
                         ctx.stroke();
                     });
 
-                    // 4. Еда — то, что ещё предстоит "укусить"
+                    // 4. Еда — то, что предстоит съесть
                     ctx.fillStyle = accentColor;
                     ctx.shadowColor = accentColor;
-                    ctx.shadowBlur = 8;
+                    ctx.shadowBlur = 10;
                     ctx.beginPath();
                     ctx.arc(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, CELL * 0.28, 0, Math.PI * 2);
                     ctx.fill();
@@ -4647,7 +4607,7 @@
                             document.getElementById('ouroboros-score').textContent = String(score);
                             tickMs = Math.max(70, 140 - score * 4);
                             food = spawnFood();
-                            eatRandomElement();
+                            eatRandomElement(); // Реальное удаление элемента из DOM
                         } else {
                             snake.pop();
                         }
