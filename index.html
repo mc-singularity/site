@@ -3959,8 +3959,10 @@
             const uniqueNames = [...new Set(allNameVariants)].sort((a, b) => b.length - a.length);
             const escapedNames = uniqueNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
             
-            // Ищем точные совпадения имён без захвата внутри тегов HTML
-            const regex = new RegExp(`(?<![a-zA-Z0-9_>])(${escapedNames.join('|')})(?![a-zA-Z0-9_=<])`, 'gi');
+            // ИСПРАВЛЕНИЕ: Строгая проверка границ слова, чтобы не заменять "учАСТИе"
+            // Допускаем перед именем: пробел, начало строки, знаки препинания и HTML-теги, но не буквы/цифры
+            // Допускаем после имени: пробел, конец строки, знаки препинания и HTML-теги, но не буквы/цифры
+            const regex = new RegExp(`(?<![\\p{L}\\p{N}_])(${escapedNames.join('|')})(?![\\p{L}\\p{N}_])`, 'giu');
 
             return text.replace(regex, (matchedName) => {
                 const realMember = members.find(m => 
