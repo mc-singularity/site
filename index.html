@@ -1742,32 +1742,33 @@
            ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
            ============================================================ */
 
-        /* Стили для итальянской кнопки восстановления */
+        /* Стили для итальянской кнопки восстановления (переработаны под дизайн сайта) */
         .italian-restore-btn {
-            position: relative;
-            display: block;
-            margin: 2rem auto;
-            background: linear-gradient(135deg, #0099ff 0%, #0066cc 100%);
-            border: 3px solid #0099ff;
-            color: #ffffff;
-            padding: 1rem 2rem;
-            font-family: 'uvKits', sans-serif !important;
+            display: none !important; /* Принудительно скрыта по умолчанию */
+            margin: 1.5rem auto 0 auto;
+            background: var(--btn-bg);
+            border: var(--btn-border-w) solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.6rem 1.8rem;
             font-size: 1.2rem;
+            font-family: 'uvKits', sans-serif !important;
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 0 20px rgba(0, 153, 255, 0.6);
-            animation: rocking 2s ease-in-out infinite;
+            border-radius: var(--btn-radius);
+            letter-spacing: var(--btn-letter-spacing);
+            transition: var(--btn-transition);
+            box-shadow: var(--btn-shadow);
+            /* Убираем покачивание */
+            animation: none !important;
+        }
+
+        .italian-restore-btn.show {
+            display: inline-flex !important; /* Показываем через добавление класса */
         }
 
         .italian-restore-btn:hover {
-            background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
-            box-shadow: 0 0 30px rgba(0, 153, 255, 0.9);
-            transform: scale(1.05);
-        }
-
-        @keyframes rocking {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
+            background: var(--accent-color);
+            color: #000000;
+            box-shadow: 0 0 15px var(--accent-shadow);
         }
 
         /* Пасхалка: Уроборос → Змейка, поедающая сайт */
@@ -2713,7 +2714,7 @@
         <footer class="reveal-item">
             <p>Singularity | Season 1 | 2026</p>
             <!-- Пасхалка: Итальянский перевод -->
-            <button class="italian-restore-btn" id="italianRestoreBtn" onclick="restoreRussian()" style="display: none;">Torna al Russo</button>
+            <button class="italian-restore-btn" id="italianRestoreBtn" onclick="restoreRussian()">Torna al Russo</button>
         </footer>
     </div>
 
