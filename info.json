@@ -3,6 +3,7 @@
 {
 "name": "CloverS_Kid",
 "status": "active",
+"aliases": ["Клов", "Кловер", "Клевер","Дитя клевера"],
 "history": "",
 "personalLore": "Тех админ и владелей Singularity.",
 "seasonsPeriod": "SL: Запуск — Настоящее время",
@@ -11,6 +12,7 @@
 },
 {
 "name": "MR_0zdi",
+"aliases": ["Озди", "MR_Ozdi"],
 "status": "active",
 "history": "",
 "personalLore": "Билдер и лоровед.",
@@ -20,6 +22,7 @@
 },
 {
 "name": "Yrk1z",
+"aliases": ["Иркиз", "Яркиз", "Hor"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -38,7 +41,7 @@
 },
 {
 "name": "ArtAzurp",
-"status": "active",
+"status": "Retired",
 "history": "",
 "personalLore": "",
 "seasonsPeriod": "SL: Запуск — Настоящее время",
@@ -47,6 +50,7 @@
 },
 {
 "name": "CHOMeQ418",
+"aliases": ["Хом", "Хомяк", "Хома"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -57,6 +61,7 @@
 {
 "name": "ba1toss",
 "status": "active",
+"aliases": ["Балтосс", "Балбес"],
 "history": "",
 "personalLore": "",
 "seasonsPeriod": "SL: 1 сезон — Настоящее время",
@@ -65,6 +70,7 @@
 },
 {
 "name": "EnderHack1",
+"aliases": ["Эндер", "Ендер", "Hor"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -74,6 +80,7 @@
 },
 {
 "name": "Folksy13_dll",
+"aliases": ["Фолки", "Фолкси", "Folksy"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -83,6 +90,7 @@
 },
 {
 "name": "g6thblood",
+"aliases": ["Егор"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -92,6 +100,7 @@
 },
 {
 "name": "horHyplace",
+"aliases": ["Марк", "Хор", "Hor"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -101,6 +110,7 @@
 },
 {
 "name": "impartialkus",
+"aliases": ["Импартиал", "Кира", "Кусь"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -110,6 +120,7 @@
 },
 {
 "name": "LainBerg",
+"aliases": ["Лайн", "Черный", "Негор"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -119,6 +130,7 @@
 },
 {
 "name": "lousamik",
+"aliases": ["Лусэм", "Лусамик", "Лусам"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -128,6 +140,7 @@
 },
 {
 "name": "Maksimm205",
+"aliases": ["Максимка", "Макпися", "Максися"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -137,6 +150,7 @@
 },
 {
 "name": "maloi221",
+"aliases": ["Врай"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -146,6 +160,7 @@
 },
 {
 "name": "MrKhazinack",
+"aliases": ["Кази", "Каз", "Казик"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -155,6 +170,7 @@
 },
 {
 "name": "pitrmatti",
+"aliases": ["Пиццапаста", "Итальянец", "питрматти"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -164,15 +180,7 @@
 },
 {
 "name": "TheNDay",
-"status": "active",
-"history": "",
-"personalLore": "",
-"seasonsPeriod": "SL: 1 сезон — Настоящее время",
-"leaveReason": null,
-"skinUrl": null
-},
-{
-"name": "Yrk1z",
+"aliases": ["Зендей", "Хентай", "Зендай"],
 "status": "active",
 "history": "",
 "personalLore": "",
@@ -204,15 +212,6 @@
 "history": "",
 "personalLore": "",
 "seasonsPeriod": "SL: 1 сезон — 1 Сезон",
-"leaveReason": "?",
-"skinUrl": null
-},
-{
-"name": "AshN1ght",
-"status": "retired",
-"history": "Был Тех.Админом на старте,и какое то время на первом сезоне.",
-"personalLore": "",
-"seasonsPeriod": "SL: Запуск — 1 Сезон",
 "leaveReason": "?",
 "skinUrl": null
 }
