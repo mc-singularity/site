@@ -321,7 +321,7 @@
             image-rendering: pixelated;
         }
 
-        /* Плавающие аметистовые частицы */
+        /* Плавающие фоновые частицы */
         #amethystParticles {
             position: fixed;
             top: 0;
@@ -333,7 +333,7 @@
             image-rendering: pixelated;
         }
 
-        /* Частицы, реагирующие на курсор */
+        /* Реактивные частицы (следы, логотип, модалки, наведение) */
         #cursorParticles {
             position: fixed;
             top: 0;
@@ -2505,7 +2505,7 @@
             100% { text-shadow: 0 0 8px rgba(255, 255, 255, 0.8); }
         }
 
-        /* Реактивные частицы при клике */
+        /* Реактивные частицы при клике (старые) */
         .click-particle {
             position: fixed;
             pointer-events: none !important;
@@ -2854,7 +2854,7 @@
         window.addEventListener('DOMContentLoaded', loadSplashText);
     </script>
 
-    <!-- Аметистовые частицы -->
+    <!-- Фоновые аметистовые частицы (улучшены) -->
     <script>
         function initAmethystParticles() {
             const canvas = document.getElementById('amethystParticles');
@@ -2866,7 +2866,14 @@
             let height = canvas.height = window.innerHeight;
 
             const particles = [];
-            const particleCount = 20;
+            // Увеличим количество частиц до 40
+            const particleCount = 40;
+            const colors = [
+                [180, 100, 255], // Фиолет
+                [100, 180, 255], // Голубой
+                [255, 100, 200], // Розовый
+                [200, 200, 200]  // Белый/серый
+            ];
 
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
@@ -2876,7 +2883,7 @@
                     speedX: (Math.random() - 0.5) * 0.35,
                     speedY: (Math.random() - 0.5) * 0.35,
                     alpha: Math.random() * 0.5 + 0.2,
-                    color: [Math.floor(Math.random() * 30) + 110, Math.floor(Math.random() * 30) + 70, 255]
+                    color: colors[Math.floor(Math.random() * colors.length)]
                 });
             }
 
@@ -2889,7 +2896,6 @@
                 });
             });
 
-            let frame = 0;
             function drawParticles() {
                 ctx.clearRect(0, 0, width, height);
 
@@ -2907,7 +2913,6 @@
                     ctx.fillRect(Math.floor(p.x + glitchOffset), Math.floor(p.y), p.size, p.size);
                 });
 
-                frame++;
                 requestAnimationFrame(drawParticles);
             }
 
@@ -2917,9 +2922,9 @@
         window.addEventListener('DOMContentLoaded', initAmethystParticles);
     </script>
 
-    <!-- Реактивные частицы для курсора и наведения -->
+    <!-- Реактивные частицы (переработаны и расширены) -->
     <script>
-        function initCursorParticles() {
+        function initReactiveParticles() {
             const canvas = document.getElementById('cursorParticles');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
@@ -2927,58 +2932,125 @@
 
             let width = canvas.width = window.innerWidth;
             let height = canvas.height = window.innerHeight;
-
-            const particles = [];
+            
+            // Общий массив частиц
+            let particles = [];
             let mouseX = -1000, mouseY = -1000;
             let isMouseActive = false;
+            let logoParticleTimer = 0;
 
             window.addEventListener('resize', () => {
                 width = canvas.width = window.innerWidth;
                 height = canvas.height = window.innerHeight;
             });
 
-            function spawnTrail(x, y, count) {
-                for(let i=0; i<count; i++) {
-                    particles.push({
-                        x: x + (Math.random()-0.5)*6,
-                        y: y + (Math.random()-0.5)*6,
-                        vx: (Math.random()-0.5)*1.5,
-                        vy: (Math.random()-0.5)*1.5 - 0.5,
-                        life: 1,
-                        decay: 0.02 + Math.random()*0.025,
-                        size: Math.floor(Math.random()*3) + 2,
-                        color: `hsl(280, 80%, ${60 + Math.random()*40}%)`
-                    });
-                }
+            // Функция для создания одной частицы
+            function spawnParticle(x, y, vx, vy, size, life, color, gravity = 0, decay = 0.02) {
+                if (!color) color = 'hsl(280, 80%, 70%)';
+                particles.push({
+                    x, y, vx, vy, size, life, decay, gravity, color,
+                    baseLife: life
+                });
+                // Ограничение на общее количество частиц в памяти
+                if(particles.length > 400) particles.splice(0, particles.length - 400);
             }
 
-            function spawnBurst(x, y, count, color) {
+            // Всплеск частиц (для кликов, наведений, открытий)
+            window.spawnReactiveBurst = function(x, y, count, colorHex = null, force = 3) {
+                const hue = colorHex ? (parseInt(colorHex.slice(1), 16) > 0 ? '280' : '280') : null;
                 for(let i=0; i<count; i++) {
                     const angle = Math.random() * Math.PI * 2;
-                    const speed = Math.random() * 4 + 2;
-                    particles.push({
-                        x: x, y: y,
-                        vx: Math.cos(angle) * speed,
-                        vy: Math.sin(angle) * speed - 1,
-                        life: 1,
-                        decay: 0.025 + Math.random()*0.03,
-                        size: Math.floor(Math.random()*3) + 2,
-                        color: color || `hsl(${Math.random()*60 + 280}, 80%, 70%)`
-                    });
+                    const speed = Math.random() * force + 1.5;
+                    const size = Math.floor(Math.random() * 3) + 2;
+                    const life = 1;
+                    const color = colorHex || `hsl(${Math.random()*60 + 260}, 80%, 70%)`;
+                    spawnParticle(
+                        x, y,
+                        Math.cos(angle) * speed, Math.sin(angle) * speed - 1,
+                        size, life, color, 0.04, 0.025 + Math.random()*0.02
+                    );
                 }
             }
 
-            // Слежение за курсором
+            // Искры с логотипа
+            function spawnLogoSparks() {
+                const logo = document.querySelector('.logo-container');
+                if(!logo) return;
+                const rect = logo.getBoundingClientRect();
+                for(let i=0; i<4; i++) {
+                    const size = Math.floor(Math.random() * 2) + 2;
+                    const life = 1;
+                    const color = `hsl(280, 80%, ${70 + Math.random()*30}%)`;
+                    spawnParticle(
+                        rect.left + rect.width/2 + (Math.random()-0.5)*40,
+                        rect.top + rect.height/2 + (Math.random()-0.5)*20,
+                        (Math.random()-0.5)*2.5, -Math.random()*4 - 1,
+                        size, life, color, 0.02, 0.015
+                    );
+                }
+            }
+
+            // Логика для следов за курсором
+            function spawnTrail(x, y) {
+                for(let i=0; i<2; i++) {
+                    const size = Math.floor(Math.random() * 2) + 1;
+                    const life = 1;
+                    const color = `hsl(280, 80%, 60%)`;
+                    spawnParticle(
+                        x + (Math.random()-0.5)*8,
+                        y + (Math.random()-0.5)*8,
+                        (Math.random()-0.5)*1.2, -Math.random()*1.5,
+                        size, life, color, 0.05, 0.035
+                    );
+                }
+            }
+
+            // Рисование и обновление частиц
+            function drawParticles() {
+                ctx.clearRect(0, 0, width, height);
+                
+                if(isMouseActive) {
+                    spawnTrail(mouseX, mouseY);
+                }
+
+                // Спавн искр с логотипа
+                logoParticleTimer++;
+                if(logoParticleTimer > 180) { // ~ каждые 3 секунды
+                    spawnLogoSparks();
+                    logoParticleTimer = 0;
+                }
+
+                for(let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += p.gravity;
+                    p.life -= p.decay;
+                    p.vx *= 0.99;
+
+                    if(p.life <= 0 || p.y > height + 50) {
+                        particles.splice(i, 1);
+                        continue;
+                    }
+
+                    ctx.globalAlpha = p.life * 0.9;
+                    ctx.fillStyle = p.color;
+                    // Рисуем пиксели
+                    ctx.fillRect(Math.floor(p.x), Math.floor(p.y), Math.ceil(p.size), Math.ceil(p.size));
+                }
+
+                requestAnimationFrame(drawParticles);
+            }
+
+            // Слушатели событий
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
                 isMouseActive = true;
-                spawnTrail(mouseX, mouseY, 3);
             });
-
             document.addEventListener('mouseleave', () => { isMouseActive = false; });
-
-            // Активация наведения на интерактивные элементы
+            
+            // Наведение на элементы
             document.addEventListener('DOMContentLoaded', () => {
                 const interactiveEls = document.querySelectorAll('.button, .team-member, .org-card, .social-link, .panel-toggle, .filter-btn, .author-chip');
                 interactiveEls.forEach(el => {
@@ -2986,45 +3058,17 @@
                         const rect = el.getBoundingClientRect();
                         const cx = rect.left + rect.width/2;
                         const cy = rect.top + rect.height/2;
+                        // Цвета частиц при наведении
                         const colors = ['hsl(280, 80%, 70%)', 'hsl(210, 80%, 70%)', 'hsl(340, 80%, 70%)'];
-                        spawnBurst(cx, cy, 10, colors[Math.floor(Math.random() * colors.length)]);
+                        window.spawnReactiveBurst(cx, cy, 12, colors[Math.floor(Math.random() * colors.length)], 3.5);
                     });
                 });
             });
 
-            function drawParticles() {
-                ctx.clearRect(0, 0, width, height);
-                
-                // Ограничение на количество частиц для производительности
-                if(particles.length > 200) {
-                    particles.splice(0, particles.length - 200);
-                }
-
-                for(let i = particles.length - 1; i >= 0; i--) {
-                    const p = particles[i];
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.life -= p.decay;
-                    p.vx *= 0.98;
-                    p.vy += 0.03; // Легкая гравитация
-
-                    if(p.life <= 0) {
-                        particles.splice(i, 1);
-                        continue;
-                    }
-
-                    ctx.globalAlpha = p.life * 0.8;
-                    ctx.fillStyle = p.color;
-                    ctx.fillRect(Math.floor(p.x), Math.floor(p.y), Math.ceil(p.size), Math.ceil(p.size));
-                }
-
-                requestAnimationFrame(drawParticles);
-            }
-
             drawParticles();
         }
 
-        window.addEventListener('DOMContentLoaded', initCursorParticles);
+        window.addEventListener('DOMContentLoaded', initReactiveParticles);
     </script>
 
     <!-- Переменные фильтрации медиа -->
@@ -3964,6 +4008,11 @@
             const skinSrc = extra.skinUrl || member.skinUrl || `https://minotar.net/armor/bust/${member.name}/100`;
             skinImg.src = skinSrc;
 
+            // Добавляем всплеск частиц при открытии модалки игрока
+            if (typeof window.spawnReactiveBurst === 'function') {
+                window.spawnReactiveBurst(window.innerWidth / 2, window.innerHeight / 2, 20, hexColor, 6);
+            }
+
             document.getElementById('playerInfoModal').classList.add('show');
         }
 
@@ -4013,6 +4062,11 @@
 
                 if (!isExpanded) {
                     member.classList.add('expanded');
+                    // Добавляем всплеск частиц при разворачивании карточки игрока
+                    if (typeof window.spawnReactiveBurst === 'function') {
+                        const rect = member.getBoundingClientRect();
+                        window.spawnReactiveBurst(rect.left + rect.width/2, rect.top + rect.height/2, 8, null, 3);
+                    }
                 }
 
                 resizeAllGridItems();
@@ -4816,6 +4870,11 @@
             } else {
                 const oldBlock = document.getElementById('org-modal-members-block');
                 if (oldBlock) oldBlock.remove();
+            }
+
+            // Добавляем всплеск частиц при открытии модалки организации
+            if (typeof window.spawnReactiveBurst === 'function') {
+                window.spawnReactiveBurst(window.innerWidth / 2, window.innerHeight / 2, 20, orgColor, 6);
             }
 
             modal.classList.add('active');
