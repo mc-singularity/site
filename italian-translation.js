@@ -404,6 +404,14 @@ const italianTranslations = {
 
 };
 
+// Гарантируем, что кнопка скрыта при загрузке страницы, даже если что-то пошло не так
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('italianRestoreBtn');
+    if (btn) {
+        btn.style.display = 'none';
+    }
+});
+
 function switchToItalian() {
     console.log('Switching to Italian...');
     
@@ -453,7 +461,10 @@ function switchToItalian() {
     console.log(`Translated ${translatedCount} text nodes`);
     
     // Show restore button
-    document.getElementById('italianRestoreBtn').style.display = 'block';
+    const btn = document.getElementById('italianRestoreBtn');
+    if (btn) {
+        btn.style.display = 'block';
+    }
 }
 
 function restoreRussian() {
@@ -466,5 +477,8 @@ function restoreRussian() {
     originalTexts.clear();
 
     // Hide restore button
-    document.getElementById('italianRestoreBtn').style.display = 'none';
+    const btn = document.getElementById('italianRestoreBtn');
+    if (btn) {
+        btn.style.display = 'none';
+    }
 }
