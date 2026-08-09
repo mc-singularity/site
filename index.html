@@ -3771,6 +3771,7 @@
         window.fullArchiveMembers = [];
         window.playerExtraInfos = {};
         window.allMembersList = [];
+        window.aliasMap = {}; // Новая карта псевдонимов
 
         window.switchCard = function(playerName, direction, event) {
             if (event) event.stopPropagation();
@@ -4015,7 +4016,28 @@
 
                 // Объединяем всех игроков в глобальный список для линковки
                 window.allMembersList = [...window.fullTeamMembers, ...window.fullArchiveMembers];
-                console.log('Загружено игроков для линковки:', window.allMembersList.length);
+                
+                // Строим карту псевдонимов (Aliases), включая info.json
+                window.aliasMap = {};
+                
+                // 1. Имена и реальные имена из team.json / archive.json
+                window.allMembersList.forEach(m => {
+                    window.aliasMap[m.name.toLowerCase()] = m.name;
+                    if (m.realName) window.aliasMap[m.realName.toLowerCase()] = m.name;
+                });
+                
+                // 2. Псевдонимы (aliases) из info.json (бот их не перезаписывает)
+                for (const key in window.playerExtraInfos) {
+                    const info = window.playerExtraInfos[key];
+                    if (info.aliases && Array.isArray(info.aliases)) {
+                        info.aliases.forEach(alias => {
+                            if (alias && typeof alias === 'string') {
+                                window.aliasMap[alias.toLowerCase()] = info.name;
+                            }
+                        });
+                    }
+                }
+                console.log('Карта псевдонимов построена:', window.aliasMap);
 
                 resizeAllGridItems();
                 setTimeout(resizeAllGridItems, 300);
@@ -4516,42 +4538,22 @@
         window.linkifyMemberNames = function(text) {
             if (!text || typeof text !== 'string') return text || '';
             
-            const members = window.allMembersList || [];
-            if (members.length === 0) {
-                return text; 
+            if (!window.aliasMap || Object.keys(window.aliasMap).length === 0) {
+                return text; // Если карта еще не загружена, просто возвращаем текст
             }
 
-            const allNameVariants = [];
-            members.forEach(m => {
-                if (m.name && typeof m.name === 'string') allNameVariants.push(m.name);
-                if (m.realName && typeof m.realName === 'string' && m.realName.length > 1) allNameVariants.push(m.realName);
-                if (m.aliases && Array.isArray(m.aliases)) {
-                    m.aliases.forEach(alias => {
-                        if (alias && typeof alias === 'string' && alias.length > 0) {
-                            allNameVariants.push(alias);
-                        }
-                    });
-                }
-            });
-            const uniqueNames = [...new Set(allNameVariants)].sort((a, b) => b.length - a.length);
+            const uniqueNames = [...new Set(Object.keys(window.aliasMap))].sort((a, b) => b.length - a.length);
             const escapedNames = uniqueNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-            
             const regex = new RegExp(`(?<![\\p{L}\\p{N}_])(${escapedNames.join('|')})(?![\\p{L}\\p{N}_])`, 'giu');
 
             return text.replace(regex, (matchedName) => {
-                const realMember = members.find(m => 
-                    (m.name && m.name.toLowerCase() === matchedName.toLowerCase()) ||
-                    (m.realName && m.realName.toLowerCase() === matchedName.toLowerCase()) ||
-                    (m.aliases && m.aliases.some(a => a.toLowerCase() === matchedName.toLowerCase()))
-                );
-                const targetName = realMember ? realMember.name : matchedName;
+                const targetName = window.aliasMap[matchedName.toLowerCase()] || matchedName;
+                const realMember = (window.allMembersList || []).find(m => m.name === targetName);
                 const headUrl = `https://minotar.net/helm/${encodeURIComponent(targetName)}/16`;
                 
-                let playerColor = null;
+                let playerColor = 'var(--accent-color)';
                 if (realMember && realMember.color) {
                     playerColor = normalizeColor(realMember.color);
-                } else {
-                    playerColor = 'var(--accent-color)';
                 }
 
                 return `<span class="player-mention-link" onclick="openModalByName('${targetName}')" style="color: ${playerColor};">` +
