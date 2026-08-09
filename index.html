@@ -3673,7 +3673,7 @@
                 </div>
             `;
 
-            // ИСПРАВЛЕНИЕ: Вывод плашки организации ПРЯМО ПОД ИМЕНЕМ, вне скрытого блока
+            // ИСПРАВЛЕНИЕ: Вывод плашки организации ПРЯМО ПОД ИМЕНЕМ (вне скрытого блока)
             if (primaryOrg && primaryOrg.org) {
                 // Убедимся, что нет дубликата от предыдущего вызова, если пересоздавали элемент
                 const existingBadge = memberDiv.querySelector('.member-org-badge');
@@ -3712,6 +3712,46 @@
                 const previewDiv = memberDiv.querySelector('.team-member-name-preview');
                 if (previewDiv) {
                     previewDiv.insertAdjacentElement('afterend', orgBadge);
+                }
+            }
+
+            // ИСПРАВЛЕНИЕ: Вывод плашки организации внутри РАЗВЕРНУТОГО блока (там где Кнопка "ПОДРОБНЕЕ")
+            if (primaryOrg && primaryOrg.org) {
+                const infoDiv = memberDiv.querySelector('.team-member-details');
+                if (infoDiv) {
+                    // Убедимся, что нет дубликата внутри развернутого блока
+                    const existingDetailsBadge = infoDiv.querySelector('.member-org-details-badge');
+                    if (existingDetailsBadge) existingDetailsBadge.remove();
+
+                    const { org, roleName } = primaryOrg;
+                    const orgColor = typeof normalizeColor === 'function' ? normalizeColor(org.color || mainColor) : (org.color || mainColor);
+                    
+                    const orgDetailsBadge = document.createElement('div');
+                    orgDetailsBadge.className = 'member-org-details-badge';
+                    orgDetailsBadge.style.cssText = `
+                        margin-top: 8px; 
+                        font-size: 0.85rem; 
+                        display: inline-flex; 
+                        align-items: center; 
+                        gap: 6px; 
+                        cursor: pointer; 
+                        transition: transform 0.2s ease;
+                        background: rgba(0,0,0,0.4);
+                        padding: 4px 10px;
+                        border: 1px solid ${orgColor};
+                        border-radius: 0px;
+                        width: max-content;
+                    `;
+                    orgDetailsBadge.onclick = (e) => { e.stopPropagation(); openOrgModal(org.id); };
+                    orgDetailsBadge.onmouseover = () => { orgDetailsBadge.style.transform = 'scale(1.02)'; };
+                    orgDetailsBadge.onmouseout = () => { orgDetailsBadge.style.transform = 'scale(1)'; };
+                    
+                    orgDetailsBadge.innerHTML = `
+                        <img src="${org.iconUrl}" style="width:16px; height:16px; object-fit:contain;">
+                        <span style="color: ${orgColor};">${org.name} (${roleName})</span>
+                    `;
+                    
+                    infoDiv.appendChild(orgDetailsBadge);
                 }
             }
 
@@ -4711,8 +4751,9 @@
 
         // 5. Автозагрузка и обработка упоминаний
         document.addEventListener('DOMContentLoaded', async () => {
-            await loadTeamMembers();
+            // ИСПРАВЛЕНИЕ: Загружаем организации ПЕРВЫМИ, чтобы карточки игроков создавались уже с готовыми данными
             await loadOrganizationsData();
+            await loadTeamMembers();
 
             await loadNews();
             await loadLore();
