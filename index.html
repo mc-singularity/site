@@ -2337,10 +2337,10 @@
         }
 
         /* Ссылка-никнейм с головой игрока */
-        /* ИСПРАВЛЕНИЕ: цвет задаётся через инлайн-стили, убираем жесткие цвета отсюда */
+        /* Цвет задаётся через инлайн-стили в JS, отсюда убираем жесткие цвета */
         .player-mention-link {
             background: rgba(0, 0, 0, 0.6);
-            border: 1px solid; /* Задаётся в JS */
+            border: 1px solid; 
             padding: 2px 7px;
             margin: 0 2px;
             cursor: pointer;
@@ -2354,7 +2354,7 @@
         }
         .player-mention-link:hover {
             background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 8px;
         }
         .player-mention-link img {
             width: 14px;
@@ -3048,7 +3048,7 @@
         });
     </script>
 
-    <!-- Полный парсинг Новостей из news.json и discord_news.json -->
+    <!-- Функции парсинга -->
     <script>
         function escapeHTML(str) {
             return String(str || '').replace(/[&<>'"]/g, 
@@ -3090,6 +3090,23 @@
             return linkifyMemberNames(html);
         };
 
+        function openLightbox(url) {
+            const lightbox = document.getElementById('imageLightbox');
+            const lightboxImg = document.getElementById('lightboxImage');
+            if (lightbox && lightboxImg) {
+                lightboxImg.src = url;
+                lightbox.classList.add('show');
+            }
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('imageLightbox');
+            if (lightbox) {
+                lightbox.classList.remove('show');
+            }
+        }
+
+        // Функции загрузки (запускаются в DOMContentLoaded ниже)
         async function loadNews() {
             const listContainer = document.getElementById('newsItemsList');
             listContainer.innerHTML = 'Загрузка новостей...';
@@ -3113,7 +3130,6 @@
                             mediaHTML = `<div class="discord-gallery">${imgs.map(u => `<img src="${escapeHTML(u)}" class="discord-gallery-item" onclick="openLightbox('${escapeHTML(u)}')">`).join('')}</div>`;
                         }
 
-                        // Используем parseTextForUI
                         html += `
                             <div class="news-item">
                                 <div class="news-date">${escapeHTML(item.date || '')}</div>
@@ -3224,22 +3240,6 @@
             listContainer.innerHTML = html || '<p style="color: #888;">Нет новостей.</p>';
         }
 
-        function openLightbox(url) {
-            const lightbox = document.getElementById('imageLightbox');
-            const lightboxImg = document.getElementById('lightboxImage');
-            if (lightbox && lightboxImg) {
-                lightboxImg.src = url;
-                lightbox.classList.add('show');
-            }
-        }
-
-        function closeLightbox() {
-            const lightbox = document.getElementById('imageLightbox');
-            if (lightbox) {
-                lightbox.classList.remove('show');
-            }
-        }
-
         async function loadLore() {
             const listContainer = document.getElementById('loreItemsList');
             try {
@@ -3307,8 +3307,6 @@
                 `).join('') || '<p style="color: #888;">Нет активных событий.</p>';
             } catch (error) { listContainer.innerHTML = '<p style="color: #ff6b6b;">Ошибка загрузки events.json</p>'; }
         }
-
-        loadNews(); loadLore(); loadEvents();
     </script>
 
     <!-- Основной интерфейс состава и загрузка файлов team.json, info.json, archive.json -->
@@ -3531,8 +3529,9 @@
                     console.warn('archive.json не найден');
                 }
 
-                /* ИСПРАВЛЕНИЕ: Объединяем всех игроков в глобальный список для линковки */
+                // Объединяем всех игроков в глобальный список для линковки
                 window.allMembersList = [...window.fullTeamMembers, ...window.fullArchiveMembers];
+                console.log('Загружено игроков для линковки:', window.allMembersList.length);
 
                 resizeAllGridItems();
                 setTimeout(resizeAllGridItems, 300);
@@ -3965,12 +3964,14 @@
         window.normalizeColor = normalizeColor;
 
         // 2. Универсальный автоанализ и замена имён на голова-ссылку во всех текстах (lore, news, events, discord_news)
-        // ПРИМЕЧАНИЕ: В данный момент вызывается внутри parseTextForUI
         window.linkifyMemberNames = function(text) {
             if (!text || typeof text !== 'string') return text || '';
             
             const members = window.allMembersList || [];
-            if (members.length === 0) return text;
+            if (members.length === 0) {
+                // Если список еще не загружен, возвращаем как есть. Позже перерендерим.
+                return text; 
+            }
 
             // Сортировка имён по длине (чтобы короткие имена не перебивали составные)
             const allNameVariants = [];
@@ -4367,26 +4368,18 @@
             }
         };
 
-        // 5. Автозагрузка и обработка упоминаний во всех разделах сайта
+        // 5. Автозагрузка и обработка упоминаний
         document.addEventListener('DOMContentLoaded', async () => {
-            if (typeof loadOrganizationsData === 'function') {
-                await loadOrganizationsData();
-            }
-            if (typeof loadTeamMembers === 'function') {
-                await loadTeamMembers();
-            }
+            // Сначала загружаем основной контент
+            await loadTeamMembers(); // Внутри него заполняется window.allMembersList
+            await loadOrganizationsData();
 
-            // Автозамена упоминаний во всём контенте (новости, ивенты, лор, дискорд)
-            setTimeout(() => {
-                const containersToScan = document.querySelectorAll(
-                    '.news-card, .event-card, .lore-card, .discord-news-card, .news-description, .event-description, .lore-text, .post-content'
-                );
-                containersToScan.forEach(el => {
-                    if (el && el.innerHTML) {
-                        el.innerHTML = linkifyMemberNames(el.innerHTML);
-                    }
-                });
-            }, 500);
+            // И только потом загружаем текстовые данные
+            await loadNews();
+            await loadLore();
+            await loadEvents();
+
+            console.log('Все текстовые данные загружены и обработаны.');
         });
 
         /* ============================================================
