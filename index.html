@@ -54,6 +54,10 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            font-smooth: always;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
 
         /* Выплывающая панель переключения темы под логотипом */
@@ -166,6 +170,12 @@
             background: var(--accent-color);
             transition: width 0.15s steps(10, end);
             box-shadow: inset -2px -2px 0px #888888;
+            animation: loaderGlitch 0.8s infinite alternate;
+        }
+
+        @keyframes loaderGlitch {
+            0% { opacity: 0.9; filter: drop-shadow(0 0 0 var(--accent-color)); }
+            100% { opacity: 1; filter: drop-shadow(0 0 2px var(--accent-color)); }
         }
 
         .loader-status {
@@ -274,14 +284,18 @@
             height: 100vh;
             pointer-events: none !important;
             z-index: 99999;
-            background: linear-gradient(
-                rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.25) 50%
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 3px
             );
-            background-size: 100% 4px;
-            opacity: 0.5;
+            background-size: 100% 3px;
+            opacity: 0.4;
         }
 
+        /* Звездное небо */
         #starsCanvas {
             position: fixed;
             top: 0;
@@ -290,6 +304,18 @@
             height: 100vh;
             pointer-events: none !important;
             z-index: 0;
+            image-rendering: pixelated;
+        }
+
+        /* Плавающие аметистовые частицы */
+        #amethystParticles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none !important;
+            z-index: -1;
             image-rendering: pixelated;
         }
 
@@ -303,15 +329,36 @@
             width: 2rem;
             height: 2rem;
             pointer-events: none !important;
-            z-index: 9999999 !important; /* Подняли слой курсора */
-            animation: spin 0.5s linear infinite;
+            z-index: 9999999 !important;
+            animation: spin 0.8s linear infinite;
             display: none;
             image-rendering: pixelated;
             transition: transform 0.15s ease-out;
+            filter: drop-shadow(0 0 6px rgba(255,255,255,0.2));
+        }
+        .cursor-logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: cursorGlitch 0.4s infinite alternate;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        @keyframes cursorGlitch {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(-1px, 1px); }
+            100% { transform: translate(1px, -1px); }
         }
 
         .cursor-logo.hovered {
             transform: scale(1.45) !important;
+            filter: drop-shadow(0 0 12px rgba(255,255,255,0.6));
         }
 
         .cursor-logo * {
@@ -507,8 +554,12 @@
             padding: 1.875rem;
             margin: 1.875rem 0;
             position: relative;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9);
-            transition: border-color 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.95), inset 0 0 20px rgba(0, 0, 0, 0.5);
         }
 
         .section-title {
@@ -616,7 +667,7 @@
         }
 
         .media-card:hover {
-            transform: translateY(-0.25rem);
+            transform: translateY(-0.25rem) scale(1.02);
             background: rgba(255, 255, 255, 0.12);
             box-shadow: 0 0 12px var(--accent-shadow);
         }
@@ -1657,18 +1708,6 @@
         }
 
         /* Пасхалка: Уроборос → Змейка, поедающая сайт */
-        @keyframes ouroborosShake {
-            0%, 100% { transform: translateX(0) rotate(0deg); }
-            20% { transform: translateX(-0.2rem) rotate(-2deg); }
-            40% { transform: translateX(0.2rem) rotate(2deg); }
-            60% { transform: translateX(-0.15rem) rotate(-1deg); }
-            80% { transform: translateX(0.15rem) rotate(1deg); }
-        }
-
-        .ouroboros-shake {
-            animation: ouroborosShake 0.3s ease;
-        }
-
         #ouroboros-snake-overlay {
             position: fixed;
             inset: 0;
@@ -1806,6 +1845,15 @@
             color: var(--accent-color);
             border-color: var(--accent-color);
             box-shadow: 0 0 15px var(--accent-shadow);
+            animation: btnFlicker 0.2s linear infinite;
+        }
+
+        @keyframes btnFlicker {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-1px, 0); }
+            50% { transform: translate(0, 1px); }
+            75% { transform: translate(1px, -1px); }
+            100% { transform: translate(0, 0); }
         }
 
         /* Исправленная кнопка "Обновить" в блоке статуса сервера */
@@ -1824,6 +1872,7 @@
             color: var(--accent-color);
             border-color: var(--accent-color);
             box-shadow: 0 0 10px var(--accent-shadow);
+            animation: btnFlicker 0.2s linear infinite;
         }
 
         .refresh-btn:disabled {
@@ -1845,6 +1894,9 @@
             letter-spacing: 0.05rem;
         }
 
+        /* ============================================================
+           МЕДИА-ЗАПРОСЫ И АДАПТИВНОСТЬ ДЛЯ ЛЮБЫХ ЭКРАНОВ
+           ============================================================ */
         @media (max-width: 48rem) {
             .container { padding: 0 0.9375rem; }
             header { padding: 1rem 0 1rem 0; }
@@ -1875,6 +1927,20 @@
             .panel-toggle.right.events { right: 0.5rem; top: 0.5rem; transform: none; }
             .team-members, .archive-members { grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); gap: 0.75rem; }
             .button { padding: 0.625rem 1.25rem; font-size: 1.1rem; }
+        }
+
+        @media (max-width: 32rem) {
+            .media-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (min-width: 1600px) {
+            .container { max-width: 80rem; padding: 0 2.5rem; }
+            .section { padding: 2.5rem; margin: 2.5rem 0; }
+        }
+
+        @media (min-width: 2500px) {
+            .container { max-width: 100rem; padding: 0 5rem; }
+            .section { padding: 3.75rem; margin: 3.75rem 0; }
         }
 
         .news-item {
@@ -1964,20 +2030,20 @@
         .discord-spoiler:hover:not(.revealed) {
             background-color: #2b2b2b;
             filter: blur(2px);
-            animation: spoilerGlitch 0.2s infinite alternate;
+            animation: spoilerGlitch 0.3s infinite alternate;
         }
 
         @keyframes spoilerGlitch {
             0% {
                 transform: translate(0, 0);
-                text-shadow: -1px 0 #ff0055, 1px 0 #00ffff;
+                text-shadow: -2px 0 #ff0055, 2px 0 #00ffff;
             }
             50% {
-                transform: translate(-1px, 1px);
+                transform: translate(-2px, 2px);
             }
             100% {
-                transform: translate(1px, -1px);
-                text-shadow: 1px 0 #ff0055, -1px 0 #00ffff;
+                transform: translate(2px, -2px);
+                text-shadow: 2px 0 #ff0055, -2px 0 #00ffff;
             }
         }
 
@@ -2331,9 +2397,31 @@
             border-radius: 2px;
             image-rendering: pixelated;
         }
+        
+        /* Эффект зернистой бумаги (поверх всего) */
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none !important;
+            z-index: 99999;
+            opacity: 0.03;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Дополнительный эффект свечения текста при наведении */
+        .section:hover p, .section:hover h3, .section:hover h4 {
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.02);
+        }
     </style>
 </head>
 <body>
+    <!-- Слой текстурного шума (Grain) -->
+    <div class="grain-overlay"></div>
+
     <!-- Полноэкранный Ретро Экран Загрузки -->
     <div class="retro-loader" id="retroLoader">
         <div class="loader-logo">SINGULARITY</div>
@@ -2347,6 +2435,7 @@
     <div class="crt-overlay"></div>
     <div class="background"></div>
     <canvas id="starsCanvas"></canvas>
+    <canvas id="amethystParticles"></canvas>
     <div class="cursor-logo"><img src="image.png" alt="cursor" style="width: 100%; height: 100%;"></div>
 
     <div class="panel-overlay" id="panelOverlay" onclick="closeAllPanels()"></div>
@@ -2663,6 +2752,69 @@
         }
 
         window.addEventListener('DOMContentLoaded', loadSplashText);
+    </script>
+
+    <!-- Аметистовые частицы -->
+    <script>
+        function initAmethystParticles() {
+            const canvas = document.getElementById('amethystParticles');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = false;
+
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            const particles = [];
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.floor(Math.random() * 3 + 2),
+                    speedX: (Math.random() - 0.5) * 0.35,
+                    speedY: (Math.random() - 0.5) * 0.35,
+                    alpha: Math.random() * 0.5 + 0.2,
+                    color: [Math.floor(Math.random() * 30) + 110, Math.floor(Math.random() * 30) + 70, 255]
+                });
+            }
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                particles.forEach(p => {
+                    p.x = Math.random() * width;
+                    p.y = Math.random() * height;
+                });
+            });
+
+            let frame = 0;
+            function drawParticles() {
+                ctx.clearRect(0, 0, width, height);
+
+                particles.forEach(p => {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+                    if (p.y < 0) p.y = height;
+                    if (p.y > height) p.y = 0;
+
+                    const glitchOffset = Math.random() > 0.98 ? 2 : 0;
+                    ctx.fillStyle = `rgba(${p.color[0]}, ${p.color[1]}, ${p.color[2]}, ${p.alpha})`;
+                    ctx.fillRect(Math.floor(p.x + glitchOffset), Math.floor(p.y), p.size, p.size);
+                });
+
+                frame++;
+                requestAnimationFrame(drawParticles);
+            }
+
+            drawParticles();
+        }
+
+        window.addEventListener('DOMContentLoaded', initAmethystParticles);
     </script>
 
     <!-- Переменные фильтрации медиа -->
