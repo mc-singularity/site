@@ -307,6 +307,19 @@
             );
             background-size: 100% 3px;
             opacity: 0.4;
+            transition: opacity 0.15s steps(2, end), transform 0.15s steps(2, end);
+        }
+
+        /* Глитч-эффект для CRT оверлея */
+        @keyframes scanlineFlicker {
+            0% { opacity: 0.4; transform: translate(0, 0); }
+            20% { opacity: 0.2; transform: translate(1px, -1px); }
+            40% { opacity: 0.5; transform: translate(-1px, 1px); }
+            60% { opacity: 0.2; transform: translate(0, 0); }
+            100% { opacity: 0.4; transform: translate(0, 0); }
+        }
+        .crt-overlay.scanline-flicker {
+            animation: scanlineFlicker 0.15s steps(2, end);
         }
 
         /* Звездное небо */
@@ -3050,25 +3063,63 @@
             });
             document.addEventListener('mouseleave', () => { isMouseActive = false; });
             
-            // Наведение на элементы
+            // Наведение на элементы и клики
             document.addEventListener('DOMContentLoaded', () => {
                 const interactiveEls = document.querySelectorAll('.button, .team-member, .org-card, .social-link, .panel-toggle, .filter-btn, .author-chip');
+                const socialButtons = document.querySelectorAll('.social-button');
+                
                 interactiveEls.forEach(el => {
                     el.addEventListener('mouseenter', (e) => {
                         const rect = el.getBoundingClientRect();
                         const cx = rect.left + rect.width/2;
                         const cy = rect.top + rect.height/2;
-                        // Цвета частиц при наведении
-                        const colors = ['hsl(280, 80%, 70%)', 'hsl(210, 80%, 70%)', 'hsl(340, 80%, 70%)'];
-                        window.spawnReactiveBurst(cx, cy, 12, colors[Math.floor(Math.random() * colors.length)], 3.5);
+                        let burstColor = `hsl(${Math.random()*60 + 260}, 80%, 70%)`;
+                        
+                        // Специальные цвета для соц-сетей
+                        if (el.matches('.social-button')) {
+                            const text = el.textContent.trim().toLowerCase();
+                            if (text.includes('discord')) burstColor = 'hsl(230, 70%, 60%)';
+                            else if (text.includes('telegram')) burstColor = 'hsl(200, 80%, 60%)';
+                            else if (text.includes('youtube')) burstColor = 'hsl(0, 80%, 60%)';
+                        }
+                        
+                        window.spawnReactiveBurst(cx, cy, 12, burstColor, 3.5);
                     });
                 });
+
+                // Всплеск при клике на логотип
+                const logo = document.querySelector('.logo-container');
+                if (logo) {
+                    logo.addEventListener('click', (e) => {
+                        const rect = logo.getBoundingClientRect();
+                        window.spawnReactiveBurst(rect.left + rect.width/2, rect.top + rect.height/2, 15, 'hsl(280, 80%, 70%)', 5);
+                    });
+                }
             });
 
             drawParticles();
         }
 
         window.addEventListener('DOMContentLoaded', initReactiveParticles);
+    </script>
+
+    <!-- Эффект случайного глитча на CRT-экране -->
+    <script>
+        (function initCRTGlitch() {
+            function triggerCRTGlitch() {
+                const overlay = document.querySelector('.crt-overlay');
+                if (overlay) {
+                    overlay.classList.add('scanline-flicker');
+                    setTimeout(() => {
+                        overlay.classList.remove('scanline-flicker');
+                    }, 150);
+                }
+            }
+
+            setInterval(() => {
+                triggerCRTGlitch();
+            }, Math.random() * 5000 + 3000); // Интервал между 3 и 8 секундами
+        })();
     </script>
 
     <!-- Переменные фильтрации медиа -->
