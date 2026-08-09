@@ -396,8 +396,13 @@
         }
 
         .cursor-logo.hovered {
-            transform: scale(1.45) !important;
+            animation: cursorPulse 0.8s infinite alternate ease-in-out !important;
             filter: drop-shadow(0 0 12px rgba(255,255,255,0.6));
+        }
+        
+        @keyframes cursorPulse {
+            0% { transform: scale(1.45); }
+            100% { transform: scale(1.65); }
         }
 
         .cursor-logo * {
@@ -2962,7 +2967,7 @@
             }
 
             // Всплеск частиц (для кликов, наведений, открытий)
-            window.spawnReactiveBurst = function(x, y, count, colorHex = null, force = 3) {
+            window.spawnReactiveBurst = function(x, y, count, colorHex = null, force = 3, shape = 'square') {
                 const hue = colorHex ? (parseInt(colorHex.slice(1), 16) > 0 ? '280' : '280') : null;
                 for(let i=0; i<count; i++) {
                     const angle = Math.random() * Math.PI * 2;
@@ -2970,12 +2975,16 @@
                     const size = Math.floor(Math.random() * 3) + 2;
                     const life = 1;
                     const color = colorHex || `hsl(${Math.random()*60 + 260}, 80%, 70%)`;
-                    spawnParticle(
+                    particles.push({
                         x, y,
-                        Math.cos(angle) * speed, Math.sin(angle) * speed - 1,
-                        size, life, color, 0.04, 0.025 + Math.random()*0.02
-                    );
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed - 1,
+                        size, life, decay: 0.025 + Math.random()*0.02, gravity: 0.04,
+                        color, shape, baseLife: life
+                    });
                 }
+                // Ограничение на общее количество частиц в памяти
+                if(particles.length > 400) particles.splice(0, particles.length - 400);
             }
 
             // Искры с логотипа
@@ -3041,8 +3050,20 @@
 
                     ctx.globalAlpha = p.life * 0.9;
                     ctx.fillStyle = p.color;
-                    // Рисуем пиксели
-                    ctx.fillRect(Math.floor(p.x), Math.floor(p.y), Math.ceil(p.size), Math.ceil(p.size));
+
+                    // Рисуем различные формы частиц
+                    if (p.shape === 'circle') {
+                        ctx.beginPath();
+                        ctx.arc(Math.floor(p.x), Math.floor(p.y), Math.ceil(p.size / 2), 0, Math.PI * 2);
+                        ctx.fill();
+                    } else if (p.shape === 'clover') {
+                        ctx.fillRect(Math.floor(p.x) - 2, Math.floor(p.y) - 2, 2, 2);
+                        ctx.fillRect(Math.floor(p.x) + 2, Math.floor(p.y) - 2, 2, 2);
+                        ctx.fillRect(Math.floor(p.x) - 2, Math.floor(p.y) + 2, 2, 2);
+                        ctx.fillRect(Math.floor(p.x) + 2, Math.floor(p.y) + 2, 2, 2);
+                    } else {
+                        ctx.fillRect(Math.floor(p.x), Math.floor(p.y), Math.ceil(p.size), Math.ceil(p.size));
+                    }
                 }
 
                 requestAnimationFrame(drawParticles);
@@ -3067,16 +3088,23 @@
                         const cx = rect.left + rect.width/2;
                         const cy = rect.top + rect.height/2;
                         let burstColor = `hsl(${Math.random()*60 + 260}, 80%, 70%)`;
+                        let shape = 'square';
                         
-                        // Специальные цвета для соц-сетей
-                        if (el.matches('.social-button')) {
+                        // Специальные цвета и формы для игроков и соц-сетей
+                        if (el.matches('[data-name="CloverS_Kid"]')) {
+                            burstColor = '#55ff55';
+                            shape = 'clover';
+                        } else if (el.matches('[data-name="MR_0zdi"]')) {
+                            burstColor = '#a855f7';
+                            shape = 'circle';
+                        } else if (el.matches('.social-button')) {
                             const text = el.textContent.trim().toLowerCase();
-                            if (text.includes('discord')) burstColor = 'hsl(230, 70%, 60%)';
-                            else if (text.includes('telegram')) burstColor = 'hsl(200, 80%, 60%)';
-                            else if (text.includes('youtube')) burstColor = 'hsl(0, 80%, 60%)';
+                            if (text.includes('discord')) { burstColor = 'hsl(230, 70%, 60%)'; shape = 'circle'; }
+                            else if (text.includes('telegram')) { burstColor = 'hsl(200, 80%, 60%)'; shape = 'circle'; }
+                            else if (text.includes('youtube')) { burstColor = 'hsl(0, 80%, 60%)'; shape = 'circle'; }
                         }
                         
-                        window.spawnReactiveBurst(cx, cy, 12, burstColor, 3.5);
+                        window.spawnReactiveBurst(cx, cy, 12, burstColor, 3.5, shape);
                     });
                 });
 
@@ -4175,6 +4203,15 @@
             if (!isOpen) {
                 panelElement.classList.add('open');
                 overlay.classList.add('show');
+                // Вспышка частиц при открытии панели
+                if (typeof window.spawnReactiveBurst === 'function') {
+                    const rect = panelElement.getBoundingClientRect();
+                    if (panel === 'news') {
+                        window.spawnReactiveBurst(rect.right - 20, rect.top + 50, 8, null, 2, 'square');
+                    } else if (panel === 'lore' || panel === 'events') {
+                        window.spawnReactiveBurst(rect.left + 20, rect.top + 50, 8, null, 2, 'square');
+                    }
+                }
             }
         }
 
@@ -5302,5 +5339,27 @@
         </div>
     </div>
 </div>
+
+<!-- Микро-эффект параллакса при скролле -->
+<script>
+    (function subtleScrollJitter() {
+        let lastScrollY = 0;
+        window.addEventListener('scroll', () => {
+            const delta = window.scrollY - lastScrollY;
+            if (Math.abs(delta) > 5) {
+                const stars = document.getElementById('starsCanvas');
+                if (stars) {
+                    stars.style.transition = 'transform 0.15s ease-out';
+                    stars.style.transform = `translateY(${delta * 0.03}px)`;
+                    clearTimeout(stars._scrollTimer);
+                    stars._scrollTimer = setTimeout(() => {
+                        stars.style.transform = 'translateY(0)';
+                    }, 250);
+                }
+            }
+            lastScrollY = window.scrollY;
+        });
+    })();
+</script>
 </body>
 </html>
