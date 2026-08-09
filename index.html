@@ -1743,8 +1743,13 @@
            ============================================================ */
 
         /* Стили для итальянской кнопки восстановления (переработаны под дизайн сайта) */
-        .italian-restore-btn {
+        .italian-restore-btn:not(.show) {
             display: none !important; /* Принудительно скрыта по умолчанию */
+        }
+        .italian-restore-btn.show {
+            display: inline-flex !important; /* Показываем через добавление класса */
+        }
+        .italian-restore-btn {
             margin: 1.5rem auto 0 auto;
             background: var(--btn-bg);
             border: var(--btn-border-w) solid var(--accent-color);
@@ -1757,14 +1762,8 @@
             letter-spacing: var(--btn-letter-spacing);
             transition: var(--btn-transition);
             box-shadow: var(--btn-shadow);
-            /* Убираем покачивание */
             animation: none !important;
         }
-
-        .italian-restore-btn.show {
-            display: inline-flex !important; /* Показываем через добавление класса */
-        }
-
         .italian-restore-btn:hover {
             background: var(--accent-color);
             color: #000000;
@@ -1860,13 +1859,7 @@
 
         /* ============================================================
            УНИФИЦИРОВАННАЯ СИСТЕМА КНОПОК
-           Все кнопки сайта (.button, .refresh-btn, .sort-btn, .filter-btn,
-           .card-nav-btn, .more-info-btn, .org-details-btn, .social-button,
-           .modal-close-btn, .panel-close) используют общие правила:
-           одинаковые border-radius, тени, transition и паттерн hover-инверсии
-           (заливка становится текстом и наоборот). Различаются только
-           размерами (padding/font-size), т.к. это кнопки разного уровня
-           важности (главные / второстепенные / компактные).
+           !!! ВНИМАНИЕ: .italian-restore-btn исключена из этого списка, чтобы избежать конфликта display !!!
            ============================================================ */
         .button,
         .refresh-btn,
@@ -1877,8 +1870,7 @@
         .org-details-btn,
         .social-button,
         .modal-close-btn,
-        .panel-close,
-        .italian-restore-btn {
+        .panel-close {
             font-family: 'uvKits', sans-serif !important;
             cursor: pointer;
             border-radius: var(--btn-radius);
