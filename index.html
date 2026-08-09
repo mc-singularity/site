@@ -1,3 +1,30 @@
+Готово! Добавил пасхалку для **Griffin Corp** и починил логику загрузки картинок для пасхалки Суньхуньсяй.
+
+### Что сделано:
+
+1. **Исправление пасхалки Суньхуньсяй (CXC):** 
+   * Раньше, если картинки `cxcscl.jpg` не было, на её место вставал логотип сайта (`logo.png`), что выглядело странно. Теперь я заменил `onerror="this.src='logo.png'"` на `onerror="this.style.display='none'"`. Если картинки нет, блок с изображением просто скрывается, и пасхалка выглядит чисто (только текст и звук).
+
+2. **Добавление пасхалки для Griffin Corp:**
+   * Активируется **двойным кликом (дабл-клик)** по карточке организации **«Гриффин Corp»** (в секции «Организации»).
+   * Играет звук: `gcpb.mp3`.
+   * Показывает картинку: `gcpb.png` с соответствующей военной/технологичной эстетикой (в стиле Гриффин).
+   * Закрытие окна автоматически останавливает музыку.
+
+---
+
+### Как подготовить файлы:
+В корень сайта (рядом с `index.html`) добавьте:
+*   `gcpb.mp3` (любой пафосный/технологичный трек для Гриффин Корп).
+*   `gcpb.png` (пиксельная картинка-мем или логотип Гриффин, на ваш выбор).
+
+---
+
+### Полный обновленный файл `index.html`
+
+Скопируйте весь код ниже и замените ваш старый файл.
+
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -2284,6 +2311,18 @@
             text-shadow: 0 0 8px rgba(85, 255, 85, 0.3);
         }
 
+        .griffin-highlight {
+            color: #d9d4d4;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(217, 212, 212, 0.4);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .griffin-highlight:hover {
+            text-shadow: 0 0 20px rgba(217, 212, 212, 0.8);
+            transform: scale(1.02);
+        }
+
         .singularity-highlight {
             color: #ffffff;
             font-weight: bold;
@@ -2590,6 +2629,58 @@
             color: #ff4444;
             transform: scale(1.2);
         }
+
+        /* ============================================================
+           ПАСХАЛКА ДЛЯ GRIFFIN CORP (GCPB)
+           ============================================================ */
+        .griffin-easter-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .griffin-easter-modal.show {
+            display: flex;
+        }
+        .griffin-easter-content {
+            background: #111;
+            border: 4px solid #d9d4d4;
+            padding: 1.5rem 2rem 2rem;
+            text-align: center;
+            max-width: 90vw;
+            position: relative;
+            animation: cxcShake 0.5s ease-in-out;
+            box-shadow: 0 0 30px rgba(217, 212, 212, 0.5);
+        }
+        .griffin-meme-image {
+            max-width: 100%;
+            max-height: 60vh;
+            object-fit: contain;
+            border: 2px solid #d9d4d4;
+            margin: 1rem 0;
+            image-rendering: pixelated;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .griffin-easter-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            font-family: 'uvKits', sans-serif !important;
+        }
+        .griffin-easter-close:hover {
+            color: #d9d4d4;
+            transform: scale(1.2);
+        }
     </style>
 </head>
 <body>
@@ -2814,13 +2905,26 @@
 
     <!-- Аудио для пасхалки Суньхуньсяй -->
     <audio id="cxc-audio" src="cxcscl.mp3" preload="auto"></audio>
+    <!-- Аудио для пасхалки GRIFFIN Corp -->
+    <audio id="griffin-audio" src="gcpb.mp3" preload="auto"></audio>
 
     <!-- Модальное окно пасхалки для Суньхуньсяй -->
     <div id="cxcEasterEgg" class="cxc-easter-modal">
         <div class="cxc-easter-content">
             <button class="cxc-easter-close" onclick="closeCXCEasterEgg()">&times;</button>
             <h2 style="color: #ff4444; text-shadow: 2px 2px 0 #000; font-size: clamp(1.5rem, 4vw, 3rem);">ПАРТИЯ ГОРДИТСЯ ТОБОЙ!</h2>
-            <img id="cxc-random-meme" src="cxcscl.jpg" alt="Social Credit" class="cxc-meme-image" onerror="this.src='logo.png'">
+            <!-- Исправлено: onerror скрывает элемент вместо замены на логотип -->
+            <img id="cxc-random-meme" src="cxcscl.jpg" alt="Social Credit" class="cxc-meme-image" onerror="this.style.display='none'">
+        </div>
+    </div>
+
+    <!-- Модальное окно пасхалки для GRIFFIN Corp -->
+    <div id="griffinEasterEgg" class="griffin-easter-modal">
+        <div class="griffin-easter-content">
+            <button class="griffin-easter-close" onclick="closeGriffinEasterEgg()">&times;</button>
+            <h2 style="color: #d9d4d4; text-shadow: 2px 2px 0 #000; font-size: clamp(1.5rem, 4vw, 3rem);">GRIFFIN CORP PUBLIC BROADCAST</h2>
+            <p style="color: #aaa; margin-bottom: 1rem;">Find Exploit Protect</p>
+            <img id="griffin-meme" src="gcpb.png" alt="Griffin Corp" class="griffin-meme-image" onerror="this.style.display='none'">
         </div>
     </div>
 
@@ -4394,7 +4498,8 @@
             const imgElement = document.getElementById('cxc-random-meme');
             if (imgElement) {
                 imgElement.src = randomMeme;
-                imgElement.onerror = function() { this.src = 'logo.png'; };
+                // Исправление: если картинка не загружается, она просто скрывается, а не заменяется на логотип
+                imgElement.onerror = function() { this.style.display = 'none'; };
             }
 
             document.getElementById('cxcEasterEgg').classList.add('show');
@@ -4409,20 +4514,53 @@
             document.getElementById('cxcEasterEgg').classList.remove('show');
         }
 
-        // Повесим обработчики на клик по футеру и двойной клик по карточке Суньхуньсяй
+        // ============================================================
+        // ПАСХАЛКА ДЛЯ GRIFFIN CORP (GCPB) - СКРИПТ
+        // ============================================================
+        window.triggerGriffinEasterEgg = function() {
+            const audio = document.getElementById('griffin-audio');
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(() => console.warn('Аудио не найдено или заблокировано браузером'));
+            }
+
+            const imgElement = document.getElementById('griffin-meme');
+            if (imgElement) {
+                imgElement.src = 'gcpb.png';
+                imgElement.onerror = function() { this.style.display = 'none'; };
+            }
+
+            document.getElementById('griffinEasterEgg').classList.add('show');
+        }
+
+        window.closeGriffinEasterEgg = function() {
+            const audio = document.getElementById('griffin-audio');
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+            document.getElementById('griffinEasterEgg').classList.remove('show');
+        }
+
+        // Повесим обработчики
         document.addEventListener('DOMContentLoaded', function() {
+            // 1. Суньхуньсяй - клик по футеру + дабл-клик по карточке
             const cxcHighlight = document.querySelector('.cxc-highlight');
             if (cxcHighlight) {
                 cxcHighlight.addEventListener('click', triggerCXCEasterEgg);
             }
 
-            // Двойной клик по карточке "Суньхуньсяй"
             document.addEventListener('dblclick', function(e) {
                 const card = e.target.closest('.org-card');
                 if (card) {
                     const titleBlock = card.querySelector('.org-title-block h3');
+                    // Активируем Суньхуньсяй
                     if (titleBlock && titleBlock.textContent.trim() === 'Суньхуньсяй') {
                         triggerCXCEasterEgg();
+                    }
+                    // 2. Активируем Гриффин (GCPB)
+                    if (titleBlock && titleBlock.textContent.trim() === 'Гриффин Corp') {
+                        triggerGriffinEasterEgg();
                     }
                 }
             });
@@ -5491,3 +5629,4 @@
 </script>
 </body>
 </html>
+```
