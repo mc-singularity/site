@@ -404,14 +404,6 @@ const italianTranslations = {
 
 };
 
-// Гарантируем, что кнопка скрыта при загрузке страницы, даже если что-то пошло не так
-document.addEventListener('DOMContentLoaded', function() {
-    const btn = document.getElementById('italianRestoreBtn');
-    if (btn) {
-        btn.style.display = 'none';
-    }
-});
-
 function switchToItalian() {
     console.log('Switching to Italian...');
     
@@ -462,23 +454,26 @@ function switchToItalian() {
     
     // Show restore button
     const btn = document.getElementById('italianRestoreBtn');
-    if (btn) {
-        btn.style.display = 'block';
-    }
+    if (btn) btn.style.display = 'block';
 }
 
 function restoreRussian() {
-    // Restore original texts
-    originalTexts.forEach((originalText, node) => {
-        node.textContent = originalText;
-    });
-
-    // Clear the map
-    originalTexts.clear();
-
-    // Hide restore button
-    const btn = document.getElementById('italianRestoreBtn');
-    if (btn) {
-        btn.style.display = 'none';
+    try {
+        // Проходим по сохраненным нодам и безопасно возвращаем текст
+        originalTexts.forEach((originalText, node) => {
+            // Проверяем, существует ли еще нода в DOM
+            if (node && node.parentNode) {
+                node.textContent = originalText;
+            }
+        });
+        originalTexts.clear();
+        
+        // Скрываем кнопку
+        const btn = document.getElementById('italianRestoreBtn');
+        if (btn) btn.style.display = 'none';
+        
+        console.log('Restored Russian text.');
+    } catch (e) {
+        console.error('Error restoring Russian:', e);
     }
 }
