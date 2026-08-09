@@ -333,6 +333,18 @@
             image-rendering: pixelated;
         }
 
+        /* Частицы, реагирующие на курсор */
+        #cursorParticles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none !important;
+            z-index: 0;
+            image-rendering: pixelated;
+        }
+
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -1380,12 +1392,30 @@
             text-align: left;
         }
 
-        @media (max-width: 32rem) {
-            .team-member.expanded.has-card-member { grid-column: span 1; }
+        /* ИСПРАВЛЕНИЕ: Мобильная версия развернутой карточки */
+        @media (max-width: 48rem) {
+            .team-member.expanded.has-card-member {
+                grid-column: 1 / -1; /* Растягиваем на всю ширину */
+            }
             .team-member.expanded.has-card-member .team-member-info {
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
+                width: 100%;
+            }
+            .team-member-card {
+                width: 100%;
+                max-width: 10rem;
+                margin-bottom: 0.8rem;
+            }
+            .team-member-details {
+                align-items: center !important;
+                text-align: center !important;
+                width: 100%;
+            }
+            .member-org-details-badge {
+                width: 100% !important;
+                justify-content: center !important;
             }
         }
 
@@ -2505,6 +2535,7 @@
     <div class="background"></div>
     <canvas id="starsCanvas"></canvas>
     <canvas id="amethystParticles"></canvas>
+    <canvas id="cursorParticles"></canvas>
     <div class="cursor-logo"><img src="image.png" alt="cursor" style="width: 100%; height: 100%;"></div>
 
     <div class="panel-overlay" id="panelOverlay" onclick="closeAllPanels()"></div>
@@ -2884,6 +2915,116 @@
         }
 
         window.addEventListener('DOMContentLoaded', initAmethystParticles);
+    </script>
+
+    <!-- Реактивные частицы для курсора и наведения -->
+    <script>
+        function initCursorParticles() {
+            const canvas = document.getElementById('cursorParticles');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = false;
+
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            const particles = [];
+            let mouseX = -1000, mouseY = -1000;
+            let isMouseActive = false;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            function spawnTrail(x, y, count) {
+                for(let i=0; i<count; i++) {
+                    particles.push({
+                        x: x + (Math.random()-0.5)*6,
+                        y: y + (Math.random()-0.5)*6,
+                        vx: (Math.random()-0.5)*1.5,
+                        vy: (Math.random()-0.5)*1.5 - 0.5,
+                        life: 1,
+                        decay: 0.02 + Math.random()*0.025,
+                        size: Math.floor(Math.random()*3) + 2,
+                        color: `hsl(280, 80%, ${60 + Math.random()*40}%)`
+                    });
+                }
+            }
+
+            function spawnBurst(x, y, count, color) {
+                for(let i=0; i<count; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 4 + 2;
+                    particles.push({
+                        x: x, y: y,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed - 1,
+                        life: 1,
+                        decay: 0.025 + Math.random()*0.03,
+                        size: Math.floor(Math.random()*3) + 2,
+                        color: color || `hsl(${Math.random()*60 + 280}, 80%, 70%)`
+                    });
+                }
+            }
+
+            // Слежение за курсором
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                isMouseActive = true;
+                spawnTrail(mouseX, mouseY, 3);
+            });
+
+            document.addEventListener('mouseleave', () => { isMouseActive = false; });
+
+            // Активация наведения на интерактивные элементы
+            document.addEventListener('DOMContentLoaded', () => {
+                const interactiveEls = document.querySelectorAll('.button, .team-member, .org-card, .social-link, .panel-toggle, .filter-btn, .author-chip');
+                interactiveEls.forEach(el => {
+                    el.addEventListener('mouseenter', (e) => {
+                        const rect = el.getBoundingClientRect();
+                        const cx = rect.left + rect.width/2;
+                        const cy = rect.top + rect.height/2;
+                        const colors = ['hsl(280, 80%, 70%)', 'hsl(210, 80%, 70%)', 'hsl(340, 80%, 70%)'];
+                        spawnBurst(cx, cy, 10, colors[Math.floor(Math.random() * colors.length)]);
+                    });
+                });
+            });
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, width, height);
+                
+                // Ограничение на количество частиц для производительности
+                if(particles.length > 200) {
+                    particles.splice(0, particles.length - 200);
+                }
+
+                for(let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.life -= p.decay;
+                    p.vx *= 0.98;
+                    p.vy += 0.03; // Легкая гравитация
+
+                    if(p.life <= 0) {
+                        particles.splice(i, 1);
+                        continue;
+                    }
+
+                    ctx.globalAlpha = p.life * 0.8;
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(Math.floor(p.x), Math.floor(p.y), Math.ceil(p.size), Math.ceil(p.size));
+                }
+
+                requestAnimationFrame(drawParticles);
+            }
+
+            drawParticles();
+        }
+
+        window.addEventListener('DOMContentLoaded', initCursorParticles);
     </script>
 
     <!-- Переменные фильтрации медиа -->
@@ -3673,47 +3814,7 @@
                 </div>
             `;
 
-            // ИСПРАВЛЕНИЕ: Вывод плашки организации ПРЯМО ПОД ИМЕНЕМ (вне скрытого блока)
-            if (primaryOrg && primaryOrg.org) {
-                // Убедимся, что нет дубликата от предыдущего вызова, если пересоздавали элемент
-                const existingBadge = memberDiv.querySelector('.member-org-badge');
-                if (existingBadge) existingBadge.remove();
-
-                const { org, roleName } = primaryOrg;
-                const orgColor = typeof normalizeColor === 'function' ? normalizeColor(org.color || mainColor) : (org.color || mainColor);
-                
-                // Создаем плашку организации в самом верху карточки, сразу под превью имени
-                const orgBadge = document.createElement('div');
-                orgBadge.className = 'member-org-badge';
-                orgBadge.style.cssText = `
-                    margin-top: -0.3rem; 
-                    margin-bottom: 0.3rem; 
-                    font-size: 0.8rem; 
-                    display: flex; 
-                    align-items: center; 
-                    gap: 6px; 
-                    cursor: pointer; 
-                    transition: transform 0.2s ease;
-                    background: rgba(0,0,0,0.4);
-                    padding: 2px 8px;
-                    border: 1px solid ${orgColor};
-                    border-radius: 0px;
-                `;
-                orgBadge.onclick = (e) => { e.stopPropagation(); openOrgModal(org.id); };
-                orgBadge.onmouseover = () => { orgBadge.style.transform = 'scale(1.02)'; };
-                orgBadge.onmouseout = () => { orgBadge.style.transform = 'scale(1)'; };
-                
-                orgBadge.innerHTML = `
-                    <img src="${org.iconUrl}" style="width:14px; height:14px; object-fit:contain;">
-                    <span style="color: ${orgColor};">${org.name}</span>
-                `;
-                
-                // Вставляем прямо после .team-member-name-preview
-                const previewDiv = memberDiv.querySelector('.team-member-name-preview');
-                if (previewDiv) {
-                    previewDiv.insertAdjacentElement('afterend', orgBadge);
-                }
-            }
+            /* Удаляем плашку организации из-под ника, она будет только в развернутом блоке (внутри .team-member-details) */
 
             // ИСПРАВЛЕНИЕ: Вывод плашки организации внутри РАЗВЕРНУТОГО блока (там где Кнопка "ПОДРОБНЕЕ")
             if (primaryOrg && primaryOrg.org) {
