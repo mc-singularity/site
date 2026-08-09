@@ -1468,7 +1468,7 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 99999 !important;
+            z-index: 999999 !important;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.25s ease, visibility 0.25s ease;
@@ -1490,7 +1490,7 @@
             height: 100vh !important;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(4px);
-            z-index: 99999 !important;
+            z-index: 99999;
             justify-content: center;
             align-items: center;
             padding: 20px;
@@ -1619,8 +1619,9 @@
             font-family: 'uvKits', sans-serif !important;
         }
 
+        /* ИСПРАВЛЕНО: Наследование цвета в модалке */
         .meta-label {
-            color: var(--accent-color);
+            color: var(--modal-accent-color, var(--accent-color));
             font-weight: bold;
         }
 
@@ -1745,9 +1746,10 @@
             100% { transform: scale(0) rotate(10deg); opacity: 0; filter: saturate(0) brightness(2); }
         }
 
+        /* ИСПРАВЛЕНО: Наследование цвета в лоре модалки */
         .lore-box {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px dashed var(--accent-color);
+            border: 1px dashed var(--modal-accent-color, var(--accent-color));
             padding: 0.8rem;
             line-height: 1.5;
             font-size: 0.95rem;
@@ -3083,6 +3085,15 @@
                 .replace(/`([^`]+)`/g, '<code style="background: rgba(255,255,255,0.1); padding: 2px 4px;">$1</code>');
         }
 
+        /* НОВОЕ: Единая функция парсинга текста с МД-разметкой и заменой имен */
+        window.parseTextForUI = function(text) {
+            if (!text) return '';
+            // Сначала преобразуем Markdown в HTML
+            let html = parseMarkdownLinks(text);
+            // Затем заменяем имена на ссылки
+            return linkifyMemberNames(html);
+        };
+
         async function loadNews() {
             const listContainer = document.getElementById('newsItemsList');
             listContainer.innerHTML = 'Загрузка новостей...';
@@ -3106,10 +3117,11 @@
                             mediaHTML = `<div class="discord-gallery">${imgs.map(u => `<img src="${escapeHTML(u)}" class="discord-gallery-item" onclick="openLightbox('${escapeHTML(u)}')">`).join('')}</div>`;
                         }
 
+                        // Используем parseTextForUI
                         html += `
                             <div class="news-item">
                                 <div class="news-date">${escapeHTML(item.date || '')}</div>
-                                <p>${parseMarkdownLinks(item.text || '')}</p>
+                                <p>${parseTextForUI(item.text || '')}</p>
                                 ${mediaHTML}
                             </div>
                         `;
@@ -3132,7 +3144,7 @@
                         let messageHTML = '';
 
                         if (mainContent) {
-                            messageHTML += `<p style="margin-bottom: 0.8rem;">${parseMarkdownLinks(mainContent)}</p>`;
+                            messageHTML += `<p style="margin-bottom: 0.8rem;">${parseTextForUI(mainContent)}</p>`;
                         }
 
                         if (msg.attachments && Array.isArray(msg.attachments) && msg.attachments.length > 0) {
@@ -3150,13 +3162,13 @@
                                 let embedSection = '';
 
                                 if (embed.author && embed.author.name) {
-                                    embedSection += `<div class="event-title" style="margin-top: 0.6rem; color: var(--accent-color);">${parseMarkdownLinks(embed.author.name)}</div>`;
+                                    embedSection += `<div class="event-title" style="margin-top: 0.6rem; color: var(--accent-color);">${parseTextForUI(embed.author.name)}</div>`;
                                 }
                                 if (embed.title) {
-                                    embedSection += `<div class="event-title" style="margin-top: 0.4rem;">${parseMarkdownLinks(embed.title)}</div>`;
+                                    embedSection += `<div class="event-title" style="margin-top: 0.4rem;">${parseTextForUI(embed.title)}</div>`;
                                 }
                                 if (embed.description) {
-                                    embedSection += `<p style="margin-bottom: 0.6rem;">${parseMarkdownLinks(embed.description)}</p>`;
+                                    embedSection += `<p style="margin-bottom: 0.6rem;">${parseTextForUI(embed.description)}</p>`;
                                 }
 
                                 if (embed.fields && Array.isArray(embed.fields)) {
@@ -3165,8 +3177,8 @@
                                         const fieldValue = f.value || f.rawValue || '';
                                         embedSection += `
                                             <div class="news-field">
-                                                ${fieldName ? `<div class="news-field-title">${parseMarkdownLinks(fieldName)}</div>` : ''}
-                                                ${fieldValue ? `<div>${parseMarkdownLinks(fieldValue)}</div>` : ''}
+                                                ${fieldName ? `<div class="news-field-title">${parseTextForUI(fieldName)}</div>` : ''}
+                                                ${fieldValue ? `<div>${parseTextForUI(fieldValue)}</div>` : ''}
                                             </div>
                                         `;
                                     });
@@ -3193,7 +3205,7 @@
 
                                 if (embed.footer && (embed.footer.text || typeof embed.footer === 'string')) {
                                     const footerText = embed.footer.text || embed.footer;
-                                    embedSection += `<div style="font-size: 0.85rem; color: #888888; margin-top: 0.4rem;">${parseMarkdownLinks(footerText)}</div>`;
+                                    embedSection += `<div style="font-size: 0.85rem; color: #888888; margin-top: 0.4rem;">${parseTextForUI(footerText)}</div>`;
                                 }
 
                                 messageHTML += embedSection;
@@ -3275,7 +3287,7 @@
                                 <span class="lore-season-arrow">&gt;</span>
                             </div>
                             <div class="lore-season-content">
-                                ${(season.paragraphs || []).map(p => `<p>${escapeHTML(p)}</p>`).join('')}
+                                ${(season.paragraphs || []).map(p => `<p>${parseTextForUI(p)}</p>`).join('')}
                             </div>
                         </div>
                     `;
@@ -3293,8 +3305,8 @@
                 listContainer.innerHTML = (data.events || []).map(event => `
                     <div class="event-item">
                         ${event.date ? `<div class="event-date">${escapeHTML(event.date)}</div>` : ''}
-                        ${event.title ? `<div class="event-title">${escapeHTML(event.title)}</div>` : ''}
-                        <p>${escapeHTML(event.text || '')}</p>
+                        ${event.title ? `<div class="event-title">${parseTextForUI(event.title)}</div>` : ''}
+                        <p>${parseTextForUI(event.text || '')}</p>
                     </div>
                 `).join('') || '<p style="color: #888;">Нет активных событий.</p>';
             } catch (error) { listContainer.innerHTML = '<p style="color: #ff6b6b;">Ошибка загрузки events.json</p>'; }
@@ -3315,6 +3327,7 @@
         window.fullTeamMembers = [];
         window.fullArchiveMembers = [];
         window.playerExtraInfos = {};
+        window.allMembersList = [];
 
         window.switchCard = function(playerName, direction, event) {
             if (event) event.stopPropagation();
@@ -3521,6 +3534,9 @@
                 } catch (e) {
                     console.warn('archive.json не найден');
                 }
+
+                /* ИСПРАВЛЕНИЕ: Объединяем всех игроков в глобальный список для линковки */
+                window.allMembersList = [...window.fullTeamMembers, ...window.fullArchiveMembers];
 
                 resizeAllGridItems();
                 setTimeout(resizeAllGridItems, 300);
@@ -3953,32 +3969,36 @@
         window.normalizeColor = normalizeColor;
 
         // 2. Универсальный автоанализ и замена имён на голова-ссылку во всех текстах (lore, news, events, discord_news)
-        function linkifyMemberNames(text) {
+        // ПРИМЕЧАНИЕ: В данный момент вызывается внутри parseTextForUI
+        window.linkifyMemberNames = function(text) {
             if (!text || typeof text !== 'string') return text || '';
             
-            const members = window.fullTeamMembers || [];
+            const members = window.allMembersList || [];
             if (members.length === 0) return text;
 
             // Сортировка имён по длине (чтобы короткие имена не перебивали составные)
-            const sortedNames = members
-                .map(m => m.name)
-                .filter(Boolean)
-                .sort((a, b) => b.length - a.length);
-
-            if (sortedNames.length === 0) return text;
-
-            const escapedNames = sortedNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+            const allNameVariants = [];
+            members.forEach(m => {
+                if (m.name && typeof m.name === 'string') allNameVariants.push(m.name);
+                if (m.realName && typeof m.realName === 'string' && m.realName.length > 1) allNameVariants.push(m.realName);
+            });
+            const uniqueNames = [...new Set(allNameVariants)].sort((a, b) => b.length - a.length);
+            const escapedNames = uniqueNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+            
             // Ищем точные совпадения имён без захвата внутри тегов HTML
             const regex = new RegExp(`(?<![a-zA-Z0-9_>])(${escapedNames.join('|')})(?![a-zA-Z0-9_=<])`, 'gi');
 
             return text.replace(regex, (matchedName) => {
-                const realMember = members.find(m => m.name.toLowerCase() === matchedName.toLowerCase());
+                const realMember = members.find(m => 
+                    (m.name && m.name.toLowerCase() === matchedName.toLowerCase()) ||
+                    (m.realName && m.realName.toLowerCase() === matchedName.toLowerCase())
+                );
                 const targetName = realMember ? realMember.name : matchedName;
                 const headUrl = `https://minotar.net/helm/${encodeURIComponent(targetName)}/16`;
 
                 return `<span class="player-mention-link" onclick="openModalByName('${targetName}')">` +
                        `<img src="${headUrl}" alt="${targetName}" onerror="this.style.display='none'">` +
-                       `<span>${targetName}</span></span>`;
+                       `<span>${matchedName}</span></span>`;
             });
         }
         window.linkifyMemberNames = linkifyMemberNames;
@@ -4202,7 +4222,7 @@
                                 </div>
                                 <div class="org-body-wrapper" id="org-body-wrapper-${org.id}">
                                     <div class="org-body-inner">
-                                        <p class="org-description">${linkifyMemberNames(org.description || '')}</p>
+                                        <p class="org-description">${parseTextForUI(org.description || '')}</p>
                                         ${socialsHTML}
                                         <div class="org-members-list" style="border-top-color: ${orgColor}44; margin-top: 10px; padding-top: 6px;">
                                             ${rolesHTML}
@@ -4267,20 +4287,20 @@
             const formerEl = document.getElementById('org-modal-former-names');
             if (org.formerNames && Array.isArray(org.formerNames) && org.formerNames.length > 0) {
                 if (formerBlock) formerBlock.style.display = 'block';
-                if (formerEl) formerEl.innerHTML = org.formerNames.map(name => `<span class="org-former-tag" style="border-color: ${orgColor}66;">${linkifyMemberNames(name)}</span>`).join('');
+                if (formerEl) formerEl.innerHTML = org.formerNames.map(name => `<span class="org-former-tag" style="border-color: ${orgColor}66;">${parseTextForUI(name)}</span>`).join('');
             } else if (formerBlock) {
                 formerBlock.style.display = 'none';
             }
 
             // История и примечания с авто-ссылками имён
             const historyEl = document.getElementById('org-modal-history');
-            if (historyEl) historyEl.innerHTML = linkifyMemberNames(org.history || org.description || 'История данной организации ещё формируется.');
+            if (historyEl) historyEl.innerHTML = parseTextForUI(org.history || org.description || 'История данной организации ещё формируется.');
 
             const notesBlock = document.getElementById('org-notes-block');
             const notesEl = document.getElementById('org-modal-notes');
             if (org.specialNotes) {
                 if (notesBlock) notesBlock.style.display = 'block';
-                if (notesEl) notesEl.innerHTML = linkifyMemberNames(org.specialNotes);
+                if (notesEl) notesEl.innerHTML = parseTextForUI(org.specialNotes);
             } else if (notesBlock) {
                 notesBlock.style.display = 'none';
             }
