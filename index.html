@@ -1619,7 +1619,6 @@
             font-family: 'uvKits', sans-serif !important;
         }
 
-        /* ИСПРАВЛЕНО: Наследование цвета в модалке */
         .meta-label {
             color: var(--modal-accent-color, var(--accent-color));
             font-weight: bold;
@@ -1746,7 +1745,6 @@
             100% { transform: scale(0) rotate(10deg); opacity: 0; filter: saturate(0) brightness(2); }
         }
 
-        /* ИСПРАВЛЕНО: Наследование цвета в лоре модалки */
         .lore-box {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed var(--modal-accent-color, var(--accent-color));
@@ -2339,10 +2337,10 @@
         }
 
         /* Ссылка-никнейм с головой игрока */
+        /* ИСПРАВЛЕНИЕ: цвет задаётся через инлайн-стили, убираем жесткие цвета отсюда */
         .player-mention-link {
-            color: #ffffff;
             background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #ffffff;
+            border: 1px solid; /* Задаётся в JS */
             padding: 2px 7px;
             margin: 0 2px;
             cursor: pointer;
@@ -2354,12 +2352,10 @@
             transition: all 0.2s ease;
             font-size: 0.9em;
         }
-
         .player-mention-link:hover {
             background: rgba(255, 255, 255, 0.25);
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
         }
-
         .player-mention-link img {
             width: 14px;
             height: 14px;
@@ -3085,7 +3081,7 @@
                 .replace(/`([^`]+)`/g, '<code style="background: rgba(255,255,255,0.1); padding: 2px 4px;">$1</code>');
         }
 
-        /* НОВОЕ: Единая функция парсинга текста с МД-разметкой и заменой имен */
+        /* Единая функция парсинга текста с МД-разметкой и заменой имен */
         window.parseTextForUI = function(text) {
             if (!text) return '';
             // Сначала преобразуем Markdown в HTML
@@ -3995,8 +3991,17 @@
                 );
                 const targetName = realMember ? realMember.name : matchedName;
                 const headUrl = `https://minotar.net/helm/${encodeURIComponent(targetName)}/16`;
+                
+                // Ищем цвет игрока в базе
+                let playerColor = null;
+                if (realMember && realMember.color) {
+                    playerColor = normalizeColor(realMember.color);
+                } else {
+                    // Если игрок не найден или цвета нет, используем акцентный цвет сайта
+                    playerColor = 'var(--accent-color)';
+                }
 
-                return `<span class="player-mention-link" onclick="openModalByName('${targetName}')">` +
+                return `<span class="player-mention-link" onclick="openModalByName('${targetName}')" style="border-color: ${playerColor}; color: ${playerColor};">` +
                        `<img src="${headUrl}" alt="${targetName}" onerror="this.style.display='none'">` +
                        `<span>${matchedName}</span></span>`;
             });
