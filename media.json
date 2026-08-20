@@ -1,6 +1,33 @@
 {
   "media": [
     {
+      "title": "Тест мультитрансляции и разборки с разрушителями бедрока",
+      "author": "CloverS_Kid",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=z73J3wZt39I",
+      "thumbnail": "https://i.ytimg.com/vi/z73J3wZt39I/maxresdefault_live.jpg",
+      "date": "2026-08-20"
+    },
+    {
+      "title": "Строим хаб для синги",
+      "author": "CloverS_Kid",
+      "platform": "twitch",
+      "type": "stream",
+      "url": "https://www.twitch.tv/videos/2851329648",
+      "thumbnail": "https://vod-secure.twitch.tv/_404/404_processing_1280x720.png",
+      "date": "2026-08-20"
+    },
+    {
+      "title": "Строим хаб для синги",
+      "author": "CloverS_Kid",
+      "platform": "twitch",
+      "type": "stream",
+      "url": "https://www.twitch.tv/cloverskid",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cloverskid-1280x720.jpg",
+      "date": "2026-08-20"
+    },
+    {
       "title": "тест машины 2026 08 19 14 29 41",
       "author": "Yrk1z",
       "platform": "youtube",
