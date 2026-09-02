@@ -813,6 +813,7 @@
         .media-watch-btn {
             width: 100%;
             margin-top: 0.4rem;
+            text-decoration: none;
         }
 
         /* Строгое центрирование соц-кнопок */
@@ -2653,74 +2654,6 @@
             color: #d9d4d4;
             transform: scale(1.2);
         }
-
-        /* ============================================================
-           НОВЫЕ СТИЛИ ДЛЯ ВИДЕОПЛЕЕРА
-           ============================================================ */
-        .video-player-modal {
-            display: none; /* скрыто по умолчанию */
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 999999;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .video-player-modal.active {
-            display: flex !important;
-        }
-
-        .video-modal-content {
-            position: relative !important;
-            z-index: 2 !important;
-            max-width: 900px;
-            width: 100%;
-            background: #080808;
-            border: 3px solid var(--accent-color, #ffffff);
-            box-shadow: 6px 6px 0 rgba(0,0,0,0.9);
-            padding: 20px;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .video-player-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background: #000;
-        }
-
-        .video-player-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .video-player-title {
-            font-family: 'uvKits', sans-serif !important;
-            font-size: 1.2rem;
-            color: var(--accent-color, #ffffff);
-            text-shadow: 1px 1px 0 #000;
-        }
-
-        /* На мобильных уменьшаем отступы */
-        @media (max-width: 48rem) {
-            .video-modal-content {
-                padding: 10px;
-                border-width: 2px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -2968,18 +2901,1017 @@
         </div>
     </div>
 
-    <!-- Модальное окно для видео (добавлено) -->
-    <div class="modal video-player-modal" id="videoPlayerModal">
-        <div class="modal-overlay" onclick="closeVideoPlayer()"></div>
-        <div class="modal-content video-modal-content" id="videoModalContent">
-            <button class="modal-close" onclick="closeVideoPlayer()">✕</button>
-            <div class="video-player-wrapper">
-                <iframe id="videoPlayerFrame" src="" frameborder="0" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
-            </div>
-            <div class="video-player-title" id="videoPlayerTitle"></div>
-        </div>
-    </div>
-        <!-- Основной интерфейс состава и загрузка файлов team.json, info.json, archive.json -->
+    <!-- ============================================================
+         ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
+         ============================================================ -->
+
+    <!-- Пасхалка с комбинацией клавиш, таймером на 10 секунд и однократным использованием -->
+    <script>
+        (function setupEasterEggSequence() {
+            const easterEggText = 'SINGULARITY SECRET';
+            const defaultText = 'SINGULARITY';
+            const STORAGE_KEY = 'singularity_easter_egg_used';
+
+            function applyEasterEgg() {
+                const mainLogo = document.getElementById('mainLogoTitle');
+                if (mainLogo) mainLogo.textContent = easterEggText;
+                
+                const loaderLogo = document.querySelector('.loader-logo');
+                if (loaderLogo) loaderLogo.textContent = easterEggText;
+
+                // Возвращаем исходный текст через 10 секунд
+                setTimeout(() => {
+                    if (mainLogo) mainLogo.textContent = defaultText;
+                    if (loaderLogo) loaderLogo.textContent = defaultText;
+                }, 10000);
+            }
+
+            function triggerEasterEgg() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, 'true');
+                } catch (e) {
+                    console.warn('LocalStorage недоступен');
+                }
+
+                applyEasterEgg();
+            }
+
+            // 1. Активация Конами-кодом: Up Up Down Down Left Right Left Right B A
+            const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
+            let konamiIndex = 0;
+
+            document.addEventListener('keydown', function(e) {
+                try {
+                    if (localStorage.getItem(STORAGE_KEY) === 'true') return;
+                } catch (err) {}
+
+                const key = e.code || e.key;
+                const expectedKey = konamiCode[konamiIndex];
+
+                if (key === expectedKey || e.key.toUpperCase() === expectedKey.replace('Key', '')) {
+                    konamiIndex++;
+                    if (konamiIndex === konamiCode.length) {
+                        triggerEasterEgg();
+                        konamiIndex = 0;
+                    }
+                } else {
+                    konamiIndex = 0;
+                }
+            });
+
+            // 2. Альтернатива (для мобильных): 7 быстро связанных кликов по логотипу
+            let logoClicks = 0;
+            let clickTimer = null;
+            const logoContainer = document.querySelector('.logo-container');
+
+            if (logoContainer) {
+                logoContainer.addEventListener('click', function() {
+                    try {
+                        if (localStorage.getItem(STORAGE_KEY) === 'true') return;
+                    } catch (err) {}
+
+                    logoClicks++;
+                    clearTimeout(clickTimer);
+
+                    if (logoClicks >= 7) {
+                        triggerEasterEgg();
+                        logoClicks = 0;
+                    } else {
+                        clickTimer = setTimeout(() => {
+                            logoClicks = 0;
+                        }, 500);
+                    }
+                });
+            }
+        })();
+    </script>
+
+    <!-- Загрузка и отображение Сплешей из splashes.json -->
+    <script>
+        async function loadSplashText() {
+            const splashElement = document.getElementById('splashText');
+            if (!splashElement) return;
+
+            let splashes = [];
+
+            try {
+                const response = await fetch('splashes.json?v=' + Date.now(), { cache: 'no-store' });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.splashes && data.splashes.length > 0) {
+                        splashes = data.splashes;
+                    }
+                }
+            } catch (e) {
+                console.warn('Ошибка загрузки splashes.json');
+            }
+
+            if (splashes.length > 0) {
+                const randomSplash = splashes[Math.floor(Math.random() * splashes.length)];
+                splashElement.textContent = randomSplash.text;
+                if (randomSplash.color) {
+                    splashElement.style.color = randomSplash.color;
+                }
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadSplashText);
+    </script>
+
+    <!-- Фоновые аметистовые частицы (улучшены) -->
+    <script>
+        function initAmethystParticles() {
+            const canvas = document.getElementById('amethystParticles');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = false;
+
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            const particles = [];
+            // Увеличим количество частиц до 40
+            const particleCount = 40;
+            const colors = [
+                [180, 100, 255], // Фиолет
+                [100, 180, 255], // Голубой
+                [255, 100, 200], // Розовый
+                [200, 200, 200]  // Белый/серый
+            ];
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.floor(Math.random() * 3 + 2),
+                    speedX: (Math.random() - 0.5) * 0.35,
+                    speedY: (Math.random() - 0.5) * 0.35,
+                    alpha: Math.random() * 0.5 + 0.2,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                particles.forEach(p => {
+                    p.x = Math.random() * width;
+                    p.y = Math.random() * height;
+                });
+            });
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, width, height);
+
+                particles.forEach(p => {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+                    if (p.y < 0) p.y = height;
+                    if (p.y > height) p.y = 0;
+
+                    const glitchOffset = Math.random() > 0.98 ? 2 : 0;
+                    ctx.fillStyle = `rgba(${p.color[0]}, ${p.color[1]}, ${p.color[2]}, ${p.alpha})`;
+                    ctx.fillRect(Math.floor(p.x + glitchOffset), Math.floor(p.y), p.size, p.size);
+                });
+
+                requestAnimationFrame(drawParticles);
+            }
+
+            drawParticles();
+        }
+
+        window.addEventListener('DOMContentLoaded', initAmethystParticles);
+    </script>
+
+    <!-- Реактивные частицы (переработаны и расширены) -->
+    <script>
+        function initReactiveParticles() {
+            const canvas = document.getElementById('cursorParticles');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = false;
+
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+            
+            // Общий массив частиц
+            let particles = [];
+            let mouseX = -1000, mouseY = -1000;
+            let isMouseActive = false;
+            let logoParticleTimer = 0;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            // Функция для создания одной частицы
+            function spawnParticle(x, y, vx, vy, size, life, color, gravity = 0, decay = 0.02) {
+                if (!color) color = 'hsl(280, 80%, 70%)';
+                particles.push({
+                    x, y, vx, vy, size, life, decay, gravity, color,
+                    baseLife: life
+                });
+                // Ограничение на общее количество частиц в памяти
+                if(particles.length > 400) particles.splice(0, particles.length - 400);
+            }
+
+            // Всплеск частиц (для кликов, наведений, открытий)
+            window.spawnReactiveBurst = function(x, y, count, colorHex = null, force = 3, shape = 'square') {
+                const hue = colorHex ? (parseInt(colorHex.slice(1), 16) > 0 ? '280' : '280') : null;
+                for(let i=0; i<count; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * force + 1.5;
+                    const size = Math.floor(Math.random() * 3) + 2;
+                    const life = 1;
+                    const color = colorHex || `hsl(${Math.random()*60 + 260}, 80%, 70%)`;
+                    particles.push({
+                        x, y,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed - 1,
+                        size, life, decay: 0.025 + Math.random()*0.02, gravity: 0.04,
+                        color, shape, baseLife: life
+                    });
+                }
+                // Ограничение на общее количество частиц в памяти
+                if(particles.length > 400) particles.splice(0, particles.length - 400);
+            }
+
+            // Искры с логотипа
+            function spawnLogoSparks() {
+                const logo = document.querySelector('.logo-container');
+                if(!logo) return;
+                const rect = logo.getBoundingClientRect();
+                for(let i=0; i<4; i++) {
+                    const size = Math.floor(Math.random() * 2) + 2;
+                    const life = 1;
+                    const color = `hsl(280, 80%, ${70 + Math.random()*30}%)`;
+                    spawnParticle(
+                        rect.left + rect.width/2 + (Math.random()-0.5)*40,
+                        rect.top + rect.height/2 + (Math.random()-0.5)*20,
+                        (Math.random()-0.5)*2.5, -Math.random()*4 - 1,
+                        size, life, color, 0.02, 0.015
+                    );
+                }
+            }
+
+            // Логика для следов за курсором
+            function spawnTrail(x, y) {
+                for(let i=0; i<2; i++) {
+                    const size = Math.floor(Math.random() * 2) + 1;
+                    const life = 1;
+                    const color = `hsl(280, 80%, 60%)`;
+                    spawnParticle(
+                        x + (Math.random()-0.5)*8,
+                        y + (Math.random()-0.5)*8,
+                        (Math.random()-0.5)*1.2, -Math.random()*1.5,
+                        size, life, color, 0.05, 0.035
+                    );
+                }
+            }
+
+            // Рисование и обновление частиц
+            function drawParticles() {
+                ctx.clearRect(0, 0, width, height);
+                
+                if(isMouseActive) {
+                    spawnTrail(mouseX, mouseY);
+                }
+
+                // Спавн искр с логотипа
+                logoParticleTimer++;
+                if(logoParticleTimer > 180) { // ~ каждые 3 секунды
+                    spawnLogoSparks();
+                    logoParticleTimer = 0;
+                }
+
+                for(let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += p.gravity;
+                    p.life -= p.decay;
+                    p.vx *= 0.99;
+
+                    if(p.life <= 0 || p.y > height + 50) {
+                        particles.splice(i, 1);
+                        continue;
+                    }
+
+                    ctx.globalAlpha = p.life * 0.9;
+                    ctx.fillStyle = p.color;
+
+                    // Рисуем различные формы частиц
+                    if (p.shape === 'circle') {
+                        ctx.beginPath();
+                        ctx.arc(Math.floor(p.x), Math.floor(p.y), Math.ceil(p.size / 2), 0, Math.PI * 2);
+                        ctx.fill();
+                    } else if (p.shape === 'clover') {
+                        ctx.fillRect(Math.floor(p.x) - 2, Math.floor(p.y) - 2, 2, 2);
+                        ctx.fillRect(Math.floor(p.x) + 2, Math.floor(p.y) - 2, 2, 2);
+                        ctx.fillRect(Math.floor(p.x) - 2, Math.floor(p.y) + 2, 2, 2);
+                        ctx.fillRect(Math.floor(p.x) + 2, Math.floor(p.y) + 2, 2, 2);
+                    } else {
+                        ctx.fillRect(Math.floor(p.x), Math.floor(p.y), Math.ceil(p.size), Math.ceil(p.size));
+                    }
+                }
+
+                requestAnimationFrame(drawParticles);
+            }
+
+            // Слушатели событий
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                isMouseActive = true;
+            });
+            document.addEventListener('mouseleave', () => { isMouseActive = false; });
+            
+            // Наведение на элементы и клики
+            document.addEventListener('DOMContentLoaded', () => {
+                const interactiveEls = document.querySelectorAll('.button, .team-member, .org-card, .social-link, .panel-toggle, .filter-btn, .author-chip');
+                const socialButtons = document.querySelectorAll('.social-button');
+                
+                interactiveEls.forEach(el => {
+                    el.addEventListener('mouseenter', (e) => {
+                        const rect = el.getBoundingClientRect();
+                        const cx = rect.left + rect.width/2;
+                        const cy = rect.top + rect.height/2;
+                        let burstColor = `hsl(${Math.random()*60 + 260}, 80%, 70%)`;
+                        let shape = 'square';
+                        
+                        // Специальные цвета и формы для игроков и соц-сетей
+                        if (el.matches('[data-name="CloverS_Kid"]')) {
+                            burstColor = '#55ff55';
+                            shape = 'clover';
+                        } else if (el.matches('[data-name="MR_0zdi"]')) {
+                            burstColor = '#a855f7';
+                            shape = 'circle';
+                        } else if (el.matches('.social-button')) {
+                            const text = el.textContent.trim().toLowerCase();
+                            if (text.includes('discord')) { burstColor = 'hsl(230, 70%, 60%)'; shape = 'circle'; }
+                            else if (text.includes('telegram')) { burstColor = 'hsl(200, 80%, 60%)'; shape = 'circle'; }
+                            else if (text.includes('youtube')) { burstColor = 'hsl(0, 80%, 60%)'; shape = 'circle'; }
+                        }
+                        
+                        window.spawnReactiveBurst(cx, cy, 12, burstColor, 3.5, shape);
+                    });
+                });
+
+                // Всплеск при клике на логотип
+                const logo = document.querySelector('.logo-container');
+                if (logo) {
+                    logo.addEventListener('click', (e) => {
+                        const rect = logo.getBoundingClientRect();
+                        window.spawnReactiveBurst(rect.left + rect.width/2, rect.top + rect.height/2, 15, 'hsl(280, 80%, 70%)', 5);
+                    });
+                }
+            });
+
+            drawParticles();
+        }
+
+        window.addEventListener('DOMContentLoaded', initReactiveParticles);
+    </script>
+
+    <!-- Эффект случайного глитча на CRT-экране -->
+    <script>
+        (function initCRTGlitch() {
+            function triggerCRTGlitch() {
+                const overlay = document.querySelector('.crt-overlay');
+                if (overlay) {
+                    overlay.classList.add('scanline-flicker');
+                    setTimeout(() => {
+                        overlay.classList.remove('scanline-flicker');
+                    }, 150);
+                }
+            }
+
+            setInterval(() => {
+                triggerCRTGlitch();
+            }, Math.random() * 5000 + 3000); // Интервал между 3 и 8 секундами
+        })();
+    </script>
+
+    <!-- Переменные фильтрации медиа -->
+    <script>
+        window.allMediaData = [];
+        window.currentMediaTypeFilter = 'all';
+        window.selectedAuthorFilter = null;
+
+        function setMediaTypeFilter(type, btnElem) {
+            window.currentMediaTypeFilter = type;
+            document.querySelectorAll('.media-type-filters .filter-btn').forEach(b => b.classList.remove('active'));
+            if (btnElem) btnElem.classList.add('active');
+            renderFilteredMedia();
+        }
+
+        function toggleAuthorFilter(authorName, chipElem) {
+            if (window.selectedAuthorFilter === authorName) {
+                window.selectedAuthorFilter = null;
+                chipElem.classList.remove('active');
+            } else {
+                window.selectedAuthorFilter = authorName;
+                document.querySelectorAll('.author-chip').forEach(c => c.classList.remove('active'));
+                chipElem.classList.add('active');
+            }
+            renderFilteredMedia();
+        }
+
+        function renderAuthorFilters(mediaItems) {
+            const container = document.getElementById('mediaAuthorFilters');
+            if (!container) return;
+
+            const authorsSet = new Set();
+            mediaItems.forEach(item => {
+                if (item.author) authorsSet.add(item.author);
+            });
+
+            const authorsList = Array.from(authorsSet).sort();
+
+            container.innerHTML = authorsList.map(author => {
+                const headSrc = `https://minotar.net/helm/${encodeURIComponent(author)}/30`;
+                return `
+                    <button class="author-chip ${window.selectedAuthorFilter === author ? 'active' : ''}" onclick="toggleAuthorFilter('${escapeJsAttribute(author)}', this)">
+                        <img src="${headSrc}" alt="${escapeHTML(author)}" onerror="this.src='https://minotar.net/helm/Steve/30'">
+                        <span>${escapeHTML(author)}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function renderFilteredMedia() {
+            const mediaGrid = document.getElementById('mediaGrid');
+            if (!mediaGrid) return;
+
+            let filtered = window.allMediaData;
+
+            if (window.currentMediaTypeFilter !== 'all') {
+                filtered = filtered.filter(item => item.type === window.currentMediaTypeFilter);
+            }
+
+            if (window.selectedAuthorFilter) {
+                filtered = filtered.filter(item => item.author === window.selectedAuthorFilter);
+            }
+
+            if (filtered.length === 0) {
+                mediaGrid.innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Контент по выбранному фильтру не найден.</p>';
+                return;
+            }
+
+            mediaGrid.innerHTML = filtered.map(item => {
+                let platform = (item.platform || '').toLowerCase();
+                if (!platform && item.url) {
+                    if (item.url.includes('twitch.tv')) {
+                        platform = 'twitch';
+                    } else if (item.url.includes('youtube.com') || item.url.includes('youtu.be')) {
+                        platform = 'youtube';
+                    }
+                }
+
+                let badgeText = 'ЮТУБ';
+                let badgeClass = 'video';
+
+                if (platform === 'twitch') {
+                    badgeText = 'ТВИЧ';
+                    badgeClass = 'twitch';
+                } else if (platform === 'youtube') {
+                    badgeClass = 'youtube';
+                    if (item.type === 'stream') {
+                        badgeText = 'ЮТУБ СТРИМ';
+                    } else if (item.type === 'short') {
+                        badgeText = 'ЮТУБ SHORTS';
+                    } else {
+                        badgeText = 'ЮТУБ';
+                    }
+                } else {
+                    if (item.type === 'stream') {
+                        badgeText = 'ТВИЧ';
+                        badgeClass = 'twitch';
+                    } else if (item.type === 'short') {
+                        badgeText = 'ЮТУБ SHORTS';
+                        badgeClass = 'youtube';
+                    }
+                }
+
+                const authorHeadSrc = `https://minotar.net/helm/${encodeURIComponent(item.author || 'Steve')}/24`;
+
+                return `
+                    <div class="media-card">
+                        <span class="media-type-badge ${badgeClass}">${badgeText}</span>
+                        <div class="media-thumb-wrapper">
+                            <img src="${escapeHTML(item.thumbnail || 'card.jpg')}" class="media-thumbnail" alt="${escapeHTML(item.title)}" onerror="this.src='card.jpg'">
+                        </div>
+                        <div class="media-info">
+                            <div class="media-title">${escapeHTML(item.title)}</div>
+                            <div class="media-meta">
+                                <div class="media-author-box">
+                                    <img src="${authorHeadSrc}" class="media-author-avatar" alt="${escapeHTML(item.author || '')}" onerror="this.src='https://minotar.net/helm/Steve/24'">
+                                    <span>${escapeHTML(item.author || '')}</span>
+                                </div>
+                                <span>${escapeHTML(item.date || '')}</span>
+                            </div>
+                        </div>
+                        <a href="${escapeHTML(item.url || '#')}" target="_blank" rel="noopener noreferrer" class="more-info-btn media-watch-btn">СМОТРЕТЬ</a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function loadMedia() {
+            try {
+                const response = await fetch('media.json?v=' + Date.now(), { cache: 'no-store' });
+                if (response.ok) {
+                    const data = await response.json();
+                    window.allMediaData = data.media || [];
+                    renderAuthorFilters(window.allMediaData);
+                    renderFilteredMedia();
+                } else {
+                    document.getElementById('mediaGrid').innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Медиа-контент пока отсутствует.</p>';
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки media.json:', e);
+                document.getElementById('mediaGrid').innerHTML = '<p style="color: #888; text-align: center; grid-column: 1/-1;">Медиа-контент пока отсутствует.</p>';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadMedia);
+    </script>
+
+    <!-- Скрипт открытия и смены цветовой темы -->
+    <script>
+        function hexToRgba(hex, alpha) {
+            if (!hex || !hex.startsWith('#')) return `rgba(255, 255, 255, ${alpha})`;
+            let r = parseInt(hex.slice(1, 3), 16);
+            let g = parseInt(hex.slice(3, 5), 16);
+            let b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
+        function toggleThemeSwitcher(event) {
+            if (event) event.stopPropagation();
+            const switcher = document.getElementById('themeSwitcher');
+            if (switcher) {
+                switcher.classList.toggle('show');
+            }
+        }
+
+        function setThemeColor(colorHex, swatchElement, event) {
+            if (event) event.stopPropagation();
+            
+            document.documentElement.style.setProperty('--accent-color', colorHex);
+            document.documentElement.style.setProperty('--accent-dim', hexToRgba(colorHex, 0.2));
+            document.documentElement.style.setProperty('--accent-hover', hexToRgba(colorHex, 0.35));
+            document.documentElement.style.setProperty('--accent-shadow', hexToRgba(colorHex, 0.5));
+
+            try {
+                localStorage.setItem('singularity_theme_color', colorHex);
+            } catch (e) { console.warn('LocalStorage error'); }
+
+            if (swatchElement) {
+                document.querySelectorAll('.theme-swatch').forEach(s => s.classList.remove('active'));
+                swatchElement.classList.add('active');
+            } else {
+                document.querySelectorAll('.theme-swatch').forEach(s => {
+                    if (s.getAttribute('onclick') && s.getAttribute('onclick').includes(colorHex)) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            }
+        }
+
+        (function loadSavedTheme() {
+            try {
+                const savedColor = localStorage.getItem('singularity_theme_color');
+                if (savedColor) setThemeColor(savedColor);
+            } catch (e) {}
+        })();
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.theme-switcher-container') && !e.target.closest('.logo-container')) {
+                const switcher = document.getElementById('themeSwitcher');
+                if (switcher) switcher.classList.remove('show');
+            }
+        });
+    </script>
+
+    <!-- Логика ретро-загрузчика -->
+    <script>
+        async function runRetroLoader() {
+            const loader = document.getElementById('retroLoader');
+            const bar = document.getElementById('loaderBar');
+            const percentText = document.getElementById('loaderPercent');
+            const statusText = document.getElementById('loaderStatus');
+
+            if (!loader || !bar) return;
+
+            let statusList = ['ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ...', 'ПОДКЛЮЧЕНИЕ К СЕРВЕРУ...', 'ЗАГРУЗКА ДАННЫХ...'];
+            let finalStatus = 'ГОТОВО!';
+
+            try {
+                const response = await fetch('loader.json?v=' + Date.now(), { cache: 'no-store' });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.statuses) statusList = data.statuses;
+                    if (data.finalStatus) finalStatus = data.finalStatus;
+                }
+            } catch (e) {}
+
+            const shuffledStatuses = [...statusList].sort(() => Math.random() - 0.5).slice(0, 3);
+            statusText.textContent = shuffledStatuses[0] || 'ЗАГРУЗКА...';
+
+            let progress = 0;
+            let phase = 0;
+
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 6) + 3;
+                if (progress > 100) progress = 100;
+
+                bar.style.width = progress + '%';
+                percentText.textContent = progress + '%';
+
+                if (progress >= 35 && phase === 0 && shuffledStatuses[1]) {
+                    phase = 1; statusText.textContent = shuffledStatuses[1];
+                }
+
+                if (progress >= 70 && phase === 1 && shuffledStatuses[2]) {
+                    phase = 2; statusText.textContent = shuffledStatuses[2];
+                }
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    statusText.textContent = finalStatus;
+                    setTimeout(() => {
+                        loader.classList.add('hidden');
+                        document.body.classList.add('loaded');
+                    }, 400);
+                }
+            }, 120);
+        }
+
+        window.addEventListener('DOMContentLoaded', runRetroLoader);
+    </script>
+
+    <!-- Анимация звезд -->
+    <script>
+        function initStarsCanvas() {
+            const canvas = document.getElementById('starsCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = false;
+
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const stars = [];
+            for (let i = 0; i < 110; i++) {
+                stars.push({
+                    x: Math.floor(Math.random() * width),
+                    y: Math.floor(Math.random() * height),
+                    size: Math.random() < 0.25 ? 4 : 2,
+                    alpha: Math.random(),
+                    speed: (Math.random() * 0.02 + 0.008)
+                });
+            }
+
+            const shootingStars = [];
+
+            function animateStars() {
+                ctx.clearRect(0, 0, width, height);
+
+                stars.forEach(star => {
+                    star.alpha += star.speed;
+                    if (star.alpha > 1 || star.alpha < 0.15) star.speed = -star.speed;
+                    const steppedAlpha = Math.floor(Math.abs(star.alpha) * 5) / 5;
+                    ctx.fillStyle = `rgba(255, 255, 255, ${steppedAlpha})`;
+                    ctx.fillRect(star.x, star.y, star.size, star.size);
+                });
+
+                if (Math.random() < 0.035 && shootingStars.length < 3) {
+                    shootingStars.push({
+                        x: Math.floor(Math.random() * width * 0.85),
+                        y: Math.floor(Math.random() * height * 0.4),
+                        length: Math.floor(Math.random() * 8 + 6),
+                        speed: Math.floor(Math.random() * 5 + 6),
+                        alpha: 1,
+                        decay: Math.random() * 0.025 + 0.015
+                    });
+                }
+
+                for (let i = shootingStars.length - 1; i >= 0; i--) {
+                    const s = shootingStars[i];
+                    for (let j = 0; j < s.length; j++) {
+                        const pixelX = Math.floor(s.x - j * 3);
+                        const pixelY = Math.floor(s.y - j * 3);
+                        const fade = Math.floor(((1 - j / s.length) * s.alpha) * 4) / 4;
+                        if (fade > 0) {
+                            ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
+                            ctx.fillRect(pixelX, pixelY, 3, 3);
+                        }
+                    }
+                    s.x += s.speed; s.y += s.speed; s.alpha -= s.decay;
+                    if (s.alpha <= 0 || s.x > width || s.y > height) shootingStars.splice(i, 1);
+                }
+
+                requestAnimationFrame(animateStars);
+            }
+
+            animateStars();
+        }
+
+        window.addEventListener('DOMContentLoaded', initStarsCanvas);
+    </script>
+
+    <!-- Курсор -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursor = document.querySelector('.cursor-logo');
+            const interactiveSelector = 'button, a, input, .team-member, .lore-season-header, .player-head, .panel-close, .social-button, .discord-gallery-item, .card-nav-btn, .theme-swatch, .more-info-btn, .refresh-btn, .logo-container, .author-chip, .filter-btn';
+
+            document.addEventListener('mouseover', (e) => {
+                if (e.target.closest(interactiveSelector)) cursor && cursor.classList.add('hovered');
+            });
+
+            document.addEventListener('mouseout', (e) => {
+                if (e.target.closest(interactiveSelector)) cursor && cursor.classList.remove('hovered');
+            });
+        });
+    </script>
+
+    <!-- Функции парсинга -->
+    <script>
+        function escapeHTML(str) {
+            return String(str || '').replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        function escapeJsAttribute(str) {
+            return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+        }
+
+        function parseMarkdownLinks(text) {
+            if (!text) return '';
+            let escaped = escapeHTML(text);
+        
+            escaped = escaped.replace(/\|\|([\s\S]+?)\|\|/g, function(match, content) {
+                return `<span class="discord-spoiler" onclick="this.classList.add('revealed')">${content}</span>`;
+            });
+        
+            escaped = escaped.replace(/&lt;:([a-zA-Z0-9_]+):[0-9]+&gt;/g, ':$1:');
+        
+            return escaped
+                .replace(/\n/g, '<br>')
+                .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #4ecdc4; text-decoration: underline;">$1</a>')
+                .replace(/__([\s\S]+?)__/g, '<strong>$1</strong>')
+                .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/_([\s\S]+?)_/g, '<em>$1</em>')
+                .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')
+                .replace(/~~([\s\S]+?)~~/g, '<del>$1</del>')
+                .replace(/`([^`]+)`/g, '<code style="background: rgba(255,255,255,0.1); padding: 2px 4px;">$1</code>');
+        }
+
+        /* Единая функция парсинга текста с МД-разметкой и заменой имен/организаций */
+        window.parseTextForUI = function(text) {
+            if (!text) return '';
+            // Сначала преобразуем Markdown в HTML
+            let html = parseMarkdownLinks(text);
+            // Затем заменяем имена организаций на ссылки
+            html = linkifyOrganizationNames(html);
+            // Затем заменяем имена игроков на ссылки
+            return linkifyMemberNames(html);
+        };
+
+        function openLightbox(url) {
+            const lightbox = document.getElementById('imageLightbox');
+            const lightboxImg = document.getElementById('lightboxImage');
+            if (lightbox && lightboxImg) {
+                lightboxImg.src = url;
+                lightbox.classList.add('show');
+            }
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('imageLightbox');
+            if (lightbox) {
+                lightbox.classList.remove('show');
+            }
+        }
+
+        // Функции загрузки (запускаются в DOMContentLoaded ниже)
+        async function loadNews() {
+            const listContainer = document.getElementById('newsItemsList');
+            listContainer.innerHTML = 'Загрузка новостей...';
+
+            const discordBadgeHTML = `<img src="discord-icon.png" class="discord-badge" title="Из Discord" alt="Discord">`;
+            let html = '';
+
+            try {
+                const resNews = await fetch('news.json?v=' + Date.now(), { cache: 'no-store' });
+                if (resNews.ok) {
+                    const dataNews = await resNews.json();
+                    const news = dataNews.news || [];
+                    news.forEach(item => {
+                        let mediaHTML = '';
+                        let imgs = [];
+                        if (item.imageUrl) imgs.push(item.imageUrl);
+                        if (item.image) imgs.push(item.image);
+                        if (item.images && Array.isArray(item.images)) imgs = imgs.concat(item.images);
+
+                        if (imgs.length > 0) {
+                            mediaHTML = `<div class="discord-gallery">${imgs.map(u => `<img src="${escapeHTML(u)}" class="discord-gallery-item" onclick="openLightbox('${escapeHTML(u)}')">`).join('')}</div>`;
+                        }
+
+                        html += `
+                            <div class="news-item">
+                                <div class="news-date">${escapeHTML(item.date || '')}</div>
+                                <p>${parseTextForUI(item.text || '')}</p>
+                                ${mediaHTML}
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) {
+                console.error('news.json err:', e);
+            }
+
+            try {
+                const resDiscord = await fetch('discord_news.json?v=' + Date.now(), { cache: 'no-store' });
+                if (resDiscord.ok) {
+                    const dataDiscord = await resDiscord.json();
+                    const messages = Array.isArray(dataDiscord) ? dataDiscord : (dataDiscord.news ? dataDiscord.news : [dataDiscord]);
+
+                    messages.forEach(msg => {
+                        let dateStr = msg.date || (msg.timestamp ? new Date(msg.timestamp).toLocaleDateString('ru-RU') : 'Discord');
+                        let mainContent = msg.content || msg.description || msg.text || '';
+
+                        let messageHTML = '';
+
+                        if (mainContent) {
+                            messageHTML += `<p style="margin-bottom: 0.8rem;">${parseTextForUI(mainContent)}</p>`;
+                        }
+
+                        if (msg.attachments && Array.isArray(msg.attachments) && msg.attachments.length > 0) {
+                            let attachGalleryHTML = `<div class="discord-gallery">`;
+                            msg.attachments.forEach(att => {
+                                const safeUrl = escapeHTML(att.url || att);
+                                attachGalleryHTML += `<img src="${safeUrl}" class="discord-gallery-item" onclick="openLightbox('${safeUrl}')" alt="attachment">`;
+                            });
+                            attachGalleryHTML += `</div>`;
+                            messageHTML += attachGalleryHTML;
+                        }
+
+                        if (msg.embeds && Array.isArray(msg.embeds)) {
+                            msg.embeds.forEach(embed => {
+                                let embedSection = '';
+
+                                if (embed.author && embed.author.name) {
+                                    embedSection += `<div class="event-title" style="margin-top: 0.6rem; color: var(--accent-color);">${parseTextForUI(embed.author.name)}</div>`;
+                                }
+                                if (embed.title) {
+                                    embedSection += `<div class="event-title" style="margin-top: 0.4rem;">${parseTextForUI(embed.title)}</div>`;
+                                }
+                                if (embed.description) {
+                                    embedSection += `<p style="margin-bottom: 0.6rem;">${parseTextForUI(embed.description)}</p>`;
+                                }
+
+                                if (embed.fields && Array.isArray(embed.fields)) {
+                                    embed.fields.forEach(f => {
+                                        const fieldName = f.name || f.rawName || '';
+                                        const fieldValue = f.value || f.rawValue || '';
+                                        embedSection += `
+                                            <div class="news-field">
+                                                ${fieldName ? `<div class="news-field-title">${parseTextForUI(fieldName)}</div>` : ''}
+                                                ${fieldValue ? `<div>${parseTextForUI(fieldValue)}</div>` : ''}
+                                            </div>
+                                        `;
+                                    });
+                                }
+
+                                let images = [];
+                                if (embed.images && Array.isArray(embed.images)) {
+                                    images = embed.images.map(img => typeof img === 'object' ? img.url : img).filter(Boolean);
+                                } else if (embed.image && embed.image.url) {
+                                    images.push(embed.image.url);
+                                } else if (embed.thumbnail && embed.thumbnail.url) {
+                                    images.push(embed.thumbnail.url);
+                                }
+
+                                if (images.length > 0) {
+                                    let galleryHTML = `<div class="discord-gallery">`;
+                                    images.forEach(imgUrl => {
+                                        const safeUrl = escapeHTML(imgUrl);
+                                        galleryHTML += `<img src="${safeUrl}" class="discord-gallery-item" onclick="openLightbox('${safeUrl}')" alt="preview">`;
+                                    });
+                                    galleryHTML += `</div>`;
+                                    embedSection += galleryHTML;
+                                }
+
+                                if (embed.footer && (embed.footer.text || typeof embed.footer === 'string')) {
+                                    const footerText = embed.footer.text || embed.footer;
+                                    embedSection += `<div style="font-size: 0.85rem; color: #888888; margin-top: 0.4rem;">${parseTextForUI(footerText)}</div>`;
+                                }
+
+                                messageHTML += embedSection;
+                            });
+                        }
+
+                        html += `
+                            <div class="news-item">
+                                ${discordBadgeHTML}
+                                <div class="news-date">${escapeHTML(dateStr)}</div>
+                                ${messageHTML}
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) {
+                console.error('discord_news.json err:', e);
+            }
+
+            listContainer.innerHTML = html || '<p style="color: #888;">Нет новостей.</p>';
+        }
+
+        async function loadLore() {
+            const listContainer = document.getElementById('loreItemsList');
+            try {
+                const response = await fetch('lore.json?v=' + Date.now(), { cache: 'no-store' });
+                const data = await response.json();
+                const seasons = data.seasons || [];
+
+                if (seasons.length === 0) {
+                    listContainer.innerHTML = '<p style="color: #888;">Лор пока не заполнен.</p>';
+                    return;
+                }
+
+                const hasExplicitCurrent = seasons.some(s => 
+                    s.status === 'current' || s.status === 'active' || s.isCurrent === true ||
+                    (s.title && (s.title.includes('СЛЕДУЮЩИЙ') || s.title.includes('АКТИВЕН') || s.title.includes('ТЕКУЩИЙ')))
+                );
+
+                listContainer.innerHTML = seasons.map((season, index) => {
+                    let isCurrent = false;
+                    if (season.status === 'current' || season.status === 'active' || season.isCurrent === true) {
+                        isCurrent = true;
+                    } else if (season.title && (season.title.includes('СЛЕДУЮЩИЙ') || season.title.includes('АКТИВЕН') || season.title.includes('ТЕКУЩИЙ'))) {
+                        isCurrent = true;
+                    } else if (!hasExplicitCurrent && index === seasons.length - 1) {
+                        isCurrent = true;
+                    }
+
+                    const cardClass = isCurrent ? 'lore-season current' : 'lore-season completed';
+                    const badgeText = isCurrent 
+                        ? (season.title && season.title.includes('СЛЕДУЮЩИЙ') ? '[ СЛЕДУЮЩИЙ СЕЗОН ]' : '[ АКТИВНЫЙ СЕЗОН ]') 
+                        : '[ ЗАВЕРШЕН ]';
+                    const badgeClass = isCurrent ? 'season-badge current-badge' : 'season-badge completed-badge';
+
+                    return `
+                        <div class="${cardClass}">
+                            <div class="lore-season-header" onclick="toggleLoreSeason(this)">
+                                <div class="lore-season-title-group">
+                                    <span class="${badgeClass}">${badgeText}</span>
+                                    <h4>${escapeHTML(season.title)}</h4>
+                                </div>
+                                <span class="lore-season-arrow">&gt;</span>
+                            </div>
+                            <div class="lore-season-content">
+                                ${(season.paragraphs || []).map(p => `<p>${parseTextForUI(p)}</p>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) { 
+                listContainer.innerHTML = '<p style="color: #ff6b6b;">Ошибка загрузки lore.json</p>'; 
+            }
+        }
+
+        async function loadEvents() {
+            const listContainer = document.getElementById('eventsItemsList');
+            try {
+                const response = await fetch('events.json?v=' + Date.now(), { cache: 'no-store' });
+                const data = await response.json();
+                listContainer.innerHTML = (data.events || []).map(event => `
+                    <div class="event-item">
+                        ${event.date ? `<div class="event-date">${escapeHTML(event.date)}</div>` : ''}
+                        ${event.title ? `<div class="event-title">${parseTextForUI(event.title)}</div>` : ''}
+                        <p>${parseTextForUI(event.text || '')}</p>
+                    </div>
+                `).join('') || '<p style="color: #888;">Нет активных событий.</p>';
+            } catch (error) { listContainer.innerHTML = '<p style="color: #ff6b6b;">Ошибка загрузки events.json</p>'; }
+        }
+    </script>
+
+    <!-- Основной интерфейс состава и загрузка файлов team.json, info.json, archive.json -->
     <script>
         function decimalToHex(decimalColor) {
             if (decimalColor === null || decimalColor === undefined) return null;
@@ -3522,12 +4454,10 @@
                 });
             });
         }
-    </script>
 
-    <!-- ============================================================
-         ПАСХАЛКА ДЛЯ СУНЬХУНЬСЯЯ (CXC) - СКРИПТ
-         ============================================================ -->
-    <script>
+        // ============================================================
+        // ПАСХАЛКА ДЛЯ СУНЬХУНЬСЯЯ (CXC) - СКРИПТ
+        // ============================================================
         window.triggerCXCEasterEgg = function() {
             const audio = document.getElementById('cxc-audio');
             if (audio) {
@@ -3763,7 +4693,6 @@
             }
         })();
     </script>
-
     <footer class="site-footer">
         <div class="footer-container">
             <div class="footer-content">
@@ -3779,7 +4708,6 @@
             </div>
         </div>
     </footer>
-
     <script>
         // 1. Нормализация цвета
         function normalizeColor(color) {
@@ -4609,148 +5537,68 @@
     </script>
     <script src="italian-translation.js"></script>
 
-    <!-- Модальное окно организации -->
-    <div id="org-details-modal" class="modal">
-        <div class="modal-overlay" onclick="closeOrgModal()"></div>
-        <div class="modal-content org-modal-content" id="org-modal-card">
-            <button class="modal-close" onclick="closeOrgModal()">✕</button>
-            
-            <div class="org-modal-header">
-                <img id="org-modal-icon" src="logo.png" alt="Logo" class="org-modal-logo">
-                <div class="org-modal-titles">
-                    <h2 id="org-modal-title">Название Организации</h2>
-                    <span id="org-modal-tagline" class="org-tagline">Слоган</span>
-                </div>
+<div id="org-details-modal" class="modal">
+    <div class="modal-overlay" onclick="closeOrgModal()"></div>
+    <div class="modal-content org-modal-content" id="org-modal-card">
+        <button class="modal-close" onclick="closeOrgModal()">✕</button>
+        
+        <div class="org-modal-header">
+            <img id="org-modal-icon" src="logo.png" alt="Logo" class="org-modal-logo">
+            <div class="org-modal-titles">
+                <h2 id="org-modal-title">Название Организации</h2>
+                <span id="org-modal-tagline" class="org-tagline">Слоган</span>
+            </div>
+        </div>
+
+        <div class="org-modal-body">
+            <div class="org-info-block">
+                <div class="org-info-label">Период активности:</div>
+                <div id="org-modal-seasons" class="org-info-value">—</div>
             </div>
 
-            <div class="org-modal-body">
-                <div class="org-info-block">
-                    <div class="org-info-label">Период активности:</div>
-                    <div id="org-modal-seasons" class="org-info-value">—</div>
-                </div>
+            <div class="org-info-block" id="org-former-names-block">
+                <div class="org-info-label">Прошлые названия:</div>
+                <div id="org-modal-former-names" class="org-info-value">—</div>
+            </div>
 
-                <div class="org-info-block" id="org-former-names-block">
-                    <div class="org-info-label">Прошлые названия:</div>
-                    <div id="org-modal-former-names" class="org-info-value">—</div>
-                </div>
+            <div class="org-info-block">
+                <div class="org-info-label">История и лор:</div>
+                <div id="org-modal-history" class="org-info-text">Описание истории отсутствует.</div>
+            </div>
 
-                <div class="org-info-block">
-                    <div class="org-info-label">История и лор:</div>
-                    <div id="org-modal-history" class="org-info-text">Описание истории отсутствует.</div>
-                </div>
+            <div class="org-info-block" id="org-notes-block">
+                <div class="org-info-label">Особые примечания:</div>
+                <div id="org-modal-notes" class="org-info-text">—</div>
+            </div>
 
-                <div class="org-info-block" id="org-notes-block">
-                    <div class="org-info-label">Особые примечания:</div>
-                    <div id="org-modal-notes" class="org-info-text">—</div>
-                </div>
-
-                <div class="org-info-block" id="org-modal-socials-block">
-                    <div class="org-info-label">Ссылки и ресурсы:</div>
-                    <div id="org-modal-socials" class="org-socials-list"></div>
-                </div>
+            <div class="org-info-block" id="org-modal-socials-block">
+                <div class="org-info-label">Ссылки и ресурсы:</div>
+                <div id="org-modal-socials" class="org-socials-list"></div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Микро-эффект параллакса при скролле -->
-    <script>
-        (function subtleScrollJitter() {
-            let lastScrollY = 0;
-            window.addEventListener('scroll', () => {
-                const delta = window.scrollY - lastScrollY;
-                if (Math.abs(delta) > 5) {
-                    const stars = document.getElementById('starsCanvas');
-                    if (stars) {
-                        stars.style.transition = 'transform 0.15s ease-out';
-                        stars.style.transform = `translateY(${delta * 0.03}px)`;
-                        clearTimeout(stars._scrollTimer);
-                        stars._scrollTimer = setTimeout(() => {
-                            stars.style.transform = 'translateY(0)';
-                        }, 250);
-                    }
-                }
-                lastScrollY = window.scrollY;
-            });
-        })();
-    </script>
-
-    <!-- ============================================================
-         НОВЫЕ ФУНКЦИИ ВИДЕОПЛЕЕРА
-         ============================================================ -->
-    <script>
-        /* Открытие видеоплеера */
-        function openVideoPlayer(url, title) {
-            if (!url) return;
-
-            // Определяем платформу
-            let embedUrl = null;
-            const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
-            const isTwitch = url.includes('twitch.tv');
-
-            if (isYouTube) {
-                // Извлекаем ID видео
-                let videoId = null;
-                const match = url.match(/(?:watch\?v=|youtu\.be\/|embed\/|shorts\/)([a-zA-Z0-9_-]{11})/);
-                if (match) {
-                    videoId = match[1];
-                    embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-                }
-            } else if (isTwitch) {
-                // Для Twitch извлекаем канал (если это ссылка на канал) или VOD
-                const channelMatch = url.match(/twitch\.tv\/([a-zA-Z0-9_]+)/);
-                if (channelMatch) {
-                    const channel = channelMatch[1];
-                    const parent = window.location.hostname || 'localhost';
-                    embedUrl = `https://player.twitch.tv/?channel=${channel}&parent=${parent}&muted=false&autoplay=true`;
-                } else {
-                    // Если это VOD
-                    const vodMatch = url.match(/twitch\.tv\/videos\/(\d+)/);
-                    if (vodMatch) {
-                        const parent = window.location.hostname || 'localhost';
-                        embedUrl = `https://player.twitch.tv/?video=${vodMatch[1]}&parent=${parent}&muted=false&autoplay=true`;
-                    }
+<!-- Микро-эффект параллакса при скролле -->
+<script>
+    (function subtleScrollJitter() {
+        let lastScrollY = 0;
+        window.addEventListener('scroll', () => {
+            const delta = window.scrollY - lastScrollY;
+            if (Math.abs(delta) > 5) {
+                const stars = document.getElementById('starsCanvas');
+                if (stars) {
+                    stars.style.transition = 'transform 0.15s ease-out';
+                    stars.style.transform = `translateY(${delta * 0.03}px)`;
+                    clearTimeout(stars._scrollTimer);
+                    stars._scrollTimer = setTimeout(() => {
+                        stars.style.transform = 'translateY(0)';
+                    }, 250);
                 }
             }
-
-            if (!embedUrl) return;
-
-            const modal = document.getElementById('videoPlayerModal');
-            const frame = document.getElementById('videoPlayerFrame');
-            const titleEl = document.getElementById('videoPlayerTitle');
-
-            if (!modal || !frame) return;
-
-            frame.src = embedUrl;
-            titleEl.textContent = title || '';
-            modal.classList.add('active');
-            modal.style.display = 'flex';
-
-            // Добавляем частицы (если функция есть)
-            if (typeof window.spawnReactiveBurst === 'function') {
-                window.spawnReactiveBurst(window.innerWidth / 2, window.innerHeight / 2, 15, null, 4);
-            }
-        }
-
-        function closeVideoPlayer() {
-            const modal = document.getElementById('videoPlayerModal');
-            if (modal) {
-                modal.classList.remove('active');
-                modal.style.display = 'none';
-                // Останавливаем видео
-                const frame = document.getElementById('videoPlayerFrame');
-                if (frame) frame.src = '';
-            }
-        }
-
-        // Закрытие по Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeVideoPlayer();
-                // Также закрываем другие модалки, если нужно
-                closePlayerModal();
-                closeOrgModal();
-            }
+            lastScrollY = window.scrollY;
         });
-    </script>
+    })();
+</script>
 </body>
 </html>
