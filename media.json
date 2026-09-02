@@ -82,6 +82,15 @@
       "date": "2026-08-12"
     },
     {
+      "title": "старт второго сезона синги",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=nUVV00H_NxI",
+      "thumbnail": "https://i.ytimg.com/vi/nUVV00H_NxI/maxresdefault.jpg",
+      "date": "2026-08-02"
+    },
+    {
       "title": "информация Singularity| что будет на новом сезоне сервера?",
       "author": "maloi221",
       "platform": "youtube",
@@ -89,6 +98,15 @@
       "url": "https://www.youtube.com/watch?v=LTSV1dYcsrY",
       "thumbnail": "https://i.ytimg.com/vi/LTSV1dYcsrY/maxresdefault.jpg",
       "date": "2026-07-29"
+    },
+    {
+      "title": "Demonstration of Griffin Corp.'s \"Test #2\" technologies",
+      "author": "MR_0zdi",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=LBojI6SQyVs",
+      "thumbnail": "https://i.ytimg.com/vi/LBojI6SQyVs/maxresdefault.jpg",
+      "date": "2026-07-17"
     },
     {
       "title": "Singularity, второй день на сервере| сервер для контент-мейкеров",
@@ -152,6 +170,42 @@
       "url": "https://www.youtube.com/watch?v=MZKfLfQrMnc",
       "thumbnail": "https://i.ytimg.com/vi/MZKfLfQrMnc/maxresdefault.jpg",
       "date": "2026-07-07"
+    },
+    {
+      "title": "SL 1 - ИГРАЕМ НА СИНГУЛЯРИТИ В ВР - продолжение",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=3ISIQBUn6HI",
+      "thumbnail": "https://i.ytimg.com/vi/3ISIQBUn6HI/maxresdefault.jpg",
+      "date": "2026-07-02"
+    },
+    {
+      "title": "SL 1 - ИГРАЕМ НА СИНГУЛЯРИТИ В ВР",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=GkM0pQd4jRw",
+      "thumbnail": "https://i.ytimg.com/vi/GkM0pQd4jRw/maxresdefault.jpg",
+      "date": "2026-07-02"
+    },
+    {
+      "title": "Тест",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=9cHLiSCziKw",
+      "thumbnail": "https://i.ytimg.com/vi/9cHLiSCziKw/hqdefault.jpg",
+      "date": "2026-07-02"
+    },
+    {
+      "title": "Тест",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=i6M9CqmTggA",
+      "thumbnail": "https://i.ytimg.com/vi/i6M9CqmTggA/maxresdefault_live.jpg",
+      "date": "2026-07-01"
     },
     {
       "title": "УНГА БУНГА 🍌",
@@ -253,6 +307,15 @@
       "date": "2026-06-10"
     },
     {
+      "title": "ТЫ НУЖЕН НАМ! | Приватный сервер Minecraft 1.21.11",
+      "author": "LainBerg",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=UT7iZD87lqM",
+      "thumbnail": "https://i.ytimg.com/vi/UT7iZD87lqM/maxresdefault.jpg",
+      "date": "2026-06-05"
+    },
+    {
       "title": "Майнкрафт сериал| Шрамы детства, 1 серия",
       "author": "maloi221",
       "platform": "youtube",
@@ -289,15 +352,6 @@
       "date": "2026-04-30"
     },
     {
-      "title": "Be Okay",
-      "author": "LainBerg",
-      "platform": "youtube",
-      "type": "video",
-      "url": "https://www.youtube.com/watch?v=LmhL4e9VbKc",
-      "thumbnail": "https://i.ytimg.com/vi/LmhL4e9VbKc/maxresdefault.jpg",
-      "date": "2026-04-06"
-    },
-    {
       "title": "FineWorld #реки #minecraft #сервер",
       "author": "maloi221",
       "platform": "youtube",
@@ -307,130 +361,139 @@
       "date": "2026-04-03"
     },
     {
-      "title": "Be Okay (Preview)",
+      "title": "Поспали..",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=_CiPr6OEWaM",
+      "thumbnail": "https://i.ytimg.com/vi/_CiPr6OEWaM/maxresdefault.jpg",
+      "date": "2026-03-28"
+    },
+    {
+      "title": "Погладил..",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=ZraH8AIKW48",
+      "thumbnail": "https://i.ytimg.com/vi/ZraH8AIKW48/maxresdefault.jpg",
+      "date": "2026-03-28"
+    },
+    {
+      "title": "Блять..",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=W-rICfiYoQ0",
+      "thumbnail": "https://i.ytimg.com/vi/W-rICfiYoQ0/maxresdefault.jpg",
+      "date": "2026-03-28"
+    },
+    {
+      "title": "Это изменит твой Minecraft навсегда #майнкрафт #моды",
       "author": "LainBerg",
       "platform": "youtube",
       "type": "short",
-      "url": "https://www.youtube.com/watch?v=n48GZAD0RVs",
-      "thumbnail": "https://i.ytimg.com/vi/n48GZAD0RVs/maxresdefault.jpg",
-      "date": "2026-03-30"
+      "url": "https://www.youtube.com/watch?v=NtL8g0dskPI",
+      "thumbnail": "https://i.ytimg.com/vi/NtL8g0dskPI/maxresdefault.jpg",
+      "date": "2026-02-23"
     },
     {
-      "title": "BELIEVE IN LOVE",
+      "title": "КАК МЫ УЗНАЛИ О ВЕЛИКОМ ЗАРАЖЕНИИ ДЕРЕВА В МАЙНКРАФТЕ SINGULARITY",
       "author": "LainBerg",
       "platform": "youtube",
       "type": "video",
-      "url": "https://www.youtube.com/watch?v=18dp-pprY7Y",
-      "thumbnail": "https://i.ytimg.com/vi/18dp-pprY7Y/maxresdefault.jpg",
-      "date": "2026-01-31"
+      "url": "https://www.youtube.com/watch?v=-OcdN0UrfxY",
+      "thumbnail": "https://i.ytimg.com/vi/-OcdN0UrfxY/maxresdefault.jpg",
+      "date": "2026-02-11"
     },
     {
-      "title": "LITTLE WING",
+      "title": "Мемы из Майнкрафта майнкрафт #memes #мем #алмазы #вирусное #втренде  #майнкрафт #жиза #лол",
+      "author": "LainBerg",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=51CDIzBYJFg",
+      "thumbnail": "https://i.ytimg.com/vi/51CDIzBYJFg/maxresdefault.jpg",
+      "date": "2025-12-31"
+    },
+    {
+      "title": "Мемы из Майнкрафта майнкрафт #memes #мем #алмазы #вирусное #втренде  #майнкрафт #жиза #лол",
+      "author": "LainBerg",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=1WX0j6VDQVQ",
+      "thumbnail": "https://i.ytimg.com/vi/1WX0j6VDQVQ/maxresdefault.jpg",
+      "date": "2025-12-30"
+    },
+    {
+      "title": "Игроки, которым нет равных #майнкрафт #memes #мем #алмазы #вирусное #втренде  #майнкрафт #жиза #лол",
+      "author": "LainBerg",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=ghqVEA1Hzwk",
+      "thumbnail": "https://i.ytimg.com/vi/ghqVEA1Hzwk/maxresdefault.jpg",
+      "date": "2025-12-29"
+    },
+    {
+      "title": "НОВОГОДНИЙ НАБОР НА СЕРВЕР SINGULARITY",
+      "author": "LainBerg",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=clNEWwxS7rc",
+      "thumbnail": "https://i.ytimg.com/vi/clNEWwxS7rc/maxresdefault.jpg",
+      "date": "2025-12-29"
+    },
+    {
+      "title": "МОНСТР СРЕДИ НАС В МАЙНКРАФТЕ",
       "author": "LainBerg",
       "platform": "youtube",
       "type": "video",
-      "url": "https://www.youtube.com/watch?v=CYdmxQI9za0",
-      "thumbnail": "https://i.ytimg.com/vi/CYdmxQI9za0/maxresdefault.jpg",
-      "date": "2026-01-31"
+      "url": "https://www.youtube.com/watch?v=ioeqS18bx8Y",
+      "thumbnail": "https://i.ytimg.com/vi/ioeqS18bx8Y/maxresdefault.jpg",
+      "date": "2025-12-26"
     },
     {
-      "title": "恋をしようよYeah!Yeah!",
+      "title": "2000 алмазов долга: не повторяйте моих ошибок",
       "author": "LainBerg",
       "platform": "youtube",
       "type": "video",
-      "url": "https://www.youtube.com/watch?v=O1TuZTTqzIQ",
-      "thumbnail": "https://i.ytimg.com/vi/O1TuZTTqzIQ/maxresdefault.jpg",
-      "date": "2026-01-31"
+      "url": "https://www.youtube.com/watch?v=zLyMAQf9p80",
+      "thumbnail": "https://i.ytimg.com/vi/zLyMAQf9p80/maxresdefault.jpg",
+      "date": "2025-12-12"
     },
     {
-      "title": "10セントの小宇宙(ゆめ)",
+      "title": "Я УМЕР и ПОТЕРЯЛ ВСЁ на сервере Minecraft! 😱",
       "author": "LainBerg",
       "platform": "youtube",
       "type": "video",
-      "url": "https://www.youtube.com/watch?v=bTh283V-6Ek",
-      "thumbnail": "https://i.ytimg.com/vi/bTh283V-6Ek/maxresdefault.jpg",
-      "date": "2026-01-31"
+      "url": "https://www.youtube.com/watch?v=-nkw2D_JbE0",
+      "thumbnail": "https://i.ytimg.com/vi/-nkw2D_JbE0/maxresdefault.jpg",
+      "date": "2025-11-17"
     },
     {
-      "title": "JUMP",
+      "title": "MINECRAFT ИНТЕРВЬЮ НА ПРИВАТНОМ СЕРВЕРЕ",
       "author": "LainBerg",
       "platform": "youtube",
       "type": "video",
-      "url": "https://www.youtube.com/watch?v=kDRw3a_CPJM",
-      "thumbnail": "https://i.ytimg.com/vi/kDRw3a_CPJM/maxresdefault.jpg",
-      "date": "2026-01-31"
+      "url": "https://www.youtube.com/watch?v=FaKbiZV77XY",
+      "thumbnail": "https://i.ytimg.com/vi/FaKbiZV77XY/maxresdefault.jpg",
+      "date": "2025-11-09"
     },
     {
-      "title": "ブギウギSunshine '98",
+      "title": "💥Я ВЕРНУЛСЯ И СТЕР ЕГО С ЛИЦА СЕРВЕРА! 💥 Месть за убийства | Minecraft",
       "author": "LainBerg",
       "platform": "youtube",
       "type": "video",
-      "url": "https://www.youtube.com/watch?v=ma0oU5eXJFU",
-      "thumbnail": "https://i.ytimg.com/vi/ma0oU5eXJFU/maxresdefault.jpg",
-      "date": "2026-01-31"
+      "url": "https://www.youtube.com/watch?v=9gTeXI_lXw0",
+      "thumbnail": "https://i.ytimg.com/vi/9gTeXI_lXw0/hqdefault.jpg",
+      "date": "2025-11-04"
     },
     {
-      "title": "EASY GO EASY LOVE",
+      "title": "КОГДА У ДРУГА БОЛЬШОЙ ПИНГ  #minecraft #reels  #майнкрафт#rofls #memes #shorts #пинг #ping #майн",
       "author": "LainBerg",
       "platform": "youtube",
-      "type": "video",
-      "url": "https://www.youtube.com/watch?v=zDqNG5nEPI4",
-      "thumbnail": "https://i.ytimg.com/vi/zDqNG5nEPI4/maxresdefault.jpg",
-      "date": "2026-01-31"
-    },
-    {
-      "title": "風",
-      "author": "LainBerg",
-      "platform": "youtube",
-      "type": "video",
-      "url": "https://www.youtube.com/watch?v=74CF156i6sk",
-      "thumbnail": "https://i.ytimg.com/vi/74CF156i6sk/maxresdefault.jpg",
-      "date": "2026-01-31"
-    },
-    {
-      "title": "Over The Top",
-      "author": "LainBerg",
-      "platform": "youtube",
-      "type": "video",
-      "url": "https://www.youtube.com/watch?v=7MioXGYroMU",
-      "thumbnail": "https://i.ytimg.com/vi/7MioXGYroMU/maxresdefault.jpg",
-      "date": "2026-01-31"
-    },
-    {
-      "title": "YOU BELONG TO ME",
-      "author": "LainBerg",
-      "platform": "youtube",
-      "type": "video",
-      "url": "https://www.youtube.com/watch?v=P9F7KeIIWhk",
-      "thumbnail": "https://i.ytimg.com/vi/P9F7KeIIWhk/maxresdefault.jpg",
-      "date": "2026-01-31"
-    },
-    {
-      "title": "今すぐKiss Me～Magical Dreamer～I MISS YOU～胸さわぎのAfter...",
-      "author": "LainBerg",
-      "platform": "youtube",
-      "type": "video",
-      "url": "https://www.youtube.com/watch?v=S-5OugwS2PQ",
-      "thumbnail": "https://i.ytimg.com/vi/S-5OugwS2PQ/maxresdefault.jpg",
-      "date": "2026-01-31"
-    },
-    {
-      "title": "GAMBAらなくちゃね",
-      "author": "LainBerg",
-      "platform": "youtube",
-      "type": "video",
-      "url": "https://www.youtube.com/watch?v=TCkYWcrDkMU",
-      "thumbnail": "https://i.ytimg.com/vi/TCkYWcrDkMU/maxresdefault.jpg",
-      "date": "2026-01-31"
-    },
-    {
-      "title": "星に願いを",
-      "author": "LainBerg",
-      "platform": "youtube",
-      "type": "video",
-      "url": "https://www.youtube.com/watch?v=cH5pZcDX5fQ",
-      "thumbnail": "https://i.ytimg.com/vi/cH5pZcDX5fQ/maxresdefault.jpg",
-      "date": "2026-01-31"
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=OAqdNGYYEvk",
+      "thumbnail": "https://i.ytimg.com/vi/OAqdNGYYEvk/maxresdefault.jpg",
+      "date": "2025-11-02"
     },
     {
       "title": "типичная целевая Тохи#t2x2",
@@ -523,6 +586,51 @@
       "date": "2025-10-18"
     },
     {
+      "title": "МАЙНКРАФТ СКИНЫ #minecraft #майнкрафт #скиныдлямайнкрафт #shorts #reels #скины",
+      "author": "LainBerg",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=rb-xvLm_--w",
+      "thumbnail": "https://i.ytimg.com/vi/rb-xvLm_--w/maxresdefault.jpg",
+      "date": "2025-10-15"
+    },
+    {
+      "title": "ГОЛОСОВАНИЕ #minecraft #телеграм #голосование #набор #сингулярити",
+      "author": "LainBerg",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=Joj1DP9EJgw",
+      "thumbnail": "https://i.ytimg.com/vi/Joj1DP9EJgw/maxresdefault.jpg",
+      "date": "2025-10-12"
+    },
+    {
+      "title": "MXZI - accelerada #minecraft #phonk #short #shorts",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=M5EipMuVLjI",
+      "thumbnail": "https://i.ytimg.com/vi/M5EipMuVLjI/maxresdefault.jpg",
+      "date": "2025-09-11"
+    },
+    {
+      "title": "Сингулярити старт первого сезона!",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=6tlckKYZ_BE",
+      "thumbnail": "https://i.ytimg.com/vi/6tlckKYZ_BE/maxresdefault.jpg",
+      "date": "2025-08-16"
+    },
+    {
+      "title": "EURO TRACK SIMULATOR 2 ft. Sanya",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=EY27pKVs-4s",
+      "thumbnail": "https://i.ytimg.com/vi/EY27pKVs-4s/maxresdefault.jpg",
+      "date": "2025-08-08"
+    },
+    {
       "title": "Minecraft Stream,но я просто выживаю...",
       "author": "CHOMeQ418",
       "platform": "youtube",
@@ -532,6 +640,15 @@
       "date": "2025-07-21"
     },
     {
+      "title": "Играем в seizo ft. timeless & devz",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=7dBz5rqka-I",
+      "thumbnail": "https://i.ytimg.com/vi/7dBz5rqka-I/maxresdefault.jpg",
+      "date": "2025-07-18"
+    },
+    {
       "title": "Майкрафт стрим ,но я играю с версии с которой я начал играть в майкрафт!!!",
       "author": "CHOMeQ418",
       "platform": "youtube",
@@ -539,6 +656,24 @@
       "url": "https://www.youtube.com/watch?v=ulhosmBhcpo",
       "thumbnail": "https://i.ytimg.com/vi/ulhosmBhcpo/hqdefault.jpg",
       "date": "2025-07-09"
+    },
+    {
+      "title": "Пишу головного ассистента - Целеста #jarvis #voiceassistant",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "short",
+      "url": "https://www.youtube.com/watch?v=Cg7tOZANrZw",
+      "thumbnail": "https://i.ytimg.com/vi/Cg7tOZANrZw/maxresdefault.jpg",
+      "date": "2025-06-17"
+    },
+    {
+      "title": "Создаем магазин в  supermarket togheter! -- ft Themday, Sanya",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "stream",
+      "url": "https://www.youtube.com/watch?v=SiYiYp_bN5k",
+      "thumbnail": "https://i.ytimg.com/vi/SiYiYp_bN5k/hqdefault.jpg",
+      "date": "2025-06-03"
     },
     {
       "title": "Useless adult",
@@ -557,6 +692,15 @@
       "url": "https://www.youtube.com/watch?v=Rd4Oh3GAiOE",
       "thumbnail": "https://i.ytimg.com/vi/Rd4Oh3GAiOE/hqdefault.jpg",
       "date": "2025-05-30"
+    },
+    {
+      "title": "SOTAREKO MIX - 40+ min",
+      "author": "Folksy13_dll",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=ejbh50fzZL4",
+      "thumbnail": "https://i.ytimg.com/vi/ejbh50fzZL4/maxresdefault.jpg",
+      "date": "2025-05-25"
     },
     {
       "title": "mibombo",
