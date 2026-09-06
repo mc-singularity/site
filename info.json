@@ -40,11 +40,11 @@
 "skinUrl": null
 },
 {
-"name": "ArtAzurp",
+"name": "_ArtAzurp",
 "status": "Retired",
 "history": "",
 "personalLore": "",
-"seasonsPeriod": "SL: Запуск — Настоящее время",
+"seasonsPeriod": "SL: Запуск — SL: 2 сезон",
 "leaveReason": null,
 "skinUrl": null
 },
@@ -202,7 +202,7 @@
 "status": "retired",
 "history": "",
 "personalLore": "",
-"seasonsPeriod": "SL: Запуск — SL: Запуск",
+"seasonsPeriod": "SL: Запуск — SL: 1 сезон",
 "leaveReason": "?",
 "skinUrl": null
 },
