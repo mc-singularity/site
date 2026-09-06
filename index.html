@@ -2654,6 +2654,16 @@
             color: #d9d4d4;
             transform: scale(1.2);
         }
+        .requirements-content-wrapper.expanded {
+    grid-template-rows: 1fr;
+}
+.requirements-content-wrapper.expanded .requirements-content-inner {
+    opacity: 1;
+    transform: translateY(0);
+}
+.requirements-toggle-btn.expanded .requirements-arrow {
+    transform: rotate(180deg);
+}
     </style>
 </head>
 <body>
@@ -2791,6 +2801,30 @@
                 <div class="team-members hidden" id="teamMembers">
                     <!-- Загружается из team.json -->
                 </div>
+                <div class="requirements-toggle-wrapper" style="margin-top: 2rem;">
+    <button class="requirements-toggle-btn button" onclick="toggleRequirements()" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.5rem; margin: 0 auto; font-size: 1.3rem;">
+        <span>Требования к заявке</span>
+        <span class="requirements-arrow" style="transition: transform 0.3s ease; display: inline-block;">▼</span>
+    </button>
+
+    <div class="requirements-content-wrapper" id="requirementsContentWrapper" style="display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease; background: rgba(0,0,0,0.85); border: 0.25rem solid var(--accent-color); border-top: none; box-shadow: 0 8px 25px rgba(0,0,0,0.9);">
+        <div class="requirements-content-inner" style="overflow: hidden; opacity: 0; transform: translateY(-0.4rem); transition: opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s; padding: 0 1.5rem 1.5rem 1.5rem;">
+            <p style="font-size: 1.1rem; color: #ddd; text-align: center; margin: 1rem 0 1.2rem 0;">Чтобы присоединиться к нашему сообществу, подайте заявку в Discord. Требования к заявке:</p>
+            <ul style="list-style: none; padding: 0; color: #eee; font-size: 1rem; line-height: 1.8; max-width: 700px; margin: 0 auto;">
+                <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Наличие лицензии.</li>
+                <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Возраст - от 15 лет.</li>
+                <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Расскажите о себе в текстовой форме или видео-заявке.</li>
+                <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Видео-заявки рассматриваются с бóльшим приоритетом. Длительность видео должна быть от 30 секунд, проявите себя!</li>
+                <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Важно! Мы набираем только тех, кто собирается делать контент.</li>
+                <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">Есть некоторые сложности, без них никак!</li>
+                <li style="padding: 0.3rem 0; font-style: italic; color: #aaa;">Послесловие: На нашем сервере мы ищем не только коллег, но и друзей, так что последнее наше требование — будьте адекватны.</li>
+            </ul>
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <a href="https://discord.gg/fnzjSWf88p" target="_blank" class="button" style="font-size: 1.3rem; padding: 0.7rem 2.5rem;">ПОДАТЬ ЗАЯВКУ</a>
+            </div>
+        </div>
+    </div>
+</div>
 
                 <!-- Блок Архива ушедших игроков -->
                 <div class="archive-container hidden" id="archiveContainer">
@@ -2810,22 +2844,6 @@
                     <div id="organizations-container" class="team-grid" style="display: none; margin-top: 1rem;"></div>
                 </div>
             </div>
-            <div class="requirements-block" style="margin-top: 2rem; background: rgba(0,0,0,0.85); border: 0.25rem solid var(--accent-color); padding: 1.5rem; box-shadow: 0 8px 25px rgba(0,0,0,0.9);">
-    <h3 style="font-size: 1.8rem; color: var(--accent-color); text-shadow: 0.1875rem 0.1875rem 0 #000; text-align: center; border-bottom: 0.1875rem solid var(--accent-color); padding-bottom: 0.7rem; margin-bottom: 1rem; font-family: 'uvKits', sans-serif;">КАК ПОПАСТЬ К НАМ?</h3>
-    <p style="font-size: 1.1rem; color: #ddd; text-align: center; margin-bottom: 1.2rem;">Чтобы присоединиться к нашему сообществу, подайте заявку в Discord. Требования к заявке:</p>
-    <ul style="list-style: none; padding: 0; color: #eee; font-size: 1rem; line-height: 1.8; max-width: 700px; margin: 0 auto;">
-        <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Наличие лицензии.</li>
-        <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Возраст - от 15 лет.</li>
-        <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Расскажите о себе в текстовой форме или видео-заявке.</li>
-        <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Видео-заявки рассматриваются с бóльшим приоритетом. Длительность видео должна быть от 30 секунд, проявите себя!</li>
-        <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Важно! Мы набираем только тех, кто собирается делать контент.</li>
-        <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">Есть некоторые сложности, без них никак!</li>
-        <li style="padding: 0.3rem 0; font-style: italic; color: #aaa;">Послесловие: На нашем сервере мы ищем не только коллег, но и друзей, так что последнее наше требование — будьте адекватны.</li>
-    </ul>
-    <div style="text-align: center; margin-top: 1.5rem;">
-        <a href="https://discord.gg/fnzjSWf88p" target="_blank" class="button" style="font-size: 1.3rem; padding: 0.7rem 2.5rem;">ПОДАТЬ ЗАЯВКУ</a>
-    </div>
-</div>
 
             <!-- Блок Медиа с фильтрацией (Видео, Стримы, Shorts, Авторы) -->
             <div class="section media-section reveal-item">
@@ -5602,7 +5620,7 @@
         window.addEventListener('scroll', () => {
             const delta = window.scrollY - lastScrollY;
             if (Math.abs(delta) > 5) {
-                const stars = document.getElementById('starsCanvas');
+                const stars = document.getElementById('starsCanvas');р
                 if (stars) {
                     stars.style.transition = 'transform 0.15s ease-out';
                     stars.style.transform = `translateY(${delta * 0.03}px)`;
@@ -5616,5 +5634,15 @@
         });
     })();
 </script>
+<script>
+function toggleRequirements() {
+    const wrapper = document.getElementById('requirementsContentWrapper');
+    const btn = document.querySelector('.requirements-toggle-btn');
+    if (!wrapper) return;
+    wrapper.classList.toggle('expanded');
+    btn.classList.toggle('expanded');
+}
+</script>
+</body>
 </body>
 </html>
