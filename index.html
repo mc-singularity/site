@@ -3154,6 +3154,12 @@
     <!-- Реактивные частицы (переработаны и расширены) -->
     <script>
         function initReactiveParticles() {
+                // Если устройство сенсорное — ничего не делаем
+    if (('ontouchstart' in window) || (navigator.maxTouchPoints > 0)) {
+        // Заглушка, чтобы не было ошибок при вызовах
+        window.spawnReactiveBurst = function() {};
+        return;
+    }
             const canvas = document.getElementById('cursorParticles');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
