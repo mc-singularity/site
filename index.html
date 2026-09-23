@@ -1637,6 +1637,7 @@
             max-width: 32rem;
             max-height: 88vh;
             overflow-y: auto;
+            overscroll-behavior: contain;
             padding: 1.5rem;
             position: relative;
             animation: slideDown 0.25s ease-out;
@@ -1672,27 +1673,6 @@
         .modal-close-btn:hover {
             background: #ffffff;
             color: #000000;
-        }
-
-        .modal-close, #org-details-modal .modal-close {
-            position: absolute !important;
-            top: 12px !important;
-            right: 12px !important;
-            width: 32px !important;
-            height: 32px !important;
-            background: rgba(0, 0, 0, 0.6) !important;
-            border: 1px solid #ffffff !important;
-            color: #ffffff !important;
-            font-size: 1.2rem !important;
-            font-weight: bold !important;
-            cursor: pointer !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            z-index: 10 !important;
-            transition: all 0.2s ease !important;
-            line-height: 1 !important;
-            padding: 0 !important;
         }
 
         .modal-close:hover {
@@ -2347,90 +2327,6 @@
             .dot-separator {
                 display: none;
             }
-        }
-
-        /* Контейнер модального окна организации */
-        .org-modal-content {
-            position: relative !important;
-            z-index: 2 !important;
-            max-width: 32rem; /* Сделано идентичным окну игрока */
-            width: 100%;
-            max-height: 88vh;
-            background: #080808;
-            border: 2px solid #ffffff;
-            box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.9);
-            padding: 24px;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .org-modal-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--modal-accent-color, var(--accent-color));
-            margin-bottom: 16px;
-        }
-
-        .org-modal-logo {
-            width: 56px;
-            height: 56px;
-            object-fit: contain;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 4px;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .org-modal-titles h2 {
-            font-size: 1.5rem;
-            margin-bottom: 4px;
-        }
-
-        .org-modal-body {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            max-height: 65vh;
-            overflow-y: auto;
-            padding-right: 6px;
-        }
-
-        .org-info-block {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 14px;
-        }
-
-        .org-info-label {
-            font-size: 0.85rem;
-            color: #aaa;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-
-        .org-info-value {
-            font-size: 0.95rem;
-            color: #ffffff;
-        }
-
-        .org-info-text {
-            font-size: 0.9rem;
-            line-height: 1.5;
-            color: #ddd;
-            white-space: pre-line;
-        }
-
-        .org-former-tag {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 2px 8px;
-            font-size: 0.8rem;
-            margin-right: 6px;
-            margin-top: 4px;
         }
 
         .org-details-btn {
@@ -4331,13 +4227,8 @@
                 window.spawnReactiveBurst(window.innerWidth / 2, window.innerHeight / 2, 20, hexColor, 6);
             }
 
+            document.body.style.overflow = 'hidden';
             document.getElementById('playerInfoModal').classList.add('show');
-        }
-
-        function closePlayerModal(e) {
-            if (!e || e.target.id === 'playerInfoModal' || e.target.classList.contains('modal-close-btn')) {
-                document.getElementById('playerInfoModal').classList.remove('show');
-            }
         }
 
         loadTeamMembers();
@@ -5136,9 +5027,9 @@
         window.toggleOrgCard = toggleOrgCard;
 
         // 3. Открытие модального окна организации ("Подробнее")
+         // 3. Открытие модального окна организации ("Подробнее")
         function openOrgModal(orgId) {
             if (!window.allOrganizations) return;
-            // Если передали название вместо ID, пытаемся найти
             let org = window.allOrganizations.find(o => String(o.id).toLowerCase() === String(orgId).toLowerCase());
             if (!org) {
                 org = window.allOrganizations.find(o => o.name.toLowerCase() === String(orgId).toLowerCase());
@@ -5150,25 +5041,28 @@
             if (!modal || !card) return;
 
             const orgColor = normalizeColor(org.color);
-            card.style.borderColor = orgColor;
-            card.style.boxShadow = `6px 6px 0px ${orgColor}44`;
-            
-            // Устанавливаем цвет скроллбара для модалки
+
+            // Устанавливаем цвет обводки и теней для модалки (как у игрока)
             card.style.setProperty('--modal-accent-color', orgColor);
             card.style.setProperty('--modal-accent-shadow', hexToRgba(orgColor, 0.4));
 
-            const iconEl = document.getElementById('org-modal-icon');
-            if (iconEl) iconEl.src = org.iconUrl || 'logo.png';
-            
+            // Заголовок
             const titleEl = document.getElementById('org-modal-title');
             if (titleEl) {
                 titleEl.textContent = org.name || 'Организация';
                 titleEl.style.color = orgColor;
             }
 
+            // Иконка и слоган
+            const iconEl = document.getElementById('org-modal-icon');
+            if (iconEl) {
+                iconEl.src = org.iconUrl || 'logo.png';
+                iconEl.style.borderColor = orgColor;
+            }
             const taglineEl = document.getElementById('org-modal-tagline');
-            if (taglineEl) taglineEl.textContent = org.tagline || '';
+            if (taglineEl) taglineEl.textContent = org.tagline || '—';
 
+            // Период
             const seasonsEl = document.getElementById('org-modal-seasons');
             if (seasonsEl) seasonsEl.textContent = org.seasonsPeriod || org.period || 'SL: 1 Сезон — Настоящее время';
 
@@ -5177,15 +5071,16 @@
             const formerEl = document.getElementById('org-modal-former-names');
             if (org.formerNames && Array.isArray(org.formerNames) && org.formerNames.length > 0) {
                 if (formerBlock) formerBlock.style.display = 'block';
-                if (formerEl) formerEl.innerHTML = org.formerNames.map(name => `<span class="org-former-tag" style="border-color: ${orgColor}66;">${parseTextForUI(name)}</span>`).join('');
+                if (formerEl) formerEl.innerHTML = org.formerNames.map(name => `<span class="org-former-tag" style="border-color: ${orgColor}66; padding: 2px 6px; display: inline-block; margin: 2px;">${parseTextForUI(name)}</span>`).join('');
             } else if (formerBlock) {
                 formerBlock.style.display = 'none';
             }
 
-            // История и примечания с авто-ссылками имён
+            // История и лор
             const historyEl = document.getElementById('org-modal-history');
             if (historyEl) historyEl.innerHTML = parseTextForUI(org.history || org.description || 'История данной организации ещё формируется.');
 
+            // Особые примечания
             const notesBlock = document.getElementById('org-notes-block');
             const notesEl = document.getElementById('org-modal-notes');
             if (org.specialNotes) {
@@ -5202,16 +5097,7 @@
                 if (socialsBlock) socialsBlock.style.display = 'block';
                 if (socialsContainer) {
                     socialsContainer.innerHTML = org.socials.map(s => `
-                        <a href="${s.url}" target="_blank" rel="noopener" style="
-                            font-size: 0.8rem; 
-                            color: #ffffff; 
-                            text-decoration: none; 
-                            background: rgba(0,0,0,0.6); 
-                            padding: 4px 10px; 
-                            border: 1px solid ${orgColor};
-                            display: inline-block;
-                            margin-right: 6px;
-                            margin-top: 4px;">
+                        <a href="${s.url}" target="_blank" rel="noopener" class="social-link" style="border-color: ${orgColor}; color: ${orgColor};">
                             ${s.platform || 'Ссылка'}
                         </a>
                     `).join('');
@@ -5220,10 +5106,13 @@
                 socialsBlock.style.display = 'none';
             }
 
-            // Рендер состава организации (всех ролей и участников) внутри модалки с личными цветами
-            let rolesHTML = '';
+            // Состав организации
+            const membersBlock = document.getElementById('org-modal-members-block');
+            const membersListEl = document.getElementById('org-modal-members-list');
+
             if (org.roles && org.roles.length > 0) {
-                rolesHTML = org.roles.map(roleObj => {
+                if (membersBlock) membersBlock.style.display = 'block';
+                let rolesHTML = org.roles.map(roleObj => {
                     const membersList = (roleObj.members || []).map(memberName => {
                         const player = window.allMembersList.find(m => m.name.toLowerCase() === memberName.toLowerCase());
                         const playerColor = player ? normalizeColor(player.color) : orgColor;
@@ -5231,53 +5120,48 @@
                     }).join(' ');
                     return `
                         <div style="margin-bottom: 6px;">
-                            <strong style="color: ${orgColor};">${roleObj.name || 'Роль'}:</strong>
+                            <strong style="color: ${orgColor}; font-size: 0.85rem;">${roleObj.name || 'Роль'}:</strong>
                             <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px;">
                                 ${membersList || '<span style="color:#777;">Нет участников</span>'}
                             </div>
                         </div>
                     `;
                 }).join('');
-            }
-
-            // Вставляем блок состав в тело модалки перед ссылками
-            const socialsBlockElement = document.getElementById('org-modal-socials-block');
-            if (rolesHTML) {
-                const membersContainer = document.getElementById('org-modal-members-block') || (() => {
-                    const newBlock = document.createElement('div');
-                    newBlock.id = 'org-modal-members-block';
-                    newBlock.className = 'org-info-block';
-                    newBlock.innerHTML = `<div class="org-info-label">Состав организации:</div><div class="org-info-value" id="org-modal-members-list"></div>`;
-                    if (socialsBlockElement && socialsBlockElement.parentNode) {
-                        socialsBlockElement.parentNode.insertBefore(newBlock, socialsBlockElement);
-                    } else {
-                        document.querySelector('.org-modal-body').appendChild(newBlock);
-                    }
-                    return newBlock;
-                })();
-                
-                const listContainer = membersContainer.querySelector('#org-modal-members-list');
-                if (listContainer) listContainer.innerHTML = rolesHTML;
+                if (membersListEl) membersListEl.innerHTML = rolesHTML;
             } else {
-                const oldBlock = document.getElementById('org-modal-members-block');
-                if (oldBlock) oldBlock.remove();
+                const leader = org.leader;
+                const members = org.members || [];
+                if (leader || members.length > 0) {
+                    if (membersBlock) membersBlock.style.display = 'block';
+                    let html = '';
+                    if (leader) html += `<div><strong style="color: ${orgColor};">Лидер:</strong> <span class="member-tag" style="border:1px solid ${orgColor}; color:${orgColor}; cursor:pointer;" onclick="closeOrgModal(); setTimeout(() => { openModalByName('${leader}'); }, 300);">${leader}</span></div>`;
+                    if (members.length > 0) html += `<div style="margin-top:4px;"><strong style="color: ${orgColor};">Участники:</strong> ${members.map(m => `<span class="member-tag" style="border:1px solid #666; cursor:pointer;" onclick="closeOrgModal(); setTimeout(() => { openModalByName('${m}'); }, 300);">${m}</span>`).join(' ')}</div>`;
+                    if (membersListEl) membersListEl.innerHTML = html;
+                } else {
+                    if (membersBlock) membersBlock.style.display = 'none';
+                }
             }
 
-            // Добавляем всплеск частиц при открытии модалки организации
+            // Всплеск частиц при открытии
             if (typeof window.spawnReactiveBurst === 'function') {
                 window.spawnReactiveBurst(window.innerWidth / 2, window.innerHeight / 2, 20, orgColor, 6);
             }
 
+                        // Блокируем скролл body, чтобы скроллилась только модалка
+            document.body.style.overflow = 'hidden';
+
             modal.classList.add('active');
             modal.style.display = 'flex';
+            
         }
         window.openOrgModal = openOrgModal;
-
-        function closeOrgModal() {
+        function closeOrgModal(e) {
+            if (e && e.target.closest('.player-info-box')) return;
             const modal = document.getElementById('org-details-modal');
             if (modal) {
                 modal.classList.remove('active');
                 modal.style.display = 'none';
+                document.body.style.overflow = '';
             }
         }
         window.closeOrgModal = closeOrgModal;
@@ -5608,48 +5492,50 @@
     </script>
     <script src="italian-translation.js"></script>
 
-<div id="org-details-modal" class="modal">
+<!-- Модальное окно организации (приведено к стилю окна игрока) -->
+<div id="org-details-modal" class="modal" onclick="closeOrgModal(event)">
     <div class="modal-overlay" onclick="closeOrgModal()"></div>
-    <div class="modal-content org-modal-content" id="org-modal-card">
-        <button class="modal-close" onclick="closeOrgModal()">✕</button>
-        
-        <div class="org-modal-header">
-            <img id="org-modal-icon" src="logo.png" alt="Logo" class="org-modal-logo">
-            <div class="org-modal-titles">
-                <h2 id="org-modal-title">Название Организации</h2>
-                <span id="org-modal-tagline" class="org-tagline">Слоган</span>
-            </div>
+    <div class="player-info-box" id="org-modal-card" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <div class="modal-title" id="org-modal-title">Название Организации</div>
+            <button class="modal-close-btn" onclick="closeOrgModal()">&times;</button>
         </div>
-
-        <div class="org-modal-body">
-            <div class="org-info-block">
-                <div class="org-info-label">Период активности:</div>
-                <div id="org-modal-seasons" class="org-info-value">—</div>
+        <div class="modal-body">
+            <div class="skin-section" style="justify-content: flex-start; gap: 1.5rem;">
+                <img id="org-modal-icon" src="logo.png" alt="Logo" style="width: 5rem; height: 5rem; object-fit: contain; border: 2px solid var(--modal-accent-color); background: #111;">
+                <div class="player-meta">
+                    <div class="meta-item"><span class="meta-label">Слоган:</span> <span id="org-modal-tagline">—</span></div>
+                    <div class="meta-item"><span class="meta-label">Период:</span> <span id="org-modal-seasons">—</span></div>
+                </div>
             </div>
 
-            <div class="org-info-block" id="org-former-names-block">
-                <div class="org-info-label">Прошлые названия:</div>
-                <div id="org-modal-former-names" class="org-info-value">—</div>
+            <div>
+                <div class="meta-label" style="margin-bottom:0.4rem;">ИСТОРИЯ И ЛОР:</div>
+                <div class="lore-box" id="org-modal-history">Описание истории отсутствует.</div>
             </div>
 
-            <div class="org-info-block">
-                <div class="org-info-label">История и лор:</div>
-                <div id="org-modal-history" class="org-info-text">Описание истории отсутствует.</div>
+            <div id="org-former-names-block" style="display: none;">
+                <div class="meta-label" style="margin-bottom:0.4rem;">ПРОШЛЫЕ НАЗВАНИЯ:</div>
+                <div class="lore-box" id="org-modal-former-names"></div>
             </div>
 
-            <div class="org-info-block" id="org-notes-block">
-                <div class="org-info-label">Особые примечания:</div>
-                <div id="org-modal-notes" class="org-info-text">—</div>
+            <div id="org-modal-members-block" style="display: none;">
+                <div class="meta-label" style="margin-bottom:0.4rem;">СОСТАВ ОРГАНИЗАЦИИ:</div>
+                <div class="lore-box" id="org-modal-members-list" style="font-size: 0.9rem;"></div>
             </div>
 
-            <div class="org-info-block" id="org-modal-socials-block">
-                <div class="org-info-label">Ссылки и ресурсы:</div>
-                <div id="org-modal-socials" class="org-socials-list"></div>
+            <div id="org-notes-block" style="display: none;">
+                <div class="meta-label" style="margin-bottom:0.4rem;">ОСОБЫЕ ПРИМЕЧАНИЯ:</div>
+                <div class="lore-box" id="org-modal-notes"></div>
+            </div>
+
+            <div id="org-modal-socials-block" style="display: none;">
+                <div class="meta-label" style="margin-bottom:0.4rem;">ССЫЛКИ И РЕСУРСЫ:</div>
+                <div class="team-member-socials" id="org-modal-socials"></div>
             </div>
         </div>
     </div>
 </div>
-
 <!-- Микро-эффект параллакса при скролле -->
 <script>
     (function subtleScrollJitter() {
