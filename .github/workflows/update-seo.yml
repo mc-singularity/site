@@ -1,0 +1,49 @@
+name: Update SEO Block
+
+on:
+  push:
+    branches: [main]
+    # Запускаем только если изменились исходные JSON-файлы
+    paths:
+      - 'team.json'
+      - 'organizations.json'
+      - 'tools/generate-seo.js'
+      - '.github/workflows/update-seo.yml'
+  # Позволяет запустить workflow вручную из вкладки Actions
+  workflow_dispatch:
+
+# Разрешения на запись содержимого репозитория (для коммита)
+permissions:
+  contents: write
+
+jobs:
+  update-seo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Важно: используем специальный токен, чтобы push от имени Actions
+          # не блокировался защитой ветки
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run SEO generator
+        run: node tools/generate-seo.js
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          # Проверяем, есть ли изменения, чтобы избежать ошибки
+          if git diff --staged --quiet; then
+            echo "Нет изменений в index.html — коммит не нужен."
+          else
+            git commit -m "auto: update SEO block from team.json / organizations.json"
+            git push
+          fi
