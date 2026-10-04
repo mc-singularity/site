@@ -277,7 +277,6 @@
             background: #cccccc;
         }
 
-        /* Динамическая обводка и цвет скроллбара (подстраивается под текущую тему или модалку) */
         .modal.active ::-webkit-scrollbar-thumb,
         .player-info-modal.show ::-webkit-scrollbar-thumb,
         .side-panel.open ::-webkit-scrollbar-thumb {
@@ -310,7 +309,6 @@
             transition: opacity 0.15s steps(2, end), transform 0.15s steps(2, end);
         }
 
-        /* Глитч-эффект для CRT оверлея */
         @keyframes scanlineFlicker {
             0% { opacity: 0.4; transform: translate(0, 0); }
             20% { opacity: 0.2; transform: translate(1px, -1px); }
@@ -322,7 +320,6 @@
             animation: scanlineFlicker 0.15s steps(2, end);
         }
 
-        /* Звездное небо */
         #starsCanvas {
             position: fixed;
             top: 0;
@@ -334,7 +331,6 @@
             image-rendering: pixelated;
         }
 
-        /* Плавающие фоновые частицы */
         #amethystParticles {
             position: fixed;
             top: 0;
@@ -346,7 +342,6 @@
             image-rendering: pixelated;
         }
 
-        /* Реактивные частицы (следы, логотип, модалки, наведение) */
         #cursorParticles {
             position: fixed;
             top: 0;
@@ -354,7 +349,7 @@
             width: 100vw;
             height: 100vh;
             pointer-events: none !important;
-            z-index: 50 !important; /* Поверх контента, но под панелями */
+            z-index: 50 !important;
             image-rendering: pixelated;
         }
 
@@ -426,7 +421,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            z-index: -2; /* Самый нижний слой */
+            z-index: -2;
             transition: transform 0.1s ease-out, background-image 0.5s ease;
             will-change: transform;
             image-rendering: pixelated;
@@ -456,7 +451,6 @@
             position: relative;
         }
 
-        /* Кликабельный контейнер логотипа */
         .logo-container {
             display: flex;
             flex-direction: column;
@@ -469,7 +463,6 @@
             margin: 0 auto;
         }
 
-        /* Подсказка ПК при наведении на логотип */
         .logo-container .tooltip {
             position: absolute;
             top: -2.2rem;
@@ -493,7 +486,6 @@
             visibility: visible;
         }
 
-        /* Неброская постоянная подсказка для телефона */
         .mobile-logo-hint {
             display: none;
             font-size: 0.75rem;
@@ -623,7 +615,6 @@
             text-shadow: -2px 0 #ff0055, 2px 0 #00ffff, 0.1875rem 0.1875rem 0 #000000;
         }
 
-        /* Стили фильтров секции Медиа */
         .media-filter-bar {
             display: flex;
             flex-direction: column;
@@ -691,7 +682,6 @@
             border-color: #000000;
         }
 
-        /* Стили карточек Медиа */
         .media-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
@@ -816,7 +806,6 @@
             text-decoration: none;
         }
 
-        /* Строгое центрирование соц-кнопок */
         .social-buttons {
             display: flex;
             justify-content: center;
@@ -1027,7 +1016,6 @@
             position: relative;
         }
 
-        /* Стиль для ЗАВЕРШЕННЫХ сезонов */
         .lore-season.completed {
             background: rgba(15, 15, 20, 0.7);
             border: 0.125rem dashed #666666;
@@ -1040,7 +1028,6 @@
             border-style: solid;
         }
 
-        /* Стиль для ТЕКУЩЕГО / СЛЕДУЮЩЕГО сезона */
         .lore-season.current {
             background: rgba(0, 0, 0, 0.85);
             border: 0.1875rem solid var(--accent-color);
@@ -1095,14 +1082,12 @@
             line-height: 1;
         }
 
-        /* Бейдж ЗАВЕРШЕН */
         .season-badge.completed-badge {
             background: #111111;
             border: 1px solid #666666;
             color: #888888;
         }
 
-        /* Бейдж ТЕКУЩИЙ / СЛЕДУЮЩИЙ */
         .season-badge.current-badge {
             background: #000000;
             border: 1px solid #55ff55;
@@ -1159,7 +1144,6 @@
             margin-bottom: 0;
         }
 
-        /* Централизованное окно онлайна */
         .status-corner {
             display: flex;
             flex-direction: column;
@@ -1304,7 +1288,6 @@
             100% { box-shadow: 0 0 12px var(--accent-shadow); }
         }
 
-        /* Сломанный ретро-стиль для игроков Архива */
         .archive-members .team-member {
             background: rgba(15, 15, 20, 0.85);
             border: 0.1875rem dashed #666666;
@@ -1410,10 +1393,9 @@
             text-align: left;
         }
 
-        /* ИСПРАВЛЕНИЕ: Мобильная версия развернутой карточки */
         @media (max-width: 48rem) {
             .team-member.expanded.has-card-member {
-                grid-column: 1 / -1; /* Растягиваем на всю ширину */
+                grid-column: 1 / -1;
             }
             .team-member.expanded.has-card-member .team-member-info {
                 flex-direction: column;
@@ -1742,17 +1724,15 @@
             color: var(--modal-accent-color, var(--accent-color));
             font-weight: bold;
         }
-
         /* ============================================================
            ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
            ============================================================ */
 
-        /* Стили для итальянской кнопки восстановления (переработаны под дизайн сайта) */
         .italian-restore-btn:not(.show) {
-            display: none !important; /* Принудительно скрыта по умолчанию */
+            display: none !important;
         }
         .italian-restore-btn.show {
-            display: inline-flex !important; /* Показываем через добавление класса */
+            display: inline-flex !important;
         }
         .italian-restore-btn {
             margin: 1.5rem auto 0 auto;
@@ -1775,7 +1755,6 @@
             box-shadow: 0 0 15px var(--accent-shadow);
         }
 
-        /* Пасхалка: Уроборос → Змейка, поедающая сайт */
         #ouroboros-snake-overlay {
             position: fixed;
             inset: 0;
@@ -1889,7 +1868,6 @@
             line-height: 1;
         }
 
-        /* Универсальные кнопки, динамически меняющие цвет темы (главный уровень) */
         .button {
             background: var(--accent-color);
             color: #000000;
@@ -1917,7 +1895,6 @@
             100% { transform: translate(0, 0); }
         }
 
-        /* Исправленная кнопка "Обновить" в блоке статуса сервера */
         .refresh-btn {
             background: var(--accent-color);
             color: #000000;
@@ -1956,7 +1933,7 @@
         }
 
         /* ============================================================
-           МЕДИА-ЗАПРОСЫ И АДАПТИВНОСТЬ ДЛЯ ЛЮБЫХ ЭКРАНОВ
+           МЕДИА-ЗАПРОСЫ И АДАПТИВНОСТЬ
            ============================================================ */
         @media (max-width: 48rem) {
             .container { padding: 0 0.9375rem; }
@@ -2074,7 +2051,6 @@
             object-fit: contain;
         }
 
-        /* Ретро Глитч-эффект для скрытых спойлеров */
         .discord-spoiler {
             background-color: #1a1a1a;
             color: transparent;
@@ -2117,7 +2093,6 @@
             animation: none;
         }
 
-        /* Карточки организаций в стиле карточек игроков */
         .org-card {
             background: rgba(0, 0, 0, 0.9);
             border: 3px solid var(--accent-color);
@@ -2159,7 +2134,6 @@
             color: var(--accent-color);
         }
 
-        /* Плавное раскрытие содержимого карточки организации (без JS-измерения высоты) */
         .org-body-wrapper {
             display: grid;
             grid-template-rows: 0fr;
@@ -2235,11 +2209,10 @@
             color: #ffff55;
         }
 
-        /* Стили для футера */
         .site-footer {
             width: 100%;
             background: rgba(10, 10, 14, 0.95);
-            border-top: 2px solid rgba(158, 96, 96, 0.5); /* Акцентный цвет Суньхуньсяй (#9e6060) */
+            border-top: 2px solid rgba(158, 96, 96, 0.5);
             padding: 30px 20px;
             margin-top: 60px;
             position: relative;
@@ -2349,11 +2322,10 @@
             }
         }
 
-        /* Контейнер модального окна организации */
         .org-modal-content {
             position: relative !important;
             z-index: 2 !important;
-            max-width: 32rem; /* Сделано идентичным окну игрока */
+            max-width: 32rem;
             width: 100%;
             max-height: 88vh;
             background: #080808;
@@ -2449,7 +2421,6 @@
             color: #000000;
         }
 
-        /* Ссылка-никнейм с головой игрока - БЕЗ ОБВОДКИ */
         .player-mention-link {
             background: transparent;
             border: none; 
@@ -2477,7 +2448,6 @@
             image-rendering: pixelated;
         }
 
-        /* Ссылка на организацию - БЕЗ ОБВОДКИ */
         .org-mention-link {
             background: transparent;
             border: none; 
@@ -2505,8 +2475,7 @@
             image-rendering: pixelated;
             border: 1px solid #333;
         }
-        
-        /* Эффект зернистой бумаги (поверх всего) */
+
         .grain-overlay {
             position: fixed;
             top: 0;
@@ -2520,12 +2489,10 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        /* Дополнительный эффект свечения текста при наведении */
         .section:hover p, .section:hover h3, .section:hover h4 {
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.02);
         }
 
-        /* Пульсация футера */
         .singularity-highlight {
             animation: footerPulse 5s infinite alternate;
         }
@@ -2534,7 +2501,6 @@
             100% { text-shadow: 0 0 8px rgba(255, 255, 255, 0.8); }
         }
 
-        /* Реактивные частицы при клике (старые) */
         .click-particle {
             position: fixed;
             pointer-events: none !important;
@@ -2655,46 +2621,47 @@
             transform: scale(1.2);
         }
 
-/* ===== СТИЛИ ДЛЯ СВОРАЧИВАЕМОГО БЛОКА ТРЕБОВАНИЙ ===== */
-.requirements-content-wrapper {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 0.4s ease, border 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-    background: transparent; /* прозрачный фон по умолчанию */
-    border: 0 solid transparent; /* без рамки */
-    box-shadow: none;
-}
+        /* ===== СТИЛИ ДЛЯ СВОРАЧИВАЕМОГО БЛОКА ТРЕБОВАНИЙ ===== */
+        .requirements-content-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s ease, border 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            background: transparent;
+            border: 0 solid transparent;
+            box-shadow: none;
+        }
 
-.requirements-content-wrapper.expanded {
-    grid-template-rows: 1fr;
-    background: rgba(0, 0, 0, 0.85);
-    border: 0.25rem solid var(--accent-color);
-    border-top: none;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9);
-}
+        .requirements-content-wrapper.expanded {
+            grid-template-rows: 1fr;
+            background: rgba(0, 0, 0, 0.85);
+            border: 0.25rem solid var(--accent-color);
+            border-top: none;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9);
+        }
 
-.requirements-content-wrapper .requirements-content-inner {
-    overflow: hidden;
-    padding: 0 1.5rem; /* отступы только по бокам, сверху/снизу 0 */
-    opacity: 0;
-    transform: translateY(-0.4rem);
-    transition: opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s, padding 0.3s ease;
-}
+        .requirements-content-wrapper .requirements-content-inner {
+            overflow: hidden;
+            padding: 0 1.5rem;
+            opacity: 0;
+            transform: translateY(-0.4rem);
+            transition: opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s, padding 0.3s ease;
+        }
 
-.requirements-content-wrapper.expanded .requirements-content-inner {
-    padding: 1.5rem; /* полноценные отступы, когда раскрыто */
-    opacity: 1;
-    transform: translateY(0);
-}
+        .requirements-content-wrapper.expanded .requirements-content-inner {
+            padding: 1.5rem;
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-.requirements-toggle-btn.expanded .requirements-arrow {
-    transform: rotate(180deg);
-}
+        .requirements-toggle-btn.expanded .requirements-arrow {
+            transform: rotate(180deg);
+        }
 
-.requirements-toggle-btn .requirements-arrow {
-    transition: transform 0.3s ease;
-    display: inline-block;
-}
+        .requirements-toggle-btn .requirements-arrow {
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
     </style>
 </head>
 <body>
@@ -2813,29 +2780,18 @@
                     <a href="https://www.youtube.com/@Singularity_Mine" target="_blank" class="button social-button reveal-sub">YOUTUBE</a>
                 </div>
                 <div class="requirements-toggle-wrapper" style="margin-top: 2rem;">
-    <button class="requirements-toggle-btn button" onclick="toggleRequirements()" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.5rem; margin: 0 auto; font-size: 1.3rem;">
-        <span>Требования к заявке</span>
-        <span class="requirements-arrow">V</span>
-    </button>
+                    <button class="requirements-toggle-btn button" onclick="toggleRequirements()" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.5rem; margin: 0 auto; font-size: 1.3rem;">
+                        <span>Требования к заявке</span>
+                        <span class="requirements-arrow">V</span>
+                    </button>
 
-    <div class="requirements-content-wrapper" id="requirementsContentWrapper">
-        <div class="requirements-content-inner">
-            <p style="font-size: 1.1rem; color: #ddd; text-align: center; margin: 0 0 1.2rem 0;">Чтобы присоединиться к нашему сообществу, подайте заявку в Discord. Требования к заявке:</p>
-            <ul style="list-style: none; padding: 0; color: #eee; font-size: 1rem; line-height: 1.8; max-width: 700px; margin: 0 auto;">
-                <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Наличие лицензии.</li>
-                <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Возраст - от 15 лет.</li>
-                <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Расскажите о себе в текстовой форме или видео-заявке.</li>
-                <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Видео-заявки рассматриваются с бóльшим приоритетом. Длительность видео должна быть от 30 секунд, проявите себя!</li>
-                <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● Важно! Мы набираем только тех, кто собирается делать контент.</li>
-                <li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">Есть некоторые сложности, без них никак!</li>
-                <li style="padding: 0.3rem 0; font-style: italic; color: #aaa;">Послесловие: На нашем сервере мы ищем не только коллег, но и друзей, так что последнее наше требование — будьте адекватны.</li>
-            </ul>
-            <div style="text-align: center; margin-top: 1.5rem;">
-                <a href="https://discord.gg/fnzjSWf88p" target="_blank" class="button" style="font-size: 1.3rem; padding: 0.7rem 2.5rem;">ПОДАТЬ ЗАЯВКУ</a>
-            </div>
-        </div>
-    </div>
-</div>
+                    <div class="requirements-content-wrapper" id="requirementsContentWrapper">
+                        <div class="requirements-content-inner" id="requirementsContentInner">
+                            <!-- Содержимое загружается из requirements.json -->
+                            <p style="color: #888; text-align: center;">Загрузка требований...</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="section team-section reveal-item">
@@ -2866,7 +2822,6 @@
                 </div>
 
                 <div class="orgs-wrapper" style="margin-top: 2rem; border-top: 2px dashed var(--accent-color); padding-top: 1rem;">
-                    <!-- УНИФИЦИРОВАННАЯ КНОПКА (используем класс .button) -->
                     <button id="toggle-orgs-btn" class="button" onclick="toggleOrganizations()" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.5rem; margin: 0 auto;">
                         <span>Организации (нажмите, чтобы развернуть)</span>
                         <span id="orgs-arrow" class="section-toggle-arrow">v</span>
@@ -2876,12 +2831,11 @@
                 </div>
             </div>
 
-            <!-- Блок Медиа с фильтрацией (Видео, Стримы, Shorts, Авторы) -->
+            <!-- Блок Медиа с фильтрацией -->
             <div class="section media-section reveal-item">
                 <h2 class="section-title">МЕДИА</h2>
                 
                 <div class="media-filter-bar">
-                    <!-- Фильтр по типам контента -->
                     <div class="media-type-filters">
                         <button class="filter-btn active" data-type="all" onclick="setMediaTypeFilter('all', this)">ВСЕ</button>
                         <button class="filter-btn" data-type="video" onclick="setMediaTypeFilter('video', this)">ВИДЕО</button>
@@ -2889,7 +2843,6 @@
                         <button class="filter-btn" data-type="short" onclick="setMediaTypeFilter('short', this)">SHORTS</button>
                     </div>
 
-                    <!-- Фильтр по авторам с пиксельной головой игрока -->
                     <div class="media-author-filters" id="mediaAuthorFilters">
                         <!-- Динамически заполняется авторами -->
                     </div>
@@ -2908,7 +2861,7 @@
         </footer>
     </div>
 
-    <!-- Модальное окно поп-ап подробной информации об игроке -->
+    <!-- Модальное окно подробной информации об игроке -->
     <div class="player-info-modal" id="playerInfoModal" onclick="closePlayerModal(event)">
         <div class="player-info-box" id="playerInfoBox" onclick="event.stopPropagation()">
             <div class="modal-header">
@@ -2916,20 +2869,17 @@
                 <button class="modal-close-btn" onclick="closePlayerModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="skin-section">
-                    <img id="modalSkinImg" class="skin-preview-img" src="" alt="Skin" onerror="this.src='https://minotar.net/armor/bust/Steve'">
-                    <div class="player-meta">
-                        <div class="meta-item"><span class="meta-label">Роль:</span> <span id="modalRole">-</span></div>
-                        <div class="meta-item"><span class="meta-label">Имя:</span> <span id="modalRealName">-</span></div>
-                        <div class="meta-item"><span class="meta-label">История:</span> <span id="modalHistory">-</span></div>
-                        <div class="meta-item"><span class="meta-label">Период игры:</span> <span id="modalSeasons">-</span></div>
-                        <div class="meta-item" id="modalLeaveReasonRow" style="display:none;"><span class="meta-label">Причина ухода:</span> <span id="modalLeaveReason">-</span></div>
+                <div class="skin-section" style="flex-direction: column; align-items: stretch;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 1.2rem; flex-wrap: wrap;">
+                        <img id="modalSkinImg" class="skin-preview-img" src="" alt="Skin" onerror="this.src='https://minotar.net/armor/bust/Steve'">
+                        <div class="player-meta">
+                            <div class="meta-item"><span class="meta-label">Роль:</span> <span id="modalRole">-</span></div>
+                            <div class="meta-item"><span class="meta-label">Имя:</span> <span id="modalRealName">-</span></div>
+                            <div class="meta-item"><span class="meta-label">История:</span> <span id="modalHistory">-</span></div>
+                            <div class="meta-item"><span class="meta-label">Период игры:</span> <span id="modalSeasons">-</span></div>
+                            <div class="meta-item" id="modalLeaveReasonRow" style="display:none;"><span class="meta-label">Причина ухода:</span> <span id="modalLeaveReason">-</span></div>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <div class="meta-label" style="margin-bottom:0.4rem;">ЛИЧНЫЙ ЛОР:</div>
-                    <div class="lore-box" id="modalPersonalLore">Информация отсутствует.</div>
-                </div>
                 <!-- Блок организации -->
                 <div id="modal-member-org"></div>
                 <!-- Блок ссылок снизу личного лора -->
@@ -2941,9 +2891,8 @@
         </div>
     </div>
 
-    <!-- Аудио для пасхалки Суньхуньсяй -->
+    <!-- Аудио для пасхалок -->
     <audio id="cxc-audio" src="cxcscl.mp3" preload="auto"></audio>
-    <!-- Аудио для пасхалки GRIFFIN Corp -->
     <audio id="griffin-audio" src="gcpb.mp3" preload="auto"></audio>
 
     <!-- Модальное окно пасхалки для Суньхуньсяй -->
@@ -2951,7 +2900,6 @@
         <div class="cxc-easter-content">
             <button class="cxc-easter-close" onclick="closeCXCEasterEgg()">&times;</button>
             <h2 style="color: #ff4444; text-shadow: 2px 2px 0 #000; font-size: clamp(1.5rem, 4vw, 3rem);">ПАРТИЯ ГОРДИТСЯ ТОБОЙ!</h2>
-            <!-- Исправлено: onerror скрывает элемент вместо замены на логотип -->
             <img id="cxc-random-meme" src="cxcscl.jpg" alt="Social Credit" class="cxc-meme-image" onerror="this.style.display='none'">
         </div>
     </div>
@@ -2966,11 +2914,56 @@
         </div>
     </div>
 
-    <!-- ============================================================
-         ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
-         ============================================================ -->
+    <!-- Модальное окно просмотра картинок (Lightbox) -->
+    <div class="image-lightbox" id="imageLightbox" onclick="closeLightbox()">
+        <img id="lightboxImage" src="" alt="Full view">
+    </div>
 
-    <!-- Пасхалка с комбинацией клавиш, таймером на 10 секунд и однократным использованием -->
+    <!-- Модальное окно организации -->
+    <div id="org-details-modal" class="modal">
+        <div class="modal-overlay" onclick="closeOrgModal()"></div>
+        <div class="modal-content org-modal-content" id="org-modal-card">
+            <button class="modal-close" onclick="closeOrgModal()">✕</button>
+            
+            <div class="org-modal-header">
+                <img id="org-modal-icon" src="logo.png" alt="Logo" class="org-modal-logo">
+                <div class="org-modal-titles">
+                    <h2 id="org-modal-title">Название Организации</h2>
+                    <span id="org-modal-tagline" class="org-tagline">Слоган</span>
+                </div>
+            </div>
+
+            <div class="org-modal-body">
+                <div class="org-info-block">
+                    <div class="org-info-label">Период активности:</div>
+                    <div id="org-modal-seasons" class="org-info-value">—</div>
+                </div>
+
+                <div class="org-info-block" id="org-former-names-block">
+                    <div class="org-info-label">Прошлые названия:</div>
+                    <div id="org-modal-former-names" class="org-info-value">—</div>
+                </div>
+
+                <div class="org-info-block">
+                    <div class="org-info-label">История и лор:</div>
+                    <div id="org-modal-history" class="org-info-text">Описание истории отсутствует.</div>
+                </div>
+
+                <div class="org-info-block" id="org-notes-block">
+                    <div class="org-info-label">Особые примечания:</div>
+                    <div id="org-modal-notes" class="org-info-text">—</div>
+                </div>
+
+                <div class="org-info-block" id="org-modal-socials-block">
+                    <div class="org-info-label">Ссылки и ресурсы:</div>
+                    <div id="org-modal-socials" class="org-socials-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================
+         ЗОНА ПАСХАЛОК - КОНАМИ-КОД / 7 КЛИКОВ
+         ============================================================ -->
     <script>
         (function setupEasterEggSequence() {
             const easterEggText = 'SINGULARITY SECRET';
@@ -2984,7 +2977,6 @@
                 const loaderLogo = document.querySelector('.loader-logo');
                 if (loaderLogo) loaderLogo.textContent = easterEggText;
 
-                // Возвращаем исходный текст через 10 секунд
                 setTimeout(() => {
                     if (mainLogo) mainLogo.textContent = defaultText;
                     if (loaderLogo) loaderLogo.textContent = defaultText;
@@ -2997,11 +2989,9 @@
                 } catch (e) {
                     console.warn('LocalStorage недоступен');
                 }
-
                 applyEasterEgg();
             }
 
-            // 1. Активация Конами-кодом: Up Up Down Down Left Right Left Right B A
             const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
             let konamiIndex = 0;
 
@@ -3024,7 +3014,6 @@
                 }
             });
 
-            // 2. Альтернатива (для мобильных): 7 быстро связанных кликов по логотипу
             let logoClicks = 0;
             let clickTimer = null;
             const logoContainer = document.querySelector('.logo-container');
@@ -3051,7 +3040,7 @@
         })();
     </script>
 
-    <!-- Загрузка и отображение Сплешей из splashes.json -->
+    <!-- Загрузка и отображение Сплешей -->
     <script>
         async function loadSplashText() {
             const splashElement = document.getElementById('splashText');
@@ -3083,7 +3072,7 @@
         window.addEventListener('DOMContentLoaded', loadSplashText);
     </script>
 
-    <!-- Фоновые аметистовые частицы (улучшены) -->
+    <!-- Фоновые аметистовые частицы -->
     <script>
         function initAmethystParticles() {
             const canvas = document.getElementById('amethystParticles');
@@ -3095,13 +3084,12 @@
             let height = canvas.height = window.innerHeight;
 
             const particles = [];
-            // Увеличим количество частиц до 40
             const particleCount = 40;
             const colors = [
-                [180, 100, 255], // Фиолет
-                [100, 180, 255], // Голубой
-                [255, 100, 200], // Розовый
-                [200, 200, 200]  // Белый/серый
+                [180, 100, 255],
+                [100, 180, 255],
+                [255, 100, 200],
+                [200, 200, 200]
             ];
 
             for (let i = 0; i < particleCount; i++) {
@@ -3151,15 +3139,13 @@
         window.addEventListener('DOMContentLoaded', initAmethystParticles);
     </script>
 
-    <!-- Реактивные частицы (переработаны и расширены) -->
+    <!-- Реактивные частицы -->
     <script>
         function initReactiveParticles() {
-                // Если устройство сенсорное — ничего не делаем
-    if (('ontouchstart' in window) || (navigator.maxTouchPoints > 0)) {
-        // Заглушка, чтобы не было ошибок при вызовах
-        window.spawnReactiveBurst = function() {};
-        return;
-    }
+            if (('ontouchstart' in window) || (navigator.maxTouchPoints > 0)) {
+                window.spawnReactiveBurst = function() {};
+                return;
+            }
             const canvas = document.getElementById('cursorParticles');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
@@ -3168,7 +3154,6 @@
             let width = canvas.width = window.innerWidth;
             let height = canvas.height = window.innerHeight;
             
-            // Общий массив частиц
             let particles = [];
             let mouseX = -1000, mouseY = -1000;
             let isMouseActive = false;
@@ -3179,20 +3164,16 @@
                 height = canvas.height = window.innerHeight;
             });
 
-            // Функция для создания одной частицы
             function spawnParticle(x, y, vx, vy, size, life, color, gravity = 0, decay = 0.02) {
                 if (!color) color = 'hsl(280, 80%, 70%)';
                 particles.push({
                     x, y, vx, vy, size, life, decay, gravity, color,
                     baseLife: life
                 });
-                // Ограничение на общее количество частиц в памяти
                 if(particles.length > 400) particles.splice(0, particles.length - 400);
             }
 
-            // Всплеск частиц (для кликов, наведений, открытий)
             window.spawnReactiveBurst = function(x, y, count, colorHex = null, force = 3, shape = 'square') {
-                const hue = colorHex ? (parseInt(colorHex.slice(1), 16) > 0 ? '280' : '280') : null;
                 for(let i=0; i<count; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const speed = Math.random() * force + 1.5;
@@ -3207,11 +3188,9 @@
                         color, shape, baseLife: life
                     });
                 }
-                // Ограничение на общее количество частиц в памяти
                 if(particles.length > 400) particles.splice(0, particles.length - 400);
             }
 
-            // Искры с логотипа
             function spawnLogoSparks() {
                 const logo = document.querySelector('.logo-container');
                 if(!logo) return;
@@ -3229,7 +3208,6 @@
                 }
             }
 
-            // Логика для следов за курсором
             function spawnTrail(x, y) {
                 for(let i=0; i<2; i++) {
                     const size = Math.floor(Math.random() * 2) + 1;
@@ -3244,7 +3222,6 @@
                 }
             }
 
-            // Рисование и обновление частиц
             function drawParticles() {
                 ctx.clearRect(0, 0, width, height);
                 
@@ -3252,9 +3229,8 @@
                     spawnTrail(mouseX, mouseY);
                 }
 
-                // Спавн искр с логотипа
                 logoParticleTimer++;
-                if(logoParticleTimer > 180) { // ~ каждые 3 секунды
+                if(logoParticleTimer > 180) {
                     spawnLogoSparks();
                     logoParticleTimer = 0;
                 }
@@ -3275,7 +3251,6 @@
                     ctx.globalAlpha = p.life * 0.9;
                     ctx.fillStyle = p.color;
 
-                    // Рисуем различные формы частиц
                     if (p.shape === 'circle') {
                         ctx.beginPath();
                         ctx.arc(Math.floor(p.x), Math.floor(p.y), Math.ceil(p.size / 2), 0, Math.PI * 2);
@@ -3293,7 +3268,6 @@
                 requestAnimationFrame(drawParticles);
             }
 
-            // Слушатели событий
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
@@ -3301,10 +3275,8 @@
             });
             document.addEventListener('mouseleave', () => { isMouseActive = false; });
             
-            // Наведение на элементы и клики
             document.addEventListener('DOMContentLoaded', () => {
                 const interactiveEls = document.querySelectorAll('.button, .team-member, .org-card, .social-link, .panel-toggle, .filter-btn, .author-chip');
-                const socialButtons = document.querySelectorAll('.social-button');
                 
                 interactiveEls.forEach(el => {
                     el.addEventListener('mouseenter', (e) => {
@@ -3314,7 +3286,6 @@
                         let burstColor = `hsl(${Math.random()*60 + 260}, 80%, 70%)`;
                         let shape = 'square';
                         
-                        // Специальные цвета и формы для игроков и соц-сетей
                         if (el.matches('[data-name="CloverS_Kid"]')) {
                             burstColor = '#55ff55';
                             shape = 'clover';
@@ -3332,7 +3303,6 @@
                     });
                 });
 
-                // Всплеск при клике на логотип
                 const logo = document.querySelector('.logo-container');
                 if (logo) {
                     logo.addEventListener('click', (e) => {
@@ -3348,7 +3318,7 @@
         window.addEventListener('DOMContentLoaded', initReactiveParticles);
     </script>
 
-    <!-- Эффект случайного глитча на CRT-экране -->
+    <!-- CRT глитч -->
     <script>
         (function initCRTGlitch() {
             function triggerCRTGlitch() {
@@ -3363,11 +3333,11 @@
 
             setInterval(() => {
                 triggerCRTGlitch();
-            }, Math.random() * 5000 + 3000); // Интервал между 3 и 8 секундами
+            }, Math.random() * 5000 + 3000);
         })();
     </script>
 
-    <!-- Переменные фильтрации медиа -->
+    <!-- Медиа: фильтрация и загрузка -->
     <script>
         window.allMediaData = [];
         window.currentMediaTypeFilter = 'all';
@@ -3512,7 +3482,7 @@
         window.addEventListener('DOMContentLoaded', loadMedia);
     </script>
 
-    <!-- Скрипт открытия и смены цветовой темы -->
+    <!-- Тема -->
     <script>
         function hexToRgba(hex, alpha) {
             if (!hex || !hex.startsWith('#')) return `rgba(255, 255, 255, ${alpha})`;
@@ -3571,7 +3541,7 @@
         });
     </script>
 
-    <!-- Логика ретро-загрузчика -->
+    <!-- Ретро-загрузчик -->
     <script>
         async function runRetroLoader() {
             const loader = document.getElementById('retroLoader');
@@ -3628,7 +3598,7 @@
         window.addEventListener('DOMContentLoaded', runRetroLoader);
     </script>
 
-    <!-- Анимация звезд -->
+    <!-- Звёзды -->
     <script>
         function initStarsCanvas() {
             const canvas = document.getElementById('starsCanvas');
@@ -3719,7 +3689,7 @@
         });
     </script>
 
-    <!-- Функции парсинга -->
+    <!-- Парсинг -->
     <script>
         function escapeHTML(str) {
             return String(str || '').replace(/[&<>'"]/g, 
@@ -3752,14 +3722,10 @@
                 .replace(/`([^`]+)`/g, '<code style="background: rgba(255,255,255,0.1); padding: 2px 4px;">$1</code>');
         }
 
-        /* Единая функция парсинга текста с МД-разметкой и заменой имен/организаций */
         window.parseTextForUI = function(text) {
             if (!text) return '';
-            // Сначала преобразуем Markdown в HTML
             let html = parseMarkdownLinks(text);
-            // Затем заменяем имена организаций на ссылки
             html = linkifyOrganizationNames(html);
-            // Затем заменяем имена игроков на ссылки
             return linkifyMemberNames(html);
         };
 
@@ -3779,7 +3745,6 @@
             }
         }
 
-        // Функции загрузки (запускаются в DOMContentLoaded ниже)
         async function loadNews() {
             const listContainer = document.getElementById('newsItemsList');
             listContainer.innerHTML = 'Загрузка новостей...';
@@ -3982,7 +3947,50 @@
         }
     </script>
 
-    <!-- Основной интерфейс состава и загрузка файлов team.json, info.json, archive.json -->
+    <!-- СКРИПТ ЗАГРУЗКИ ТРЕБОВАНИЙ ИЗ requirements.json -->
+    <script>
+        async function loadRequirements() {
+            const container = document.getElementById('requirementsContentInner');
+            if (!container) return;
+
+            try {
+                const res = await fetch('requirements.json?v=' + Date.now(), { cache: 'no-store' });
+                if (!res.ok) throw new Error('requirements.json не найден');
+                const data = await res.json();
+
+                const itemsHTML = (data.items || []).map(item =>
+                    `<li style="padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">● ${escapeHTML(item)}</li>`
+                ).join('');
+
+                container.innerHTML = `
+                    <p style="font-size: 1.1rem; color: #ddd; text-align: center; margin: 0 0 1.2rem 0;">${escapeHTML(data.intro || '')}</p>
+                    <ul style="list-style: none; padding: 0; color: #eee; font-size: 1rem; line-height: 1.8; max-width: 700px; margin: 0 auto;">
+                        ${itemsHTML}
+                        ${data.afterword ? `<li style="padding: 0.3rem 0; font-style: italic; color: #aaa;">${escapeHTML(data.afterword)}</li>` : ''}
+                    </ul>
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <a href="${escapeHTML(data.applyButtonUrl || '#')}" target="_blank" class="button" style="font-size: 1.3rem; padding: 0.7rem 2.5rem;">
+                            ${escapeHTML(data.applyButtonText || 'ПОДАТЬ ЗАЯВКУ')}
+                        </a>
+                    </div>
+                `;
+            } catch (e) {
+                console.error('Ошибка загрузки requirements.json:', e);
+                container.innerHTML = '<p style="color: #ff6b6b; text-align: center;">Ошибка загрузки требований</p>';
+            }
+        }
+
+        function toggleRequirements() {
+            const wrapper = document.getElementById('requirementsContentWrapper');
+            const btn = document.querySelector('.requirements-toggle-btn');
+            if (!wrapper) return;
+            wrapper.classList.toggle('expanded');
+            if (btn) btn.classList.toggle('expanded');
+        }
+
+        window.addEventListener('DOMContentLoaded', loadRequirements);
+    </script>
+    <!-- Основной интерфейс состава -->
     <script>
         function decimalToHex(decimalColor) {
             if (decimalColor === null || decimalColor === undefined) return null;
@@ -3995,7 +4003,7 @@
         window.fullArchiveMembers = [];
         window.playerExtraInfos = {};
         window.allMembersList = [];
-        window.aliasMap = {}; // Новая карта псевдонимов
+        window.aliasMap = {};
 
         window.switchCard = function(playerName, direction, event) {
             if (event) event.stopPropagation();
@@ -4037,7 +4045,6 @@
                 const y = (e.clientY / window.innerHeight - 0.5) * 30;
                 background.style.transform = `translate(${x}px, ${y}px)`;
                 
-                // Параллакс частиц
                 const particlesCanvas = document.getElementById('amethystParticles');
                 if (particlesCanvas) {
                     particlesCanvas.style.transform = `translate(${-x/20}px, ${-y/20}px)`;
@@ -4062,10 +4069,6 @@
             memberDiv.dataset.priority = member.priority || 0;
             memberDiv.dataset.name = member.name;
 
-            // ============================================================
-            // ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
-            // ============================================================
-
             // Easter egg: pitrmatti Italian translation
             if (member.name === 'pitrmatti' || member.name === 'Pitrmatti') {
                 memberDiv.style.cursor = 'pointer';
@@ -4080,13 +4083,9 @@
                 });
             }
 
-            // Получаем ВСЕ организации игрока (отсортированные по наивысшей роли)
             const userOrgs = typeof getMemberOrganizationsInfo === 'function' ? getMemberOrganizationsInfo(member.name) : [];
             const primaryOrg = userOrgs.length > 0 ? userOrgs[0] : null;
 
-            // Определяем главный цвет:
-            // 1. Цвет организации высшего ранга (если есть)
-            // 2. Личный цвет из team.json (HEX или Decimal)
             let mainColor = '#ffffff';
             if (primaryOrg && primaryOrg.org && primaryOrg.org.color) {
                 mainColor = typeof normalizeColor === 'function' ? normalizeColor(primaryOrg.org.color) : primaryOrg.org.color;
@@ -4155,13 +4154,9 @@
                 </div>
             `;
 
-            /* Удаляем плашку организации из-под ника, она будет только в развернутом блоке (внутри .team-member-details) */
-
-            // ИСПРАВЛЕНИЕ: Вывод плашки организации внутри РАЗВЕРНУТОГО блока (там где Кнопка "ПОДРОБНЕЕ")
             if (primaryOrg && primaryOrg.org) {
                 const infoDiv = memberDiv.querySelector('.team-member-details');
                 if (infoDiv) {
-                    // Убедимся, что нет дубликата внутри развернутого блока
                     const existingDetailsBadge = infoDiv.querySelector('.member-org-details-badge');
                     if (existingDetailsBadge) existingDetailsBadge.remove();
 
@@ -4238,19 +4233,14 @@
                     console.warn('archive.json не найден');
                 }
 
-                // Объединяем всех игроков в глобальный список для линковки
                 window.allMembersList = [...window.fullTeamMembers, ...window.fullArchiveMembers];
-                
-                // Строим карту псевдонимов (Aliases), включая info.json
                 window.aliasMap = {};
                 
-                // 1. Имена и реальные имена из team.json / archive.json
                 window.allMembersList.forEach(m => {
                     window.aliasMap[m.name.toLowerCase()] = m.name;
                     if (m.realName) window.aliasMap[m.realName.toLowerCase()] = m.name;
                 });
                 
-                // 2. Псевдонимы (aliases) из info.json (бот их не перезаписывает)
                 for (const key in window.playerExtraInfos) {
                     const info = window.playerExtraInfos[key];
                     if (info.aliases && Array.isArray(info.aliases)) {
@@ -4265,6 +4255,19 @@
 
                 resizeAllGridItems();
                 setTimeout(resizeAllGridItems, 300);
+
+                // Фоновая запись скинов всех игроков для накопления истории
+                if (typeof recordCurrentSkin === 'function') {
+                    const allNames = [...window.fullTeamMembers, ...window.fullArchiveMembers].map(m => m.name).filter(Boolean);
+                    let i = 0;
+                    function recordNext() {
+                        if (i >= allNames.length) return;
+                        recordCurrentSkin(allNames[i++]).then(() => {
+                            setTimeout(recordNext, 800);
+                        });
+                    }
+                    setTimeout(recordNext, 2000);
+                }
             } catch (error) {
                 console.error('Error loading team members:', error);
                 document.getElementById('teamMembers').innerHTML = '<p style="color: #ff6b6b; text-align: center; grid-column: 1/-1;">Ошибка загрузки состава</p>';
@@ -4301,7 +4304,6 @@
 
             document.getElementById('modalPersonalLore').textContent = extra.personalLore || member.personalLore || 'Личный лор персонажа пока не зафиксирован.';
 
-            // Вывод организации в модальное окно с кликабельной ссылкой
             const modalOrgContainer = document.getElementById('modal-member-org');
             if (modalOrgContainer) {
                 modalOrgContainer.innerHTML = '';
@@ -4326,7 +4328,17 @@
             const skinSrc = extra.skinUrl || member.skinUrl || `https://minotar.net/armor/bust/${member.name}/100`;
             skinImg.src = skinSrc;
 
-            // Добавляем всплеск частиц при открытии модалки игрока
+            // ЗАПИСЬ + ОТОБРАЖЕНИЕ ИСТОРИИ СКИНОВ
+            if (typeof recordCurrentSkin === 'function') {
+                recordCurrentSkin(member.name).then(() => {
+                    if (typeof renderSkinHistory === 'function') {
+                        renderSkinHistory(member.name);
+                    }
+                });
+            } else if (typeof renderSkinHistory === 'function') {
+                renderSkinHistory(member.name);
+            }
+
             if (typeof window.spawnReactiveBurst === 'function') {
                 window.spawnReactiveBurst(window.innerWidth / 2, window.innerHeight / 2, 20, hexColor, 6);
             }
@@ -4339,8 +4351,6 @@
                 document.getElementById('playerInfoModal').classList.remove('show');
             }
         }
-
-        loadTeamMembers();
 
         function toggleTeam() {
             const teamMembers = document.getElementById('teamMembers');
@@ -4380,7 +4390,6 @@
 
                 if (!isExpanded) {
                     member.classList.add('expanded');
-                    // Добавляем всплеск частиц при разворачивании карточки игрока
                     if (typeof window.spawnReactiveBurst === 'function') {
                         const rect = member.getBoundingClientRect();
                         window.spawnReactiveBurst(rect.left + rect.width/2, rect.top + rect.height/2, 8, null, 3);
@@ -4449,7 +4458,6 @@
             if (!isOpen) {
                 panelElement.classList.add('open');
                 overlay.classList.add('show');
-                // Вспышка частиц при открытии панели
                 if (typeof window.spawnReactiveBurst === 'function') {
                     const rect = panelElement.getBoundingClientRect();
                     if (panel === 'news') {
@@ -4527,7 +4535,7 @@
         }
 
         // ============================================================
-        // ПАСХАЛКА ДЛЯ СУНЬХУНЬСЯЯ (CXC) - СКРИПТ
+        // ПАСХАЛКА ДЛЯ СУНЬХУНЬСЯЯ (CXC)
         // ============================================================
         window.triggerCXCEasterEgg = function() {
             const audio = document.getElementById('cxc-audio');
@@ -4542,7 +4550,7 @@
             const imgElement = document.getElementById('cxc-random-meme');
             if (imgElement) {
                 imgElement.src = randomMeme;
-                // Исправление: если картинка не загружается, она просто скрывается, а не заменяется на логотип
+                imgElement.style.display = 'block';
                 imgElement.onerror = function() { this.style.display = 'none'; };
             }
 
@@ -4559,7 +4567,7 @@
         }
 
         // ============================================================
-        // ПАСХАЛКА ДЛЯ GRIFFIN CORP (GCPB) - СКРИПТ
+        // ПАСХАЛКА ДЛЯ GRIFFIN CORP (GCPB)
         // ============================================================
         window.triggerGriffinEasterEgg = function() {
             const audio = document.getElementById('griffin-audio');
@@ -4571,6 +4579,7 @@
             const imgElement = document.getElementById('griffin-meme');
             if (imgElement) {
                 imgElement.src = 'gcpb.png';
+                imgElement.style.display = 'block';
                 imgElement.onerror = function() { this.style.display = 'none'; };
             }
 
@@ -4586,9 +4595,7 @@
             document.getElementById('griffinEasterEgg').classList.remove('show');
         }
 
-        // Повесим обработчики
         document.addEventListener('DOMContentLoaded', function() {
-            // 1. Суньхуньсяй - клик по футеру + дабл-клик по карточке
             const cxcHighlight = document.querySelector('.cxc-highlight');
             if (cxcHighlight) {
                 cxcHighlight.addEventListener('click', triggerCXCEasterEgg);
@@ -4598,11 +4605,9 @@
                 const card = e.target.closest('.org-card');
                 if (card) {
                     const titleBlock = card.querySelector('.org-title-block h3');
-                    // Активируем Суньхуньсяй
                     if (titleBlock && titleBlock.textContent.trim() === 'Суньхуньсяй') {
                         triggerCXCEasterEgg();
                     }
-                    // 2. Активируем Гриффин (GCPB)
                     if (titleBlock && titleBlock.textContent.trim() === 'Гриффин Corp') {
                         triggerGriffinEasterEgg();
                     }
@@ -4611,14 +4616,6 @@
         });
     </script>
 
-    <!-- Модальное окно просмотра картинок (Lightbox) -->
-    <div class="image-lightbox" id="imageLightbox" onclick="closeLightbox()">
-        <img id="lightboxImage" src="" alt="Full view">
-    </div>
-
-    <!-- ============================================================
-         ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
-         ============================================================ -->
     <!-- Пасхалка EnderHack1, Maksimm205 и CloverS_kid -->
     <script>
         (function setupPlayerEasterEggs() {
@@ -4635,7 +4632,6 @@
                 const targetCard = e.target.closest('.team-member, .author-chip, .player-head, [data-name]');
                 const targetText = targetCard ? targetCard.textContent : (e.target.textContent || '');
 
-                // 1. Проверка на клики по Эндеру (EnderHack1 / Эндер)
                 if (/enderhack|эндер/i.test(targetText)) {
                     enderClickCount++;
                     clearTimeout(enderClickTimer);
@@ -4657,7 +4653,6 @@
                     enderClickCount = 0;
                 }
 
-                // 2. Проверка на клики по Максиму (Maksimm205 / Максим / Макс)
                 if (/maksimm205|максим|макс/i.test(targetText)) {
                     maksimClickCount++;
                     clearTimeout(maksimClickTimer);
@@ -4679,7 +4674,6 @@
                     maksimClickCount = 0;
                 }
 
-                // 3. Проверка на клики по Кловеру (CloverS_Kid / Clover / Кловер) -> Установка фона bambsb.jpg
                 if (/clovers_kid|clover|кловер/i.test(targetText)) {
                     cloverClickCount++;
                     clearTimeout(cloverClickTimer);
@@ -4764,6 +4758,10 @@
             }
         })();
     </script>
+
+    <!-- ============================================================
+         ФУТЕР
+         ============================================================ -->
     <footer class="site-footer">
         <div class="footer-container">
             <div class="footer-content">
@@ -4779,6 +4777,10 @@
             </div>
         </div>
     </footer>
+
+    <!-- ============================================================
+         ОРГАНИЗАЦИИ И УПОМИНАНИЯ
+         ============================================================ -->
     <script>
         // 1. Нормализация цвета
         function normalizeColor(color) {
@@ -4796,7 +4798,7 @@
         }
         window.normalizeColor = normalizeColor;
 
-        // 2. Автоматическая замена названий организаций на кликабельные ссылки (с поддержкой отдельных алиасов)
+        // 2. Замена названий организаций
         window.linkifyOrganizationNames = function(text) {
             if (!text || typeof text !== 'string') return text || '';
             
@@ -4806,13 +4808,11 @@
             const allOrgVariants = [];
             orgs.forEach(o => {
                 if (o.name && typeof o.name === 'string' && o.name.length > 1) allOrgVariants.push(o.name);
-                // Добавляем отдельные алиасы (не путать с formerNames)
                 if (o.aliases && Array.isArray(o.aliases)) {
                     o.aliases.forEach(alias => {
                         if (alias && typeof alias === 'string' && alias.length > 0) allOrgVariants.push(alias);
                     });
                 }
-                // Прошлые названия также ищем, но в тексте они не должны мешать
                 if (o.formerNames && Array.isArray(o.formerNames)) {
                     o.formerNames.forEach(fn => {
                         if (fn && typeof fn === 'string' && fn.length > 1) allOrgVariants.push(fn);
@@ -4820,9 +4820,9 @@
                 }
             });
             const uniqueOrgNames = [...new Set(allOrgVariants)].sort((a, b) => b.length - a.length);
+            if (uniqueOrgNames.length === 0) return text;
             const escapedOrgNames = uniqueOrgNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
             
-            // Строгая проверка границ слова для организаций
             const regex = new RegExp(`(?<![\\p{L}\\p{N}_])(${escapedOrgNames.join('|')})(?![\\p{L}\\p{N}_])`, 'giu');
 
             return text.replace(regex, (matchedName) => {
@@ -4840,17 +4840,17 @@
                        `<span>${matchedName}</span></span>`;
             });
         }
-        window.linkifyOrganizationNames = linkifyOrganizationNames;
 
-        // 3. Универсальный автоанализ и замена имён игроков на голова-ссылку во всех текстах (lore, news, events, discord_news)
+        // 3. Замена имён игроков
         window.linkifyMemberNames = function(text) {
             if (!text || typeof text !== 'string') return text || '';
             
             if (!window.aliasMap || Object.keys(window.aliasMap).length === 0) {
-                return text; // Если карта еще не загружена, просто возвращаем текст
+                return text;
             }
 
             const uniqueNames = [...new Set(Object.keys(window.aliasMap))].sort((a, b) => b.length - a.length);
+            if (uniqueNames.length === 0) return text;
             const escapedNames = uniqueNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
             const regex = new RegExp(`(?<![\\p{L}\\p{N}_])(${escapedNames.join('|')})(?![\\p{L}\\p{N}_])`, 'giu');
 
@@ -4869,9 +4869,8 @@
                        `<span>${matchedName}</span></span>`;
             });
         }
-        window.linkifyMemberNames = linkifyMemberNames;
 
-        // 2.1. Сворачивание / Разворачивание блока организаций
+        // 4. Сворачивание / Разворачивание блока организаций
         function toggleOrganizations() {
             const container = document.getElementById('organizations-container');
             const toggleBtn = document.getElementById('toggle-orgs-btn');
@@ -4890,7 +4889,7 @@
         }
         window.toggleOrganizations = toggleOrganizations;
 
-        // 2.2. Приоритет должности
+        // 5. Приоритет должности
         function getRolePriority(roleName) {
             if (!roleName) return 0;
             const r = String(roleName).toLowerCase();
@@ -4899,7 +4898,7 @@
             return 10;
         }
 
-        // 2.3. Поиск организаций игрока
+        // 6. Поиск организаций игрока
         function getMemberOrganizationsInfo(memberNameParam) {
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string' || !window.allOrganizations) return [];
@@ -4943,7 +4942,7 @@
             return orgs.length > 0 ? orgs[0] : null;
         };
 
-        // 2.4. Отрисовка плашки организации в модалке игрока
+        // 7. Плашка организации в модалке игрока
         function renderOrgBadgeInModal(memberNameParam, containerElement) {
             if (!containerElement || !memberNameParam) return;
 
@@ -4986,7 +4985,6 @@
                         cursor: pointer;
                         transition: transform 0.2s ease;
                     `;
-                    // Привязка клика к открытию организации
                     orgBadge.onclick = (e) => { 
                         e.stopPropagation(); 
                         closePlayerModal(); 
@@ -5013,7 +5011,7 @@
         }
         window.renderOrgBadgeInModal = renderOrgBadgeInModal;
 
-        // 2.5. Загрузка организаций
+        // 8. Загрузка организаций
         async function loadOrganizationsData() {
             try {
                 const res = await fetch(`organizations.json?_t=${Date.now()}`, { cache: 'no-store' });
@@ -5036,7 +5034,6 @@
 
                         const rolesHTML = roles.map(roleObj => {
                             const membersList = (roleObj.members || []).map(memberName => {
-                                // Ищем игрока в общем списке, чтобы взять его личный цвет
                                 const player = window.allMembersList.find(m => m.name.toLowerCase() === memberName.toLowerCase());
                                 const playerColor = player ? normalizeColor(player.color) : orgColor;
                                 const headUrl = `https://minotar.net/helm/${encodeURIComponent(memberName)}/16`;
@@ -5123,7 +5120,7 @@
             }
         }
 
-        // 2.5.1 Разворачивание/сворачивание отдельной карточки организации
+        // 9. Разворачивание карточки организации
         function toggleOrgCard(orgId, event) {
             if (event) event.stopPropagation();
             const wrapper = document.getElementById(`org-body-wrapper-${orgId}`);
@@ -5135,10 +5132,9 @@
         }
         window.toggleOrgCard = toggleOrgCard;
 
-        // 3. Открытие модального окна организации ("Подробнее")
+        // 10. Открытие модального окна организации
         function openOrgModal(orgId) {
             if (!window.allOrganizations) return;
-            // Если передали название вместо ID, пытаемся найти
             let org = window.allOrganizations.find(o => String(o.id).toLowerCase() === String(orgId).toLowerCase());
             if (!org) {
                 org = window.allOrganizations.find(o => o.name.toLowerCase() === String(orgId).toLowerCase());
@@ -5153,7 +5149,6 @@
             card.style.borderColor = orgColor;
             card.style.boxShadow = `6px 6px 0px ${orgColor}44`;
             
-            // Устанавливаем цвет скроллбара для модалки
             card.style.setProperty('--modal-accent-color', orgColor);
             card.style.setProperty('--modal-accent-shadow', hexToRgba(orgColor, 0.4));
 
@@ -5172,7 +5167,6 @@
             const seasonsEl = document.getElementById('org-modal-seasons');
             if (seasonsEl) seasonsEl.textContent = org.seasonsPeriod || org.period || 'SL: 1 Сезон — Настоящее время';
 
-            // Прошлые названия
             const formerBlock = document.getElementById('org-former-names-block');
             const formerEl = document.getElementById('org-modal-former-names');
             if (org.formerNames && Array.isArray(org.formerNames) && org.formerNames.length > 0) {
@@ -5182,7 +5176,6 @@
                 formerBlock.style.display = 'none';
             }
 
-            // История и примечания с авто-ссылками имён
             const historyEl = document.getElementById('org-modal-history');
             if (historyEl) historyEl.innerHTML = parseTextForUI(org.history || org.description || 'История данной организации ещё формируется.');
 
@@ -5195,7 +5188,6 @@
                 notesBlock.style.display = 'none';
             }
 
-            // Ссылки
             const socialsBlock = document.getElementById('org-modal-socials-block');
             const socialsContainer = document.getElementById('org-modal-socials');
             if (org.socials && org.socials.length > 0) {
@@ -5220,7 +5212,6 @@
                 socialsBlock.style.display = 'none';
             }
 
-            // Рендер состава организации (всех ролей и участников) внутри модалки с личными цветами
             let rolesHTML = '';
             if (org.roles && org.roles.length > 0) {
                 rolesHTML = org.roles.map(roleObj => {
@@ -5240,21 +5231,21 @@
                 }).join('');
             }
 
-            // Вставляем блок состав в тело модалки перед ссылками
             const socialsBlockElement = document.getElementById('org-modal-socials-block');
             if (rolesHTML) {
-                const membersContainer = document.getElementById('org-modal-members-block') || (() => {
-                    const newBlock = document.createElement('div');
-                    newBlock.id = 'org-modal-members-block';
-                    newBlock.className = 'org-info-block';
-                    newBlock.innerHTML = `<div class="org-info-label">Состав организации:</div><div class="org-info-value" id="org-modal-members-list"></div>`;
+                let membersContainer = document.getElementById('org-modal-members-block');
+                if (!membersContainer) {
+                    membersContainer = document.createElement('div');
+                    membersContainer.id = 'org-modal-members-block';
+                    membersContainer.className = 'org-info-block';
+                    membersContainer.innerHTML = `<div class="org-info-label">Состав организации:</div><div class="org-info-value" id="org-modal-members-list"></div>`;
                     if (socialsBlockElement && socialsBlockElement.parentNode) {
-                        socialsBlockElement.parentNode.insertBefore(newBlock, socialsBlockElement);
+                        socialsBlockElement.parentNode.insertBefore(membersContainer, socialsBlockElement);
                     } else {
-                        document.querySelector('.org-modal-body').appendChild(newBlock);
+                        const body = document.querySelector('.org-modal-body');
+                        if (body) body.appendChild(membersContainer);
                     }
-                    return newBlock;
-                })();
+                }
                 
                 const listContainer = membersContainer.querySelector('#org-modal-members-list');
                 if (listContainer) listContainer.innerHTML = rolesHTML;
@@ -5263,7 +5254,6 @@
                 if (oldBlock) oldBlock.remove();
             }
 
-            // Добавляем всплеск частиц при открытии модалки организации
             if (typeof window.spawnReactiveBurst === 'function') {
                 window.spawnReactiveBurst(window.innerWidth / 2, window.innerHeight / 2, 20, orgColor, 6);
             }
@@ -5282,7 +5272,7 @@
         }
         window.closeOrgModal = closeOrgModal;
 
-        // 4. Открытие модального окна игрока по никнейму
+        // 11. Открытие модалки игрока по никнейму
         window.openModalByName = function(memberNameParam) {
             const memberName = typeof memberNameParam === 'object' ? (memberNameParam?.name || memberNameParam?.memberName || '') : memberNameParam;
             if (!memberName || typeof memberName !== 'string') return;
@@ -5294,15 +5284,12 @@
             if (memberObj) {
                 if (typeof openPlayerModal === 'function') {
                     openPlayerModal(memberObj.name);
-                } else if (typeof showMemberDetails === 'function') {
-                    showMemberDetails(memberObj);
                 }
             }
         };
 
-        // 5. Автозагрузка и обработка упоминаний
+        // 12. Автозагрузка
         document.addEventListener('DOMContentLoaded', async () => {
-            // ИСПРАВЛЕНИЕ: Загружаем организации ПЕРВЫМИ, чтобы карточки игроков создавались уже с готовыми данными
             await loadOrganizationsData();
             await loadTeamMembers();
 
@@ -5312,13 +5299,12 @@
 
             console.log('Все текстовые данные загружены и обработаны.');
         });
+    </script>
 
-        /* ============================================================
-           ЗОНА ПАСХАЛОК - ВСЕ ПАСХАЛКИ НАХОДЯТСЯ НИЖЕ
-           Пасхалка «Уроборос»: если много раз кликнуть по шапке организации
-           «Уроборос» в списке организаций, запускается змейка, которая
-           буквально «поедает» элементы сайта.
-           ============================================================ */
+    <!-- ============================================================
+         ПАСХАЛКА УРОБОРОС (ЗМЕЙКА)
+         ============================================================ -->
+    <script>
         (function setupOuroborosSnakeEasterEgg() {
             const CLICKS_NEEDED = 7;
             const RESET_DELAY_MS = 2200;
@@ -5332,7 +5318,7 @@
                 const header = event && event.currentTarget;
                 if (header) {
                     header.classList.remove('ouroboros-shake');
-                    void header.offsetWidth; // форсируем reflow, чтобы анимация перезапускалась
+                    void header.offsetWidth;
                     header.classList.add('ouroboros-shake');
                 }
 
@@ -5351,7 +5337,6 @@
 
                 const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#ffffff';
 
-                // Элементы сайта, которые змейка может "съесть по-настоящему" при поедании еды
                 const EATABLE_SELECTOR = '.org-card, .team-member, .news-item, .discord-news-card, .lore-season, .event-card, .social-buttons > a, .archive-card';
                 let eatenElements = [];
 
@@ -5386,14 +5371,12 @@
                     eatenElements = [];
                 }
 
-                // ---- HUD с индикатором загрузки ----
                 const hud = document.createElement('div');
                 hud.className = 'ouroboros-hud';
                 hud.innerHTML = `УРОБОРОС ПРОБУЖДАЕТСЯ...<small>Поедает реальный сайт.</small>`;
                 document.body.appendChild(hud);
                 document.body.style.overflow = 'hidden';
 
-                // ---- Настройка холста ----
                 const overlay = document.createElement('div');
                 overlay.id = 'ouroboros-snake-overlay';
 
@@ -5429,7 +5412,6 @@
                     return pos;
                 }
 
-                // Выгрызает дыру в тёмном оверлее
                 function biteHole(cx, cy, radius) {
                     ctx.save();
                     ctx.globalCompositeOperation = 'destination-out';
@@ -5443,17 +5425,13 @@
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     ctx.globalCompositeOperation = 'source-over';
                     
-                    // 1. Рисуем полупрозрачный оверлей на холсте, скрывая реальный сайт под ним
                     ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                    // 2. Змейка прогрызает оверлей насквозь по всей своей длине —
-                    //    открывая реальный сайт в месте, где она проползла
                     snake.forEach(seg => {
                         biteHole(seg.x * CELL + CELL / 2, seg.y * CELL + CELL / 2, CELL * 0.65);
                     });
 
-                    // 3. Голова змейки — светящийся контур
                     ctx.globalCompositeOperation = 'source-over';
                     const head = snake[0];
                     ctx.strokeStyle = accentColor;
@@ -5465,7 +5443,6 @@
                     ctx.stroke();
                     ctx.shadowBlur = 0;
 
-                    // тело — тонкий пунктирный контур по сегментам
                     ctx.strokeStyle = 'rgba(255,255,255,0.6)';
                     ctx.lineWidth = 1.5;
                     snake.slice(1).forEach(seg => {
@@ -5474,7 +5451,6 @@
                         ctx.stroke();
                     });
 
-                    // 4. Еда — то, что предстоит съесть
                     ctx.fillStyle = accentColor;
                     ctx.shadowColor = accentColor;
                     ctx.shadowBlur = 10;
@@ -5495,7 +5471,6 @@
                             y: (snake[0].y + dir.y + rows) % rows
                         };
 
-                        // Уроборос кусает себя за хвост — конец игры
                         if (snake.some(s => s.x === head.x && s.y === head.y)) {
                             return gameOver();
                         }
@@ -5507,7 +5482,7 @@
                             document.getElementById('ouroboros-score').textContent = String(score);
                             tickMs = Math.max(70, 140 - score * 4);
                             food = spawnFood();
-                            eatRandomElement(); // Реальное удаление элемента из DOM
+                            eatRandomElement();
                         } else {
                             snake.pop();
                         }
@@ -5606,79 +5581,31 @@
             window.launchOuroborosSnake = launchOuroborosSnake;
         })();
     </script>
+
+    <!-- Микро-эффект параллакса при скролле -->
+    <script>
+        (function subtleScrollJitter() {
+            let lastScrollY = 0;
+            window.addEventListener('scroll', () => {
+                const delta = window.scrollY - lastScrollY;
+                if (Math.abs(delta) > 5) {
+                    const stars = document.getElementById('starsCanvas');
+                    if (stars) {
+                        stars.style.transition = 'transform 0.15s ease-out';
+                        stars.style.transform = `translateY(${delta * 0.03}px)`;
+                        clearTimeout(stars._scrollTimer);
+                        stars._scrollTimer = setTimeout(() => {
+                            stars.style.transform = 'translateY(0)';
+                        }, 250);
+                    }
+                }
+                lastScrollY = window.scrollY;
+            });
+        })();
+    </script>
+
+    <!-- Итальянский перевод (внешний файл) -->
     <script src="italian-translation.js"></script>
 
-<div id="org-details-modal" class="modal">
-    <div class="modal-overlay" onclick="closeOrgModal()"></div>
-    <div class="modal-content org-modal-content" id="org-modal-card">
-        <button class="modal-close" onclick="closeOrgModal()">✕</button>
-        
-        <div class="org-modal-header">
-            <img id="org-modal-icon" src="logo.png" alt="Logo" class="org-modal-logo">
-            <div class="org-modal-titles">
-                <h2 id="org-modal-title">Название Организации</h2>
-                <span id="org-modal-tagline" class="org-tagline">Слоган</span>
-            </div>
-        </div>
-
-        <div class="org-modal-body">
-            <div class="org-info-block">
-                <div class="org-info-label">Период активности:</div>
-                <div id="org-modal-seasons" class="org-info-value">—</div>
-            </div>
-
-            <div class="org-info-block" id="org-former-names-block">
-                <div class="org-info-label">Прошлые названия:</div>
-                <div id="org-modal-former-names" class="org-info-value">—</div>
-            </div>
-
-            <div class="org-info-block">
-                <div class="org-info-label">История и лор:</div>
-                <div id="org-modal-history" class="org-info-text">Описание истории отсутствует.</div>
-            </div>
-
-            <div class="org-info-block" id="org-notes-block">
-                <div class="org-info-label">Особые примечания:</div>
-                <div id="org-modal-notes" class="org-info-text">—</div>
-            </div>
-
-            <div class="org-info-block" id="org-modal-socials-block">
-                <div class="org-info-label">Ссылки и ресурсы:</div>
-                <div id="org-modal-socials" class="org-socials-list"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Микро-эффект параллакса при скролле -->
-<script>
-    (function subtleScrollJitter() {
-        let lastScrollY = 0;
-        window.addEventListener('scroll', () => {
-            const delta = window.scrollY - lastScrollY;
-            if (Math.abs(delta) > 5) {
-                const stars = document.getElementById('starsCanvas');
-                if (stars) {
-                    stars.style.transition = 'transform 0.15s ease-out';
-                    stars.style.transform = `translateY(${delta * 0.03}px)`;
-                    clearTimeout(stars._scrollTimer);
-                    stars._scrollTimer = setTimeout(() => {
-                        stars.style.transform = 'translateY(0)';
-                    }, 250);
-                }
-            }
-            lastScrollY = window.scrollY;
-        });
-    })();
-</script>
-<script>
-    function toggleRequirements() {
-    const wrapper = document.getElementById('requirementsContentWrapper');
-    const btn = document.querySelector('.requirements-toggle-btn');
-    if (!wrapper) return;
-    wrapper.classList.toggle('expanded');
-    if (btn) btn.classList.toggle('expanded');
-}
-</script>
 </body>
 </html>
