@@ -2863,33 +2863,42 @@
 
     <!-- Модальное окно подробной информации об игроке -->
     <div class="player-info-modal" id="playerInfoModal" onclick="closePlayerModal(event)">
-        <div class="player-info-box" id="playerInfoBox" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <div class="modal-title" id="modalPlayerName">Игрок</div>
-                <button class="modal-close-btn" onclick="closePlayerModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="skin-section" style="flex-direction: column; align-items: stretch;">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 1.2rem; flex-wrap: wrap;">
-                        <img id="modalSkinImg" class="skin-preview-img" src="" alt="Skin" onerror="this.src='https://minotar.net/armor/bust/Steve'">
-                        <div class="player-meta">
-                            <div class="meta-item"><span class="meta-label">Роль:</span> <span id="modalRole">-</span></div>
-                            <div class="meta-item"><span class="meta-label">Имя:</span> <span id="modalRealName">-</span></div>
-                            <div class="meta-item"><span class="meta-label">История:</span> <span id="modalHistory">-</span></div>
-                            <div class="meta-item"><span class="meta-label">Период игры:</span> <span id="modalSeasons">-</span></div>
-                            <div class="meta-item" id="modalLeaveReasonRow" style="display:none;"><span class="meta-label">Причина ухода:</span> <span id="modalLeaveReason">-</span></div>
-                        </div>
+    <div class="player-info-box" id="playerInfoBox" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <div class="modal-title" id="modalPlayerName">Игрок</div>
+            <button class="modal-close-btn" onclick="closePlayerModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="skin-section" style="flex-direction: column; align-items: stretch;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 1.2rem; flex-wrap: wrap;">
+                    <img id="modalSkinImg" class="skin-preview-img" src="" alt="Skin" onerror="this.src='https://minotar.net/armor/bust/Steve'">
+                    <div class="player-meta">
+                        <div class="meta-item"><span class="meta-label">Роль:</span> <span id="modalRole">-</span></div>
+                        <div class="meta-item"><span class="meta-label">Имя:</span> <span id="modalRealName">-</span></div>
+                        <div class="meta-item"><span class="meta-label">История:</span> <span id="modalHistory">-</span></div>
+                        <div class="meta-item"><span class="meta-label">Период игры:</span> <span id="modalSeasons">-</span></div>
+                        <div class="meta-item" id="modalLeaveReasonRow" style="display:none;"><span class="meta-label">Причина ухода:</span> <span id="modalLeaveReason">-</span></div>
                     </div>
-                <!-- Блок организации -->
-                <div id="modal-member-org"></div>
-                <!-- Блок ссылок снизу личного лора -->
-                <div id="modalSocialsContainer" style="display: none;">
-                    <div class="meta-label" style="margin-top:0.8rem; margin-bottom:0.4rem;">ССЫЛКИ:</div>
-                    <div class="team-member-socials" id="modalSocialsList"></div>
                 </div>
+            </div>
+
+            <!-- ЛИЧНЫЙ ЛОР (обязательный блок!) -->
+            <div>
+                <div class="meta-label" style="margin-bottom:0.4rem;">ЛИЧНЫЙ ЛОР:</div>
+                <div class="lore-box" id="modalPersonalLore">Информация отсутствует.</div>
+            </div>
+
+            <!-- Блок организации -->
+            <div id="modal-member-org"></div>
+
+            <!-- Блок ссылок -->
+            <div id="modalSocialsContainer" style="display: none;">
+                <div class="meta-label" style="margin-top:0.8rem; margin-bottom:0.4rem;">ССЫЛКИ:</div>
+                <div class="team-member-socials" id="modalSocialsList"></div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Аудио для пасхалок -->
     <audio id="cxc-audio" src="cxcscl.mp3" preload="auto"></audio>
@@ -4257,17 +4266,7 @@
                 setTimeout(resizeAllGridItems, 300);
 
                 // Фоновая запись скинов всех игроков для накопления истории
-                if (typeof recordCurrentSkin === 'function') {
-                    const allNames = [...window.fullTeamMembers, ...window.fullArchiveMembers].map(m => m.name).filter(Boolean);
-                    let i = 0;
-                    function recordNext() {
-                        if (i >= allNames.length) return;
-                        recordCurrentSkin(allNames[i++]).then(() => {
-                            setTimeout(recordNext, 800);
-                        });
-                    }
-                    setTimeout(recordNext, 2000);
-                }
+
             } catch (error) {
                 console.error('Error loading team members:', error);
                 document.getElementById('teamMembers').innerHTML = '<p style="color: #ff6b6b; text-align: center; grid-column: 1/-1;">Ошибка загрузки состава</p>';
@@ -4327,17 +4326,6 @@
             const skinImg = document.getElementById('modalSkinImg');
             const skinSrc = extra.skinUrl || member.skinUrl || `https://minotar.net/armor/bust/${member.name}/100`;
             skinImg.src = skinSrc;
-
-            // ЗАПИСЬ + ОТОБРАЖЕНИЕ ИСТОРИИ СКИНОВ
-            if (typeof recordCurrentSkin === 'function') {
-                recordCurrentSkin(member.name).then(() => {
-                    if (typeof renderSkinHistory === 'function') {
-                        renderSkinHistory(member.name);
-                    }
-                });
-            } else if (typeof renderSkinHistory === 'function') {
-                renderSkinHistory(member.name);
-            }
 
             if (typeof window.spawnReactiveBurst === 'function') {
                 window.spawnReactiveBurst(window.innerWidth / 2, window.innerHeight / 2, 20, hexColor, 6);
