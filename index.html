@@ -5597,6 +5597,12 @@
 
     <!-- Итальянский перевод (внешний файл) -->
     <script src="italian-translation.js"></script>
-
+    <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('Service Worker зарегистрирован'))
+      .catch(err => console.error('Ошибка регистрации SW:', err));
+  }
+</script>
 </body>
 </html>
