@@ -1,6 +1,15 @@
 {
   "media": [
     {
+      "title": "МАКАСИН СКИНЬ ДИСС",
+      "author": "Yrk1z",
+      "platform": "youtube",
+      "type": "video",
+      "url": "https://www.youtube.com/watch?v=_s8N3LpoQHU",
+      "thumbnail": "https://i.ytimg.com/vi/_s8N3LpoQHU/maxresdefault.jpg",
+      "date": "2026-10-07"
+    },
+    {
       "title": "Учимся с ботами(колесо фартуны)",
       "author": "Agata_friss",
       "platform": "twitch",
@@ -340,15 +349,6 @@
       "type": "short",
       "url": "https://www.youtube.com/watch?v=hBbVVemhqzU",
       "thumbnail": "https://i.ytimg.com/vi/hBbVVemhqzU/maxresdefault.jpg",
-      "date": "2026-06-10"
-    },
-    {
-      "title": "#beamngdrive",
-      "author": "Yrk1z",
-      "platform": "youtube",
-      "type": "short",
-      "url": "https://www.youtube.com/watch?v=OF79HCJkMbs",
-      "thumbnail": "https://i.ytimg.com/vi/OF79HCJkMbs/maxresdefault.jpg",
       "date": "2026-06-10"
     },
     {
