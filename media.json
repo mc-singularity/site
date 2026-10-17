@@ -1,21 +1,30 @@
 {
   "media": [
     {
-      "title": "Страдаем в Cult of the Lamb.",
+      "title": "Страдаем в Octodad.",
       "author": "CloverS_Kid",
       "platform": "twitch",
       "type": "stream",
-      "url": "https://www.twitch.tv/videos/2903225881",
+      "url": "https://www.twitch.tv/videos/2903356232",
       "thumbnail": "https://vod-secure.twitch.tv/_404/404_processing_1280x720.png",
       "date": "2026-10-17"
     },
     {
-      "title": "Страдаем на SINGULARITY.",
+      "title": "Страдаем в Octodad.",
       "author": "CloverS_Kid",
       "platform": "twitch",
       "type": "stream",
       "url": "https://www.twitch.tv/cloverskid",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cloverskid-1280x720.jpg",
+      "date": "2026-10-17"
+    },
+    {
+      "title": "Страдаем в Cult of the Lamb.",
+      "author": "CloverS_Kid",
+      "platform": "twitch",
+      "type": "stream",
+      "url": "https://www.twitch.tv/videos/2903225881",
+      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/16efa843a7b26ca7199b_cloverskid_316414883949_1792245205//thumb/thumb0-1280x720.jpg",
       "date": "2026-10-17"
     },
     {
